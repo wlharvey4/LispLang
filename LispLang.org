@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-13 18:32
-#+macro:version Version 0.0.1
+#+date:2020-09-13 18:59
+#+macro:version Version 0.0.2
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -49,8 +49,43 @@ written in MacLisp.
 
 - [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
 
-* Chapter
-
+* Common-Lisp dot Net
+- https://common-lisp.net
+
+* Common Lisp Implementations
+- https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
+
+** Steel Bank Common Lisp
+- http://www.sbcl.org
+- [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
+
+** Clozure Common Lisp
+- https://ccl.clozure.com
+- [[https://ccl.clozure.com/docs/ccl.html][CCL Manual]]
+
+** Armed Bear Common Lisp
+- https://common-lisp.net/project/armedbear/
+- [[https://github.com/slyrus/abcl][ABCL on GitHub]]
+
+** GNU Common Lisp
+- https://www.gnu.org/software/gcl/
+
+** CLISP
+- https://clisp.sourceforge.io
+- [[https://clisp.sourceforge.io/impnotes/clisp.html][CLISP Manual]]
+
+** CLASP
+- [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
+
+** CMUCL
+- https://www.cons.org/cmucl/
+- [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL on GitLab]]
+
+** Embeddable Common Lisp
+- https://common-lisp.net/project/ecl/
+- [[https://gitlab.com/embeddable-common-lisp/ecl/][ECL on GitLab]]
+- [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
+
 * Build Tools
 :PROPERTIES:
 :appendix: t
