@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-13 23:54
-#+macro:version Version 0.0.3
+#+date:2020-09-14 09:02
+#+macro:version Version 0.0.4
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -127,7 +127,148 @@ Hello, World!
 
 ** Clozure Common Lisp
 - https://ccl.clozure.com
-- [[https://ccl.clozure.com/docs/ccl.html][CCL Manual]]
+- [[https://ccl.clozure.com/manual/][Clozure CL Documentation]]
+- [[https://ccl.clozure.com/docs/ccl.html][CCL Manual (one page HTML)]]
+- [[https://github.com/Clozure/ccl][CCL on GitHub]]
+- [[https://ccl.clozure.com/openmcl-overview.pdf][Overview]]
+
+
+Some  distinguishing features  of the  implementation include  fast compilation
+speed, native  threads, a precise, generational,  compacting garbage collector,
+and a convenient foreign-function interface.
+
+Clozure CL is available for the following platforms:
+
+- Mac OS X 10.6 and later (x86, x86-64)
+- Linux (x86, x86-64, ppc32, ppc64, armv7l/armv6)
+- FreeBSD (x86, x86-64)
+- Solaris (x86, x86-64)
+- Microsoft Windows XP and later (x86, x86-64)
+
+*** Running CCL
+
+You should have a directory on your system named ~ccl~. This directory is
+called the ~ccl directory~.
+
+: /opt/local/share/ccl
+
+Clozure CL is made up of two parts:
+
+- the lisp kernel ::
+
+  The binary executable program that implements the lowest levels of the Lisp
+  system.
+
+- a heap image ::
+
+  The  in-memory state  of a  running Lisp  system, containing  functions, data
+  structures, variables, and  so on. Also, a file  containing archived versions
+  of these data  in a format that  can be loaded and reconstituted  by the Lisp
+  lisp kernel.
+
+
+When the lisp kernel starts up, it locates the heap image, maps it into memory,
+and starts running the lisp code contained  in the image. In the ccl directory,
+you  will find  pre-built  lisp kernel  executables and  heap  images for  your
+platform. The  heap images  have the  same basename  as the  corresponding lisp
+kernel, but with an added ~.image~ suffix.
+
+By default, the lisp kernel will look for a heap image with an appropriate name
+in the same directory  that the lisp kernel itself is in.  Thus, it is possible
+to start Clozure  CL simply by running ~./dx86cl64~ (or  whatever the appropriate
+binary is called) directly from the ~ccl~ directory.
+
+- OS X x86, x86-64 ::
+
+  - ~dx86cl~, ~dx86cl.image~
+  - ~dx86cl64~, ~dx86cl64.image~
+
+
+If you  always run  Clozure CL  from Emacs, it  is sufficient  to use  the full
+pathname of the lisp kernel binary directly.  That is, in your Emacs init file,
+you could write something like:
+
+: (setq inferior-lisp-program "/opt/local/share/ccl/1.12/dx86cl64")
+
+or make the equivalent changes to =slime-lisp-implementations=.
+
+**** Running CCL from the Command-Line as a Script
+
+ It can also be handy to run Clozure  CL straight from a terminal prompt. In the
+ ~scripts/~ directory of the ~ccl~ directory, there are two files named:
+
+ - ~ccl~
+ - ~ccl64~
+
+
+ Copy these files into ~/usr/local/bin~ or  some other directory that is on your
+ path, and then  edit them so that the value  of
+
+: CCL_DEFAULT_DIRECTORY
+
+is your ~ccl~ directory or add this environment variable to a startup file. You
+can then start up the lisp by typing:
+
+ : ccl
+ or
+ : ccl64
+
+ You may  wish to  install ~scripts/ccl64~ with  the name ~ccl~  if you  use the
+ 64-bit lisp more. If you want the 32-bit  lisp to be available as well, you can
+ install  ~scripts/ccl~ as  ~ccl32~. Note  that there  is nothing  magical about
+ these scripts. You should feel free to edit them as desired.
+
+**** The CCL Init File
+
+By default, Clozure CL will look for a file named:
+
+: .ccl-init.lisp
+
+in your home directory, and load it  upon startup. If you wish, you can compile
+your init file,  and Clozure CL will  load the compiled version if  it is newer
+than the  corresponding source file. Because  the init file is  loaded the same
+way as normal Lisp  code is, you can put anything you want  in it. For example,
+you can change the working directory, and load code that you use frequently.
+
+To suppress the loading of this init-file, invoke Clozure CL with the:
+
+: --no-init (or -n)
+
+option.
+
+*** CCLDoc Documentation System
+- [[https://github.com/Clozure/ccldoc][CCLDoc on GitHub]]
+
+
+CCLDoc is  a system for creating  Lisp documentation. It uses  S-expressions to
+represent document structure, markup, cross  references, and contents. It has a
+small number  of basic  operators, supports macros  for syntax  extensions, and
+supports  a  simple syntax  for  embedding  expressions  in strings  for  added
+convenience.
+
+To use CCLDoc to format the CCL documentation, follow these steps:
+
+1. Install CCL.
+2. Install Quicklisp.
+3. Check out the CCLDoc sources into =~/quicklisp/local-projects=
+
+
+Now, start CCL, and do the following:
+
+#+begin_src lisp
+  (load "home:quicklisp;setup")
+  (ql:quickload :ccldoc)
+  (defparameter *d* (ccldoc:load-document "ccl:doc;manual;ccl.ccldoc"))
+  (ccldoc::output-html *d* "/tmp/ccl.html" :stylesheet "ccl.css"
+#+end_src
+
+You can then view the generated ~ccl.html~ file in your browser. The generated
+HTML expects to use a style file named ~ccl.css~ in the same directory.
+
+There  is   also  a   not-quite-complete  LaTeX  converter.   To  use   it,  do
+=(output-latex  *d*  "ccl.tex")=  and  then process  the  ~ccl.tex~  file  with
+~xelatex~  to produce  a PDF  file. The  version of  ~xelatex~ that  comes with
+MacTeX 2014 works.
 
 ** Armed Bear Common Lisp
 - https://common-lisp.net/project/armedbear/
@@ -153,7 +294,6 @@ Hello, World!
 - [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
 
 * Common Lisp Resources
-
 ** Common Lisp Hyper Spec
 - https://wiki.c2.com/?CommonLispHyperSpec
 
@@ -180,6 +320,30 @@ Lisp.
 Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
 blogs.
 
+** QuickLisp
+- https://www.quicklisp.org/beta/
+
+
+Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
+Common Lisp  implementation to download,  install, and  load any of  over 1,500
+[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:3]  It works with:
+
+- ABCL,
+- Allegro CL,
+- Clasp,
+- Clozure CL,
+- CLISP,
+- CMUCL,
+- ECL,
+- LispWorks,
+- MKCL,
+- SBCL, and
+- Scieneer CL, on
+- Linux,
+- Mac OS X, and
+- Windows.
+
+
 * Build Tools
 :PROPERTIES:
 :appendix: t
@@ -1921,6 +2085,7 @@ variable values prior to tangling.  It lives in the ~tools~ directory.
     (org-babel-tangle)))
 #+end_src
 
+
 * List of Programs
 :PROPERTIES:
 :appendix: t
@@ -1940,6 +2105,7 @@ variable values prior to tangling.  It lives in the ~tools~ directory.
 
 Copyright \copy 2020 by {{{author}}}
 
+
 * Concept Index
 :PROPERTIES:
 :unnumbered: t
@@ -1965,6 +2131,7 @@ Copyright \copy 2020 by {{{author}}}
 :END:
 
 
+
 * Configuration							   :noexport:
 #+todo: SOMEDAY(s@) TODO(t@) INPROGRESS(i@) WAIT(w@) | CANCEL(c@) DONE(d!)
 
@@ -1981,13 +2148,14 @@ Copyright \copy 2020 by {{{author}}}
 
 * Local Variables						   :noexport:
 
+
 * Footnotes
 
-[fn:1]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:3]The libraries were last updated on July 15, 2020.
 
 [fn:2]Markdown requires the standard Perl library module Digest::MD5.
 
-
+[fn:1]In the browser, add =index.text= to the end of the URL to see the source.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
