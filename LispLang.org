@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-14 09:02
-#+macro:version Version 0.0.4
+#+date:2020-09-14 13:50
+#+macro:version Version 0.0.5
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -60,6 +60,36 @@ written in MacLisp.
 
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
+
+
+Common  Lisp   is  defined  by   its  standard---there  is  neither   a  single
+implementation controlled  by a benevolent  dictator, as with Perl  and Python,
+nor a canonical implementation controlled by  a single company, as with VB, C#,
+and Java. Anyone who  wants to read the standard and  implement the language is
+free to do so.
+
+Changes to the standard have to be made in accordance with a process controlled
+by  the  standards body  American  National  Standards Institute  (ANSI).  That
+process is designed to keep any one entity, such as a single vendor, from being
+able to  arbitrarily change the standard.  Thus, the Common Lisp  standard is a
+contract  between any  Common  Lisp  vendor and  Common  Lisp programmers.  The
+contract tells you  that if you write  a program that uses the  features of the
+language  the way  they're described  in the  standard, you  can count  on your
+program behaving the same in any conforming implementation.
+
+On the other hand, the standard may not  cover everything you may want to do in
+your programs---some  things were  intentionally left  unspecified in  order to
+allow continuing  experimentation by implementers  in areas where  there wasn't
+consensus about the  best way for the language to  support certain features. So
+every implementation offers some features  above and beyond what's specified in
+the standard. Depending  on what kind of programming you're  going to be doing,
+it may make sense  to just pick one implementation that  has the extra features
+you need and use that. On the other hand, if we're delivering Lisp source to be
+used by  others, such as libraries,  you'll want--as far as  possible--to write
+portable Common Lisp. For writing code  that should be mostly portable but that
+needs facilities not  defined by the standard, Common Lisp  provides a flexible
+way to write  code "conditionalized" on the features available  in a particular
+implementation.
 
 ** Steel Bank Common Lisp
 - http://www.sbcl.org
@@ -344,6 +374,114 @@ Common Lisp  implementation to download,  install, and  load any of  over 1,500
 - Windows.
 
 
+* Common Lisp on Emacs---SLIME
+- https://common-lisp.net/project/slime/
+- [[https://github.com/slime][SLIME on GitHub]]
+- [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual]]
+
+SLIME is a Emacs mode for Common Lisp development. SLIME extends Emacs
+with  support  for  interactive  programming  in  Common  Lisp.  While
+lisp-mode supports editing Lisp  source files, slime-mode adds support
+for interacting  with a running  Common Lisp process  for compilation,
+debugging, documentation lookup, and so on.
+
+- -slime-mode= ::
+  An Emacs minor-mode to enhance lisp-mode with:
+  - Code evaluation, compilation, and macroexpansion
+  - Online documentation
+    - =describe=
+    - =apropos=
+    - =hyperspec=
+  - Definition finding
+  - Symbol and package name completion
+  - Automatic macro indentation based on =&body=.
+  - Cross-reference interface
+
+- SLDB ::
+  Common Lisp debugger with an Emacs-based user interface
+
+- REPL ::
+  The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
+  tighter integration with Emacs.
+
+- Compilation Notes ::
+  SLIME is able to take compiler messages and annotate them directly
+  into source buffers.
+
+- Inspector ::
+  Interactive object-inspector in an Emacs buffer.
+
+** SLIME Setup
+- inferior-lisp-program ::
+  Point the =inferior-lisp-program= variable to your favourite Common
+  Lisp implementation:
+  : (setq inferior-lisp-program "sbcl")
+
+- M-x slime ::
+  Run SLIME  and connect to an  inferior Lisp. SLIME will  now automatically be
+  available in your Lisp source buffers.
+
+  : =M-x slime=
+
+** Running SLIME
+SLIME is started with the Emacs command:
+: M-x slime
+
+This uses the  inferior-lisp package to start a Lisp  process, loads and starts
+the Lisp-side  server (known as  “Swank”), and establishes a  socket connection
+between Emacs and  Lisp. Finally a REPL  buffer is created where  you can enter
+Lisp expressions for evaluation.
+
+** Using Multiple LISPs in SLIME
+
+To tell SLIME which Lisp program to run, add a prefix argument:
+: C-u M-x slime
+
+To setup SLIME with multiple Lisp's set up the variable:
+
+: slime-lisp-implementations
+
+This variable holds a list of programs  and if you invoke SLIME with a negative
+prefix argument,
+: M-- M-x slime
+you can select a  program from that list. When called  without a prefix, either
+the name specified in
+: slime-default-lisp
+or the first item of the list will be used.
+
+The elements of the list should look like:
+
+: (NAME (PROGRAM PROGRAM-ARGS...) &key CODING-SYSTEM INIT INIT-FUNCTION ENV)
+
+#+begin_src elisp
+(setq slime-lisp-implementations
+      '((ccl ("/opt/local/share/ccl/1.12/dx86cl64"))
+        (sbcl ("/opt/local/bin/sbcl") :coding-system utf-8-unix)))
+#+end_src
+
+- NAME :: is a symbol and is used to identify the program.
+- PROGRAM :: is the filename of the program.
+- PROGRAM-ARGS :: is a list of command line arguments.
+- CODING-SYSTEM :: the coding system for the connection. (see slime-net-coding-system)
+- INIT ::
+  should be  a function which takes  two arguments: a filename  and a character
+  encoding. The  function should  return a  Lisp expression  as a  string which
+  instructs Lisp to start the Swank server  and to write the port number to the
+  file. At startup, SLIME starts the Lisp  process and sends the result of this
+  function to Lisp’s standard input. As default, slime-init-command is used. An
+  example is shown in Loading Swank faster.
+- INIT-FUNCTION :: should be a function  which takes no arguments. It is called
+  after the connection is established. (See also slime-connected-hook.)
+- ENV :: specifies a list of environment variables for the subprocess. E.g.
+
+  #+begin_src elisp
+    (sbcl-cvs ("/home/me/sbcl-cvs/src/runtime/sbcl"
+	       "--core" "/home/me/sbcl-cvs/output/sbcl.core")
+	      :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
+  #+end_src
+
+  initializes SBCL_HOME in the subprocess.
+
 * Build Tools
 :PROPERTIES:
 :appendix: t
