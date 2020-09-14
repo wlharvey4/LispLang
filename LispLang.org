@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-13 01:18
-#+macro:version Version 0.0.0
+#+date:2020-09-13 18:32
+#+macro:version Version 0.0.1
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -12,94 +12,43 @@
 
 #+texinfo:@insertcopying
 
+
+"Pascal is for building pyramids -- imposing, breathtaking structures
+built by armies pushing heavy blocks into place. Lisp is for building
+organisms..."
+
+- Alan Perlis, from https://www.cons.org/cmucl/
+
+#+begin_quote
+Alan Jay Perlis (April 1, 1922 – February 7, 1990) was an American
+computer scientist and professor at Purdue University, Carnegie Mellon
+University and Yale University. He is best known for his pioneering
+work in programming languages and was the first recipient of the
+Turing Award.
+[fn::https://amturing.acm.org/award_winners/perlis_0132439.cfm]
+#+end_quote
+
+- [[https://web.archive.org/web/19990117034445/http://www-pu.informatik.uni-tuebingen.de/users/klaeren/epigrams.html][Alan Perlis' Epigrams]]
+
 
 * Introduction
 :PROPERTIES:
 :unnumbered: t
 :END:
-** TODO Ideas on how to make this a better system
-*** TODO Install major dependencies
-[2020-02-14 Fri 10:12]
-- [ ] like ~aws2~
-- [ ] Org-mode > 9.1.9
+LISP  was  originally  specified  in  1958 and  derives  its  name  from  =LISt
+Processing= (or Lots of Insignificant Silly Parentheses).
 
-*** TODO Get rid of hard-coded directories
-- [ ] ~create-script~
-  [2020-02-14 Fri 09:45]
+[[http://www.maclisp.info][Maclisp]] is a dialect  of Lisp developed at MIT in 1966.  It added many features
+that we  take for  granted in  Lisp today: functions  with variable  numbers of
+arguments, macros, arrays,  and non-local dynamic exits. It  was influential on
+the development of EmacsLisp, Scheme, ZetaLisp and CommonLisp. The first Scheme
+interpreter and  the first Emacs  with Lisp facilities (see  MulticsEmacs) were
+written in MacLisp.
 
-  This script places itself inside a ~bin/~ directory so it can be found by
-  searching $PATH.  This can be accomplished by creating an environment
-  variable; I need to come up with a good domain name for this system first.
-  How about =SyncOrg=?	So the environment variable would be =SYNC_ORG_BIN=.  A
-  possible value would =~/Dev/bin= or =/usr/local/dev/bin=, depending on the
-  system.
+- [[http://www.maclisp.info/pitmanual/index.html][The MacLISP Manual]]
 
-*** TODO Add check for existence of environment variables
-[2020-02-14 Fri 09:57]
-- [ ] it appears environment variables do not expand inside header lines? Check
-  this.
-- [ ] if environment variables do not expand, then need to provide a script to
-  update them upon installation
-- [ ] such as =SYNC_ORG_BIN=
+- [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
 
-*** DONE Update Date
-
-- State "DONE"	     from "TODO"       [2020-03-02 Mon 21:12]
-- State "TODO"	     from	       [2020-03-01 Sun 10:36] \\
-  When creating a new project from this template, update the #+date: to
-  the current day and time instead of leaving it to when this template
-  was last updated.
-
-*** TODO Make Update independent of the project
-
-- State "TODO"	     from	       [2020-03-01 Sun 14:07] \\
-  I just tried to update a project, but the command AWS :=: aws2 did not
-  work because it has changed to aws version 2.	 If the update program
-  had been independent and based upon Template's most recent code, then
-  that would not have happened.	 Who knows what the next problem will be
-  causing the project's out-of-date code to fail to update.
-*** DONE Make adding git repo an option
-- State "DONE"	     from	       [2020-03-02 Mon 21:13]
-*** TODO Default macros
-    - State "TODO"       from              [2020-04-01 Wed 10:49] \\
-      Default macros do not get expanded or in some cases even recognized.
-      Is this a bug or am I doing something wrong.  User-defined macros
-      work.
-*** TODO Dependencies
-:LOGBOOK:
-- State "TODO"       from              [2020-06-09 Tue 23:36] \\
-  Provide function to collect all dependencies and list; or perhaps test
-:END:
-*** TODO Add link to main index.html file
-:LOGBOOK:
-- State "TODO"       from              [2020-06-17 Wed 12:30] \\
-  Want to create a link from project index.html files to the root
-  index.html files.
-:END:
-*** TODO Make sure exec-path has correct values before proceeding
-:LOGBOOK:
-- State "TODO"       from              [2020-09-09 Wed 12:54] \\
-  Make Sure exec-path has correct values
-:END:
-*** DONE Error on running initial 'make open-org'
-   - State "DONE"       from "TODO"       [2020-09-08 Tue 23:10]
-:LOGBOOK:
-- State "TODO"       from              [2020-09-03 Thu 09:30] \\
-  Fix error when running initial make from new project
-
-  A: Made sure the default bucket was named correctly.
-:END:
-#+begin_src sh
-> make open-org
-
-  An error occurred (NoSuchBucket) when calling the ListObjectsV2 operation: The specified bucket does not exist
-#+end_src
-*** SOMEDAY Delete a whole project
-:LOGBOOK:
-- State "SOMEDAY"    from "TODO"       [2020-09-04 Fri 13:54] \\
-  Provide functionality to remove a project from the file system,
-  GitHub, and the AWS S3 bucket.
-:END:
 * Chapter
 
 * Build Tools
