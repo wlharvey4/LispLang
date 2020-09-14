@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-13 18:59
-#+macro:version Version 0.0.2
+#+date:2020-09-13 23:54
+#+macro:version Version 0.0.3
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -52,12 +52,78 @@ written in MacLisp.
 * Common-Lisp dot Net
 - https://common-lisp.net
 
+** Getting Started in Common Lisp
+- https://common-lisp.net/downloads
+
+** Common Lisp Documentation
+- https://common-lisp.net/documentation
+
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
 
 ** Steel Bank Common Lisp
 - http://www.sbcl.org
 - [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
+
+*** Running and Stopping SBCL
+To run SBCL type =sbcl= at the command  line. You should end up in the toplevel
+REPL (read,  eval, print  -loop), where  you can interact  with SBCL  by typing
+expressions.
+
+#+begin_example
+▶ which sbcl
+/opt/local/bin/sbcl
+
+▶ sbcl
+This is SBCL 2.0.7, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+,* 
+#+end_example
+
+SBCL can be stopped at any  time by calling ~sb-ext:exit~, optionally returning
+a specified numeric value to the calling process.
+
+By default  SBCL also  exits on end  of input, caused  either by  user pressing
+=Control-D= on an attached terminal, or end of input when using SBCL as part of
+a shell pipeline.
+
+**** SBCL as an inferior Lisp in Emacs
+
+To run SBCL as an inferior-lisp from Emacs in your =.emacs= do something like:
+
+#+begin_src elisp
+;;; The SBCL binary and command-line arguments
+(setq inferior-lisp-program "/opt/local/bin/sbcl --noinform")
+#+end_src
+
+=--noinform= suppress the printing of any banner or other informational message
+at startup. This makes  it easier to write Lisp programs  which work cleanly in
+Unix pipelines.
+
+See [[http://www.sbcl.org/manual/index.html#Editor-Integration][Editor Integration]]
+
+**** SBCL as a Shell Script
+Standard Unix tools that are interpreters follow a common command line protocol
+that is  necessary to work with  “shebang scripts”. SBCL supports  this via the
+--script command line option.
+
+#+name:hello.lisp
+#+begin_src sh
+#!/opt/local/bin/sbcl --script
+(write-line "Hello, World!")
+#+end_src
+
+#+begin_example
+$ ./hello.lisp
+Hello, World!
+$ sbcl --script hello.lisp
+Hello, World!
+#+end_example
 
 ** Clozure Common Lisp
 - https://ccl.clozure.com
@@ -85,6 +151,34 @@ written in MacLisp.
 - https://common-lisp.net/project/ecl/
 - [[https://gitlab.com/embeddable-common-lisp/ecl/][ECL on GitLab]]
 - [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
+
+* Common Lisp Resources
+
+** Common Lisp Hyper Spec
+- https://wiki.c2.com/?CommonLispHyperSpec
+
+
+The  CommonLisp Hyperspec  is  an HTMLified  version of  the  ANSI Common  Lisp
+language standard  (X3.226-1994). You can  view it  online or download  it from
+Xanalys (formerly Harlequin) at:
+
+- http://www.lispworks.com/reference/HyperSpec/
+
+** CLiki
+- https://cliki.net
+
+
+CLiki  is a  Common  Lisp wiki  hosted  by The  Common  Lisp Foundation.  CLiki
+contains resources for learning about and using the programming language Common
+Lisp, and information about DFSG-compliant  free software implemented in Common
+Lisp.
+
+** Planet Lisp
+- http://planet.lisp.org
+
+
+Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
+blogs.
 
 * Build Tools
 :PROPERTIES:
