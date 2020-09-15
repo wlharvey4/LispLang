@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-14 13:50
-#+macro:version Version 0.0.5
+#+date:2020-09-15 08:17
+#+macro:version Version 0.0.6
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -411,17 +411,11 @@ debugging, documentation lookup, and so on.
 - Inspector ::
   Interactive object-inspector in an Emacs buffer.
 
-** SLIME Setup
+** Setting Up SLIME
 - inferior-lisp-program ::
   Point the =inferior-lisp-program= variable to your favourite Common
   Lisp implementation:
   : (setq inferior-lisp-program "sbcl")
-
-- M-x slime ::
-  Run SLIME  and connect to an  inferior Lisp. SLIME will  now automatically be
-  available in your Lisp source buffers.
-
-  : =M-x slime=
 
 ** Running SLIME
 SLIME is started with the Emacs command:
@@ -432,12 +426,11 @@ the Lisp-side  server (known as  “Swank”), and establishes a  socket connect
 between Emacs and  Lisp. Finally a REPL  buffer is created where  you can enter
 Lisp expressions for evaluation.
 
-** Using Multiple LISPs in SLIME
-
 To tell SLIME which Lisp program to run, add a prefix argument:
 : C-u M-x slime
 
-To setup SLIME with multiple Lisp's set up the variable:
+*** Using Multiple LISPs in SLIME
+To setup SLIME with multiple Lisp's configure the variable:
 
 : slime-lisp-implementations
 
@@ -480,7 +473,82 @@ The elements of the list should look like:
 	      :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
   #+end_src
 
-  initializes SBCL_HOME in the subprocess.
+  initializes =SBCL_HOME= in the subprocess.
+
+*** Loading Contrib Packages
+In  version   2.1  the   developers  moved   some  functionality   to  separate
+packages. This chapter tells you how to load contrib modules and describes what
+the particular packages do.
+
+Contrib packages aren’t loaded by default. You  have to modify your setup a bit
+so that Emacs knows where to find them and which of them to load.
+
+- ~slime-contribs~ :: variable holding the  list of package-names that you want
+  to use.  Its default value is ~slime-fancy~ which loads almost everything.  a
+  setup  to load  the slime-scratch  and slime-editing-commands  packages looks
+  like:
+
+  : (setq slime-contribs '(slime-scratch slime-editing-commands))
+
+  After starting SLIME, the commands of both packages should be available.
+
+  If you want  to enable more contribs  after you start SLIME, you  can set the
+  slime-contribs variable to another value and call
+  : M-x slime-setup.
+
+  Note that packages will not be unloaded if they are removed from the list,
+  and if you have more than one SLIME connection currently active, you must
+  manually repeat ~slime-setup~ for each of them.
+
+
+You can unload contrib packages by calling a function whose name is obtained by
+adding =-unload= to  the contrib’s name, for every contrib  you wish to unload.
+So, to remove ~slime-repl~, you must call ~slime-repl-unload~.
+
+*** The SLIME REPL
+SLIME uses  a custom Read-Eval-Print  Loop (REPL).  The REPL  user-interface is
+written in Emacs Lisp, which  gives more Emacs-integration than the traditional
+comint-based Lisp interaction:
+- Conditions signalled in REPL expressions are debugged with SLDB.
+- Return values are  distinguished from printed output by  separate Emacs faces
+  (colours).
+- Emacs manages the REPL prompt with  markers. This ensures that Lisp output is
+  inserted in the right place, and doesn’t get mixed up with user input.
+
+
+Load the REPL:
+: (add-to-list 'slime-contribs 'slime-repl)
+
+Select the output buffer, preferably in a different window.
+: M-x slime-switch-to-output-buffer (C-c C-z)
+
+Insert a call to the function defined around point into the REPL.
+: M-x slime-call-defun (C-c C-y)
+
+Inserts the last expression to the REPL and evaluates it there.
+: M-x slime-eval-last-expression-in-repl (C-c C-j)
+
+*** User-interface Conventions
+There are a few "global" user-interface conventions.
+
+**** Temporary Buffers
+Some SLIME commands create temporary buffers to display their results.
+
+- Temporary buffers can be dismissed by pressing =q=.
+- Pressing =<RET>= is supposed to “do the most obvious useful thing.”
+- Temporary buffers containing Lisp symbols use ~slime-mode~ in addition to any
+  special mode of their own.
+- ~slime-description-autofocus~ (default =nil=); determines which buffer gets
+  the initial focus.
+
+**** =*inferior-lisp*= Buffer
+SLIME internally uses the ~comint~ package to start Lisp processes.
+
+- The buffer =*inferior-lisp*= contains the  Lisp process’s own top-level. This
+  direct access to Lisp is useful for troubleshooting, and some degree of SLIME
+  integration is available using the ~inferior-slime-mode~.
+- Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
+  REPL) and ignore the =*inferior-lisp*= buffer.
 
 * Build Tools
 :PROPERTIES:
