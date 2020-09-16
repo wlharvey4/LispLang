@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-16 08:40
-#+macro:version Version 0.0.7
+#+date:2020-09-16 09:14
+#+macro:version Version 0.0.8
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1895,6 +1895,8 @@ clean:
 
 dist-clean: clean
 	@echo Dist Cleaning...
+	  ${EDITOR} --eval \
+	    "(kill-buffer \"$(ORG)\")"
 	  -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
 	  -@for dir in *; \
 	  do \
