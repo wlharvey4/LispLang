@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-16 09:14
-#+macro:version Version 0.0.8
+#+date:2020-09-16 16:08
+#+macro:version Version 0.0.9
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -441,6 +441,44 @@ MacTeX 2014 works.
  Xanalys (formerly Harlequin) at:
 
  - http://www.lispworks.com/reference/HyperSpec/
+** Commoin Lisp The Language 2nd Edition
+- http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
+- https://wiki.c2.com/?CommonLispTheLanguage
+- Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
+
+
+** ANSI Common Lisp---Paul Graham
+- http://www.paulgraham.com/acl.html
+- Prentice Hall, 1995, 432 pages, paperback. ISBN 0133708756.
+
+
+ANSI  Common  Lisp  combines  an   introduction  to  Lisp  programming,  and  a
+convenient, up-to-date  reference manual for  ANSI Common Lisp.  Beginners will
+find  that  its  careful  explanations   and  interesting  examples  make  Lisp
+programming  easy  to  learn.  Professional  programmers  will  appreciate  its
+thorough, practical approach.
+
+*** Features
+
+- An up-to-date reference manual for ANSI Common Lisp.
+- An in-depth look at object-oriented programming. Explains the Common Lisp
+  Object System (CLOS), and also shows how to write your own object-oriented
+  language.
+- Over 20 substantial examples, including programs for ray-tracing, text
+  generation, pattern-matching, logical inference, generating HTML, sorting and
+  searching, file I/O, compression, and date arithmetic.
+- Special attention to critical concepts, including prefix syntax, code
+  vs. data, recursion, functional programming, types, implicit pointers,
+  dynamic allocation, closures, macros, class precedence, and generic functions
+  vs. message-passing.
+- A complete guide to optimization.
+- The clearest and most thorough explanation of macros in any introductory
+  book.
+- Examples that illustrate Lisp programming styles, including rapid
+  prototyping, bottom-up programming, object-oriented programming, and embedded
+  languages.
+- An appendix on debugging, with examples of common errors.
+
 ** Lisp Documentation Resources
  - Documentation :: https://common-lisp.net/documentation
 
@@ -701,6 +739,76 @@ Common Lisp  implementation to download,  install, and  load any of  over 1,500
 - Linux,
 - Mac OS X, and
 - Windows.
+
+
+QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
+other languages call a  library or module, i.e., a set of files,  and a list of
+any other systems that this system depends on.<
+
+** QuickLisp Setup
+To get started with the Quicklisp beta, download and load:
+: https://beta.quicklisp.org/quicklisp.lisp
+
+The following command will setup ~quicklisp~ for your user account:
+
+#+begin_src sh
+curl -O https://beta.quicklisp.org/quicklisp.lisp
+sbcl   --load  quicklisp.lisp \
+       --eval '(quicklisp-quickstart:install :path .quicklisp/)' \
+       --eval '(ql:add-to-init-file)' \
+       --eval '(quit)'
+#+end_src
+
+To load Quicklisp into your Common Lisp session after the initial installation,
+(before ~add-to-init-file~ has been run)load the file:
+
+: (load "quicklisp/setup.lisp")
+
+To get updated software, use:
+
+: (ql:update-dist "quicklisp")
+
+To update the Quicklisp client, use:
+
+: (ql:update-client)
+
+** QuickLisp Libraries
+To find out what's available in Quicklisp, use:
+
+: (ql:system-apropos substring)
+
+To see what systems depend on a particular system, use:
+
+: (ql:who-depends-on system-name)
+
+** QuickLisp Load
+To load software, use:
+
+: (ql:quickload "system-name")
+
+Quicklisp will automatically download any  supporting software it needs to load
+the system.
+
+By default, ~ql:quickload~ hides most compilation and loading output, including
+warnings, and shows progess as a series  of dots. You can show full compilation
+and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
+output can be especially helpful when reporting and troubleshooting problems.
+
+** QuickLisp Unload
+To remove software, use:
+
+: (ql:uninstall system-name)
+
+An uninstall does the following:
+
+- Deletes the system's tarball archive and unpacked source files
+- Deletes Quicklisp metadata files associated with the system
+- Clears ASDF's system cache via asdf:clear-system.
+
+
+Uninstalling does not alter  the current Lisp session in any  other way; if the
+given  system has  been  loaded, it  remains loaded  and  accessible until  the
+session is ended.
 
 * Common Lisp on Emacs
 ** Emacs Lisp
