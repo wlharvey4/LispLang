@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-15 08:17
-#+macro:version Version 0.0.6
+#+date:2020-09-16 08:40
+#+macro:version Version 0.0.7
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -31,10 +31,31 @@ Turing Award.
 - [[https://web.archive.org/web/19990117034445/http://www-pu.informatik.uni-tuebingen.de/users/klaeren/epigrams.html][Alan Perlis' Epigrams]]
 
 
-* Introduction
+* Introduction to Lisp
 :PROPERTIES:
 :unnumbered: t
 :END:
+
+- Common-Lisp :: https://common-lisp.net
+
+  ``This site is one among many gateways to Common Lisp. Its goal is to provide
+  the  Common Lisp  community  with  development resources  and  to  work as  a
+  starting point for new programmers.''
+
+  Common   Lisp   is   the  *modern*,   *multi-paradigm*,   *high-performance*,
+  *compiled*,   *ANSI-standardized*,  most   prominent   (along  with   Scheme)
+  descendant of the long-running family of Lisp programming languages.
+
+  Common Lisp is  known for being extremely flexible,  having excellent support
+  for object oriented  programming, and fast prototyping  capabilities. It also
+  sports  an extremely  powerful macro  system that  allows you  to tailor  the
+  language to your application, and a flexible run-time environment that allows
+  modification and debugging of running applications (excellent for server-side
+  development  and  long-running critical  software).  It  is a  multi-paradigm
+  programming  language that  allows you  to choose  the approach  and paradigm
+  according to your application domain.
+
+
 LISP  was  originally  specified  in  1958 and  derives  its  name  from  =LISt
 Processing= (or Lots of Insignificant Silly Parentheses).
 
@@ -49,18 +70,12 @@ written in MacLisp.
 
 - [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
 
-* Common-Lisp dot Net
-- https://common-lisp.net
-
-** Getting Started in Common Lisp
-- https://common-lisp.net/downloads
-
-** Common Lisp Documentation
-- https://common-lisp.net/documentation
-
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
+- https://common-lisp.net/implementations
 
+
+Common Lisp comes in many different flavors, or implementations.
 
 Common  Lisp   is  defined  by   its  standard---there  is  neither   a  single
 implementation controlled  by a benevolent  dictator, as with Perl  and Python,
@@ -94,6 +109,17 @@ implementation.
 ** Steel Bank Common Lisp
 - http://www.sbcl.org
 - [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
+
+
+- SBCL ::
+  - Steel Bank Common Lisp
+  - In doubt, just get [[http://www.sbcl.org/platform-table.html][SBCL]]
+  - Articulate Lisp also [[http://articulate-lisp.com/implementations/summary.html][recommends SBCL]] for beginners
+  - A high performance Common Lisp compiler and runtime system
+  - provides  an interactive  environment  including  a debugger,  a
+    statistical  profiler,  a code  coverage  tool,  and many  other
+    extensions
+  - [[http://www.sbcl.org/manual/index.html][SBCL 2.0.8 User Manual]]
 
 *** Running and Stopping SBCL
 To run SBCL type =sbcl= at the command  line. You should end up in the toplevel
@@ -174,6 +200,30 @@ Clozure CL is available for the following platforms:
 - FreeBSD (x86, x86-64)
 - Solaris (x86, x86-64)
 - Microsoft Windows XP and later (x86, x86-64)
+
+
+- CCL ::
+  - [[https://ccl.clozure.com][Clozure CL]]
+  - Clozure CL compiles to native code and supports multithreading
+    using native OS threads.
+  - supports both Lisp code that calls external code, and external
+    code that calls Lisp code.
+  - Clozure CL can create standalone executables on all supported
+    platforms.
+  - A good implementation with very fast build times
+  - fast compilation speed,
+  - native threads,
+  - a precise, generational, compacting garbage collector, and
+  - a convenient foreign-function interface.
+  - On Mac OS X, Clozure CL supports building GUI applications that
+    use OS X's native Cocoa frameworks, and the OS X distributions
+    include an IDE written with Cocoa, and distributed with complete
+    sources.
+  - On all supported platforms, Clozure CL can run as a command-line
+    process, or as an inferior Emacs process using either SLIME or
+    ILISP.
+  - [[https://ccl.clozure.com/docs/ccl.html][Clozure CL Manual]]
+
 
 *** Running CCL
 
@@ -304,36 +354,118 @@ MacTeX 2014 works.
 - https://common-lisp.net/project/armedbear/
 - [[https://github.com/slyrus/abcl][ABCL on GitHub]]
 
+
+- ABCL ::
+  - [[https://common-lisp.net/project/armedbear/][Armed Bear Common Lisp]]
+  - A full implementation of the Common Lisp language
+  - To interface with the JVM
+  - features both an interpreter and a compiler, running in the JVM.
+  - [[https://abcl.org/doc/abcl-user.html][User Documentation]]
+  - [[https://abcl.org/releases/1.7.1/abcl-1.7.1.pdf][Armed Bear Common Lisp User Manual Version 1.7.1 July 2020]]
+
 ** GNU Common Lisp
 - https://www.gnu.org/software/gcl/
+
+
+- GNU Common Lisp ::
+  - [[https://en.wikipedia.org/wiki/GNU_Common_Lisp][GNU Common Lisp]]
+  - the GNU Project's ANSI Common Lisp compiler, an evolutionary
+    development of Kyoto Common Lisp. It produces native object code
+    by first generating C code and then calling a C compiler.
 
 ** CLISP
 - https://clisp.sourceforge.io
 - [[https://clisp.sourceforge.io/impnotes/clisp.html][CLISP Manual]]
 
+
+- CLISP ::
+  - [[https://clisp.sourceforge.io][CLISP Home]]
+  - [[https://en.wikipedia.org/wiki/CLISP][GNU ANSI Common Lisp implementation]]
+  - CLISP is an implementation of the programming language Common
+    Lisp originally developed by Bruno Haible and Michael Stoll for
+    the Atari ST
+
 ** CLASP
 - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
+
+
+- CLASP ::
+  - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
+  - Interoperates with  C++ libraries using LLVM  for compilation to
+    native code
+  - Clasp  is  a  new  Common Lisp  implementation  that  seamlessly
+    interoperates  with C++  libraries and  programs using  LLVM for
+    compilation to native code.
+  - This  allows  Clasp  to  take  advantage  of  a  vast  array  of
+    preexisting  libraries   and  programs,  such  as   out  of  the
+    scientific computing ecosystem.
+  - Embedding them in  a Common Lisp environment allows  you to make
+    use  of rapid  prototyping, incremental  development, and  other
+    capabilities that make it a powerful language.
 
 ** CMUCL
 - https://www.cons.org/cmucl/
 - [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL on GitLab]]
+
+
+- CMUCL ::
+  - [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL]] is a high-performance, free Common Lisp implementation
+    which runs on most major Unix platforms.
 
 ** Embeddable Common Lisp
 - https://common-lisp.net/project/ecl/
 - [[https://gitlab.com/embeddable-common-lisp/ecl/][ECL on GitLab]]
 - [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
 
-* Common Lisp Resources
+
+- Embeddable CL ::
+  Compiles to C
+
+** Allegra Common Lisp
+
+- Allegra CL ::
+  Proprietary
+
+** LispWorks
+
+- LispWorks ::
+  Proprietary
+
+* Common Lisp Documentation Resources
 ** Common Lisp Hyper Spec
-- https://wiki.c2.com/?CommonLispHyperSpec
+ - https://wiki.c2.com/?CommonLispHyperSpec
 
 
-The  CommonLisp Hyperspec  is  an HTMLified  version of  the  ANSI Common  Lisp
-language standard  (X3.226-1994). You can  view it  online or download  it from
-Xanalys (formerly Harlequin) at:
+ The  CommonLisp Hyperspec  is  an HTMLified  version of  the  ANSI Common  Lisp
+ language standard  (X3.226-1994). You can  view it  online or download  it from
+ Xanalys (formerly Harlequin) at:
 
-- http://www.lispworks.com/reference/HyperSpec/
+ - http://www.lispworks.com/reference/HyperSpec/
+** Lisp Documentation Resources
+ - Documentation :: https://common-lisp.net/documentation
 
+ - QuickDocs :: http://quickdocs.org
+   Ready and Up-to-Date Documentation for All Common Lisp Projects.
+
+ - QuickRef :: https://quickref.common-lisp.net/index-per-library.html
+   Reference manuals for Quicklisp libraries
+
+ - Common Lisp in the Wild :: https://www.darkchestnut.com/book-common-lisp-application-deployment/
+
+ - Books on CL :: https://cliki.net/Lisp+Books
+
+ - The CL Cookbook :: https://lispcookbook.github.io/cl-cookbook/
+
+ - The CL Ecosystem 2015 ::  https://borretti.me/article/common-lisp-sotu-2015
+
+** Articulate Common Lisp
+- http://articulate-lisp.com
+
+
+How to write Common Lisp in 2018 - an initiation manual for the
+uninitiated.
+
+* Common Lisp Resources
 ** CLiki
 - https://cliki.net
 
@@ -343,6 +475,47 @@ contains resources for learning about and using the programming language Common
 Lisp, and information about DFSG-compliant  free software implemented in Common
 Lisp.
 
+** Common Lisp Books
+- https://wiki.c2.com/?DefinitiveCommonLispBooks
+
+*** Practical Common Lisp by Peter Seibel
+- https://wiki.c2.com/?PracticalCommonLisp
+- http://www.gigamonkeys.com/book/
+
+*** ANSI Common Lisp by Paul Graham
+- https://wiki.c2.com/?AnsiCommonLisp
+- https://courses.cs.northwestern.edu/325/readings/graham/graham-notes.html
+
+*** Common Lisp---A Gentle Introduction to Symbolic Computation
+- https://www.cs.cmu.edu/~dst/LispBook/book.pdf
+- https://wiki.c2.com/?CommonLispaGentleIntroductionToSymbolicComputation
+- http://www.cs.cmu.edu/~dst/LispBook/index.html
+
+*** On Lisp by Paul Graham
+- https://wiki.c2.com/?OnLisp
+- http://www.paulgraham.com/onlisptext.html
+- http://www.paulgraham.com/lisp.html
+
+"This is simply the best book written about any computing topic that I
+have ever come  across. Even if you  don't know lisp, you  can get the
+general gist of this book and enjoy it."
+
+*** Paradigms Of Artificial Intelligence Programming by Peter Norvig
+- https://wiki.c2.com/?ParadigmsOfArtificialIntelligenceProgramming
+- https://github.com/norvig/paip-lisp
+
+*** Common Lisp, the Language 2nd Edition by Guy L. Steele, Jr.
+
+Useful as  a reference book. However,  this isn't a good  tutorial for
+learning CommonLisp--it assumes  that the reader is  familiar with the
+language.
+
+- https://wiki.c2.com/?CommonLispTheLanguage
+- http://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html
+  This document contains the complete text of the book
+
+*** The Common Lisp Cookbook
+- https://lispcookbook.github.io/cl-cookbook/getting-started.html
 ** Planet Lisp
 - http://planet.lisp.org
 
@@ -350,8 +523,164 @@ Lisp.
 Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
 blogs.
 
-** QuickLisp
-- https://www.quicklisp.org/beta/
+** Common-Lisp dot Net
+ - https://common-lisp.net
+
+
+This site is one among many gateways to Common Lisp. Its goal is to
+provide the Common Lisp community with development resources and to
+work as a starting point for new programmers.
+
+*** Getting Started in Common Lisp
+ - https://common-lisp.net/downloads
+
+*** Common Lisp Documentation
+ - https://common-lisp.net/documentation
+
+** Iwanna Learn Lisp
+- https://wiki.c2.com/?IwannaLearnLisp
+
+** Planet Lisp
+ http://planet.lisp.org
+
+ "Planet Lisp is a meta blog that collects the contents of various
+ Lisp-related blogs."
+
+** Planet SBCL
+ http://planet.sbcl.org
+
+ "Planet SBCL is a meta blog that collects the contents of various
+ SBCL-related blogs. It was inspired by Planet Lisp."
+** Common Lisp Application Software
+https://github.com/azzamsa/awesome-cl-software
+
+This is a list of awesome application software built with Common Lisp.
+
+*** CL-Ledger
+https://github.com/ledger/cl-ledger
+
+CL-Ledger is a Common Lisp port of the [[http://ledger-cli.org/][Ledger]] double-entry accounting
+system.
+** Getting Started in Common Lisp
+ - https://common-lisp.net/downloads
+
+ - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
+
+*** Portacle
+ - https://portacle.github.io
+ - https://common-lisp.net/downloads
+
+
+ If you are  a newbie or you  want to get started as  fast as possible,
+ then  Portacle   is  probably   your  best   option.  Portacle   is  a
+ multiplatform, complete IDE for Common  Lisp. It includes Emacs, SBCL,
+ Git, Quicklisp, all configured and ready to use.
+
+*** CMUCL
+ - Carnegie Mellon University Common Lisp :: https://www.cons.org/cmucl/
+   CMUCL is a free implementation of the Common Lisp programming
+   language which runs on most major Unix platforms. It mainly conforms
+   to the ANSI Common Lisp standard.
+
+*** SBCL
+ - Steel Bank Common Lisp : :http://www.sbcl.org
+
+ SBCL is a high performance Common Lisp *compiler*. In addition to the
+ compiler and *runtime system* for ANSI Common Lisp, it provides an
+ *interactive environment* including a *debugger*, a *statistical
+ profiler*, a *code coverage tool*, and many other extensions.
+
+**** Getting Started with SBCL
+ http://www.sbcl.org/getting.html
+
+**** SBCL History
+ http://www.sbcl.org/history.html
+
+ In December 1999, SBCL forked off the main branch of CMUCL. Broadly
+ speaking, SBCL is distinguished from CMU CL by a greater emphasis on
+ maintainability.
+
+ SBCL derives most of its code from CMU CL, created at Carnegie Mellon
+ University. Radical changes have been made to some parts of the system
+ (particularly bootstrapping) but many fundamentals (like the mapping
+ of Lisp abstractions onto the underlying hardware, the basic
+ architecture of the compiler, and much of the runtime support code)
+ are only slightly changed. Enough changes have been made to the
+ interface and architecture that calling the new system CMU Common Lisp
+ would cause confusion - the world does not need multiple incompatible
+ systems named CMU CL. But it's appropriate to acknowledge the descent
+ from the CMU hackers (and post-CMU CMU CL hackers) who did most of the
+ heavy lifting to make the system work. So the system is named Steel
+ Bank after the industries where Andrew Carnegie and Andrew Mellon,
+ respectively, made the big bucks.
+
+*** ABCL
+ - Armed Bear Common Lisp :: https://common-lisp.net/project/armedbear/
+
+ ABCL is a full implementation of the Common Lisp language featuring
+ both an interpreter and a compiler, running in the JVM.
+
+ It now supports JSR-223 (Java scripting API): it can be a scripting
+ engine in any Java application. Additionally, it can be used to
+ implement (parts of) the application using Java to Lisp integration
+ APIs.
+
+*** Clozure CL
+ - CCL :: https://ccl.clozure.com/
+
+ Some distinguishing features of the implementation include fast
+ compilation speed, native threads, a precise, generational, compacting
+ garbage collector, and a convenient foreign-function interface.
+
+*** Clasp
+ - Clasp :: https://github.com/clasp-developers/clasp
+
+ This is a new Common Lisp implementation that seamlessly interoperates
+ with C++ libraries and programs using LLVM for compilation to native
+ code. This allows Clasp to take advantage of a vast array of
+ preexisting libraries and programs, such as out of the scientific
+ computing ecosystem. Embedding them in a Common Lisp environment
+ allows you to make use of rapid prototyping, incremental development,
+ and other capabilities that make it a powerful language.
+
+*** CLISP
+ - CLISP :: https://clisp.sourceforge.io/
+
+ CLISP is a Common Lisp implementation by Bruno Haible, then of
+ Karlsruhe University, and Michael Stoll, then of Munich University,
+ both in Germany. It implements the language described in the ANSI
+ Common Lisp standard with many extensions.
+
+*** GCL---Gnu Common Lisp
+ - https://directory.fsf.org/wiki/Gcl
+ - https://web.ma.utexas.edu/users/wfs/gcl.html
+*** ECL
+ - Embeddable Common Lisp :: https://common-lisp.net/project/ecl/main.html
+
+ ECL is an interpreter of the Common-Lisp language as described in the
+ X3J13 Ansi specification, featuring CLOS (Common-Lisp Object System),
+ conditions, loops, etc, plus a translator to C, which can produce
+ standalone executables.
+
+*** CMUCL Wiki
+ https://gitlab.common-lisp.net/cmucl/cmucl/-/wikis/home
+
+*** Installing CMUCL
+ https://trac.common-lisp.net/cmucl/wiki/InstallingCmucl
+
+*** Allegro CL
+ - Allegro CL :: https://franz.com/products/allegro-common-lisp/
+
+ Commercial product.
+
+*** LispWorks
+ - LispWorks :: http://www.lispworks.com/products/lispworks.html
+
+ Commercial product
+*** ANSI Common Lisp
+ - ANSI CL :: http://www.paulgraham.com/acl.html
+* Quicklisp Library Manager
+https://www.quicklisp.org/beta/
 
 
 Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
@@ -373,183 +702,746 @@ Common Lisp  implementation to download,  install, and  load any of  over 1,500
 - Mac OS X, and
 - Windows.
 
-
-* Common Lisp on Emacs---SLIME
-- https://common-lisp.net/project/slime/
-- [[https://github.com/slime][SLIME on GitHub]]
-- [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual]]
+* Common Lisp on Emacs
+** Emacs Lisp
+*** Emacs Lisp Reference
+- An Introduction to Programming in Emacs Lisp ::
 
-SLIME is a Emacs mode for Common Lisp development. SLIME extends Emacs
-with  support  for  interactive  programming  in  Common  Lisp.  While
-lisp-mode supports editing Lisp  source files, slime-mode adds support
-for interacting  with a running  Common Lisp process  for compilation,
-debugging, documentation lookup, and so on.
+    https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
 
-- -slime-mode= ::
-  An Emacs minor-mode to enhance lisp-mode with:
-  - Code evaluation, compilation, and macroexpansion
-  - Online documentation
-    - =describe=
-    - =apropos=
-    - =hyperspec=
-  - Definition finding
-  - Symbol and package name completion
-  - Automatic macro indentation based on =&body=.
-  - Cross-reference interface
+    https://www.gnu.org/software/emacs/manual/pdf/eintr.pdf
 
-- SLDB ::
-  Common Lisp debugger with an Emacs-based user interface
+    https://github.com/RenWenshan/emacs-lisp-intro-solutions
 
-- REPL ::
-  The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
-  tighter integration with Emacs.
+- Emacs Lisp Reference Wiki ::
 
-- Compilation Notes ::
-  SLIME is able to take compiler messages and annotate them directly
-  into source buffers.
+    https://www.emacswiki.org/emacs/EmacsLispReference
 
-- Inspector ::
-  Interactive object-inspector in an Emacs buffer.
+- Learn Emacs Lisp ::
 
-** Setting Up SLIME
-- inferior-lisp-program ::
-  Point the =inferior-lisp-program= variable to your favourite Common
-  Lisp implementation:
-  : (setq inferior-lisp-program "sbcl")
+    https://www.emacswiki.org/emacs/LearnEmacsLisp
 
-** Running SLIME
-SLIME is started with the Emacs command:
-: M-x slime
+- Emacs Lisp Cookbook ::
 
-This uses the  inferior-lisp package to start a Lisp  process, loads and starts
-the Lisp-side  server (known as  “Swank”), and establishes a  socket connection
-between Emacs and  Lisp. Finally a REPL  buffer is created where  you can enter
-Lisp expressions for evaluation.
+    https://www.emacswiki.org/emacs/ElispCookbook
 
-To tell SLIME which Lisp program to run, add a prefix argument:
-: C-u M-x slime
+- Category Code ::
 
-*** Using Multiple LISPs in SLIME
-To setup SLIME with multiple Lisp's configure the variable:
+    https://www.emacswiki.org/emacs/CategoryCode
+*** Lisp-Mode
+Emacs Lisp Mode is enabled for any files ending in =.el= or when
+editing the Emacs InitFile.
+**** Evaluating Expressions in Lisp-Mode
+- sexp :: any readable Lisp expression --- code enclosed in
+  parentheses, a string enclosed in double quotes, a variable name, a
+  quoted expression, a numeral, and so on.
 
-: slime-lisp-implementations
+- eval-last-sexp :: =[C-u] C-x C-e=
 
-This variable holds a list of programs  and if you invoke SLIME with a negative
-prefix argument,
-: M-- M-x slime
-you can select a  program from that list. When called  without a prefix, either
-the name specified in
-: slime-default-lisp
-or the first item of the list will be used.
+  This prints the value of the immediately-preceding sexp in the echo
+  area. Using a prefix argument =C-u= will insert the result of an
+  evaluation into the current buffer at point.
 
-The elements of the list should look like:
+  To make ‘C-x C-e’ pretty-print:
 
-: (NAME (PROGRAM PROGRAM-ARGS...) &key CODING-SYSTEM INIT INIT-FUNCTION ENV)
+  : (global-set-key [remap eval-last-sexp] 'pp-eval-last-sexp)
 
-#+begin_src elisp
-(setq slime-lisp-implementations
-      '((ccl ("/opt/local/share/ccl/1.12/dx86cl64"))
-        (sbcl ("/opt/local/bin/sbcl") :coding-system utf-8-unix)))
-#+end_src
+- eval-defun :: =C-M-x=
 
-- NAME :: is a symbol and is used to identify the program.
-- PROGRAM :: is the filename of the program.
-- PROGRAM-ARGS :: is a list of command line arguments.
-- CODING-SYSTEM :: the coding system for the connection. (see slime-net-coding-system)
-- INIT ::
-  should be  a function which takes  two arguments: a filename  and a character
-  encoding. The  function should  return a  Lisp expression  as a  string which
-  instructs Lisp to start the Swank server  and to write the port number to the
-  file. At startup, SLIME starts the Lisp  process and sends the result of this
-  function to Lisp’s standard input. As default, slime-init-command is used. An
-  example is shown in Loading Swank faster.
-- INIT-FUNCTION :: should be a function  which takes no arguments. It is called
-  after the connection is established. (See also slime-connected-hook.)
-- ENV :: specifies a list of environment variables for the subprocess. E.g.
+  This evaluates the defun at point. If the cursor is inside or
+  immediately after a variable declaration, then this function, unlike
+  ‘C-x C-e’, resets the variable to the value contained in the
+  declaration.
 
-  #+begin_src elisp
-    (sbcl-cvs ("/home/me/sbcl-cvs/src/runtime/sbcl"
-	       "--core" "/home/me/sbcl-cvs/output/sbcl.core")
-	      :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
-  #+end_src
+- eval-expression :: =M-:=
 
-  initializes =SBCL_HOME= in the subprocess.
+  runs the command eval-expression. Evaluate EXP and print value in
+  the echo area. When called interactively, read an Emacs Lisp
+  expression and evaluate it. This is especially useful when you are
+  coding and testing. It lets you quickly invoke non-interactive
+  functions (non-commands).
 
-*** Loading Contrib Packages
-In  version   2.1  the   developers  moved   some  functionality   to  separate
-packages. This chapter tells you how to load contrib modules and describes what
-the particular packages do.
+  To make `M-:’ pretty-print:
 
-Contrib packages aren’t loaded by default. You  have to modify your setup a bit
-so that Emacs knows where to find them and which of them to load.
+  : (global-set-key [remap eval-expression] 'pp-eval-expression)
 
-- ~slime-contribs~ :: variable holding the  list of package-names that you want
-  to use.  Its default value is ~slime-fancy~ which loads almost everything.  a
-  setup  to load  the slime-scratch  and slime-editing-commands  packages looks
-  like:
+- eval-region :: =M-x eval-region=
 
-  : (setq slime-contribs '(slime-scratch slime-editing-commands))
+  This evaluates the EmacsLisp code in the region. To evaluate all of
+  the code in the current buffer, mark it using =C-x h= first.
 
-  After starting SLIME, the commands of both packages should be available.
+- describe-variable :: =C-h v=
 
-  If you want  to enable more contribs  after you start SLIME, you  can set the
-  slime-contribs variable to another value and call
-  : M-x slime-setup.
+  Checks the current value of a variable. This prints the variable’s
+  doc string and value.
 
-  Note that packages will not be unloaded if they are removed from the list,
-  and if you have more than one SLIME connection currently active, you must
-  manually repeat ~slime-setup~ for each of them.
+- set-variable :: =M-x set-variable=
+
+  Set user options.
+**** Inferior Emacs Lisp Mode
+- ielm :: =M-x ielm=
+
+  Interactively evaluate Emacs Lisp expressions. This creates a buffer
+  much like a shell buffer. Whatever Lisp expressions you type are
+  evaluated and the result is printed into the buffer.
+
+**** Lisp Interaction Mode
+It is useful for evaluating EmacsLisp expressions. Typing ‘C-j’ after
+an expression will print the result on the next line.
+** Lisp Mode
+** SLIME
+http://www.common-lisp.net/project/slime/images2/slime-small.png
+
+ - https://common-lisp.net/project/slime/
+ - [[https://github.com/slime][SLIME on GitHub]]
+ - [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual]]
+
+ SLIME is a Emacs mode for Common Lisp development. SLIME extends Emacs
+ with  support  for  interactive  programming  in  Common  Lisp.  While
+ lisp-mode supports editing Lisp  source files, slime-mode adds support
+ for interacting  with a running  Common Lisp process  for compilation,
+ debugging, documentation lookup, and so on.
+
+ - Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
+
+   "SLIME is a Emacs mode for Common Lisp development. Inspired by
+   existing systems such Emacs Lisp and ILISP, we are working to
+   create an environment for hacking Common Lisp in."
+
+ - -slime-mode= ::
+   An Emacs minor-mode to enhance lisp-mode with:
+   - Code evaluation, compilation, and macroexpansion
+   - Online documentation
+     - =describe=
+     - =apropos=
+     - =hyperspec=
+   - Definition finding
+   - Symbol and package name completion
+   - Automatic macro indentation based on =&body=.
+   - Cross-reference interface
+
+ - SLDB ::
+   Common Lisp debugger with an Emacs-based user interface
+
+ - REPL ::
+   The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
+   tighter integration with Emacs.
+
+ - Compilation Notes ::
+   SLIME is able to take compiler messages and annotate them directly
+   into source buffers.
+
+ - Inspector ::
+   Interactive object-inspector in an Emacs buffer.
+
+*** Setting Up SLIME
+ - inferior-lisp-program ::
+   Point the =inferior-lisp-program= variable to your favourite Common
+   Lisp implementation:
+   : (setq inferior-lisp-program "sbcl")
+
+*** Running SLIME
+ SLIME is started with the Emacs command:
+ : M-x slime
+
+ This uses the  inferior-lisp package to start a Lisp  process, loads and starts
+ the Lisp-side  server (known as  “Swank”), and establishes a  socket connection
+ between Emacs and  Lisp. Finally a REPL  buffer is created where  you can enter
+ Lisp expressions for evaluation.
+
+ To tell SLIME which Lisp program to run, add a prefix argument:
+ : C-u M-x slime
+
+**** Using Multiple LISPs in SLIME
+ To setup SLIME with multiple Lisp's configure the variable:
+
+ : slime-lisp-implementations
+
+ This variable holds a list of programs  and if you invoke SLIME with a negative
+ prefix argument,
+ : M-- M-x slime
+ you can select a  program from that list. When called  without a prefix, either
+ the name specified in
+ : slime-default-lisp
+ or the first item of the list will be used.
+
+ The elements of the list should look like:
+
+ : (NAME (PROGRAM PROGRAM-ARGS...) &key CODING-SYSTEM INIT INIT-FUNCTION ENV)
+
+ #+begin_src elisp
+ (setq slime-lisp-implementations
+       '((ccl ("/opt/local/share/ccl/1.12/dx86cl64"))
+         (sbcl ("/opt/local/bin/sbcl") :coding-system utf-8-unix)))
+ #+end_src
+
+ - NAME :: is a symbol and is used to identify the program.
+ - PROGRAM :: is the filename of the program.
+ - PROGRAM-ARGS :: is a list of command line arguments.
+ - CODING-SYSTEM :: the coding system for the connection. (see slime-net-coding-system)
+ - INIT ::
+   should be  a function which takes  two arguments: a filename  and a character
+   encoding. The  function should  return a  Lisp expression  as a  string which
+   instructs Lisp to start the Swank server  and to write the port number to the
+   file. At startup, SLIME starts the Lisp  process and sends the result of this
+   function to Lisp’s standard input. As default, slime-init-command is used. An
+   example is shown in Loading Swank faster.
+ - INIT-FUNCTION :: should be a function  which takes no arguments. It is called
+   after the connection is established. (See also slime-connected-hook.)
+ - ENV :: specifies a list of environment variables for the subprocess. E.g.
+
+   #+begin_src elisp
+     (sbcl-cvs ("/home/me/sbcl-cvs/src/runtime/sbcl"
+		"--core" "/home/me/sbcl-cvs/output/sbcl.core")
+	       :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
+   #+end_src
+
+   initializes =SBCL_HOME= in the subprocess.
+
+**** Loading Contrib Packages
+ In  version   2.1  the   developers  moved   some  functionality   to  separate
+ packages. This chapter tells you how to load contrib modules and describes what
+ the particular packages do.
+
+ Contrib packages aren’t loaded by default. You  have to modify your setup a bit
+ so that Emacs knows where to find them and which of them to load.
+
+ - ~slime-contribs~ :: variable holding the  list of package-names that you want
+   to use.  Its default value is ~slime-fancy~ which loads almost everything.  a
+   setup  to load  the slime-scratch  and slime-editing-commands  packages looks
+   like:
+
+   : (setq slime-contribs '(slime-scratch slime-editing-commands))
+
+   After starting SLIME, the commands of both packages should be available.
+
+   If you want  to enable more contribs  after you start SLIME, you  can set the
+   slime-contribs variable to another value and call
+   : M-x slime-setup.
+
+   Note that packages will not be unloaded if they are removed from the list,
+   and if you have more than one SLIME connection currently active, you must
+   manually repeat ~slime-setup~ for each of them.
 
 
-You can unload contrib packages by calling a function whose name is obtained by
-adding =-unload= to  the contrib’s name, for every contrib  you wish to unload.
-So, to remove ~slime-repl~, you must call ~slime-repl-unload~.
+ You can unload contrib packages by calling a function whose name is obtained by
+ adding =-unload= to  the contrib’s name, for every contrib  you wish to unload.
+ So, to remove ~slime-repl~, you must call ~slime-repl-unload~.
 
-*** The SLIME REPL
-SLIME uses  a custom Read-Eval-Print  Loop (REPL).  The REPL  user-interface is
-written in Emacs Lisp, which  gives more Emacs-integration than the traditional
-comint-based Lisp interaction:
-- Conditions signalled in REPL expressions are debugged with SLDB.
-- Return values are  distinguished from printed output by  separate Emacs faces
-  (colours).
-- Emacs manages the REPL prompt with  markers. This ensures that Lisp output is
-  inserted in the right place, and doesn’t get mixed up with user input.
+**** The SLIME REPL
+ SLIME uses  a custom Read-Eval-Print  Loop (REPL).  The REPL  user-interface is
+ written in Emacs Lisp, which  gives more Emacs-integration than the traditional
+ comint-based Lisp interaction:
+ - Conditions signalled in REPL expressions are debugged with SLDB.
+ - Return values are  distinguished from printed output by  separate Emacs faces
+   (colours).
+ - Emacs manages the REPL prompt with  markers. This ensures that Lisp output is
+   inserted in the right place, and doesn’t get mixed up with user input.
 
 
-Load the REPL:
-: (add-to-list 'slime-contribs 'slime-repl)
+ Load the REPL:
+ : (add-to-list 'slime-contribs 'slime-repl)
 
-Select the output buffer, preferably in a different window.
-: M-x slime-switch-to-output-buffer (C-c C-z)
+ Select the output buffer, preferably in a different window.
+ : M-x slime-switch-to-output-buffer (C-c C-z)
 
-Insert a call to the function defined around point into the REPL.
-: M-x slime-call-defun (C-c C-y)
+ Insert a call to the function defined around point into the REPL.
+ : M-x slime-call-defun (C-c C-y)
 
-Inserts the last expression to the REPL and evaluates it there.
-: M-x slime-eval-last-expression-in-repl (C-c C-j)
+ Inserts the last expression to the REPL and evaluates it there.
+ : M-x slime-eval-last-expression-in-repl (C-c C-j)
 
-*** User-interface Conventions
-There are a few "global" user-interface conventions.
+**** User-interface Conventions
+ There are a few "global" user-interface conventions.
 
-**** Temporary Buffers
-Some SLIME commands create temporary buffers to display their results.
+***** Temporary Buffers
+ Some SLIME commands create temporary buffers to display their results.
 
-- Temporary buffers can be dismissed by pressing =q=.
-- Pressing =<RET>= is supposed to “do the most obvious useful thing.”
-- Temporary buffers containing Lisp symbols use ~slime-mode~ in addition to any
-  special mode of their own.
-- ~slime-description-autofocus~ (default =nil=); determines which buffer gets
-  the initial focus.
+ - Temporary buffers can be dismissed by pressing =q=.
+ - Pressing =<RET>= is supposed to “do the most obvious useful thing.”
+ - Temporary buffers containing Lisp symbols use ~slime-mode~ in addition to any
+   special mode of their own.
+ - ~slime-description-autofocus~ (default =nil=); determines which buffer gets
+   the initial focus.
 
-**** =*inferior-lisp*= Buffer
-SLIME internally uses the ~comint~ package to start Lisp processes.
+***** =*inferior-lisp*= Buffer
+ SLIME internally uses the ~comint~ package to start Lisp processes.
 
-- The buffer =*inferior-lisp*= contains the  Lisp process’s own top-level. This
-  direct access to Lisp is useful for troubleshooting, and some degree of SLIME
-  integration is available using the ~inferior-slime-mode~.
-- Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
-  REPL) and ignore the =*inferior-lisp*= buffer.
+ - The buffer =*inferior-lisp*= contains the  Lisp process’s own top-level. This
+   direct access to Lisp is useful for troubleshooting, and some degree of SLIME
+   integration is available using the ~inferior-slime-mode~.
+ - Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
+   REPL) and ignore the =*inferior-lisp*= buffer.
 
+* Scheme
+- https://wiki.c2.com/?SchemeLanguage
+
+Scheme was introduced in 1975 by Gerald J. Sussman and Guy L. Steele Jr.
+
+Scheme is a  statically scoped and properly  tail-recursive dialect of
+the Lisp  programming language  invented by Guy  Lewis Steele  Jr. and
+Gerald Jay Sussman. It was designed to have an exceptionally clear and
+simple semantics  and few different  ways to form expressions.  A wide
+variety  of programming  paradigms, including  imperative, functional,
+and message passing styles, find convenient expression in Scheme.
+
+It was the first dialect of Lisp to fully support:
+
+- lexical scoping
+- first-class procedures
+- continuations
+
+
+In its earliest  form it was a very small  language intended primarily
+for research  and teaching. Scheme  is now a  complete general-purpose
+programming language, though  it still derives its power  from a small
+set of key concepts.
+
+There are two standards for Scheme: an official standard with IEEE and
+a de facto one, often called  "RnRS", short for the Revised^nth Report
+on  the  Algorithmic  Language  Scheme.  In  colloquial  use,  "Scheme
+standard" usually refers to the latter.
+
+** What is the difference between Scheme and Common Lisp?
+- http://community.schemewiki.org/?scheme-faq-general
+
+
+Scheme  is a  dialect of  Lisp that  stresses conceptual  elegance and
+simplicity.  It  is  much  smaller  than  Common  Lisp;  the  language
+specification is about  50 pages, compared to Common  Lisp's 1300 page
+draft standard.  Advocates of  Scheme often find  it amusing  that the
+entire  Scheme standard  is shorter  than  the index  to Guy  Steele's
+"Common Lisp: the Language, 2nd  Edition". Unlike the Scheme standard,
+the Common Lisp  standard has a large library of  utility functions, a
+standard   object-oriented   programming   facility  (CLOS),   and   a
+sophisticated condition handling system.
+
+#+begin_quote
+"Some people prefer to teach Scheme in introductory courses because it
+is so  much smaller  than Common  Lisp. But one  can easily  teach the
+subset of Common  Lisp that is equivalent to Scheme,  so language size
+isn't really  an issue  for beginners. A  more compelling  argument is
+that there is a certain style of applicative programming, making heavy
+use  of lexical  closures, that  can  be expressed  more elegantly  in
+Scheme syntax. But there are also  areas where Common Lisp is superior
+to Scheme,  such as its support  for user defined macros,  its elegant
+unification of lists and vectors into a sequence datatype, and its use
+of keyword  arguments to  greatly extend the  utility of  the sequence
+functions. The combination of tremendous power, extensive manufacturer
+support,  and a  built-in  object-oriented  programming facility  make
+Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
+book[fn:1] does emphasize a  side-effect-free, applicative approach to
+programming with which Scheme afficionados will feel quite at home, it
+does so in purely Common Lisp style."
+#+end_quote
+- https://wiki.c2.com/?CommonLispaGentleIntroductionToSymbolicComputation
+
+
+** Standardizations of Scheme
+Scheme has been standardized both formally and informally.
+
+*** IEEE Standard for the Scheme Programming Language
+describes the formal ANSI/IEEE Standard for Scheme.
+
+*** Revised Reports on the Algorithmic Language Scheme
+The Revised6 Report on the Algorithmic Language Scheme
+
+- [[http://people.csail.mit.edu/jaffer/r3rs_toc.html][R3RS]]
+
+  LaTeX has changed  with time; it no longer works  from R3RS and R4RS
+  source. For that  reason, this page doesn't have  links to r3rs.pdf,
+  r3rs.ps, and r3rs.dvi. They could be produced by an old installation
+  of LaTeX, or by modification of r3rs.tar.
+
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r3rs.info.tar.gz][R3RS INFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r3rs.txi][R3RS TEXINFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r3rs.tar][R3RS LaTeX]]
+
+- [[http://people.csail.mit.edu/jaffer/r4rs_toc.html][R4RS]]
+
+  - [[http://people.csail.mit.edu/jaffer/r4rs.pdf][R4RS PDF]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r4rs.info.tar.gz][R4RS INFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r4rs.txi][R4RS TEXINFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r4rs.tar.gz][R4RS LaTeX]]
+
+- [[http://people.csail.mit.edu/jaffer/r5rs_toc.html][R5RS]]
+
+  - [[http://people.csail.mit.edu/jaffer/r5rs.pdf][R5RS PDF]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r5rs.info.tar.gz][R5RS INFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scm/r5rs.txi][R5RS TEXINFO]]
+  - [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r5rs.tar.gz][R5RS LaTeX]]
+
+- [[http://www.r6rs.org][R6RS]]
+
+= [[https://small.r7rs.org/attachment/r7rs.pdf][R7RS]]
+
+document an evolving informal standard that most implementations
+support.
+
+- http://people.csail.mit.edu/jaffer/Scheme
+
+**** The Revised6 Report on the Algorithmic Language Scheme
+http://www.r6rs.org
+
+** Resources on Scheme
+*** [[schemers.org][schemers.org]]
+The main resource for all things Scheme
+
+
+This is a collection of resources for the Scheme programming language.
+It was initiated by the PLT group at Rice University.
+*** [[http://www.scheme.dk/planet/][Planet Scheme]]
+Planet Scheme is a meta blog. Blog posts on Scheme are collected here.
+
+*** RnRS
+- http://people.csail.mit.edu/jaffer/Scheme
+
+*** MIT Scheme
+- http://groups.csail.mit.edu/mac/projects/scheme/
+
+*** The Scheme Programming Language Third Edition 2003
+by R. Kent Dybvig (3rd ed. 2003)
+
+This book is intended to provide an introduction to the Scheme
+programming language but not an introduction to programming in
+general. The reader is expected to have had some experience
+programming and to be familiar with terms commonly associated with
+computers and programming languages.
+
+The author recommends that readers unfamiliar with Scheme or Lisp also
+read _The Little Schemer_ to become familiar with the concepts of
+- list processing and
+- recursion.
+
+
+This book covers everything in both standards.
+
+This book is organized into nine chapters, plus appendices.
+
+1. Chapter 1 describes the properties and features of Scheme that make
+   it a useful and enjoyable language to use. Also describes Scheme's
+   notational conventions and the typographical conventions employed
+   in this book.
+
+2. Chapter 2 is an introduction to Scheme programming for the novice
+   Scheme programmer that leads the reader through a series of
+   examples, beginning with simple Scheme expressions and working
+   toward progressively more difficult ones.
+
+3. Chapter 3 continues the introduction but covers more advanced
+   features and concepts.
+
+4. Chapter 4 describes operations for creating procedures and variable
+   bindings.
+
+5. Chapter 5, program control operations
+
+6. Chapter 6, operations on the various object types (including lists,
+   numbers, and strings);
+
+7. Chapter 7, input and output operations;
+
+8. Chapter 8, syntactic extension.
+
+9. Chapter 9 contains a collection of complete example programs or
+   packages, each with a short overview, some examples of its use, the
+   implementation with brief explanation, and a set of exercises for
+   further work. Each of these programs demonstrates a particular set
+   of features, and together they illustrate an appropriate style for
+   programming in Scheme.
+
+10. Bibliography
+
+11. Answers
+
+12. Formal syntax
+
+13. A concise summary of Scheme syntactic forms and procedures
+
+14. Index
+*** The Scheme Programming Language Fourth Edition 2009
+https://www.scheme.com/tspl4/
+
+*** The Little Scheme
+Daniel P. Friedman and Matthias Felleisen. The Little Schemer, fourth
+edition. MIT Press, 1996.
+
+*** Simply Scheme---Introducing Computer Science 2nd Ed
+- https://people.eecs.berkeley.edu/~bh/ss-toc2.html
+
+*** PVTS
+- http://davidpilo.com/pvts/
+
+
+Visualize lists, pointers  and function calls in your code.  PVTS is a
+visual interpreter for the Scheme functional programming languages.
+
+*** Scheme-FAQ
+- http://community.schemewiki.org/?scheme-faq
+
+** Scheme Dialects
+[[http://www.r6rs.org/implementations.html][R6RS Implementations]]
+
+http://community.schemewiki.org/?category-implementations
+
+*** Chez Scheme
+ http://cisco.github.io/ChezScheme/
+
+ Chez Scheme is both a programming language and an implementation of
+ that language, with supporting tools and documentation. As a superset
+ of the language described in the Revised6 Report on the Algorithmic
+ Language Scheme (R6RS), Chez Scheme supports all standard features of
+ Scheme, including first-class procedures, proper treatment of tail
+ calls, continuations, user-defined records, libraries, exceptions, and
+ hygienic macro expansion. Chez Scheme also includes extensive support
+ for interfacing with C and other languages, support for multiple
+ threads possibly running on multiple cores, non-blocking I/O, and many
+ other features.
+
+**** Chez Scheme User's Manual
+ http://cisco.github.io/ChezScheme/csug9.5/csug.html
+
+ Chez Scheme's additional language, run-time system, and programming
+ environment features are described in the Chez Scheme User's Guide.
+
+**** Open Source
+ https://github.com/cisco/chezscheme
+*** Guile Scheme
+[[https://www.gnu.org/software/guile/][Guile]]
+
+"Guile is  designed to  help programmers create  flexible applications
+that  can be  extended by  users or  other programmers  with plug-ins,
+modules, or scripts."
+
+*** Chicken Scheme
+http://www.call-cc.org
+
+CHICKEN is a compiler for the Scheme programming language. It produces
+portable  and efficient  C and  supports the  R5RS and  R7RS (work  in
+progress)  standards, and  many extensions.  It runs  on Linux,  OS X,
+Windows, many Unix flavours
+
+*** Gambit Scheme
+- https://wiki.c2.com/?SchemeLanguage
+- https://github.com/gambit/gambit/blob/master/INSTALL.txt
+*** MIT/GNU Scheme
+- http://groups.csail.mit.edu/mac/projects/scheme/
+- https://www.gnu.org/software/mit-scheme/
+
+*** Kawa Scheme
+[[https://www.gnu.org/software/kawa/][The Kawa Scheme Language]]
+
+Kawa is a general-purpose programming language that runs on the Java
+platform.
+*** SCM Scheme
+- [[http://people.csail.mit.edu/jaffer/SCM.html][The SCM Implementation of Scheme]] ::
+
+  latest release scm-5f3 2020-02-15 by Aubrey Jaffer
+
+
+SCM is  a Scheme implementation  conforming to Revised5 Report  on the
+Algorithmic Language Scheme and the  IEEE P1178 specification*. Scm is
+written in C and runs under Amiga, Atari-ST, GNU/Linux, MacOS, MS-DOS,
+MS-Vista,  MS-Windows, OS/2,  NOS/VE,  Unicos, VMS,  Unix and  similar
+systems.
+
+SCM includes  Hobbit, the  Scheme-to-C compiler originally  written by
+Tanel  Tammet.  Hobbit  generates  C   files  whose  binaries  can  be
+dynamically or statically  linked with a SCM  executable. SCM includes
+linkable  modules   for  sequence-comparison,  arrays,   records,  and
+byte-number  conversions;  and  modules  for POSIX  system  calls  and
+network-sockets, readline, ncurses, and Xlib.
+
+SCM requires the [[http://people.csail.mit.edu/jaffer/SLIB][SLIB Scheme Library]].
+
+*** Scheme 48
+- https://www.s48.org
+
+
+Scheme 48 is an implementation of Scheme written by Richard Kelsey and
+Jonathan Rees. It is based on  a byte-code interpreter and is designed
+to be used  as a testbed for experiments  in implementation techniques
+and as an expository tool.
+*** Scsh
+- https://scsh.net
+
+
+Scsh is an  open-source Unix shell embedded within  Scheme, running on
+all major  Unix platforms including  AIX, Cygwin, Linux,  FreeBSD, GNU
+Hurd, HP-UX, Irix, Mac OS X, Solaris, and some others.
+
+Scsh is  a variant  of Scheme  48 (an  R5RS compliant  new-tech Scheme
+system)  Scsh  is  designed  for  writing  real-life  standalone  Unix
+programs and  shell scripts. Scsh  spans a wide range  of application,
+from “script”  applications usually handled  with perl or sh,  to more
+standard systems applications usually written in C.
+
+Scsh has two main components:  a process notation for running programs
+and  setting up  pipelines and  redirections, and  a complete  syscall
+library for low-level  access to the operating system,  i.e. to POSIX,
+the least common  denominator of more or less all  Unices, plus widely
+supported extensions such as symbolic links and BSD sockets. Moreover,
+scsh provides  an awk  facility for pattern-directed  computation over
+streams of  records, a  rich facility for  matching regular-expression
+patterns  in  strings,   event-based  interrupt  handling,  user-level
+threads, a  futuristic module system, and  an interactive environment.
+Scsh  comes with  extensive documentation  describing these  and other
+features.
+*** STk
+- http://kaolin.unice.fr/STk/
+
+
+STk  is  a free  R4RS  Scheme  interpreter  which  can access  the  Tk
+graphical  package. Concretely,  it can  be  seen as  the standard  Tk
+package  where Tcl  has been  replaced  by a  Scheme interpreter.  STk
+embeds  also an  efficient CLOS  like object  oriented system,  called
+STklos, which provides:
+
+- multiple inheritance,
+- generic functions,
+- multi-methods,
+- a MOP (Meta Object Protocol)
+** Scheme Programs
+
+*** SLIB
+- http://people.csail.mit.edu/jaffer/SLIB
+
+
+The SLIB Portable Scheme Library.
+
+SLIB is  a portable  library for the  programming language  Scheme. It
+provides a platform independent framework for using packages of Scheme
+procedures and  syntax. As distributed, SLIB  contains useful packages
+for  all R4RS  and R5RS  Scheme  implementations. Its  catalog can  be
+transparently  extended  to  accomodate   packages,  both  source  and
+compiled, specific to a site, implementation, user, or directory.
+
+*** SLIB-PSD Portable Scheme Debugger
+- https://github.com/perttikellomaki/psd
+
+*** Color-Scheme
+- http://people.csail.mit.edu/jaffer/Color/Color-Scheme
+
+
+SLIB's  color  package  provides  methods  to  specify,  compute,  and
+transform colors in the color spaces...
+
+*** BRL - the Beautiful Report Language
+- http://brl.sourceforge.net
+
+
+a framework for building server-side web applications.
+
+*** The Festival Speech Synthesis System
+- http://www.cstr.ed.ac.uk/projects/festival/
+
+
+A general multi-lingual speech synthesis system with a Scheme-based command interpreter.
+
+*** GIMP
+- https://www.gimp.org
+
+*** GnoTime
+- http://gttr.sourceforge.net
+
+
+GTT is  a to-do list/diary/journal tool  that can track the  amount of
+time spent on projects, and,  among other things, generate reports and
+invoices based on that time.
+
+*** GNUCash
+- https://www.gnucash.org
+
+*** Guile
+- https://www.gnu.org/software/guile/guile.html
+
+*** Impromptu
+- http://impromptu.moso.com.au
+
+*** JACAL
+- http://people.csail.mit.edu/jaffer/JACAL.html
+
+
+JACAL is an interactive symbolic mathematics program.
+
+* Racket
+- https://racket-lang.org
+
+
+Racket is a general-purpose programming language as well as the
+world’s first ecosystem for language-oriented programming. Make your
+dream language, or use one of the dozens already available.
+
+Racket started life as a Scheme implementation, but then grew into new
+areas.
+
+** Command-Line Tools
+Racket provides as part of its standard distribution a number of
+command-line tools.
+
+*** Racket Command
+- =raco= :: provides a command-line interface to many additional tools
+  for compiling Racket programs and maintaining a Racket installation.
+  The =raco= program supports various Racket tasks from a command line.
+
+  See https://docs.racket-lang.org/raco/index.html
+
+- =raco help= :: to get a complete list of available commands for your
+  installation.
+
+- =raco make= :: compiles Racket source to bytecode
+
+- =raco exe= :: create stand-alone executables
+
+- =raco setup= :: manages a Racket installation, including manually
+  installed packages.
+
+- =raco pkg= :: manages packages that can be installed through the
+  Racket package manager.
+
+- =raco test= :: run tests
+
+- =raco doc= :: documentation search
+
+- =raco scribble= :: building documentation
+
+- =raco read= :: reading and pretty-printing
+
+** Racket and Emacs
+
+*** Racket Mode
+[[https://github.com/greghendershott/racket-mode][Racket mode]] provides thorough syntax highlighting and DrRacket-style
+REPL and buffer execution support for Emacs.
+
+- Racket Mode Guide :: https://www.racket-mode.com
+
+- Scheme Mode :: as a major mode, plus Quack and Geiser minor modes
+* Clojure
+ https://clojure.org
+
+ "Clojure is a robust, practical, and fast programming language with a
+ set of useful features that together form a simple, coherent, and
+ powerful tool. Clojure provides easy access to the Java frameworks,
+ with optional type hints and type inference, to ensure that calls to
+ Java can avoid reflection."
+
+Clojure is a dialect of Lisp, and shares with Lisp the code-as-data
+philosophy and a powerful macro system. Clojure is predominantly a
+functional programming language, and features a rich set of immutable,
+persistent data structures. When mutable state is needed, Clojure
+offers a software transactional memory system and reactive Agent
+system that ensure clean, correct, multithreaded designs.
+
+** Clojure Reference
+
+*** Getting Started
+https://clojure.org/guides/getting_started
+
+*** The Reader
+https://clojure.org/reference/reader
+
+*** API
+https://clojure.org/api/api
 * Build Tools
 :PROPERTIES:
 :appendix: t
@@ -2352,9 +3244,6 @@ Copyright \copy 2020 by {{{author}}}
 #+texinfo_printed_title:LispLang---The Universe Known as LISP
 
 
-* Local Variables						   :noexport:
-
-
 * Footnotes
 
 [fn:3]The libraries were last updated on July 15, 2020.
@@ -2362,6 +3251,8 @@ Copyright \copy 2020 by {{{author}}}
 [fn:2]Markdown requires the standard Perl library module Digest::MD5.
 
 [fn:1]In the browser, add =index.text= to the end of the URL to see the source.
+
+* Local Variables						   :noexport:
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
