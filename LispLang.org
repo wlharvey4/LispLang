@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-16 16:08
-#+macro:version Version 0.0.9
+#+date:2020-09-17 22:51
+#+macro:version Version 0.0.10
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -350,7 +350,7 @@ There  is   also  a   not-quite-complete  LaTeX  converter.   To  use   it,  do
 ~xelatex~  to produce  a PDF  file. The  version of  ~xelatex~ that  comes with
 MacTeX 2014 works.
 
-** Armed Bear Common Lisp
+** Armed Bear Common Lisp---JVM
 - https://common-lisp.net/project/armedbear/
 - [[https://github.com/slyrus/abcl][ABCL on GitHub]]
 
@@ -385,7 +385,7 @@ MacTeX 2014 works.
     Lisp originally developed by Bruno Haible and Michael Stoll for
     the Atari ST
 
-** CLASP
+** CLASP---C++
 - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
 
 
@@ -412,7 +412,7 @@ MacTeX 2014 works.
   - [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL]] is a high-performance, free Common Lisp implementation
     which runs on most major Unix platforms.
 
-** Embeddable Common Lisp
+** Embeddable Common Lisp---C
 - https://common-lisp.net/project/ecl/
 - [[https://gitlab.com/embeddable-common-lisp/ecl/][ECL on GitLab]]
 - [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
@@ -504,6 +504,20 @@ How to write Common Lisp in 2018 - an initiation manual for the
 uninitiated.
 
 * Common Lisp Resources
+** Lisp-Lang
+- [[https://lisp-lang.org][Home]]
+*** Recommended Libraries
+- https://lisp-lang.org/wiki/article/recommended-libraries
+
+** Common Lisp Cookbook
+- [[https://lispcookbook.github.io/cl-cookbook/][Home]]
+
+*** Editor Support
+- https://lispcookbook.github.io/cl-cookbook/editor-support.html
+
+*** Using Emacs as an IDE
+- https://lispcookbook.github.io/cl-cookbook/emacs-ide.html
+
 ** CLiki
 - https://cliki.net
 
@@ -760,9 +774,9 @@ sbcl   --load  quicklisp.lisp \
 #+end_src
 
 To load Quicklisp into your Common Lisp session after the initial installation,
-(before ~add-to-init-file~ has been run)load the file:
+(before ~add-to-init-file~ has been run) load the file ~setup.lisp~:
 
-: (load "quicklisp/setup.lisp")
+: (load "~/quicklisp/setup.lisp")
 
 To get updated software, use:
 
@@ -812,6 +826,21 @@ session is ended.
 
 * Common Lisp on Emacs
 ** Emacs Lisp
+*** Emacs Lisp vs Common Lisp
+Learning Emacs Lisp is useful and similar (but different from CL
+- Dynamic scope is everywhere
+- There are no reader (or reader-related) functions
+- Does not support all the types that are supported in CL
+- Incomplete implementation of CLOS (with the add-on EIEIO package)
+- Not all of CL is supported
+- No numerical tower support
+
+
+Some good Emacs Lisp learning resources
+- [[https://www.gnu.org/software/emacs/manual/eintr.html][An Introduction to Programming in Emacs Lisp]]
+- [[http://www.oreilly.com/catalog/gnuext/][Writing Gnu Emacs Extensions]]
+- [[http://wikemacs.org/wiki/Category:Emacs_Lisp][Wikemacs]]
+
 *** Emacs Lisp Reference
 - An Introduction to Programming in Emacs Lisp ::
 
@@ -910,43 +939,102 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
  for interacting  with a running  Common Lisp process  for compilation,
  debugging, documentation lookup, and so on.
 
- - Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
+- Provides REPL which is hooked to implementation directly in Emacs
+- Has integrated Common Lisp debugger with Emacs interface
+- Interactive object-inspector in Emacs buffer
+- Has its own minor mode which enhances lisp-mode in many ways
+- Supports every common Common Lisp implementation
+- Symbol completion
+- Cross-referencing
+- Can perform macroexpansions
 
-   "SLIME is a Emacs mode for Common Lisp development. Inspired by
-   existing systems such Emacs Lisp and ILISP, we are working to
-   create an environment for hacking Common Lisp in."
+  - Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
 
- - -slime-mode= ::
-   An Emacs minor-mode to enhance lisp-mode with:
-   - Code evaluation, compilation, and macroexpansion
-   - Online documentation
-     - =describe=
-     - =apropos=
-     - =hyperspec=
-   - Definition finding
-   - Symbol and package name completion
-   - Automatic macro indentation based on =&body=.
-   - Cross-reference interface
+    "SLIME is a Emacs mode for Common Lisp development. Inspired by
+    existing systems such Emacs Lisp and ILISP, we are working to
+    create an environment for hacking Common Lisp in."
 
- - SLDB ::
-   Common Lisp debugger with an Emacs-based user interface
+  - -slime-mode= ::
+    An Emacs minor-mode to enhance lisp-mode with:
+    - Code evaluation, compilation, and macroexpansion
+    - Online documentation
+      - =describe=
+      - =apropos=
+      - =hyperspec=
+    - Definition finding
+    - Symbol and package name completion
+    - Automatic macro indentation based on =&body=.
+    - Cross-reference interface
 
- - REPL ::
-   The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
-   tighter integration with Emacs.
+  - SLDB ::
+    Common Lisp debugger with an Emacs-based user interface
 
- - Compilation Notes ::
-   SLIME is able to take compiler messages and annotate them directly
-   into source buffers.
+  - REPL ::
+    The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
+    tighter integration with Emacs.
 
- - Inspector ::
-   Interactive object-inspector in an Emacs buffer.
+  - Compilation Notes ::
+    SLIME is able to take compiler messages and annotate them directly
+    into source buffers.
+
+  - Inspector ::
+    Interactive object-inspector in an Emacs buffer.
 
 *** Setting Up SLIME
  - inferior-lisp-program ::
    Point the =inferior-lisp-program= variable to your favourite Common
    Lisp implementation:
    : (setq inferior-lisp-program "sbcl")
+
+ - slime-setup ::
+
+   : (slime-setup '(slime-fancy slime-quicklisp slime-asdf))
+
+*** Using Multiple LISPs in SLIME
+To setup SLIME with multiple Lisp's configure the variable:
+
+: slime-lisp-implementations
+
+This variable holds a list of programs  and if you invoke SLIME with a negative
+prefix argument,
+: M-- M-x slime
+you can select a  program from that list. When called  without a prefix, either
+the name specified in
+: slime-default-lisp
+or the first item of the list will be used.
+
+The elements of the list should look like:
+
+: (NAME (PROGRAM PROGRAM-ARGS...) &key CODING-SYSTEM INIT INIT-FUNCTION ENV)
+
+#+begin_src elisp
+(setq slime-lisp-implementations
+      '((ccl ("/opt/local/share/ccl/1.12/dx86cl64"))
+        (sbcl ("/opt/local/bin/sbcl") :coding-system utf-8-unix)))
+#+end_src
+
+- NAME :: is a symbol and is used to identify the program.
+- PROGRAM :: is the filename of the program.
+- PROGRAM-ARGS :: is a list of command line arguments.
+- CODING-SYSTEM :: the coding system for the connection. (see slime-net-coding-system)
+- INIT ::
+  should be  a function which takes  two arguments: a filename  and a character
+  encoding. The  function should  return a  Lisp expression  as a  string which
+  instructs Lisp to start the Swank server  and to write the port number to the
+  file. At startup, SLIME starts the Lisp  process and sends the result of this
+  function to Lisp’s standard input. As default, slime-init-command is used. An
+  example is shown in Loading Swank faster.
+- INIT-FUNCTION :: should be a function  which takes no arguments. It is called
+  after the connection is established. (See also slime-connected-hook.)
+- ENV :: specifies a list of environment variables for the subprocess. E.g.
+
+  #+begin_src elisp
+    (sbcl-cvs ("/home/me/sbcl-cvs/src/runtime/sbcl"
+	       "--core" "/home/me/sbcl-cvs/output/sbcl.core")
+	      :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
+  #+end_src
+
+  initializes =SBCL_HOME= in the subprocess.
 
 *** Running SLIME
  SLIME is started with the Emacs command:
@@ -960,51 +1048,55 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
  To tell SLIME which Lisp program to run, add a prefix argument:
  : C-u M-x slime
 
-**** Using Multiple LISPs in SLIME
- To setup SLIME with multiple Lisp's configure the variable:
+ To choose from multiple Lisp programs, add a negative prefix:
 
- : slime-lisp-implementations
-
- This variable holds a list of programs  and if you invoke SLIME with a negative
- prefix argument,
  : M-- M-x slime
- you can select a  program from that list. When called  without a prefix, either
- the name specified in
- : slime-default-lisp
- or the first item of the list will be used.
 
- The elements of the list should look like:
+ - ~slime-close-all-parens-in-sexp~ :: =C-c C-]=
 
- : (NAME (PROGRAM PROGRAM-ARGS...) &key CODING-SYSTEM INIT INIT-FUNCTION ENV)
+   Balance parentheses of open s-expressions at point.
 
- #+begin_src elisp
- (setq slime-lisp-implementations
-       '((ccl ("/opt/local/share/ccl/1.12/dx86cl64"))
-         (sbcl ("/opt/local/bin/sbcl") :coding-system utf-8-unix)))
- #+end_src
+ - ~slime-reindent-defun~ :: =C-c M-q=
 
- - NAME :: is a symbol and is used to identify the program.
- - PROGRAM :: is the filename of the program.
- - PROGRAM-ARGS :: is a list of command line arguments.
- - CODING-SYSTEM :: the coding system for the connection. (see slime-net-coding-system)
- - INIT ::
-   should be  a function which takes  two arguments: a filename  and a character
-   encoding. The  function should  return a  Lisp expression  as a  string which
-   instructs Lisp to start the Swank server  and to write the port number to the
-   file. At startup, SLIME starts the Lisp  process and sends the result of this
-   function to Lisp’s standard input. As default, slime-init-command is used. An
-   example is shown in Loading Swank faster.
- - INIT-FUNCTION :: should be a function  which takes no arguments. It is called
-   after the connection is established. (See also slime-connected-hook.)
- - ENV :: specifies a list of environment variables for the subprocess. E.g.
+   Reindent the current defun, or refill  the current paragraph. If the current
+   defun  has unbalanced  parens, an  attempt  will be  made to  fix it  before
+   reindenting.
 
-   #+begin_src elisp
-     (sbcl-cvs ("/home/me/sbcl-cvs/src/runtime/sbcl"
-		"--core" "/home/me/sbcl-cvs/output/sbcl.core")
-	       :env ("SBCL_HOME=/home/me/sbcl-cvs/contrib/"))
-   #+end_src
+ - ~slime-beginning/end-of-defun~ :: =M-C-a/e=
 
-   initializes =SBCL_HOME= in the subprocess.
+ - ~slime-compile-defun~ :: =C-c C-c=
+
+ - ~slime-switch-to-output-buffer~ :: =C-c C-z=
+
+   Switch to the REPL.
+=
+ - ~slime-load-file~ :: =C-c C-l=
+
+   Load a lisp file.
+
+ - ~slime-compile-and-load-file~ :: =C-c C-k=
+
+   Compile and load the buffer’s file and highlight compiler notes.
+
+*** SLIME Contrib Modules
+
+SLIME’s functionalities live  in packages and so-called  =contrib= modules must
+be loaded to add further functionalities. The default ~slime-fancy~ includes:
+- slime-autodoc
+- slime-c-p-c
+- slime-editing-commands
+- slime-fancy-inspector
+- slime-fancy-trace
+- slime-fontifying-fu
+- slime-fuzzy
+- slime-mdot-fu
+- slime-macrostep
+- slime-presentations
+- slime-references
+- slime-repl
+- slime-scratch
+- slime-package-fu
+- slime-trace-dialog
 
 **** Loading Contrib Packages
  In  version   2.1  the   developers  moved   some  functionality   to  separate
@@ -1023,8 +1115,8 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
 
    After starting SLIME, the commands of both packages should be available.
 
-   If you want  to enable more contribs  after you start SLIME, you  can set the
-   slime-contribs variable to another value and call
+   If you want to  enable more contribs after you start SLIME,  you can set the
+   ~slime-contribs~ variable to another value and call:
    : M-x slime-setup.
 
    Note that packages will not be unloaded if they are removed from the list,
@@ -1058,6 +1150,15 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
 
  Inserts the last expression to the REPL and evaluates it there.
  : M-x slime-eval-last-expression-in-repl (C-c C-j)
+
+**** SLIME-Helm
+
+SLIME also has some nice extensions like Helm-SLIME which features, among
+others:
+- Fuzzy completion,
+- REPL and connection listing,
+- Fuzzy-search of the REPL history,
+- Fuzzy-search of the apropos documentation.
 
 **** User-interface Conventions
  There are a few "global" user-interface conventions.
