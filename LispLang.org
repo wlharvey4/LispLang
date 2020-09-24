@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-17 22:51
-#+macro:version Version 0.0.10
+#+date:2020-09-24 12:30
+#+macro:version Version 0.0.11
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1655,6 +1655,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
+:org-template-version: 0.6.20
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -1678,490 +1679,476 @@ https://clojure.org/api/api
 #+header: :tangle Makefile
 #+begin_src makefile
 
-###############################################################################
-### USER-DEPENDENT VARIABLES
-### USE ENVIRONMENT VARIABLES WHENEVER POSSIBLE
+  ###############################################################################
+  ### USER-DEPENDENT VARIABLES
+  ### USE ENVIRONMENT VARIABLES WHENEVER POSSIBLE
 
-# NOTE: All environment variables need to be exported PRIOR to starting the
-# Emacs server as EDITOR in your shell startup files; otherwise, they will not
-# be available to Emacs.
-# When I moved from using Bash to Zsh, I inadvertently changed the order of
-# import, and started the Emacs server before importing, and caused a horrible
-# bug which caused the program to work on one computer but fail on another.
+  # NOTE: All environment variables need to be exported PRIOR to starting the
+  # Emacs server as EDITOR in your shell startup files; otherwise, they will not
+  # be available to Emacs.
+  # When I moved from using Bash to Zsh, I inadvertently changed the order of
+  # import, and started the Emacs server before importing, and caused a horrible
+  # bug which caused the program to work on one computer but fail on another.
 
-# The absolute path to this Template file
-TEMPLATE := $(SYNC_ORG_TEMPLATE)
+  # The absolute path to this Template file
+  TEMPLATE := $(SYNC_ORG_TEMPLATE)
 
-# Use emacsclient as $EDITOR; make sure it is set in a shell startup file and
-# the server has been started.
-EMACS	  := $(EMACS)
-EDITOR	  := $(EDITOR)
+  # Use emacsclient as $EDITOR; make sure it is set in a shell startup file and
+  # the server has been started.
+  EMACS	  := $(EMACS)
+  EDITOR	  := $(EDITOR)
 
-# User’s personal GitHub token for authentication to GitHub
-# DO NOT HARD-CODE THIS VALUE
-GITHUB_TOKEN := $(GITHUB_TOKEN)
+  # User’s personal GitHub token for authentication to GitHub
+  # DO NOT HARD-CODE THIS VALUE
+  GITHUB_TOKEN := $(GITHUB_TOKEN)
 
-# The AWS Command Line Interface (AWS CLI) is an open source tool
-# that enables you to interact with AWS services using commands in
-# your command-line shell.  It must be present on your system.  Run the 'make'
-# command 'install-aws-cli' to install it if you do not have it.  Be sure to
-# run 'aws configure' after installing it.  This will place your AWS
-# credentials into ~/.aws/credentials.
-AWS := aws
-S3  := $(AWS) s3
+  # The AWS Command Line Interface (AWS CLI) is an open source tool
+  # that enables you to interact with AWS services using commands in
+  # your command-line shell.  It must be present on your system.  Run the 'make'
+  # command 'install-aws-cli' to install it if you do not have it.  Be sure to
+  # run 'aws configure' after installing it.  This will place your AWS
+  # credentials into ~/.aws/credentials.
+  AWS := aws
+  S3  := $(AWS) s3
 
-# The AWS region of choice; this can also be in .aws/config
-REGION := --region us-west-2
+  # The AWS region of choice; this can also be in .aws/config
+  REGION := --region us-west-2
 
-### END OF USER-DEPENDENT VARIABLES
-###############################################################################
-### MAKE-GENERATED VARIABLES
+  ### END OF USER-DEPENDENT VARIABLES
+  ###############################################################################
+  ### MAKE-GENERATED VARIABLES
 
-### PROJ AND ORG
-# ORG is the name of this Org file with extension .org
-# PROJ is the project name---the Org file name without extension.
+  ### PROJ AND ORG
+  # ORG is the name of this Org file with extension .org
+  # PROJ is the project name---the Org file name without extension.
 
-### NOTE: there can be only one Org file in the project directory;
-# so far this has not been a problem, but it might be.
+  ### NOTE: there can be only one Org file in the project directory;
+  # so far this has not been a problem, but it might be.
 
-PWD  := $(shell pwd)
-ORG  := $(shell ls *.org)
-PROJ := $(basename $(ORG))
+  PWD  := $(shell pwd)
+  ORG  := $(shell ls *.org)
+  PROJ := $(basename $(ORG))
 
-### NOTE: S is needed only for the Template file because of the way it is nested
-# one level deep in the Templates GitHub repo, which uses the plural form
-# of Templates, whereas this file uses the singular form, Template.  So when
-# the homepage link is updated, the curl command must be told to use the plural
-# form.	 This is obviously a hack only for my own use and can be removed once
-# I clean up this anomaly.
+  ### NOTE: S is needed only for the Template file because of the way it is nested
+  # one level deep in the Templates GitHub repo, which uses the plural form
+  # of Templates, whereas this file uses the singular form, Template.  So when
+  # the homepage link is updated, the curl command must be told to use the plural
+  # form.	 This is obviously a hack only for my own use and can be removed once
+  # I clean up this anomaly.
 
-ifeq ($(PROJ),$(basename $(notdir $(TEMPLATE))))
-S := s
-endif
+  ifeq ($(PROJ),$(basename $(notdir $(TEMPLATE))))
+  S := s
+  endif
 
-# The AWS S3 bucket to use to store the html source file; it is found at the
-# key #+bucket towards the beginning of the file and should include the appropriate
-# suffix (.com, .net, .org, etc)
-BUCKET       := $(shell $(EDITOR) --eval \
-	       '(with-current-buffer (find-file-noselect "$(ORG)") \
+  # The AWS S3 bucket to use to store the html source file; it is found at the
+  # key #+bucket towards the beginning of the file and should include the appropriate
+  # suffix (.com, .net, .org, etc)
+  BUCKET       := $(shell $(EDITOR) --eval \
+		 '(with-current-buffer (find-file-noselect "$(ORG)") \
+		    (save-excursion \
+		      (goto-char (point-min)) \
+		      (re-search-forward "^\#[+]bucket:\\(.*\\)$$" nil t) \
+		      (match-string-no-properties 1)))')
+  S3_BUCKET    := s3://$(BUCKET)
+  HTTPS_BUCKET := https://$(BUCKET)
+
+  ### DIR, SRC
+  # DIR is the .info name found at '#+texinfo_filename:<DIR>.info' (at
+  # the bottom of this file in the export configuration settings)
+  # without its extension, used as the INFO filename and the name of the
+  # HTML export directory; this code uses the lowercased PROJ name if
+  # there is no '#+texinfo_filename'.
+  # SRC is HTML directory based upon the DIR name
+
+  #DIR := $(shell $(EDITOR) --eval \
+  #	'(with-current-buffer (find-file-noselect "$(ORG)") \
+  #		(save-excursion \
+  #		(goto-char (point-min)) \
+  #		(re-search-forward "^\#[+]\\(?:texinfo_filename\\|TEXINFO_FILENAME\\):\\(.*\\).info$$" nil t) \
+  #		(match-string-no-properties 1)))')
+
+  DIR := $(shell sed -E -n "/^\#\+texinfo_filename/s/^.*:(.*)\.info$$/\1/p" $(ORG))
+  ifeq ($(DIR),$(EMPTY))
+	  DIR := $(shell echo $(PROJ) | tr "[:upper:]" "[:lower:]")
+  endif
+
+  SRC := $(DIR)/
+
+  ### VERS: v1.2.34/
+  # VERS is the version number of this Org document.
+  # When sync is run after the version number has been updated, then VERS
+  # picks up the newly-changed value.  VERS used to be staticly imbedded
+  # when the Makefile was tangled, but it needs to be dynamic for
+  # development.
+
+  # QUERY: should this number be formatted like this, or should it be just the numbers?
+  # The reason it includes them is the S3PROJ obtains the name from the S3 bucket, and
+  # it includes them.  But it only includes them because I have made it so.  Not a good
+  # reason just by itself.  The ending slash is not actually a part of the version, but
+  # comes from the way the 'aws2 ls' command returns its values.	So VERS should probably
+  # not include the trailing slash, although it doesn’t hurt anything.
+
+  VERS := v$(shell $(EDITOR) --eval \
+	  '(with-current-buffer (find-file-noselect "$(ORG)") \
 		  (save-excursion \
 		    (goto-char (point-min)) \
-		    (re-search-forward "^\#[+]bucket:\\(.*\\)$$") \
-		    (match-string-no-properties 1)))')
-S3_BUCKET    := s3://$(BUCKET)
-HTTPS_BUCKET := https://$(BUCKET)
+		    (re-search-forward "^\#[+]\\(?:macro\\|MACRO\\):version Version \\(\\(?:[[:digit:]]+[.]?\\)\\{3\\}\\)") \
+		    (match-string-no-properties 1)))')/
 
-### DIR, SRC
-# DIR is the .info name found at '#+texinfo_filename:<DIR>.info' (at
-# the bottom of this file in the export configuration settings)
-# without its extension, used as the INFO filename and the name of the
-# HTML export directory; this code uses the lowercased PROJ name if
-# there is no '#+texinfo_filename'.
-# SRC is HTML directory based upon the DIR name
+  ### AWS
+  # PROJ_LIST contains the list of projects currently uploaded to
+  # the S3 bucket; each item contains the name of the project and its
+  # current version.
 
-#DIR := $(shell $(EDITOR) --eval \
-#	'(with-current-buffer (find-file-noselect "$(ORG)") \
-#		(save-excursion \
-#		(goto-char (point-min)) \
-#		(re-search-forward "^\#[+]\\(?:texinfo_filename\\|TEXINFO_FILENAME\\):\\(.*\\).info$$" nil t) \
-#		(match-string-no-properties 1)))')
+  # Created function using elisp instead of the shell.
+  # This variable contains an elisp list of strings of the form '("proj1-v1.2.3/" "proj2-v4.5.6/" ...)'
+  # However, when it prints to the shell, the quotes are lost.
+  # Need to make sure elisp's variable 'exec-path contains the proper $PATH instead of adding to 'exec-path.
 
-DIR := $(shell sed -E -n "/^\#\+texinfo_filename/s/^.*:(.*)\.info$$/\1/p" $(ORG))
-ifeq ($(DIR),$(EMPTY))
-	DIR := $(shell echo $(PROJ) | tr "[:upper:]" "[:lower:]")
-endif
+  PROJ_LIST := $(shell $(EDITOR) --eval \
+	  "(progn \
+		  (require (quote seq)) (add-to-list (quote exec-path) (quote \"/usr/local/bin\")) \
+		  (seq-map (lambda (s) (replace-regexp-in-string \"^\s+PRE \" \"\" s)) \
+			  (seq-filter (lambda (s) (string-match-p (regexp-quote \" PRE \") s)) \
+			  (process-lines \"$(AWS)\" \"s3\" \"ls\" \"$(S3_BUCKET)\"))))")
 
-SRC := $(DIR)/
+  ### S3PROJ
+  # The name of the current project as obtained from S3: 'proj-v1.2.34/'
+  # If there is no current project in the S3 bucket, then assign a value equal to
+  # the Org project and version instead.  It is set to the project if found, and
+  # NO if not found, then updated in the ifeq block below.
+  S3PROJ := $(shell $(EDITOR) --eval \
+		  '(let ((proj (seq-find (lambda (s) (string-match-p "$(DIR)" s)) (quote $(PROJ_LIST))))) \
+		     (or proj (quote NO)))')
 
-### VERS: v1.2.34/
-# VERS is the version number of this Org document.
-# When sync is run after the version number has been updated, then VERS
-# picks up the newly-changed value.  VERS used to be staticly imbedded
-# when the Makefile was tangled, but it needs to be dynamic for
-# development.
+  ### PROJINS3
+  # is used by make sync; this allows the index.html file to be generated the first
+  # time the project is synced.  It is set to NO if this project is not currently in an
+  # S3 bucket, and it is set to YES if it is.
+  PROJINS3 :=
 
-# QUERY: should this number be formatted like this, or should it be just the numbers?
-# The reason it includes them is the S3PROJ obtains the name from the S3 bucket, and
-# it includes them.  But it only includes them because I have made it so.  Not a good
-# reason just by itself.  The ending slash is not actually a part of the version, but
-# comes from the way the 'aws2 ls' command returns its values.	So VERS should probably
-# not include the trailing slash, although it doesn’t hurt anything.
+  ### S3VERS
+  # The version of this project currently installed in the S3 bucket: 'v1.2.34/'
+  # If there is no current version in the S3 bucket, then assign the version from
+  # this Org file instead.
+  S3VERS   :=
 
-VERS := v$(shell $(EDITOR) --eval \
-	'(with-current-buffer (find-file-noselect "$(ORG)") \
-		(save-excursion \
-		  (goto-char (point-min)) \
-		  (re-search-forward "^\#[+]\\(?:macro\\|MACRO\\):version Version \\(\\(?:[[:digit:]]+[.]?\\)\\{3\\}\\)") \
-		  (match-string-no-properties 1)))')/
+  # Update S3PROJ, S3VERS, and PROJINS3
+  ifeq ($(S3PROJ), NO)
+	  S3PROJ := $(DIR)-$(VERS)
+	  S3VERS := $(VERS)
+	  PROJINS3 := NO
+  else
+	  S3VERS := $(subst $(DIR)-,,$(S3PROJ))
+	  PROJINS3 := YES
+  endif
 
-### AWS
-# PROJ_LIST contains the list of projects currently uploaded to
-# the S3 bucket; each item contains the name of the project and its
-# current version.
+  ### GITHUB
+  # USER is the current user's GitHub login name.
 
-# Created function using elisp instead of the shell.
-# This variable contains an elisp list of strings of the form '("proj1-v1.2.3/" "proj2-v4.5.6/" ...)'
-# However, when it prints to the shell, the quotes are lost.
-# Need to make sure elisp's variable 'exec-path contains the proper $PATH instead of adding to 'exec-path.
+  # The user name used to be statically embedded into the Makefile
+  # during tangle, but in an effort to make the Makefile dynamically
+  # indepedent, dynamic code has replaced the static code.  The code
+  # that placed the static name in the Makefile was a 'node' script that
+  # ran in a separate Org process during tangle.	An unfortunate fact of
+  # 'make' is that 'make' strips the quote marks from the string
+  # obtained from the 'curl' command when the 'make shell' command
+  # returns the string.	 This makes the string malformed JSON and
+  # unparsable by most JSON parsers, including 'node’.	However,
+  # 'perl'’s core module JSON::PP (but not JSON::XS) has facilities to
+  # parse very malformed JSON strings.	Therefore, this dynamic code
+  # uses 'perl' and the core module JSON::PP to parse the 'curl' string
+  # into a 'perl' JSON object which can return the login name.	This
+  # code should work with any version of 'perl' without having to
+  # install any modules.
 
-PROJ_LIST := $(shell $(EDITOR) --eval \
-	"(progn \
-		(require (quote seq)) (add-to-list (quote exec-path) (quote \"/usr/local/bin\")) \
-		(seq-map (lambda (s) (replace-regexp-in-string \"^\s+PRE \" \"\" s)) \
-			(seq-filter (lambda (s) (string-match-p (regexp-quote \" PRE \") s)) \
-			(process-lines \"$(AWS)\" \"s3\" \"ls\" \"$(S3_BUCKET)\"))))")
+  USER := $(shell \
+	    curl -sH "Authorization: token $(GITHUB_TOKEN)" https://api.github.com/user \
+	    | \
+	    perl -MJSON::PP -e \
+		'$$/ = ""; \
+		 my $$json = JSON::PP->new->loose->allow_barekey->decode(<STDIN>); \
+		 print $$json->{login};' \
+	    )
 
-### S3PROJ
-# The name of the current project as obtained from S3: 'proj-v1.2.34/'
-# If there is no current project in the S3 bucket, then assign a value equal to
-# the Org project and version instead.  It is set to the project if found, and
-# NO if not found, then updated in the ifeq block below.
-S3PROJ := $(shell $(EDITOR) --eval \
-		'(let ((proj (seq-find (lambda (s) (string-match-p "$(DIR)" s)) (quote $(PROJ_LIST))))) \
-		   (or proj (quote NO)))')
+  ### TOOLS & RESOURCES
+  # tools is a directory holding tangled scripts, such as cmprpl
+  TOOLS	:= tools
+  CMPRPL	:= $(TOOLS)/cmprpl
+  SAVE	:= resources
 
-### PROJINS3
-# is used by make sync; this allows the index.html file to be generated the first
-# time the project is synced.  It is set to NO if this project is not currently in an
-# S3 bucket, and it is set to YES if it is.
-PROJINS3 :=
+  ### TEXINFO
+  TEXI	:= $(PROJ).texi
+  INFO	:= $(DIR).info
+  PDF		:= $(PROJ).pdf
+  INDEX	:= index.html
+  HTML	:= $(DIR)/$(INDEX)
+  DIR_OLD	:= $(DIR)-old
 
-### S3VERS
-# The version of this project currently installed in the S3 bucket: 'v1.2.34/'
-# If there is no current version in the S3 bucket, then assign the version from
-# this Org file instead.
-S3VERS   :=
+  ### AWS S3
+  DST_OLD	:= $(S3_BUCKET)/$(S3PROJ)
+  DST_NEW	:= $(S3_BUCKET)/$(DIR)-$(VERS)
+  EXCL_INCL	:= --exclude "*" --include "*.html"
+  GRANTS	:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+  S3SYNC	:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(REGION) $(GRANTS)
+  S3MOVE	:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(REGION) $(GRANTS)
+  S3COPY	:= $(S3) cp $(INDEX) $(S3_BUCKET) $(REGION) $(GRANTS)
+  S3REMOVE	:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
 
-# Update S3PROJ, S3VERS, and PROJINS3
-ifeq ($(S3PROJ), NO)
-	S3PROJ := $(DIR)-$(VERS)
-	S3VERS := $(VERS)
-	PROJINS3 := NO
-else
-	S3VERS := $(subst $(DIR)-,,$(S3PROJ))
-	PROJINS3 := YES
-endif
+  ###############################################################################
 
-### GITHUB
-# USER is the current user's GitHub login name.
+  default: check texi info html pdf
 
-# The user name used to be statically embedded into the Makefile
-# during tangle, but in an effort to make the Makefile dynamically
-# indepedent, dynamic code has replaced the static code.  The code
-# that placed the static name in the Makefile was a 'node' script that
-# ran in a separate Org process during tangle.	An unfortunate fact of
-# 'make' is that 'make' strips the quote marks from the string
-# obtained from the 'curl' command when the 'make shell' command
-# returns the string.	 This makes the string malformed JSON and
-# unparsable by most JSON parsers, including 'node’.	However,
-# 'perl'’s core module JSON::PP (but not JSON::XS) has facilities to
-# parse very malformed JSON strings.	Therefore, this dynamic code
-# uses 'perl' and the core module JSON::PP to parse the 'curl' string
-# into a 'perl' JSON object which can return the login name.	This
-# code should work with any version of 'perl' without having to
-# install any modules.
+  PHONY: default all check values boot \
+	    texi info html pdf \
+	    open-org open-texi open-html open-pdf \
+	    clean dist-clean wiped-clean \
+	    help sync update delete-proj \
+	    install-aws-cli \
+	    index-html upload-index-html
 
-USER := $(shell \
-	  curl -sH "Authorization: token $(GITHUB_TOKEN)" https://api.github.com/user \
-	  | \
-	  perl -MJSON::PP -e \
-	      '$$/ = ""; \
-	       my $$json = JSON::PP->new->loose->allow_barekey->decode(<STDIN>); \
-	       print $$json->{login};' \
-	  )
+  values: check
+	    @printf "$${BLUE}Values...$${CLEAR}\n"
+	    @echo TEMPLATE:	$(TEMPLATE)
+	    @echo EDITOR:		$(EDITOR)
+	    @echo USER:		$(USER)
+	    @echo PWD:		$(PWD)
+	    @echo ORG:		$(ORG)
+	    @echo PROJ:		$(PROJ) $S
+	    @echo BUCKET:		$(BUCKET)
+	    @echo S3_BUCKET:	$(S3_BUCKET)
+	    @echo HTTPS_BUCKET:	$(HTTPS_BUCKET)
+	    @echo VERS:		$(VERS)
+	    @echo S3PROJ:		$(S3PROJ)
+	    @echo S3VERS:		$(S3VERS)
+	    @echo DIR:		$(DIR)
+	    @echo DIR_OLD:	$(DIR_OLD)
+	    @echo SRC:		$(SRC)
+	    @echo DST_OLD:	$(DST_OLD)
+	    @echo DST_NEW:	$(DST_NEW)
+	    @echo PROJ_LIST:	"$(PROJ_LIST)"
+	    @echo PROJINS3:	$(PROJINS3)
 
-### TOOLS & RESOURCES
-# tools is a directory holding tangled scripts, such as cmprpl
-TOOLS	:= tools
-CMPRPL	:= $(TOOLS)/cmprpl
-SAVE	:= resources
+  check:
+	    @printf "$${BLUE}Checking dependencies...$${CLEAR}\n"
 
-### TEXINFO
-TEXI	:= $(PROJ).texi
-INFO	:= $(DIR).info
-PDF		:= $(PROJ).pdf
-INDEX	:= index.html
-HTML	:= $(DIR)/$(INDEX)
-DIR_OLD	:= $(DIR)-old
+	    @[[ -z $(BUCKET) ]] && \
+	       { printf "$${RED}$(BUCKET) $${CYAN}must be set.$${CLEAR}\n"; exit 1; } || \
+	       printf "$${CYAN}BUCKET: $${GREEN}$(BUCKET)$${CLEAR}\n";
 
-### AWS S3
-DST_OLD	:= $(S3_BUCKET)/$(S3PROJ)
-DST_NEW	:= $(S3_BUCKET)/$(DIR)-$(VERS)
-EXCL_INCL	:= --exclude "*" --include "*.html"
-GRANTS	:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-S3SYNC	:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(REGION) $(GRANTS)
-S3MOVE	:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(REGION) $(GRANTS)
-S3COPY	:= $(S3) cp $(INDEX) $(S3_BUCKET) $(REGION) $(GRANTS)
-S3REMOVE	:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+	    @[[ -z $${GITHUB_TOKEN} ]] && \
+	       { printf "$${RED}GITHUB_TOKEN $${CYAN}must be set.$${CLEAR}\n"; exit 1; } || \
+	       printf "$${CYAN}GITHUB_TOKEN: $${GREEN}SET$${CLEAR}\n";
 
-###############################################################################
+	    @[[ (-d ~/.aws) && (-f ~/.aws/credentials) && (-f ~/.aws/config) ]] && \
+	       printf "$${CYAN}AWS credentials and config: $${GREEN}SET$${CLEAR}\n" || \
+	       { printf "$${RED}~/.aws 'credentials' and 'config' must be set.$${CLEAR}\n"; exit 1; }
 
-default: check texi info html pdf
+	    @[[ "$(shell $(EDITOR) --eval '(member (quote texinfo) org-export-backends)')" = "(texinfo)" ]] && \
+		  printf "$${CYAN}Texinfo backend: $${GREEN}INSTALLED.$${CLEAR}\n" || \
+		  { printf "$${YELLOW}Texinfo backend:$${CLEAR} $${RED}NOT INSTALLED; it must be installed.$${CLEAR}\n"; exit 1; }
 
-PHONY: default all check values boot \
-	  texi info html pdf \
-	  open-org open-texi open-html open-pdf \
-	  clean dist-clean wiped-clean \
-	  help sync update delete-proj \
-	  install-aws-cli \
-	  index-html upload-index-html
+	    @[[ $(shell $(EDITOR) --eval '(symbol-value org-confirm-babel-evaluate)') == "t" ]] && \
+		  { printf "$${YELLOW}org-confirm-babel-evaluate:$${CLEAR} $${RED}T; set to NIL.$${CLEAR}\n"; exit 1; } || \
+		  printf "$${CYAN}org-confirm-babel-evaluate: $${GREEN}OFF.$${CLEAR}\n\n"
 
-values: check
-	  @printf "$${BLUE}Values...$${CLEAR}\n"
-	  @echo TEMPLATE:	$(TEMPLATE)
-	  @echo EDITOR:		$(EDITOR)
-	  @echo USER:		$(USER)
-	  @echo PWD:		$(PWD)
-	  @echo ORG:		$(ORG)
-	  @echo PROJ:		$(PROJ) $S
-	  @echo BUCKET:		$(BUCKET)
-	  @echo S3_BUCKET:	$(S3_BUCKET)
-	  @echo HTTPS_BUCKET:	$(HTTPS_BUCKET)
-	  @echo VERS:		$(VERS)
-	  @echo S3PROJ:		$(S3PROJ)
-	  @echo S3VERS:		$(S3VERS)
-	  @echo DIR:		$(DIR)
-	  @echo DIR_OLD:	$(DIR_OLD)
-	  @echo SRC:		$(SRC)
-	  @echo DST_OLD:	$(DST_OLD)
-	  @echo DST_NEW:	$(DST_NEW)
-	  @echo PROJ_LIST:	"$(PROJ_LIST)"
-	  @echo PROJINS3:	$(PROJINS3)
+  open-org: $(ORG)
+	    @$(EDITOR) -n $(ORG)
+  $(ORG):
+	    @echo 'THERE IS NO $(ORG) FILE!!!'
+	    exit 1
 
-check:
-	  @printf "$${BLUE}Checking dependencies...$${CLEAR}\n"
+  texi: $(TEXI)
+  $(TEXI): $(ORG)
+	   @echo Making TEXI...
+	   @$(EDITOR) -u --eval \
+		  "(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
+			  (save-excursion \
+			  (org-texinfo-export-to-texinfo)))"
+	   @echo Done making TEXI.
+  open-texi: texi
+	   @$(EDITOR) $(TEXI)
 
-	  @[[ -z $(BUCKET) ]] && \
-	     { printf "$${RED}$(BUCKET) $${CYAN}must be set.$${CLEAR}\n"; exit 1; } || \
-	     printf "$${CYAN}BUCKET: $${GREEN}$(BUCKET)$${CLEAR}\n";
+  info: $(INFO)
+  $(INFO): $(TEXI)
+	   @echo Making INFO...
+	   @makeinfo -o $(INFO) $(TEXI)
+	   @$(EDITOR) -u -eval \
+		  "(when (get-buffer \"$(INFO)\") \
+			  (with-current-buffer (get-buffer \"$(INFO)\") \
+				  (revert-buffer t t t)))"
+	   @echo Done making INFO.
 
-	  @[[ -z $${GITHUB_TOKEN} ]] && \
-	     { printf "$${RED}GITHUB_TOKEN $${CYAN}must be set.$${CLEAR}\n"; exit 1; } || \
-	     printf "$${CYAN}GITHUB_TOKEN: $${GREEN}SET$${CLEAR}\n";
+  open-info: info
+	   @$(EDITOR) -u -eval \
+		  "(when (get-buffer \"*info*\") \
+			  (with-current-buffer (get-buffer \"*info*\") \
+				  (revert-buffer t t t)))"
+	   @$(EDITOR) -n $(INFO)
 
-	  @[[ (-d ~/.aws) && (-f ~/.aws/credentials) && (-f ~/.aws/config) ]] && \
-	     printf "$${CYAN}AWS credentials and config: $${GREEN}SET$${CLEAR}\n" || \
-	     { printf "$${RED}~/.aws 'credentials' and 'config' must be set.$${CLEAR}\n"; exit 1; }
+  html: $(HTML)
+  $(HTML): $(TEXI)
+	   @echo Making HTML INFO..
+	   @makeinfo --html -o $(DIR) $(TEXI)
+	   @echo Done making HTML.
+	   $(CMPRPL) $(DIR) $(DIR_OLD)
+  open-html: html
+	   @open $(HTML)
 
-	  @[[ "$(shell $(EDITOR) --eval '(member (quote texinfo) org-export-backends)')" = "(texinfo)" ]] && \
-		printf "$${CYAN}Texinfo backend: $${GREEN}INSTALLED.$${CLEAR}\n" || \
-		{ printf "$${YELLOW}Texinfo backend:$${CLEAR} $${RED}NOT INSTALLED; it must be installed.$${CLEAR}\n"; exit 1; }
+  # If pdftexi2dvi produces an error, it may still produce a viable PDF;
+  # therefore, use --tidy.  If it produces an error, try to link the PDF;
+  # if it does not produce an error, the PDF will be added to the top dir
+  # and there will be no attempt to link.
+  pdf:	$(PDF)
+  $(PDF): $(TEXI)
+	  @echo Making PDF INFO...
+	  @-pdftexi2dvi --quiet --build=tidy $(TEXI) || ln -s $(PROJ).t2d/pdf/build/$(PDF) $(PDF)
+	  @echo Done making PDF.
+  open-pdf:pdf
+	   @open $(PDF)
 
-	  @[[ $(shell $(EDITOR) --eval '(symbol-value org-confirm-babel-evaluate)') == "t" ]] && \
-		{ printf "$${YELLOW}org-confirm-babel-evaluate:$${CLEAR} $${RED}T; set to NIL.$${CLEAR}\n"; exit 1; } || \
-		printf "$${CYAN}org-confirm-babel-evaluate: $${GREEN}OFF.$${CLEAR}\n\n"
+  sync:   $(HTML)
+	  @echo Syncing version $(VERS) onto $(S3VERS)...
+	  $(S3SYNC)
+	  @echo Done syncing.
+	  [[ $(VERS) != $(S3VERS) ]] && { echo Moving...; $(S3MOVE); echo Done moving.;  make homepage; } || :
+	  [[ $(PROJINS3) = "NO" ]] && make homepage || :
 
-open-org: $(ORG)
-	  @$(EDITOR) -n $(ORG)
-$(ORG):
-	  @echo 'THERE IS NO $(ORG) FILE!!!'
-	  exit 1
+  # This is a target-specific variable for updating the “description”
+  # key on the GitHub repo page with the current version number.  It
+  # first makes a curl call to the GitHub project repo, finds the
+  # “description” line, pulls out the description only (leaving the old
+  # version) and then prints the value with the current version number.
+  # This value is used by the “homepage:” target in the PATCH call.
+  # This method is arguably harder to code but faster to run than using
+  # Perl with the JSON::PP module.
 
-texi: $(TEXI)
-$(TEXI): $(ORG)
-	 @echo Making TEXI...
-	 @$(EDITOR) -u --eval \
-		"(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
-			(save-excursion \
-			(org-texinfo-export-to-texinfo)))"
-	 @echo Done making TEXI.
-open-texi: texi
-	 @$(EDITOR) $(TEXI)
+  homepage: description = $(shell \
+	  curl -s \
+		  -H "Authorization: token $(GITHUB_TOKEN)" \
+		  https://api.github.com/repos/$(USER)/$(PROJ)$S | \
+		  (perl -ne 'if (/^\s*\"description\":\s*\"(.*): v(?:(?:[[:digit:]]+[.]?){3})/) {print $$1}'))
 
-info: $(INFO)
-$(INFO): $(TEXI)
-	 @echo Making INFO...
-	 @makeinfo $(TEXI)
-	 @echo Done making INFO.
-open-info: info
-	 @$(EDITOR) $(INFO)
+  ### NOTE the use of the S variable at the end of PROJ; this is to handle
+  # the singular case of the GitHub repo using the plural form, Templates
+  # whereas the the Template.org file uses the singular form.
+  homepage: $(ORG) upload-index-html
+	    @echo Updating homepage...
+	    @echo DESCRIPTION: $(description)
+	    @echo VERS: $(VERS)
+	    @curl -i \
+		  -H "Authorization: token $(GITHUB_TOKEN)" \
+		  -H "Content-Type: application/json" \
+		  -X PATCH \
+		  -d "{\"homepage\":\"$(HTTPS_BUCKET)/$(DIR)-$(VERS)\",\
+		       \"description\":\"$(description): $(VERS)\"}" \
+		  https://api.github.com/repos/$(USER)/$(PROJ)$S
+	    @echo Done updating homepage.
 
-html: $(HTML)
-$(HTML): $(TEXI)
-	 @echo Making HTML INFO..
-	 @makeinfo --html -o $(DIR) $(TEXI)
-	 @echo Done making HTML.
-	 $(CMPRPL) $(DIR) $(DIR_OLD)
-open-html: html
-	 @open $(HTML)
-
-# If pdftexi2dvi produces an error, it may still produce a viable PDF;
-# therefore, use --tidy.  If it produces an error, try to link the PDF;
-# if it does not produce an error, the PDF will be added to the top dir
-# and there will be no attempt to link.
-pdf:	$(PDF)
-$(PDF): $(TEXI)
-	@echo Making PDF INFO...
-	@-pdftexi2dvi --quiet --build=tidy $(TEXI) || ln -s $(PROJ).t2d/pdf/build/$(PDF) $(PDF)
-	@echo Done making PDF.
-open-pdf:pdf
-	 @open $(PDF)
-
-sync:   $(HTML)
-	@echo Syncing version $(VERS) onto $(S3VERS)...
-	$(S3SYNC)
-	@echo Done syncing.
-	[[ $(VERS) != $(S3VERS) ]] && { echo Moving...; $(S3MOVE); echo Done moving.;  make homepage; } || :
-	[[ $(PROJINS3) = "NO" ]] && make homepage || :
-
-# This is a target-specific variable for updating the “description”
-# key on the GitHub repo page with the current version number.  It
-# first makes a curl call to the GitHub project repo, finds the
-# “description” line, pulls out the description only (leaving the old
-# version) and then prints the value with the current version number.
-# This value is used by the “homepage:” target in the PATCH call.
-# This method is arguably harder to code but faster to run than using
-# Perl with the JSON::PP module.
-
-homepage: description = $(shell \
-	curl -s \
-		-H "Authorization: token $(GITHUB_TOKEN)" \
-		https://api.github.com/repos/$(USER)/$(PROJ)$S | \
-		(perl -ne 'if (/^\s*\"description\":\s*\"(.*): v(?:(?:[[:digit:]]+[.]?){3})/) {print $$1}'))
-
-### NOTE the use of the S variable at the end of PROJ; this is to handle
-# the singular case of the GitHub repo using the plural form, Templates
-# whereas the the Template.org file uses the singular form.
-homepage: $(ORG) upload-index-html
-	  @echo Updating homepage...
-	  @echo DESCRIPTION: $(description)
-	  @echo VERS: $(VERS)
+  delete-proj:
+	  @echo Deleting project $(PROJ)...
 	  @curl -i \
-		-H "Authorization: token $(GITHUB_TOKEN)" \
-		-H "Content-Type: application/json" \
-		-X PATCH \
-		-d "{\"homepage\":\"$(HTTPS_BUCKET)/$(DIR)-$(VERS)\",\
-		     \"description\":\"$(description): $(VERS)\"}" \
-		https://api.github.com/repos/$(USER)/$(PROJ)$S
-	  @echo Done updating homepage.
+		  -H "Authorization: token $(GITHUB_TOKEN)" \
+		  -H "Accept: application/vnd.github.v3+json" \
+		  -X DELETE \
+		  https://api.github.com/repos/$(USER)/$(PROJ)$S
+	  @$(S3REMOVE)
+	  @make dist-clean
+	  @make upload-index-html
+	  @$(EDITOR) -u --eval "(kill-buffer \"$(ORG)\")"
+	  @rm -rf "../$(PROJ)"
+	  @echo Done deleting project.
 
-delete-proj:
-	@echo Deleting project $(PROJ)...
-	@curl -i \
-		-H "Authorization: token $(GITHUB_TOKEN)" \
-		-H "Accept: application/vnd.github.v3+json" \
-		-X DELETE \
-		https://api.github.com/repos/$(USER)/$(PROJ)$S
-	@$(S3REMOVE)
-	@make dist-clean
-	@make upload-index-html
-	@$(EDITOR) -u --eval "(kill-buffer \"$(ORG)\")"
-	@rm -rf "../$(PROJ)"
-	@echo Done deleting project.
+  index-html: $(INDEX)
+  $(INDEX): $(ORG)
+	  @echo making index.html...
+	  $(EDITOR) --eval \
+	  "(with-current-buffer (find-file-noselect \"$(ORG)\") \
+		  (save-excursion \
+		    (org-link-search \"#project-index-title\") \
+		    (org-export-to-file (quote html) \"index.html\" nil t)))"
+	  @echo Done making index.html.
 
-index-html: $(INDEX)
-$(INDEX): $(ORG)
-	@echo making index.html...
-	$(EDITOR) --eval \
-	"(with-current-buffer (find-file-noselect \"$(ORG)\") \
-		(save-excursion \
-		  (org-link-search \"#project-index-title\") \
-		  (org-export-to-file (quote html) \"index.html\" nil t)))"
-	@echo Done making index.html.
+  upload-index-html: $(INDEX)
+	   @echo Uploading index.html...
+	   $(S3COPY)
+	   @echo Done uploading index.html
 
-upload-index-html: $(INDEX)
-	 @echo Uploading index.html...
-	 $(S3COPY)
-	 @echo Done uploading index.html
+  install-aws-cli:
+	    curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && \
+	    sudo installer -pkg AWSCLIV2.pkg -target / && \
+	    which aws && aws --version
+	    rm -rf AWSCLIV2.pkg
 
-update: $(ORG)
-	@echo Updating $(ORG)...
-	$(EDITOR) -u --eval \
-	"(progn \
-	  (with-current-buffer (find-file-noselect \"$(TEMPLATE)\") \
-	       (save-excursion \
-	       	 (goto-char (point-min)) \
-	       	 (search-forward \"* Build Tools\") \
-	       	 (org-beginning-of-line) \
-	       	 (org-copy-subtree))) \
-	  (with-current-buffer (find-file-noselect \"$(PWD)/$(ORG)\") \
-	       (save-excursion \
-	       	 (goto-char (point-min)) \
-	       	 (search-forward \"* Build Tools\") \
-	       	 (org-beginning-of-line) \
-	       	 (org-yank) \
-	       	 (org-cut-subtree) \
-	       	 (save-buffer) \
-	       	 (kill-buffer) \
-	       	 (setq org-confirm-babel-evaluate nil) \
-	       	 (org-babel-tangle-file \"$(PWD)/$(ORG)\"))))"
-	 @echo Done updating $(ORG).
+  clean:
+	  @echo Cleaning...
+	    -@rm *~
+	    -@for file in *.??*; \
+	    do \
+		    ext=$${file#$(PROJ).}; \
+		    [[ ! $${ext} =~ org|texi|info|pdf|html ]] && rm -rv $${file}; \
+	    done
 
-install-aws-cli:
-	  curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg" && \
-	  sudo installer -pkg AWSCLIV2.pkg -target / && \
-	  which aws && aws --version
-	  rm -rf AWSCLIV2.pkg
+  dist-clean: clean
+	  @echo Dist Cleaning...
+	    ${EDITOR} --eval \
+	      "(kill-buffer \"$(ORG)\")"
+	    -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
+	    -@for dir in *; \
+	    do \
+		    [ -d $$dir -a $$dir != "$(DIR_OLD)" -a $$dir != $(SAVE) ] && \
+		    rm -vr $$dir; \
+	    done
 
-clean:
-	@echo Cleaning...
-	  -@rm *~
-	  -@for file in *.??*; \
-	  do \
-		  ext=$${file#$(PROJ).}; \
-		  [[ ! $${ext} =~ org|texi|info|pdf|html ]] && rm -rv $${file}; \
-	  done
+  wipe-clean: dist-clean
+	  @echo Wipe Clean...
+	    -@rm -rf Makefile Readme.md $(DIR_OLD)
+	    @git checkout Makefile README.md
 
-dist-clean: clean
-	@echo Dist Cleaning...
-	  ${EDITOR} --eval \
-	    "(kill-buffer \"$(ORG)\")"
-	  -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
-	  -@for dir in *; \
-	  do \
-		  [ -d $$dir -a $$dir != "$(DIR_OLD)" -a $$dir != $(SAVE) ] && \
-		  rm -vr $$dir; \
-	  done
+  git-ready: dist-clean
+	    git checkout Makefile
+	    git checkout README.md
+	    git status
 
-wipe-clean: dist-clean
-	@echo Wipe Clean...
-	  -@rm -rf Makefile Readme.md $(DIR_OLD)
-	  @git checkout Makefile README.md
+  help:
+	    @echo '"make boot" tangles all of the files in Template'
+	    @echo '"make default" makes the .texi file, the .info file, \
+	    the html files, and the .pdf file.'
+	    @echo
 
-git-ready: dist-clean
-	  git checkout Makefile
-	  git checkout README.md
-	  git status
+	    @echo '"make check" checks for prerequistes'
+	    @echo '"make values" runs check and prints variable values'
+	    @echo
 
-help:
-	  @echo '"make boot" tangles all of the files in Template'
-	  @echo '"make default" makes the .texi file, the .info file, \
-	  the html files, and the .pdf file.'
-	  @echo
+	    @echo '"make texi" makes the .texi file'
+	    @echo '"make info" makes the .info file'
+	    @echo '"make html" makes the html distribution in a subdirectory'
+	    @echo '"make pdf" makes the .pdf file'
+	    @echo
 
-	  @echo '"make check" checks for prerequistes'
-	  @echo '"make values" runs check and prints variable values'
-	  @echo
+	    @echo '"make open-org" opens the ORG program using emacsclient for editing'
+	    @echo '"make open-texi" opens the .texi file using emacsclient for review'
+	    @echo '"make open-html" opens the distribution index.html file \
+	    in the default web browser'
+	    @echo '"make open-pdf" opens the .pdf file'
+	    @echo
 
-	  @echo '"make texi" makes the .texi file'
-	  @echo '"make info" makes the .info file'
-	  @echo '"make html" makes the html distribution in a subdirectory'
-	  @echo '"make pdf" makes the .pdf file'
-	  @echo
+	    @echo '"make sync" syncs the html files in the AWS S3 bucket BUCKET; \
+	    you must have your AWS S3 bucket name in the env var AWS_S3_BUCKET; \
+	    You must have your AWS credentials installed in ~/.aws/credentials'
+	    @echo
 
-	  @echo '"make open-org" opens the ORG program using emacsclient for editing'
-	  @echo '"make open-texi" opens the .texi file using emacsclient for review'
-	  @echo '"make open-html" opens the distribution index.html file \
-	  in the default web browser'
-	  @echo '"make open-pdf" opens the .pdf file'
-	  @echo
+	    @echo '"make install-aws-cli" installs the "aws cli v2" command-line tools'
+	    @echo 'You also need to run "aws configure" and supply your Access Key and Secret Access Key'
+	    @echo
 
-	  @echo '"make sync" syncs the html files in the AWS S3 bucket BUCKET; \
-	  you must have your AWS S3 bucket name in the env var AWS_S3_BUCKET; \
-	  You must have your AWS credentials installed in ~/.aws/credentials'
-	  @echo
+	    @echo '"make clean" removes the .texi, .info, and backup files ("*~")'
+	    @echo '"make dist-clean" cleans, removes the html distribution, \
+	    and removes the build directory'
+	    @echo '"make wipe-clean" wipes clean the directory, including old directories'
+	    @echo
 
-	  @echo '"make install-aws-cli" installs the "aws cli v2" command-line tools'
-	  @echo 'You also need to run "aws configure" and supply your Access Key and Secret Access Key'
-	  @echo
-
-	  @echo '"make clean" removes the .texi, .info, and backup files ("*~")'
-	  @echo '"make dist-clean" cleans, removes the html distribution, \
-	  and removes the build directory'
-	  @echo '"make wipe-clean" wipes clean the directory, including old directories'
-	  @echo
-
-	  @echo '"make delete-proj" deletes the project from the file system, GitHub and AWS'
+	    @echo '"make delete-proj" deletes the project from the file system, GitHub and AWS'
 
 #+end_src
 
@@ -2424,6 +2411,91 @@ to a file called =index.html=.
      :END:
 
 #+call: bucket-project-links()
+** Project Readme
+This adds the README.md template to a project. It should be customized uniquely
+for the project.
+
+#+name:project-readme
+#+header: :tangle README.md
+#+begin_src markdown
+# TITLE
+## Subtitle
+## Author
+## Date
+## Version
+# ABSTRACT
+This is the Org Template file.	It is the parent of all other Org Info blogs,
+and provides the source code for processing them in various different ways.
+# INTRODUCTION
+# CHAPTER
+## Section
+### Subsection
+#+end_src
+
+** Boot Template
+:PROPERTIES:
+:dependency1: EMACS:=:/Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs or similar
+:dependency2: EDITOR:=:emacsclient
+:dependency3: =SYNC_ORG_TEMPLATE= defined as $DEV/Templates/Org/Template.org
+:END:
+Although running the command ~org-babel-tangle~ (=C-c C-v t=) from within Emacs
+will install  everything, it would  be nice to have  a simple Makefile  that is
+downloaded with this  file that could be  invoked to do the  same thing without
+starting Emacs and Org-mode and keying in the ~org-babel-tangle~ command.  This
+little Makefile should be stored on  GitHub along with the ~Template.org~ file.
+When  the source  is extracted  to a  directory, then  running this  Makefile's
+default rule  as simply ~make~  will extract the ~preprocess.el~  script, which
+updates  =DEV= and  then  extracts the  full Makefile.   Because  this file  is
+tangled along with the full Makefile, it simply gets tacked onto the end of the
+big Makefile as an additional rule.   Now, running ~make~ runs the default rule
+from the  main Makefile, which is  to extract everything, then  export to TEXI,
+INFO, HTML, and PDF forms.
+
+It is assumed that an Emacs server is running, and that the $EDITOR environment
+variable is set to use ~emacsclient~.
+
+#+name:boot-template
+#+header: :tangle Makefile
+#+begin_src makefile
+boot:
+	$(EDITOR) -u --eval \
+		"(with-current-buffer (car (find-file-noselect \"./*.org\" nil nil t)) \
+			(goto-char (point-min)) \
+			(re-search-forward \"^#[+]name:preprocess.el$$\") \
+			(org-babel-tangle (quote (4))) \
+                        (save-buffer) \
+			(kill-buffer))"
+	./tools/preprocess.el
+#+end_src
+
+** Preprocess Env Vars
+The environment variable DEV can be  in different locations and will be spelled
+differently based  on how the  local machine is set  up.  For instance,  on one
+system,  it will  be at  ~$HOME/Dev~  while in  another  system it  will be  at
+~/usr/local/dev~.  However, the =:tangle= keyword  does not expand variables in
+the form ~${DEV}~,  but rather requires absolute  paths, like ~/usr/local/dev~.
+Therefore, this program works like a preprocessor for environment variables set
+up  as part  of  =:tangle= lines,  changing them  to  their system  environment
+variable values prior to tangling.  It lives in the ~tools~ directory.
+
+#+name:preprocess.el
+#+header: :mkdirp t
+#+header: :tangle tools/preprocess.el
+#+header: :shebang "#!/opt/local/bin/emacs -Q --script"
+#+begin_src emacs-lisp
+  (with-current-buffer (car (find-file-noselect "./*.org" nil nil t))
+    (save-excursion
+    (goto-char (point-min))
+    (let ((re-search-str "\\(?::tangle\\|load-file \\(?:[\\]*\\)?[\"]\\)\s*\\(.*?/[dD]ev\\)/")
+          (dev (getenv "DEV")))
+      (while
+              (re-search-forward re-search-str nil t)
+              (replace-match dev t nil nil 1)))
+    (save-buffer)
+    (require 'org)
+    (org-babel-tangle)))
+#+end_src
+
 ** Samples
 #+begin_comment
 (cd "~/Dev/Emacs/MasteringEmacs/")
@@ -2549,6 +2621,7 @@ nil
 * Build Scripts
   :PROPERTIES:
   :custom_id: build-scripts
+  :org-template-version: 0.6.20
   :END:
 ** Create and Update Projects
 *** Create New Project
@@ -2567,36 +2640,43 @@ nil
      (let ((projfile (concat project "/" project ".org")))
        (copy-file (getenv "SYNC_ORG_TEMPLATE") projfile)
        (with-current-buffer (find-file-noselect projfile)
-         ;; remove the README section of the TEMPLATE from the new project;
-         ;; the README must have a custom_id of "README"
-         (message "Deleting the README.")
-         (let* ((cbuf (current-buffer))
-                (ptree (project-tree cbuf))
-                (readme-beg-end (find-hl ptree "README")))
-           (message "readme-beg-end: %s" readme-beg-end)
-           (delete-region (car readme-beg-end) (cdr readme-beg-end))
-           (message "Done deleting README."))
-         (goto-char (point-min))
-         ;; update title, author, version, bucket
-         ;; with values provided by the user
-         (re-search-forward "^#[+]title:\s*\\(TITLE\\)$")
-         (replace-match title t nil nil 1)
-         (re-search-forward "^#[+]author:\s*\\(AUTHOR\\)$")
-         (replace-match author t nil nil 1)
-         (re-search-forward "^#[+]macro:\s*version Version \\(.*\\)$")
-         (replace-match "0.0.0" t nil nil 1)
-         (when bucket
-           (re-search-forward "^#[+]bucket:\s*\\(.*\\)$")
-           (replace-match bucket t nil nil 1))
-         (re-search-forward "^#[+]texinfo_printed_title:\\(PRINTED TITLE\\)$")
-         (replace-match (concat project "---" title) t nil nil 1)
-         (save-buffer)
-         ;; tangle the project readme and boot makefile
-         (org-babel-goto-named-src-block "project-readme")
-         (org-babel-tangle (quote (4)))
-         (org-babel-goto-named-src-block "boot-template")
-         (org-babel-tangle (quote (4)))
-         (kill-buffer))))
+	 (let* ((cur-buf (current-buffer))
+		(proj-tree (project-tree cur-buf))
+		(delete-hl-list (list "build-scripts" "README")))
+	   (message "Deleting %s..." delete-hl-list)
+	   (seq-do (lambda (cid)
+		     (message "...Deleting %s in %s..." cid cur-buf)
+		     (let* ((beg-end (find-hl proj-tree cid))
+			    (beg (car beg-end))
+			    (end (cdr beg-end)))
+		       (message "   ...%s: %s" cid beg-end)
+		       (delete-region beg end)
+		       (message "   ...done")))
+		   delete-hl-list))
+	 (message "Done deleting.")
+
+	 (goto-char (point-min))
+	 ;; update title, author, version, bucket
+	 ;; with values provided by the user
+	 (re-search-forward "^#[+]title:\s*\\(TITLE\\)$")
+	 (replace-match title t nil nil 1)
+	 (re-search-forward "^#[+]author:\s*\\(AUTHOR\\)$")
+	 (replace-match author t nil nil 1)
+	 (re-search-forward "^#[+]macro:\s*version Version \\(.*\\)$")
+	 (replace-match "0.0.0" t nil nil 1)
+	 (when bucket
+	   (re-search-forward "^#[+]bucket:\s*\\(.*\\)$")
+	   (replace-match bucket t nil nil 1))
+	 (re-search-forward "^#[+]texinfo_printed_title:\\(PRINTED TITLE\\)$")
+	 (replace-match (concat project "---" title) t nil nil 1)
+	 (save-buffer)
+	 ;; tangle the project readme and boot makefile
+	 (goto-char (point-min))
+	 (org-babel-goto-named-src-block "project-readme")
+	 (org-babel-tangle (quote (4)))
+	 (org-babel-goto-named-src-block "boot-template")
+	 (org-babel-tangle (quote (4)))
+	 (kill-buffer))))
  #+end_src
 
 *** Update Old Project
@@ -2617,21 +2697,23 @@ nil
   ;;; Add a keyword named 'bucket' just after the version macro.
   ;;; This function should be run from within the directory containing the Org file.
   (defun add-s3-bucket (s3-bucket)
-     "Add the name of the associated AWS S3 bucket to an Org templated file in the PWD."
+     "Add the name of the associated AWS S3 bucket to an Org
+  templated file in the PWD."
      (with-current-buffer (car (find-file-noselect "*.org" nil nil t))
        (goto-char (point-min))
        (let* ((tree (project-tree (current-buffer)))
-              ;; find the beginning position of the first headline to act as a limit
-              (hl1 (org-element-map tree (quote headline) (lambda (hl) (org-element-property :begin hl)) nil t)))
-           ;; Check for the presence of a bucket keyword before the first headline
-         (unless (re-search-forward "^#[+]bucket:" hl1 t)
-           ;; If no bucket keyword is found, search for a keyword MACRO with the value 'version'
-           (re-search-forward "^#[+]macro:version")
-           (beginning-of-line 2)
-           (insert (concat "#+bucket:" s3-bucket))
-           (message "Inserted bucket %s at point %s" s3-bucket (line-beginning-position))
-           (newline)
-           (save-buffer)))))
+	      ;; find the beginning position of the first headline to act as a limit
+	      (hl1 (org-element-map tree (quote headline) (lambda (hl) (org-element-property :begin hl)) nil t)))
+	   ;; Check for the presence of a bucket keyword before the first headline
+	 (unless (re-search-forward "^#[+]bucket:" hl1 t)
+	   ;; If no bucket keyword is found, search for a keyword MACRO with the value 'version'
+	   (message "No bucket found; adding %s..." s3-bucket)
+	   (re-search-forward "^#[+]macro:version")
+	   (beginning-of-line 2)
+	   (insert (concat "#+bucket:" s3-bucket))
+	   (message "Added bucket %s at point %s" s3-bucket (line-beginning-position))
+	   (newline)
+	   (save-buffer)))))
 #+end_src
 **** Add a Custom_Id
  This code checks a project file F to see if it contains a =property: value=
@@ -2647,7 +2729,7 @@ nil
     drawer (creating one if necessary) at headline HL."
        (with-current-buffer (find-file-noselect f)
 	 (save-excursion (goto-char (point-min))
-	 (re-search-forward (concat "^*\s*" hl))
+	 (re-search-forward (concat "^*\\{1,\\}\s*" hl))
 	 (beginning-of-line 2)
 	 (let* ((e (org-element-at-point))
 		(et (org-element-type e)))
@@ -2655,7 +2737,7 @@ nil
 	       (message "Adding property drawer to headline %s" hl)
 	       (org-insert-property-drawer))
 	   (unless (org-entry-get (point) p)
-	     (message "Adding property %s with value %s" p v)
+	     ;(message "Adding property %s with value %s" p v)
 	     (org-entry-put (point) p v)
 	     (save-buffer))))))
  #+end_src
@@ -2715,7 +2797,6 @@ beginning and ending points.
       (cons (org-element-property :begin cid-hl)
 	    (org-element-property :end cid-hl))))
 
-
 #+end_src
 
 The ~replace-build-tools~ function replaces a section of an old templated file
@@ -2742,6 +2823,7 @@ corresponding section from the root template file.
 
   OLD-BUF is the Org template in the current working directory.
   SYNC_ORG_TEMPLATE must be set."
+    ;(message "...in replace-build-tools with %s..." cid)
     (let* ((old-buf (car (find-file-noselect "./*.org" nil nil t)))
 	   (sync-buf (find-file-noselect (getenv "SYNC_ORG_TEMPLATE")))
 	   (old-tree (project-tree old-buf))
@@ -2756,7 +2838,30 @@ corresponding section from the root template file.
 	(org-set-property "org-template-version" (org-template-version))
 	(save-buffer)))
 
+  (defun delete-build-tools (cid)
+    "Delete a section of an Org template file identified by the
+  custom_id CID."
+    ;(message "...in delete-build-tools at %s..." cid)
+    (let* ((old-buf (car (find-file-noselect "./*.org" nil nil t)))
+	   (old-tree (project-tree old-buf))
+	   (old-be (find-hl old-tree cid)))
+      ;(message "old-buf: %s\told-be: %s" old-buf old-be)
+      (with-current-buffer old-buf
+	(delete-region (car old-be) (cdr old-be))
+	(save-buffer))))
+#+end_src
 
+**** Replace Build Tools Script
+Add a script in ~bin~ to run just the ~replace-build-tools~, then tangle the
+~Makefile~.
+
+#+name:replace-build-tools-script
+#+header: :tangle /usr/local/dev/bin/replace-build-tools
+#+header: :shebang "#! /Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs --script"
+#+begin_src elisp
+(load-file "/usr/local/dev/bin/org-template.el")
+(replace-build-tools "build-tools")
+(kill-buffer)
 #+end_src
 
 *** Run Create and Update
@@ -2834,18 +2939,45 @@ template file.
  #+header: :tangle /usr/local/dev/bin/update-org-template
  #+header: :shebang "#!/Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs --script"
  #+begin_src emacs-lisp
+   (require 'org)
+   (message "Update Org Template...")
+   ;(message "Obtaining ORG_SYNC_TEMPLATE: %S..." (getenv "SYNC_ORG_TEMPLATE"))
+   (org-babel-tangle-file (getenv "SYNC_ORG_TEMPLATE"))
+   ;(message "obtained.")
+
    (load-file "/usr/local/dev/bin/org-template.el")
 
    (setq old-template (car (file-expand-wildcards "*.org" t)))
+   ;(message (format "loaded old-template: %s" old-template))
    (setq org-template-version (org-template-version))
+   ;(message (format "org-template-version: %s" org-template-version))
 
+   ;(message (format "Checking for s3-bucket: %s..." (org-template-bucket)))
    (add-s3-bucket (org-template-bucket))
+   ;(message "done")
 
-   (add-pv-to-hl old-template "Build Tools"   "custom_id" "build-tools")
+   ;(message "Adding pv to build-tools...")
+   (add-pv-to-hl old-template "Build Tools" "custom_id" "build-tools")
+   ;(message "done.")
+
+   ;(message "Replacing build-tools...")
    (replace-build-tools "build-tools")
+   ;(message "done.")
 
+   ;(message "Adding template version to Makefile...")
+   (add-pv-to-hl old-template "Makefile" "org-template-version" org-template-version)
+   ;(message "done.")
+
+   ;(message "Adding pb build-scripts...")
    (add-pv-to-hl old-template "Build Scripts" "custom_id" "build-scripts")
-   (replace-build-tools "build-scripts")
+   ;(message "done.")
+
+   ;(message "Deleting build-scripts...")
+   (delete-build-tools "build-scripts")
+   ;(message "done.")
+
+   (org-babel-tangle-file old-template)
+   (message "Finished Update Org Template.")
  #+end_src
 
 ** Ignore
@@ -3080,27 +3212,6 @@ template file.
    }
 
  #+end_src
-** Project Readme
-This adds the README.md template to a project. It should be customized uniquely
-for the project.
-
-#+name:project-readme
-#+header: :tangle README.md
-#+begin_src markdown
-# TITLE
-## Subtitle
-## Author
-## Date
-## Version
-# ABSTRACT
-This is the Org Template file.	It is the parent of all other Org Info blogs,
-and provides the source code for processing them in various different ways.
-# INTRODUCTION
-# CHAPTER
-## Section
-### Subsection
-#+end_src
-
 ** Switch Emacs Init
 This script allows the user to switch into using a different Emacs
 initialization setup.  The script first lists the currently-selected
@@ -3330,71 +3441,6 @@ template   is	updated	  with	 a   newer  local   file,   then   delete   the
     done
 #+end_src
 
-** Boot Template
-:PROPERTIES:
-:dependency1: EMACS:=:/Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs or similar
-:dependency2: EDITOR:=:emacsclient
-:dependency3: =SYNC_ORG_TEMPLATE= defined as $DEV/Templates/Org/Template.org
-:END:
-Although running the command ~org-babel-tangle~ (=C-c C-v t=) from within Emacs
-will install  everything, it would  be nice to have  a simple Makefile  that is
-downloaded with this  file that could be  invoked to do the  same thing without
-starting Emacs and Org-mode and keying in the ~org-babel-tangle~ command.  This
-little Makefile should be stored on  GitHub along with the ~Template.org~ file.
-When  the source  is extracted  to a  directory, then  running this  Makefile's
-default rule  as simply ~make~  will extract the ~preprocess.el~  script, which
-updates  =DEV= and  then  extracts the  full Makefile.   Because  this file  is
-tangled along with the full Makefile, it simply gets tacked onto the end of the
-big Makefile as an additional rule.   Now, running ~make~ runs the default rule
-from the  main Makefile, which is  to extract everything, then  export to TEXI,
-INFO, HTML, and PDF forms.
-
-It is assumed that an Emacs server is running, and that the $EDITOR environment
-variable is set to use ~emacsclient~.
-
-#+name:boot-template
-#+header: :tangle Makefile
-#+begin_src makefile
-boot:
-	$(EDITOR) -u --eval \
-		"(with-current-buffer (car (find-file-noselect \"./*.org\" nil nil t)) \
-			(goto-char (point-min)) \
-			(re-search-forward \"^#[+]name:preprocess.el$$\") \
-			(org-babel-tangle (quote (4))) \
-                        (save-buffer) \
-			(kill-buffer))"
-	./tools/preprocess.el
-#+end_src
-
-** Preprocess Env Vars
-The environment variable DEV can be  in different locations and will be spelled
-differently based  on how the  local machine is set  up.  For instance,  on one
-system,  it will  be at  ~$HOME/Dev~  while in  another  system it  will be  at
-~/usr/local/dev~.  However, the =:tangle= keyword  does not expand variables in
-the form ~${DEV}~,  but rather requires absolute  paths, like ~/usr/local/dev~.
-Therefore, this program works like a preprocessor for environment variables set
-up  as part  of  =:tangle= lines,  changing them  to  their system  environment
-variable values prior to tangling.  It lives in the ~tools~ directory.
-
-#+name:preprocess.el
-#+header: :mkdirp t
-#+header: :tangle tools/preprocess.el
-#+header: :shebang "#!/opt/local/bin/emacs --script"
-#+begin_src emacs-lisp
-  (with-current-buffer (car (find-file-noselect "./*.org" nil nil t))
-    (save-excursion
-    (goto-char (point-min))
-    (let ((re-search-str "\\(?::tangle\\|load-file \\(?:[\\]*\\)?[\"]\\)\s*\\(.*?/[dD]ev\\)/")
-          (dev (getenv "DEV")))
-      (while
-              (re-search-forward re-search-str nil t)
-              (replace-match dev t nil nil 1)))
-    (save-buffer)
-    (require 'org)
-    (org-babel-tangle)))
-#+end_src
-
-
 * List of Programs
 :PROPERTIES:
 :appendix: t
