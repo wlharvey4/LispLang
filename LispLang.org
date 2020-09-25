@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-24 12:30
-#+macro:version Version 0.0.11
+#+date:2020-09-25 09:51
+#+macro:version Version 0.0.12
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -731,6 +731,9 @@ system.
  Commercial product
 *** ANSI Common Lisp
  - ANSI CL :: http://www.paulgraham.com/acl.html
+** CMU Common Lisp Repository
+- http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
+
 * Quicklisp Library Manager
 https://www.quicklisp.org/beta/
 
@@ -1245,7 +1248,6 @@ does so in purely Common Lisp style."
 #+end_quote
 - https://wiki.c2.com/?CommonLispaGentleIntroductionToSymbolicComputation
 
-
 ** Standardizations of Scheme
 Scheme has been standardized both formally and informally.
 
@@ -1292,6 +1294,83 @@ support.
 **** The Revised6 Report on the Algorithmic Language Scheme
 http://www.r6rs.org
 
+** The Scheme Family
+   :PROPERTIES:
+   :author:   Paul McJones
+   :last-modified: 2020-04-20 10:10
+   :END:
+- http://www.softwarepreservation.org/projects/LISP/scheme_family/
+
+*** Creation of Scheme
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-349.pdf][SCHEME: An Interpreter for Extended Lambda Calculus]]
+  - Gerald Jay Sussman and Guy Lewis Steele, Jr.
+  - AI Memo No. 349, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, December 1975
+- [[http://www.softwarepreservation.org/projects/LISP/scheme_family/][LAMBDA: The Ultimate Imperative]]
+  - Guy Lewis Steele, Jr. and Gerald Jay Sussman
+  - AI Memo No. 353, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, March 10, 1976
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-379.pdf][LAMBDA: The Ultimate Declarative]]
+  - Guy Lewis Steele, Jr.
+  - AI Memo No. 379, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, November 1976
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-443.pdf][Debunking the "Expensive Procedure Call" Myth; or, Procedure Call
+  Implementations Considered Harmful; or, LAMBDA: The Ultimate GOTO]]
+  - Guy Lewis Steele, Jr.
+  - AI Memo No. 443, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, October 1977
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-452.pdf][The Revised Report on SCHEME: A Dialect of LISP]]
+  - Guy Lewis Steele, Jr. and Gerald Jay Sussman
+  - AI Memo No. 452, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, January 1978
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-453.pdf][The Art of the Interpreter; or, The Modularity Complex (Parts Zero, One, and
+  Two)]]
+  - Guy Lewis Steele, Jr. and Gerald Jay Sussman
+  - AI Memo No. 453, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, May 1978
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AITR-474.pdf][RABBIT: A Compiler for SCHEME (A Study in Compiler Optimization)]]
+  - Guy Lewis Steele, Jr.
+  - Technical Report 474, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, May 1978
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-514.pdf][Design of LISP-based Processors; or, SCHEME: A Dielectric LISP, or Finite
+  Memories Considered Harmful; or, LAMBDA: The Ultimate Opcode.]]
+  - Guy Lewis Steele, Jr. and Gerald Jay Sussman
+  - AI Memo No. 514, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, March 1979
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-848.pdf][The Revised Revised Report on Scheme; or, An UnCommon Lisp]]
+  - William Clinger, editor
+  - AI Memo No. 848, Artificial Intelligence Laboratory, Massachusetts
+    Institute of Technology, August 1985
+- [[https://dl.acm.org/doi/10.1145/15042.15043][Revised3 Report on the Algorithmic Language Scheme]]
+  - Jonathan Rees and William Clinger, editors
+  - SIGPLAN Notices Volume 21, Number 12, December 1986
+- [[https://legacy.cs.indiana.edu/ftp/scheme-repository/][Revised4 Report on the Algorithmic Language Scheme]]
+  - William Clinger and Jonathan Rees, editors
+  - ACM Lisp Pointers Volume 4, Number 3, July 1991
+- [[https://web.archive.org/web/20160322115236/http://cs.au.dk/~hosc/local/HOSC-11-1-pp7-105.pdf][Revised5 Report on the Algorithmic Language Scheme]]
+  - https://schemers.org/Documents/Standards/R5RS/
+  - Richard Kelsey, William Clinger, and Jonathan Rees, editors
+  - Higher-Order and Symbolic Computation, Volume 11, Number 1, August 1998
+- [[http://www.r6rs.org][The Revised6 Report on the Algorithmic Language Scheme]]
+  - Michael Sperber et al.
+  - September 26, 2007
+- [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/impl/rabbit/0.html][Scheme compiler written in Lisp, 1978]]
+  - Guy L. Steele, Jr.
+- [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/doc/intro/intro.txt][The Scheme programming language]]
+  - Ken Dickey
+- [[http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/scheme/0.html][CMU Scheme Repository]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/bookcode/0.html][Machine readable parts of various Scheme books]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/code/0.html][Scheme code for benchmarking, research, education, and fun]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/doc/0.html][Documentation, including standards and proposals]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/edu/0.html][Educational Materials for Teaching/Learning Scheme]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/faq/0.html][Scheme FAQ: Frequently Asked Questions (FAQ) posting for comp.lang.scheme newsgroup]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/doc/macros/0.html][Proposals and implementations for macros in Scheme.]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/oop/0.html][OOP: Code related to object-oriented programming.]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/util/0.html][Utilities for programming in Scheme.]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/doc/bib/0.html][This directory contains several bibliographies related to work on Scheme.]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/doc/notes/0.html][Summaries and interesting notes about Scheme-related stuff.]]
+  - [[http://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/scheme/impl/0.html][Free/Shareware Scheme implementations]]
+
 ** Resources on Scheme
 *** [[schemers.org][schemers.org]]
 The main resource for all things Scheme
@@ -1302,6 +1381,9 @@ It was initiated by the PLT group at Rice University.
 *** [[http://www.scheme.dk/planet/][Planet Scheme]]
 Planet Scheme is a meta blog. Blog posts on Scheme are collected here.
 
+*** Scheme FAQ
+- http://community.schemewiki.org/?scheme-faq-general
+
 *** RnRS
 - http://people.csail.mit.edu/jaffer/Scheme
 
@@ -1309,7 +1391,8 @@ Planet Scheme is a meta blog. Blog posts on Scheme are collected here.
 - http://groups.csail.mit.edu/mac/projects/scheme/
 
 *** The Scheme Programming Language Third Edition 2003
-by R. Kent Dybvig (3rd ed. 2003)
+- https://www.scheme.com/tspl3/
+  - by R. Kent Dybvig (3rd ed. 2003)
 
 This book is intended to provide an introduction to the Scheme
 programming language but not an introduction to programming in
@@ -1371,7 +1454,7 @@ This book is organized into nine chapters, plus appendices.
 *** The Scheme Programming Language Fourth Edition 2009
 https://www.scheme.com/tspl4/
 
-*** The Little Scheme
+*** The Little Schemer
 Daniel P. Friedman and Matthias Felleisen. The Little Schemer, fourth
 edition. MIT Press, 1996.
 
@@ -1388,10 +1471,105 @@ visual interpreter for the Scheme functional programming languages.
 *** Scheme-FAQ
 - http://community.schemewiki.org/?scheme-faq
 
-** Scheme Dialects
+*** Structure and Interpretation of Computer Programs---SICP
+- https://mitpress.mit.edu/sites/default/files/sicp/index.html
+
+** Scheme Implementations
 [[http://www.r6rs.org/implementations.html][R6RS Implementations]]
 
 http://community.schemewiki.org/?category-implementations
+
+*** List of Known Scheme Implementations
+    :PROPERTIES:
+    :last-modified: 2020-08-09 10:23:38
+    :END:
+- [[http://community.schemewiki.org/?scheme-faq-standards#implementations][What Scheme implementations are there?]]
+
+  This  page holds  a list  of  known Scheme  implementations, in  alphabetical
+  order.
+
+*** Quick and Dirty List of Scheme Implementations
+- [[http://community.schemewiki.org/?category-implementations][Here is a quick-and-dirty list of a very select number of Scheme implementations.]]
+
+
+- Bigloo ::
+  Compiles Scheme to C, JVM and .NET.
+- Chez ::
+  A very fast cross-platform native code compiler (commercial) along with a
+  free interpreter.
+- Chibi ::
+  A very small library intended for use as an extension and scripting language
+  in C programs.
+- Chicken ::
+  A Scheme->C compiler with a good FFI?.
+- Cyclone ::
+  A brand-new Scheme-to-C compiler that allows practical application
+  development using R7RS Scheme.
+- Elk ::
+  A Scheme based extension language kit.
+- Gambit ::
+  Scheme->C compiler. Also compiles to Javascript and working on an universal
+  backend (PHP, Python, Ruby, Asm).
+- Gauche ::
+  This wiki runs on it. A scripting language scheme interpreter with good
+  Unicode support.
+- Guile ::
+  The GNU Scheme interpreter, designed to have good integration with C
+  programs. A nice extension language.
+- Ikarus ::
+  R6RS Scheme incremental compiler to i32 and i64 native code.
+- IronScheme ::
+  R6RS Scheme for the .NET Framework.
+- kali-scheme-revival ::
+  A variant of Scheme48 for distributed computation.
+- Kawa ::
+  Runs on the JVM
+- Larceny ::
+  Is a simple and efficient R6RS runtime for scheme.
+- LispMe ::
+  R4RS Scheme, but for Palm Os
+- Ocs ::
+  An R5RS Scheme interpreter in OCaml.
+- Pika-Scheme ::
+  A new implementation currently in prerelease stage.
+- PLT-Scheme ::
+  PLT Scheme is an umbrella name for a family of implementations of the Scheme
+  language - DrScheme, MzScheme, MrEd.
+- Pocket-Scheme ::
+  A scheme for WinCE based handhelds.
+- RScheme ::
+  Compiles to C, has Dylan-like OO features.
+- Scheme48 ::
+  The primary design goal was clarity and good design.
+- Schoca ::
+  A Scheme interpreter in Objective Caml.
+- SCM ::
+  Small and portable R5RS implementation. SLIB, by the same author, is nicelly
+  integrated with SCM.
+- SCSH ::
+  The SCheme SHell, based on Scheme48. This adds a lot of very interesting
+  facilities for POSIX system interfacing.
+- SISC ::
+  A Scheme interpreter in Java, making the whole Java library available to
+  Scheme, and still being very fast (for an interpreter)
+- SISCWeb ::
+  The framework for creating web applications using the SISC interpreter.
+- Stalin ::
+  Scheme to C compiler
+- STKlos ::
+  A Scheme System with an Object System and TK integration
+- T ::
+  Is the name for an implementation and dialect of scheme
+  - [[http://mumble.net/~jar/tproject/][T Project Web Site]]
+  - [[http://web.archive.org/web/20070103020434/http://mumble.net/~campbell/t/t.html][T Revival Website]] (Last Updated Friday, 7th April, 2006)
+  - T is a dialect of Scheme and its implementation. T originated from Yale. It
+    is not compatible with R5RS.
+- TinyScheme ::
+  A lightweight Scheme interpreter
+- Unlikely-Scheme ::
+  An embeddable C++ implementation
+- Ypsilon ::
+  R6RS interpreter
 
 *** Chez Scheme
  http://cisco.github.io/ChezScheme/
@@ -1510,8 +1688,8 @@ STklos, which provides:
 - generic functions,
 - multi-methods,
 - a MOP (Meta Object Protocol)
-** Scheme Programs
 
+** Scheme Programs
 *** SLIB
 - http://people.csail.mit.edu/jaffer/SLIB
 
@@ -1572,6 +1750,93 @@ invoices based on that time.
 
 
 JACAL is an interactive symbolic mathematics program.
+
+** Scheme Libraries
+*** The SLIB Portable Scheme Library
+- http://people.csail.mit.edu/jaffer/SLIB.html
+- [[http://groups.csail.mit.edu/mac/ftpdir/scm/slib-3b6.zip][SLIB ZIP Source]]
+- Released 2020-02-16
+
+
+SLIB is a portable Scheme library providing compatibiliy and utility functions
+for all standard Scheme implementations.
+
+SLIB supports
+- Bigloo,
+- Chez,
+- ELK-3.0,
+- Gambit-4.0,
+- Gauche-0.9,
+- Guile,
+- JScheme,
+- MacScheme,
+- MITScheme,
+- Pocket-Scheme,
+- RScheme,
+- S7,
+- scheme->C,
+- Scheme48,
+- SCM,
+- SCM-Mac,
+- scsh,
+- SISC,
+- Stk,
+- T3.1,
+- umb-scheme, and
+- VSCM.
+
+
+SLIB-PSD is a portable debugger for Scheme (requires emacs editor):
+- [[http://groups.csail.mit.edu/mac/ftpdir/scm/slib-psd1-3.tar.gz][SLIB-PSD SOURCE]]
+- [[https://github.com/perttikellomaki/psd][SLIB on GitHub]]
+
+**** SLIB Installation
+- http://people.csail.mit.edu/jaffer/slib/Installation.html
+
+**** SLIB Documentation
+- http://people.csail.mit.edu/jaffer/slib/
+
+** Scheme on Emacs
+
+*** Scheme Mode
+ - Is there an Emacs mode for Scheme? Emacs comes with two Scheme modes. Most
+   people prefer the one that is not the default. To switch to that mode, put
+   something like this into your ~.emacs~ file:
+
+   #+begin_src elisp
+   (autoload 'scheme-mode "cmuscheme" "Major mode for Scheme." t)
+   (autoload 'run-scheme "cmuscheme" "Switch to interactive Scheme buffer." t)
+   (setq scheme-program-name "name-of-your-scheme-program")
+   (add-hook 'scheme-mode-hook 'turn-on-font-lock)
+   #+end_src
+
+   The  major mode  does syntax-highlighting  and indentation.  The minor  mode,
+   invoked  with =M-x  run-scheme=, executes  a Scheme  interpreter in  an Emacs
+   buffer. You can evaluate sections of a  program in the buffer or type into it
+   directly.
+
+
+*** CMU Scheme Mode
+For  more advanced  syntax-highlighting and  indenting, check  out the  various
+extensions to the ~cmuscheme~ mode at
+
+- http://www.cs.indiana.edu/proglang/scheme/iucs.html.
+
+
+*** MIT Scheme Mode
+MIT Scheme includes a specialized  mode (~mit-scheme.el~) that understands some
+of MIT's extensions and provides a closer integration with the REPL.
+
+
+*** Quack
+=Quack= (http://www.neilvandyke.org/quack/)  provides numerous  enhancements to
+Emacs support, works with numerous  Scheme implementations, and is a no-brainer
+install  (unless you  are using  a rare  Scheme implementation  for which  even
+better REPL integration exists).
+
+*** Support for Scheme on Emacs
+You can find descriptions of these modes,  as well as some other Emacs packages
+that provide support for Scheme [[http://alexott.net/en/writings/emacs-devenv/EmacsScheme.html][here]].
 
 * Racket
 - https://racket-lang.org
