@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-25 09:51
-#+macro:version Version 0.0.12
+#+date:2020-09-28 14:53
+#+macro:version Version 0.0.13
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -441,7 +441,7 @@ MacTeX 2014 works.
  Xanalys (formerly Harlequin) at:
 
  - http://www.lispworks.com/reference/HyperSpec/
-** Commoin Lisp The Language 2nd Edition
+** Common Lisp The Language 2nd Edition
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
 - https://wiki.c2.com/?CommonLispTheLanguage
 - Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
@@ -1920,7 +1920,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
-:org-template-version: 0.6.20
+:org-template-version: 0.6.23
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -1938,6 +1938,7 @@ https://clojure.org/api/api
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
 :env_var4: COLORS
+:org-template-version: 0.6.23
 :END:
 
 #+name:Makefile
@@ -2145,7 +2146,8 @@ https://clojure.org/api/api
   ### TEXINFO
   TEXI	:= $(PROJ).texi
   INFO	:= $(DIR).info
-  PDF		:= $(PROJ).pdf
+  INFOTN	:= $(shell $(EDITOR) --eval "(file-truename \"$(INFO)\")")
+  PDF	:= $(PROJ).pdf
   INDEX	:= index.html
   HTML	:= $(DIR)/$(INDEX)
   DIR_OLD	:= $(DIR)-old
@@ -2175,17 +2177,20 @@ https://clojure.org/api/api
   values: check
 	    @printf "$${BLUE}Values...$${CLEAR}\n"
 	    @echo TEMPLATE:	$(TEMPLATE)
-	    @echo EDITOR:		$(EDITOR)
+	    @echo EDITOR:	$(EDITOR)
 	    @echo USER:		$(USER)
 	    @echo PWD:		$(PWD)
 	    @echo ORG:		$(ORG)
+	    @echo TEXI:		$(TEXI)
+	    @echo INFO:		$(INFO)
+	    @ECHO INFOTN:	$(INFOTN)
+	    @echo BUCKET:	$(BUCKET)
 	    @echo PROJ:		$(PROJ) $S
-	    @echo BUCKET:		$(BUCKET)
 	    @echo S3_BUCKET:	$(S3_BUCKET)
 	    @echo HTTPS_BUCKET:	$(HTTPS_BUCKET)
 	    @echo VERS:		$(VERS)
-	    @echo S3PROJ:		$(S3PROJ)
-	    @echo S3VERS:		$(S3VERS)
+	    @echo S3PROJ:	$(S3PROJ)
+	    @echo S3VERS:	$(S3VERS)
 	    @echo DIR:		$(DIR)
 	    @echo DIR_OLD:	$(DIR_OLD)
 	    @echo SRC:		$(SRC)
@@ -2246,10 +2251,12 @@ https://clojure.org/api/api
 
   open-info: info
 	   @$(EDITOR) -u -eval \
-		  "(when (get-buffer \"*info*\") \
+		  "(if (get-buffer \"*info*\") \
 			  (with-current-buffer (get-buffer \"*info*\") \
-				  (revert-buffer t t t)))"
-	   @$(EDITOR) -n $(INFO)
+				(when (not (string= \"(symbol-value (quote Info-current-file))\" \"$(INFOTN)\")) \
+					(info \"$(INFOTN)\")) \
+				(revert-buffer t t t)) \
+		      (info \"$(INFOTN)\"))"
 
   html: $(HTML)
   $(HTML): $(TEXI)
@@ -2347,7 +2354,7 @@ https://clojure.org/api/api
 
   clean:
 	  @echo Cleaning...
-	    -@rm *~
+	    -@rm *~ 2>/dev/null
 	    -@for file in *.??*; \
 	    do \
 		    ext=$${file#$(PROJ).}; \
@@ -2356,14 +2363,14 @@ https://clojure.org/api/api
 
   dist-clean: clean
 	  @echo Dist Cleaning...
-	    ${EDITOR} --eval \
+	    @${EDITOR} -u --eval \
 	      "(kill-buffer \"$(ORG)\")"
 	    -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
 	    -@for dir in *; \
-	    do \
+	    	do \
 		    [ -d $$dir -a $$dir != "$(DIR_OLD)" -a $$dir != $(SAVE) ] && \
 		    rm -vr $$dir; \
-	    done
+	    	done
 
   wipe-clean: dist-clean
 	  @echo Wipe Clean...
@@ -2882,829 +2889,6 @@ nil
 
 ((keyword (:key "MACRO" :value "version Version 0.0.107" :begin 148 :end 181 :post-blank 1 :post-affiliated 148 ...)))
 #+end_comment
-
-* Build Scripts
-  :PROPERTIES:
-  :custom_id: build-scripts
-  :org-template-version: 0.6.20
-  :END:
-** Create and Update Projects
-*** Create New Project
- Copy this project template file into a new directory, update its title, author,
- and AWS S3 bucket, and tangle the bootstrap Makefile and initial Readme, then
- create a new git repository and create an initial git commit. Finally, save the
- project in GitHub, and there add a description and link to its AWS S3 bucket.
-
- #+name:create-new-project
- #+header: :tangle /usr/local/dev/bin/org-template.el
- #+begin_src emacs-lisp
-   (defun create-new-project (project title author &optional bucket)
-     "Create a new project in a new directory."
-     (message "NEW PROJECT=%s TITLE=%s AUTHOR=%s BUCKET=%s" project title author bucket)
-     (mkdir project t)
-     (let ((projfile (concat project "/" project ".org")))
-       (copy-file (getenv "SYNC_ORG_TEMPLATE") projfile)
-       (with-current-buffer (find-file-noselect projfile)
-	 (let* ((cur-buf (current-buffer))
-		(proj-tree (project-tree cur-buf))
-		(delete-hl-list (list "build-scripts" "README")))
-	   (message "Deleting %s..." delete-hl-list)
-	   (seq-do (lambda (cid)
-		     (message "...Deleting %s in %s..." cid cur-buf)
-		     (let* ((beg-end (find-hl proj-tree cid))
-			    (beg (car beg-end))
-			    (end (cdr beg-end)))
-		       (message "   ...%s: %s" cid beg-end)
-		       (delete-region beg end)
-		       (message "   ...done")))
-		   delete-hl-list))
-	 (message "Done deleting.")
-
-	 (goto-char (point-min))
-	 ;; update title, author, version, bucket
-	 ;; with values provided by the user
-	 (re-search-forward "^#[+]title:\s*\\(TITLE\\)$")
-	 (replace-match title t nil nil 1)
-	 (re-search-forward "^#[+]author:\s*\\(AUTHOR\\)$")
-	 (replace-match author t nil nil 1)
-	 (re-search-forward "^#[+]macro:\s*version Version \\(.*\\)$")
-	 (replace-match "0.0.0" t nil nil 1)
-	 (when bucket
-	   (re-search-forward "^#[+]bucket:\s*\\(.*\\)$")
-	   (replace-match bucket t nil nil 1))
-	 (re-search-forward "^#[+]texinfo_printed_title:\\(PRINTED TITLE\\)$")
-	 (replace-match (concat project "---" title) t nil nil 1)
-	 (save-buffer)
-	 ;; tangle the project readme and boot makefile
-	 (goto-char (point-min))
-	 (org-babel-goto-named-src-block "project-readme")
-	 (org-babel-tangle (quote (4)))
-	 (org-babel-goto-named-src-block "boot-template")
-	 (org-babel-tangle (quote (4)))
-	 (kill-buffer))))
- #+end_src
-
-*** Update Old Project
-**** Add an S3 Bucket
- This script takes one argument:
- 1. The name of an AWS S3 bucket (i.e., the "default" AWS S3 buffer to use)
-
- This script checks whether the Org file in the present working directory has a
- "#+bucket:" keyword (of any value). If it does, then it simply returns nil. If
- it does not, then it adds the bucket name supplied as an argument as a keyword
- (e.g. "#+bucket:pinecone-forest") to the Org file right after where the
- =version= macro is located, and saves the file. It returns a message upon
- success.
-
-#+name:add-s3-bucket
-#+header: :tangle /usr/local/dev/bin/org-template.el
-#+begin_src emacs-lisp
-  ;;; Add a keyword named 'bucket' just after the version macro.
-  ;;; This function should be run from within the directory containing the Org file.
-  (defun add-s3-bucket (s3-bucket)
-     "Add the name of the associated AWS S3 bucket to an Org
-  templated file in the PWD."
-     (with-current-buffer (car (find-file-noselect "*.org" nil nil t))
-       (goto-char (point-min))
-       (let* ((tree (project-tree (current-buffer)))
-	      ;; find the beginning position of the first headline to act as a limit
-	      (hl1 (org-element-map tree (quote headline) (lambda (hl) (org-element-property :begin hl)) nil t)))
-	   ;; Check for the presence of a bucket keyword before the first headline
-	 (unless (re-search-forward "^#[+]bucket:" hl1 t)
-	   ;; If no bucket keyword is found, search for a keyword MACRO with the value 'version'
-	   (message "No bucket found; adding %s..." s3-bucket)
-	   (re-search-forward "^#[+]macro:version")
-	   (beginning-of-line 2)
-	   (insert (concat "#+bucket:" s3-bucket))
-	   (message "Added bucket %s at point %s" s3-bucket (line-beginning-position))
-	   (newline)
-	   (save-buffer)))))
-#+end_src
-**** Add a Custom_Id
- This code checks a project file F to see if it contains a =property: value=
- pair (P, V) in a property drawer right under the headline HL. If it does not,
- it adds one. This code assumes the project file contains the heading HL for
- which it searches. It will throw an error if such a heading is not found.
-
- #+name:add-pv-to-hl
- #+header: :tangle /usr/local/dev/bin/org-template.el
- #+begin_src emacs-lisp
-    (defun add-pv-to-hl (f hl p v)
-      "In file F add a property P with value V into a property
-    drawer (creating one if necessary) at headline HL."
-       (with-current-buffer (find-file-noselect f)
-	 (save-excursion (goto-char (point-min))
-	 (re-search-forward (concat "^*\\{1,\\}\s*" hl))
-	 (beginning-of-line 2)
-	 (let* ((e (org-element-at-point))
-		(et (org-element-type e)))
-	   (unless (string= et "property-drawer")
-	       (message "Adding property drawer to headline %s" hl)
-	       (org-insert-property-drawer))
-	   (unless (org-entry-get (point) p)
-	     ;(message "Adding property %s with value %s" p v)
-	     (org-entry-put (point) p v)
-	     (save-buffer))))))
- #+end_src
-
-**** Replace Build Tools
-These three small scripts are used by ~replace-build-tools~.
-~org-template-version~ returns the main Org Template's version number.
-~project-tree~ returns a parsed tree from a buffer. ~find-hl~ locates a level 1
-heading that contains a particular custom id and returns that subtree's
-beginning and ending points.
-
-#+name: replace-utilities
-#+header: :tangle /usr/local/dev/bin/org-template.el
-#+begin_src emacs-lisp
-
-  (defun org-template-key-value (key &optional regexp-str)
-    "Given a KEY string and an optional REGEXP-STR string, in the file
-  SYNC_ORG_TEMPLATE find the key and return the value of the match
-  string, which defaults to (.*)$ if nil."
-    (with-current-buffer (find-file-noselect (getenv "SYNC_ORG_TEMPLATE"))
-      (save-excursion
-	(let ((regexp-use-str
-		(or regexp-str
-		    "\\(.*\\)$")))
-	  (goto-char (point-min))
-	  (re-search-forward (concat "^#[+]" key regexp-use-str))
-	  (match-string-no-properties 1)))))
-
-  (defun org-template-version ()
-    "Return the current version number of SYNC_ORG_TEMPLATE."
-    (org-template-key-value "macro:\s*version Version " "\\(\\(?:[[:digit:]]+[.]?\\)\\{3\\}\\)"))
-
-  (defun org-template-bucket ()
-    "Return the bucket name of SYNC_ORG_TEMPLATE."
-    (org-template-key-value "bucket:\s*"))
-
-
-  (defun project-tree (proj-buf)
-    "With a buffer PROJ-BUF, return an Org-parsed tree"
-    (with-current-buffer proj-buf
-      (org-element-parse-buffer 'headline)))
-
-
-
-
-  (defun find-hl (proj-tree cid)
-    "With an Org-parsed tree PROJ-TREE, find a headline with a
-  particular property drawer custom_id of CID."
-    (let* ((cid-hl (org-element-map proj-tree 'headline
-	    (lambda (e) (let ((lev (org-element-property :level e))
-			      (bt (org-element-property :CUSTOM_ID e)))
-			  (and (= lev 1)
-			       (string= bt cid)
-			       e)))
-	    nil t))
-	   (car cid-hl))
-      (cons (org-element-property :begin cid-hl)
-	    (org-element-property :end cid-hl))))
-
-#+end_src
-
-The ~replace-build-tools~ function replaces a section of an old templated file
-with the corresponding section from the source template file found in
-=SYNC_ORG_TEMPLATE=, which is presumably newer. It must be run from within the
-directory holding the older templated file, and the original template file must
-be identified by the environment variable =SYNC_ORG_TEMPLATE=.
-
-This function works by parsing the buffers by headlines and then using
-~org-element-map~ to find a level 1 headline containing a custom id of CID.
-Once it finds such a headline, it records that section's beginning and ending
-points. It does this for both the old template file and the template file. Then
-it deletes that section from the old template file, and inserts the
-corresponding section from the root template file.
-
-#+name: replace-build-tools
-#+header: :tangle /usr/local/dev/bin/org-template.el
-#+begin_src emacs-lisp
-
-  (defun replace-build-tools (cid)
-    "Replaces a section of an Org template file identified by the
-  custom_id CID with the corresponding section of the root
-  template identified by the environment variable.
-
-  OLD-BUF is the Org template in the current working directory.
-  SYNC_ORG_TEMPLATE must be set."
-    ;(message "...in replace-build-tools with %s..." cid)
-    (let* ((old-buf (car (find-file-noselect "./*.org" nil nil t)))
-	   (sync-buf (find-file-noselect (getenv "SYNC_ORG_TEMPLATE")))
-	   (old-tree (project-tree old-buf))
-	   (sync-tree (project-tree sync-buf))
-	   (old-be (find-hl old-tree cid))
-	   (sync-be (find-hl sync-tree cid)))
-	(set-buffer old-buf)
-	(delete-region (car old-be) (cdr old-be))
-	(goto-char (car old-be))
-	(insert-buffer-substring sync-buf (car sync-be) (cdr sync-be))
-	(goto-char (car old-be))
-	(org-set-property "org-template-version" (org-template-version))
-	(save-buffer)))
-
-  (defun delete-build-tools (cid)
-    "Delete a section of an Org template file identified by the
-  custom_id CID."
-    ;(message "...in delete-build-tools at %s..." cid)
-    (let* ((old-buf (car (find-file-noselect "./*.org" nil nil t)))
-	   (old-tree (project-tree old-buf))
-	   (old-be (find-hl old-tree cid)))
-      ;(message "old-buf: %s\told-be: %s" old-buf old-be)
-      (with-current-buffer old-buf
-	(delete-region (car old-be) (cdr old-be))
-	(save-buffer))))
-#+end_src
-
-**** Replace Build Tools Script
-Add a script in ~bin~ to run just the ~replace-build-tools~, then tangle the
-~Makefile~.
-
-#+name:replace-build-tools-script
-#+header: :tangle /usr/local/dev/bin/replace-build-tools
-#+header: :shebang "#! /Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs --script"
-#+begin_src elisp
-(load-file "/usr/local/dev/bin/org-template.el")
-(replace-build-tools "build-tools")
-(kill-buffer)
-#+end_src
-
-*** Run Create and Update
-**** Run Create
- This shell script  is installed into $DEV/bin  and is run by  typing the shell
- command =new-org-template <...ARGS>= from the command-line to set up a new Org
- project at a  particular point in your directory structure.   The main code is
- elisp, described above in [[*Create New Project][Create New Project]] and [[*Update Old Project][Update Old Project]].
-
- After a new project  is installed into the directory structure,  a git repo is
- established, as well  as a new GetHub  repo, and the initial  commit is pushed
- up.
-
- #+name:run-create-and-update
- #+header: :tangle /usr/local/dev/bin/new-org-template
- #+header: :shebang "#!/usr/bin/env zsh"
- #+begin_src sh -n
-   # run-org-template
-   # $1 := project
-   # $2 := title
-   # $3 := author
-   # [$4 := bucket] (default := ${AWS_S3_BUCKET})
-
-   USAGE="$0 <project> <title> <author> [<bucket>]\n"
-   [[ -z $AWS_S3_BUCKET ]] && {
-       printf "${RED}ERROR: ${YELLOW}The environment variable ${GREEN}\$AWS_S3_BUCKET${YELLOW} needs to be set.${CLEAR}\n"
-       exit 1
-   }
-
-   if [[ $1 =~ ^-(h|-?help)$ || ( $# < 3 || $# > 4 ) ]]; then
-       printf "USAGE:\n$USAGE"
-       exit 0;
-   fi
-
-   # verify command-line args contain only letters, digits, underscores, dashes and spaces
-   RE="^[_a-zA-Z][_a-zA-Z0-9 -.]+$"
-   for arg in "$@"; do
-       printf "$arg..."
-       [[ $arg =~ $RE ]] || { printf ": ERROR\n"; exit 1; }
-       printf "ok\n"
-   done
-
-   # bucket is optional
-   bucket=${4:-${AWS_S3_BUCKET}}
-
-   ${EDITOR} --eval "(progn
-			 (load-file \"/usr/local/dev/bin/org-template.el\")
-			 (create-new-project \"$1\" \"$2\" \"$3\" \"$bucket\"))"
-
-   # create a new Git repo and GitHub repo
-   cd "$1"
-   rm *~
-   git init
-   git add -A
-   git commit -m "Initial commit"
-   git log | cat
-   git remote add origin git@github.com:wlharvey4/"$1".git
-
-   curl -i -H "Authorization: token ${GITHUB_TOKEN}" \
-	-d "{\"name\":\"$1\",\"description\":\"$2: v0.0.0/\"}" \
-	https://api.github.com/user/repos
-
-   git push origin master
-
-   cd ..
-   tree -a -L 1 "$1"
- #+end_src
-
-**** Run Update
-The command-line utility  ~update-org-template~ is run from  within a directory
-containing  an out-dated  Org template  project. It  deletes the  file's "Build
-Tools" and "Buid  Scripts" subtrees and replaces them with  those from the main
-template file.
-
- #+header: :tangle /usr/local/dev/bin/update-org-template
- #+header: :shebang "#!/Applications/MacPorts/Emacs.app/Contents/MacOS/Emacs --script"
- #+begin_src emacs-lisp
-   (require 'org)
-   (message "Update Org Template...")
-   ;(message "Obtaining ORG_SYNC_TEMPLATE: %S..." (getenv "SYNC_ORG_TEMPLATE"))
-   (org-babel-tangle-file (getenv "SYNC_ORG_TEMPLATE"))
-   ;(message "obtained.")
-
-   (load-file "/usr/local/dev/bin/org-template.el")
-
-   (setq old-template (car (file-expand-wildcards "*.org" t)))
-   ;(message (format "loaded old-template: %s" old-template))
-   (setq org-template-version (org-template-version))
-   ;(message (format "org-template-version: %s" org-template-version))
-
-   ;(message (format "Checking for s3-bucket: %s..." (org-template-bucket)))
-   (add-s3-bucket (org-template-bucket))
-   ;(message "done")
-
-   ;(message "Adding pv to build-tools...")
-   (add-pv-to-hl old-template "Build Tools" "custom_id" "build-tools")
-   ;(message "done.")
-
-   ;(message "Replacing build-tools...")
-   (replace-build-tools "build-tools")
-   ;(message "done.")
-
-   ;(message "Adding template version to Makefile...")
-   (add-pv-to-hl old-template "Makefile" "org-template-version" org-template-version)
-   ;(message "done.")
-
-   ;(message "Adding pb build-scripts...")
-   (add-pv-to-hl old-template "Build Scripts" "custom_id" "build-scripts")
-   ;(message "done.")
-
-   ;(message "Deleting build-scripts...")
-   (delete-build-tools "build-scripts")
-   ;(message "done.")
-
-   (org-babel-tangle-file old-template)
-   (message "Finished Update Org Template.")
- #+end_src
-
-** Ignore
-  #+name:update-org-project
-  #+begin_src emacs-lisp
-    (defun get-parsed-tree (buf)
-      "Given a buffer BUF, return a parsed tree."
-      (with-current-buffer buf
-	(org-element-parse-buffer 'headline)))
-
-    (defun oep (p e)
-      "Given a property P and element E, return that property's value."
-      (org-element-property p e))
-
-    (defun start-end (buf prop)
-      "Given a buffer BUF and a property PROP, return the starting and ending points."
-      (org-element-map
-	  (get-parsed-tree buf)
-	  'headline
-	  (lambda (e) (when (string= (oep :CUSTOM_ID e) prop)
-			(list
-			 (oep :begin e)
-			 (oep :end e))))
-	  nil t))
-
-    (defun update-old-project (&optional title author bucket)
-      "Update an old project with new code."
-      (with-current-buffer (car (find-file-noselect "./*.org" nil nil t))
-	(save-excursion
-	(goto-char (point-min))
-	;; (when title
-	;;   (re-search-forward "^#[+]title:\s*\\(.*\\)$")
-	;;   (replace-match title t nil nil 1))
-	;; (when author
-	;;   (re-search-forward "^#[+]author:\s*\\(.*\\)$")
-	;;   (replace-match author t nil nil 1))
-	;; (when bucket
-	;;   (re-search-forward "^#[+]bucket:\s*\\(.*\\)$")
-	;;   (replace-match bucket t nil nil 1))
-	(let* ((curbuf (current-buffer))
-	      (orgsyncbuf (find-file-noselect (expand-file-name "Template.org" "/usr/local/dev/Templates/Org")))
-	      (start-end-curbuf (start-end curbuf "build-tools"))
-	      (start-end-sync (start-end orgsyncbuf "build-tools")))
-	  (list start-end-curbuf start-end-sync)))))
-  #+end_src
-
-  #+begin_src emacs-lisp :results raw
-  (update-old-project)
-  #+end_src
-
-  #+RESULTS:
-  ((4928 36833) (4928 36833))
-
-*** Create and Update Script                                   :dependencies:
-    :PROPERTIES:
-    :dependency1: org-template must be in $DEV/bin
-    :dependency2: SYNC_ORG_TEMPLATE must be set as an environment variable
-    :dependency3: "COLORS from profile"
-    :dependency4: tree command
-    :dependency5: git command
-    :END:
- This code  is a script file  to create a  new project from this  template, and
- also  to  update a  project  with  updated scripts.  It  is  tangled into  the
- ~$DEV/bin~  directory and  is called  from the  command line  as ~org-template
- <project> [<author>]  [git]~ or  as ~org-template -u  | --update~.  Its create
- mode  takes one  required,  and up  to two  optional  arguments. The  required
- argument is the name of the project.  One optional argument is the name of the
- author. The other optional argument is the term =git=, meaning to initialize a
- =git=  repository for  the project.  To update  a project,  call ~org-template
- --update~ from the project root.
-
- Here are the steps it takes:
-
- 1. It checks for a call to =-h|--help=, and if found, prints the USAGE message.
-
- 2. It next checks for =-u|--update=, and if found, calls the ~template-update~
-    function. Otherwise, it calls the ~template-create~ function.
-
- 3. It creates a new directory in the current working directory using the
-    =project= argument.
-
- 4. It copies this template into it (using the environment variable
-    =SYNC_ORG_TEMPLATE= to find it) as a new Org file using, again, the name of
-    the project.
-
- 5. It then updates the title to the project name, the date, sets the version
-    number to =0.0.0=, and optionally adds the author, using the =author=
-    argument if it was given.
-
- 6. It then deletes this script from the new Org project file, as it is not
-    needed by a project file.
-
- 7. It then tangles Boot Makefile and the default ~README.md~ into the project.
-
- 8. If the term ='git'= is supplied as an argument, it initializes a new Git
-    repository, creating a basic ~.gitignore~ file in it, adding the Org file
-    and the ~README.md~ file and finally making an initial Git commit.
-
- 9. Last, it prints an outline of the project’s structure using the ~tree~
-    command.
-
-
- #+caption:Create Script
- #+name:create-update-script
- #+header: :mkdirp yes
- ##+header: :tangle /usr/local/dev/bin/org-template
- #+header: :shebang "#!/usr/bin/env bash"
- #+begin_src sh -n
-   # org-template: create and update projects
-
-   USAGE='
-   '"$0..."'
-   org-template -h | --help
-   org-template <Project> [<Author>] [git]
-   org-template -u | --update
-   '
-
-   template-create () {
-       mkdir -v "$1"
-       printf "copy "
-       cp -v ${SYNC_ORG_TEMPLATE} "$1/$1.org"
-       printf "${CLEAR}\n"
-
-       sed -i '' -Ee '/^\#\+(title|TITLE):/ s/TITLE/'"$1"'/' \
-	   -Ee '/^\#\+(date|DATE):\s*(.*)$/ s/$2/$(date '"+%F %R"')/' \
-	   -Ee '/^\#\+(macro|MACRO):version Version/ s/[[:digit:].]+/0.0.0/' \
-	   -Ee '/^\#\+(texinfo_printed_title|TEXINFO_PRINTED_TITLE):/ s/PRINTED TITLE/'"$1"'/' \
-	   "$1/$1.org"
-
-       [[ $# -ge 2 ]] && \
-	   sed -i '' -Ee '/^\#\+(author|AUTHOR):/ s/AUTHOR/'"$2"'/' "$1/$1.org"
-
-       printf "${CYAN}"
-       ${EDITOR} --eval \
-       "(with-current-buffer (find-file-noselect \"$1/$1.org\")
-	  (save-excursion
-	   (goto-char (point-min))
-	   (re-search-forward \"#[+]name:project-readme$\")
-	   (org-babel-tangle (quote (4)))
-	   (search-forward \"** Create Script\")
-	   (org-cut-subtree)
-	   (save-buffer)
-	   (re-search-forward \"^#[+]name:boot-template$\")
-	   (org-babel-tangle (quote (4)))))"
-       printf "${CLEAR}\n"
-
-       if [[ (($# -eq 2) || ($# -eq 3)) && (($2 == 'git') || ($3 == 'git')) ]]
-       then
-	   cd $1 && {
-	       rm *~
-	       printf "${YELLOWBOLD}"
-	       git init
-	       printf "${CLEAR}"
-
-	       echo "\
-   .gitignore
-   Makefile
-   ,*~
-   .*~
-   ,*.texi
-   ,*.info
-   ,*.html
-   ,*-old
-   tools" > .gitignore
-
-	       git add .
-	       git commit -m "Initial commit of Project $1"
-	   }
-	   cd ..
-       fi
-       rm "$1"/*~
-
-       printf "${PURPLEBOLD}\n"
-       pwd
-       printf "${CLEAR}"
-       tree -aI .git $1
-
-       return 0
-   }
-
-   template-update() {
-       ${EDITOR} -u --eval \
-		"(progn
-		  (with-current-buffer (find-file-noselect (getenv \"SYNC_ORG_TEMPLATE\"))
-		   (save-excursion
-		    (goto-char (point-min))
-		    (org-link-search \"#build-tools\")
-		    (org-copy-subtree 2)))
-		  (with-current-buffer (car (find-file-noselect \"./*.org\" nil nil t))
-		   (save-excursion
-		     (goto-char (point-min))
-		     (org-link-search \"#build-tools\")
-		     (org-paste-subtree 1 nil t t)
-		     (org-cut-subtree 2)
-		     (save-buffer))))"
-
-       return 0;
-   }
-
-   main () {
-       case $1 in
-	   create)
-
-	       printf "${PURPLE}"
-	       read -n 1 -p "Create new project: $2 (y/n) ?"
-	       printf "${CLEAR}\n\n"
-	       [[ $REPLY =~ [yY] ]] && template-create "$2" || exit 0
-	       ;;
-
-	   update)
-
-	       template-update
-	       ;;
-       esac
-       exit 0
-   }
-
-
-   if [[ $1 =~ ^-(h|-help)$ ]]; then
-	   printf "HELP:\n$USAGE"
-	   exit 0
-   fi
-
-   if [[ $1 =~ ^-(u|-update)$ ]]; then
-	   printf "UPDATE:\n"
-	   main update
-   fi
-
-   [[ ($# -ge 1) && ($# -le 3) ]] && { printf "CREATE:\n";  main create $1; } || {
-       printf "${RED}ARGUMENTS ERROR:${CLEAR}$USAGE\n"
-       exit 1
-   }
-
- #+end_src
-** Switch Emacs Init
-This script allows the user to switch into using a different Emacs
-initialization setup.  The script first lists the currently-selected
-initialization setup, then it lists the available initialization setups, then
-requests the user's choice.  After obtaining the choice, it changes the
-symbolic link in =~/.emacs.d= to that chosen by the user.  Emacs is then killed
-and restarted using the ~desktop-save~ feature.
-
-Each initialization setup is a complete =~/.emacs.d= subtree, which must be set
-up by the user, with its name given after a dash, such as =~/.emacs.d-original=
-or =~/.emacs.d-cfbt= (“Clojure for the Brave and True”).
-
-#+name:switch-emacs-init
-#+header: :mkdirp yes
-#+header: :shebang "#!/usr/bin/env bash"
-#+header: :tangle /usr/local/dev/bin/switch-emacs-init
-#+begin_src sh
-  printf "${GREEN}"
-  ls -l ~/.emacs.d | cut -f 12- -d ' '
-  printf "${CLEAR}"
-  echo
-  select choice in $(ls -1d ~/.emacs.d-*) "abort"
-  do
-      echo -n 'You chose '
-      printf " ${B_YELLOW}${F_BLACK}$choice${CLEAR}  "
-      [[ $choice = "abort" ]] && exit 0
-      rm ~/.emacs.d
-      printf "${CYAN}"
-      ln -vs $choice ~/.emacs.d
-      echo
-      printf "${RED}"
-      read -N 1 -p "Restart Emacs now? (y/n) "
-      printf "${CLEAR}\n"
-      [[ $REPLY =~ y|Y ]] || { echo "Not restarting"; break; }
-      echo "Restarting..."
-      emacsclient --eval '(progn (desktop-save "~/.emacs.d-original/")(kill-emacs))'
-      break
-  done
-  /Applications/MacPorts/EmacsMac.app/Contents/MacOS/Emacs --eval '(progn (server-start)(desktop-read "~/.emacs.d-original/"))' &
-#+end_src
-
-** Update RC Files
-This code synchronizes the following configuration files:
-- /etc/profile
-- /etc/bashrc
-- /etc/tmux.conf
-- ~/.bash_profile
-- ~/.bashrc
-- ~/.tmux.conf
-
-
-It first verifies that the files differ; then it will copy a newer file over an
-older file.  If a  local file is updated with a newer  template file, then this
-program updates the  Emacs ~server-socket-dir~ variable, if such  exists.  If a
-template   is	updated	  with	 a   newer  local   file,   then   delete   the
-~server-socket-dir~ value.
-
-#+name:syncrc
-#+header: :mkdirp yes
-#+header: :tangle /usr/local/dev/bin/syncrc
-#+header: :shebang "#!/usr/bin/env bash"
-#+begin_src shell
-  [ -v TEMPLATES ] || {
-      printf "${RED}ERROR: missing \$TEMPLATES env var${CLEAR}\n"
-      exit 1
-  }
-
-  [ -v COMP ] || {
-      printf "${RED}ERROR: missing \$COMP env var${CLEAR}\n"
-      exit 1
-  }
-
-  set -e
-
-  ## usage: syncrc [-f system|rc -t rc|system -h]
-  ## if no options, process by natural age
-  ## if -f and -t options, force update from ... to ...
-  usage () {
-	printf "\n${GREEN}USAGE: ${YELLOW}syncrc \
-  ${WHITEBOLD}[${CYAN}-f ${MAGENTA}system|rc \
-  ${CYAN}-t ${MAGENTA}rc|system \
-  ${WHITEBOLD}]${CLEAR}\n"
-
-	printf "${GREEN}force sync rc files \
-  ${CYAN}'-f'${GREEN}rom ${MAGENTA}system|rc \
-  ${CYAN}'-t'${GREEN}o ${MAGENTA}rc|system\
-  ${CLEAR}\n\n"
-	exit $1
-  }
-
-  # force update of either system or rc file
-  touchup () {
-    printf "In touchup with \$from: $from\n";
-	case $from in
-	    "system") printf "${WHITEBOLD}Touching $1..."; sudo touch $1; printf "${CLEAR}" ;;
-	    "rc")     printf "${WHITEBOLD}Touching $2..."; touch $2; printf "${CLEAR}" ;;
-	esac
-  }
-
-  # compare files to determine which one is newer
-  comp () {
-	[[ -e $1 && -e $2 ]] && { # only process if both files exist
-	if ! cmp -s $1 $2
-	then
-	    [[ -n $from ]] && { # force update if $from is non-zero length
-		touchup $1 $2
-	    } || { :; }
-	    [[ $1 -nt $2 ]] && { # system file is newer
-		[[ -d $(dirname "$2") ]] || { # make sure rc dir exists
-		    mkdir -vp $(dirname "$2")
-		} || { :; }
-
-		printf "${YELLOW}system is newer than rc${CLEAR}\n"
-		echo; ls -l $1 $2; echo
-			  printf "${BLUE}";
-			  cp -ipv "$1" "$2";
-			  printf "${CLEAR}"
-
-			  ## delete the value of the emacs server-socket-dir in the rc file
-			  grep -q "EMACS_SERVER_SOCKET_DIR=" "$2" && {
-				  #printf "${WHITE}UNSETTING socket_dir...${CLEAR}\n"
-				  sed -i'.bak' -Ee '/(EMACS_SERVER_SOCKET_DIR)=.*$/ s!!\1=TBD!' "$2"
-			  } || { :; }
-
-		  } || {
-		    [[ "$2" -nt "$1" ]] && { # rc file is newer
-		      printf "${YELLOW}rc is newer than system${CLEAR}\n"
-		      echo; ls -l $2 $1; echo
-		      [[ -w "$1" ]] && { # check if the system file is writable
-			printf "${PURPLE}"
-			cp -ipv "$2" "$1"
-			printf "${CLEAR}"
-		      } || {
-			printf "${RED}You must authenticate... ${CLEAR}"
-			printf "${PURPLE}"
-			sudo cp -ipv "$2" "$1"
-			printf "${CLEAR}"
-		      }
-
-		      ## update the value of the emacs server-socket-dir in the system file
-		      grep -q "EMACS_SERVER_SOCKET_DIR=" "$1" && {
-			socket_dir=$(${EMACS} -Q --batch --eval '(progn (require (quote server))(princ (file-name-as-directory server-socket-dir)))')
-			printf "${WHITE}SETTING socket_dir=${socket_dir}${CLEAR}...\n"
-			sed -i'.bak'-$$ -Ee '/(EMACS_SERVER_SOCKET_DIR)=.*$/ s!!\1='"$socket_dir"'!' "$1"
-		      } || { :; }
-
-		      } || {
-			printf "${REDBOLD}ERROR: the files don't match but are the same age?${CLEAR}\n"
-		      }
-	      }
-	else
-	      printf "${CYAN}No difference.${CLEAR}\n"
-	fi
-	} || {
-	    tocreate=$( if test -e "$1"; then echo "$2"; else echo "$1"; fi; )
-	    printf "${WHITE}one file: ${RED}${tocreate} ${WHITE}does not exist...Create?${CLEAR}"
-	    read -sn 1
-	    if [[ $REPLY == [yY] ]]
-	    then
-		echo " Creating"
-		outof=$( if test -e "$1"; then echo $1; else echo "$2"; fi; )
-		mkdir -pv $(dirname "${tocreate}")
-		cp -ivp "${outof}" "${tocreate}"
-	    else
-		echo " Not creating"
-	    fi
-	}
-    } # end of comp()
-
-    declare -a rcfiles=(/private/etc/profile /private/etc/bashrc /private/etc/tmux.conf ~/.bash_profile ~/.bashrc ~/.tmux.conf)
-
-    ## see usage() abaove
-    while getopts "f:t:h" opt
-    do
-	  case $opt in
-	    'f') from=${OPTARG} ;;
-	    't') to=${OPTARG}	;;
-	    'h') usage 0	;;
-	    '?') printf "${RED}ERROR ${CLEAR}\n"; usage 1; ;;
-	     ,*) printf "OPTIND: ${RED}${OPTIND}${CLEAR}\n"; usage 1; ;;
-	  esac
-    done
-
-    ## OPTIND must be either 1 (no options) or 5 (2 options)
-    if [[ $OPTIND -gt 1 && $OPTIND -ne 5 ]]
-    then
-	  printf "${RED}ERROR: need both -f and -t${CLEAR}\n"
-	  usage 1
-    fi
-
-    ## check for correct combination of from and to
-    if [[ -n $from ]]
-    then
-	  if [[ $from == "system" ]]
-	  then
-	    if [[ $to != "rc" ]]
-	    then
-		printf "${RED}ERROR: incorrect combination: $from -- $to${CLEAR}\n"
-		usage 1
-	    fi
-	  elif [[ $from == "rc" ]]
-	  then
-	    if [[ $to != "system" ]]
-	    then
-		printf "${RED}ERROR: incorrect combination: $from -- $to${CLEAR}\n"
-		usage 1
-	    fi
-	  else
-	    printf "${RED}ERROR; incorrect combination: $from -- $to${CLEAR}\n"
-	    usage 1
-	  fi
-    fi
-
-    ## everything checks out; now process the files
-    for file in "${rcfiles[@]}"
-    do
-	  printf "Considering ${GREEN}$file... ${CLEAR}"
-
-	  case $file in
-	      ,*etc?profile)   comp $file $TEMPLATES/rc/etc/${COMP}/profile   ;;
-	      ,*etc?bashrc)    comp $file $TEMPLATES/rc/etc/${COMP}/bashrc    ;;
-	      ,*etc?tmux.conf) comp $file $TEMPLATES/rc/etc/${COMP}/tmux.conf ;;
-	      ,*bash_profile)  comp $file $TEMPLATES/rc/${COMP}/bash_profile  ;;
-	      ,*bashrc)	       comp $file $TEMPLATES/rc/${COMP}/bashrc	      ;;
-	      ,*tmux?conf)     comp $file $TEMPLATES/rc/${COMP}/tmux.conf     ;;
-	  esac
-    done
-#+end_src
 
 * List of Programs
 :PROPERTIES:
