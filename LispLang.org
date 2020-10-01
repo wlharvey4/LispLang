@@ -3,8 +3,10 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-28 14:53
-#+macro:version Version 0.0.13
+#+date:2020-09-30 17:49
+#+macro:version Version 0.0.14
+#+macro:upload-date (eval (current-time-string))
+#+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1920,7 +1922,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
-:org-template-version: 0.6.23
+:org-template-version: 0.6.25
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -1938,7 +1940,7 @@ https://clojure.org/api/api
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
 :env_var4: COLORS
-:org-template-version: 0.6.23
+:org-template-version: 0.6.25
 :END:
 
 #+name:Makefile
