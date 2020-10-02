@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-09-30 17:49
-#+macro:version Version 0.0.14
+#+date:2020-10-02 14:02
+#+macro:version Version 0.0.16
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -742,7 +742,7 @@ https://www.quicklisp.org/beta/
 
 Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
 Common Lisp  implementation to download,  install, and  load any of  over 1,500
-[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:3]  It works with:
+[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:1]  It works with:
 
 - ABCL,
 - Allegro CL,
@@ -828,6 +828,539 @@ An uninstall does the following:
 Uninstalling does not alter  the current Lisp session in any  other way; if the
 given  system has  been  loaded, it  remains loaded  and  accessible until  the
 session is ended.
+
+* Common Lisp IO
+#+texinfo: @heading File System Concepts
+This section  discusses the Common  Lisp interface  to file systems.  The model
+used by this interface assumes that:
+
+- files are named by filenames ([[a-file][files)]]
+- a filename can be represented by a pathname object ([[a-filename][filename)]]
+- given a pathname  a stream can be  constructed that connects to  a file whose
+  filename it represents ([[a-stream][stream)]].
+
+
+Pathnames and namestrings[fn:2] are two kinds of objects that
+substitute for filenames in Common Lisp ([[pathname--class][pathname class]])
+#+end_deftp
+
+** Files and Filenames
+
+#+texinfo: @heading Files
+A ~file~<<a-file>>  is a named entry  in a file system,  having an implementation-defined
+nature.
+
+#+texinfo: @heading Filenames
+#+cindex:filename
+#+attr_texinfo: :options Handle filename
+#+begin_deftp
+<<a-filename>>
+A  ~filename~ is  a handle,  not necessarily  ever directly  represented as  an
+object, that can be used to refer to a file in a file system ([[a-file][file]])
+#+end_deftp
+
+<<truename-function>>
+#+attr_texinfo: :options truename filespec => truename
+#+begin_defun
+~truename~ tries to  find the file indicated  by @@texinfo:@var{filespec}@@ and
+returns its @@texinfo:@var{truename}@@.  If the filespec designator  is an open
+stream, its associated file is used.
+
+- FILESPEC ::  a pathname designator. If filespec is a /pathname/ it represents
+  the name used to open the file
+
+- TRUENAME :: a physical pathname
+#+end_defun
+
+*** Reading File Streams
+    #+cindex:stream, file
+    #+findex:open
+The most basic file I/O task is to read the contents of a file.  To do so, you
+obtain a stream from which you can read a file's contents.  You do this with
+the ~open~ function.
+#+caption:The Open Function
+#+name:open
+#+attr_texinfo: :options open filespec &key direction element-type if-exists if-does-not-exist external-format
+#+begin_defun
+~Open~ returns a character-based input stream that can be passed along to other
+functions that read characters of text.
+
+- FILESPEC  ::   The name  of the file  to read.  This can be  one of  a string
+  ("namestring"),  a pathname  object,  or a  stream  object, all  collectively
+  called /pathname designators/. Pathnames  represent filenames in a structured
+  way that  makes them easy  to manipulate without  tying them to  a particular
+  filename syntax.
+
+#+end_defun
+
+** Pathnames and Pathspecs
+
+#+cindex:pathname
+<<pathname--class>>
+#+attr_texinfo: :options {Structured Object} pathname
+#+begin_deftp
+A /pathname/ is a structured object which represents a filename.
+
+There are two kinds of pathnames:
+
+- physical pathnames ([[physical-pathname][physical pathname]])
+- logical pathnames ([[logical-pathname][logical pathname]])
+
+
+An object  of type  pathname is a  structured representation of  the name  of a
+file. A pathname has six components:
+
+- host
+- device
+- directory
+- name
+- type
+- version
+#+end_deftp
+
+#+cindex:logical pathname
+<<logical-pathname>>
+#+attr_texinfo: :options Pathname {logical pathname}
+#+begin_deftp
+An object of type logical-pathname.
+
+A    /pathname/     that    uses     a    /namestring/    syntax     that    is
+implementation-independent,   and   that   has  component   values   that   are
+implementation-independent.  Logical   pathnames  do  not  refer   directly  to
+filenames
+#+end_deftp
+
+#+cindex:physical pathname
+<<physical-pathname>>
+#+attr_texinfo: :options Pathname {physical pathname}
+#+begin_deftp
+A pathname that is not a logical pathname.
+#+end_deftp
+
+#+attr_texinfo: :options pathname pathspec => pathname
+#+begin_defun
+Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
+
+- PATHSPEC :: If the @@texinfo:@var{pathspec}@@ designator is a file stream
+  created by opening a logical pathname, a logical pathname is returned.
+
+- PATHNAME  ::  the  @@texinfo:@var{pathname}@@  returned  corresponds  to  the
+  filename used to open the file.
+#+end_defun
+
+#+cindex:pathname designator
+<<pathname-designator>>
+#+attr_texinfo: :options Object {pathname designator} pathspec
+#+begin_deftp
+A designator for a pathname; that is, an object that denotes a pathname and
+that is one of:
+
+- pathname namestring[fn:2] (denoting the corresponding pathname)
+- a stream associated with a file (denoting the pathname used to open the file)
+- pathname (denoting itself)
+#+end_deftp
+
+** Streams
+<<a-stream>>
+#+attr_texinfo: :options Object stream
+#+begin_deftp
+A ~stream~ is  an object that can be  used with an input or  output function to
+identify  an  appropriate source  or  sink  of  characters  or bytes  for  that
+operation.
+
+A stream can be a:
+
+- character stream :: A character stream is a source or sink of characters.
+
+- binary stream :: A binary stream is a source or sink of bytes.
+
+
+
+A stream can be a/n:
+
+- input stream :: source of data
+- output stream :: sink for data
+- bidirectional stream :: a stream that is both an input and an output stream.
+- neither :: when =:direction-probe= is given to ~open~
+
+
+A stream associated with a file is either:
+
+- a file stream :: an object of class /file stream/ is used to represent a file
+  stream. The  basic operation for  opening a  file is ~open~,  which typically
+  returns a /file stream/. The basic operation for closing a stream is ~close~.
+
+  The macro ~with-open-file~ is useful to express the common idiom of opening a
+  file  for the  duration  of a  given  body  of code,  and  assuring that  the
+  resulting stream is closed upon exit from that body.
+
+- a synonym stream :: whose target is a stream associated with a file.
+
+
+Such streams can be used as pathname designators (see
+[[pathname-designator][pathname designator]]).
+
+Normally,  when  a  stream  associated  with  a file  is  used  as  a  pathname
+designator, it denotes the pathname used to  open the file; this may be, but is
+not required to be, the actual name of the file.
+
+Some  functions,  such  as  ~truename~ and  ~delete-file~,  coerce  streams  to
+pathnames in a  different way that involves referring to  the *actual file that
+is open*, which might or might not be the file whose name was opened originally
+([[truename-function][truename function]]).
+
+Streams are either:
+
+- open ::  in general, operations that create and return streams return open
+  streams.
+
+- closed :: the action of closing a stream marks the end of its use as a source
+  or sink of  data, permitting the implementation to reclaim  its internal data
+  structures, and to  free any external resources which might  have been locked
+  by the stream when it was opened.
+
+  Coercion of streams to pathnames is permissible for closed streams;
+
+#+end_deftp
+
+*** Stream Subclasses
+The class /stream/ has a number of subclasses defined by this specification.
+The following are subclasses of /stream/.
+
+- /broadcase-stream/ ::
+
+  - ~make-broadcase-string~
+
+  - ~broadcast-stream-streams~
+
+- /concatenated-stream/ ::
+
+  - ~make-concatenated-stream~
+
+  - ~concatenated-stream-streams~
+
+- /echo-stream/ ::
+
+  - ~make-echo-stream~
+
+  - ~echo-stream-input-stream~
+
+  - ~echo-stream-output-stream~
+
+- /string-stream/ ::
+
+  - ~make-string-input-stream~
+
+  - ~with-input-from-string~
+
+  - ~make-string-output-stream~
+
+  - ~with-output-to-string~
+
+  - ~get-output-stream-string~
+
+- /synonym-string/ ::
+
+  - ~make-synonym-stream~
+
+  - ~synonym-stream-symbol~
+
+- /two-way-stream/ ::
+
+  - ~make-two-way-stream~
+
+  - ~two-way-stream-input-stream~
+
+  - ~two-way-stream-output-stream~
+
+*** Predefined Streams---Stream Variables
+
+Variables whose values must be streams are sometimes called stream variables.
+
+#+cindex:standardized i/o customization variables
+These  variables are  collectively called  the /standardized  I/O customization
+variables/.  They can  be bound  or  assigned in  order to  change the  default
+destinations for input and/or output used by various standardized operators and
+facilities.
+
+  #+cindex:standard input
+  #+vindex:*standard-input*
+- =*standard-input*= ::
+
+  implementation-dependent,  but it  must  be  an open  stream  that  is not  a
+  generalized synonym stream  to an I/O customization variables  but that might
+  be  a generalized  synonym  stream to  the value  of  some I/O  customization
+  variable.
+
+  The value of =*standard-input*=, called /standard input/, is a stream that is
+  used by many  operators as a default  source of input when  no specific input
+  stream is explicitly supplied.
+
+  #+cindex:standard output
+  #+vindex:*standard-output*
+- =*standard-output*= ::
+
+  The value of =*standard-output*=, called  /standard output/, is a stream that
+  is  used by  many  operators as  a  default destination  for  output when  no
+  specific output stream is explicitly supplied.
+
+  #+cindex:error output
+  #+vindex:*error-output*
+- =*error-output*= ::
+
+  The value  of =*error-output*=, called /error  output/, is a stream  to which
+  warnings and non-interactive error messages should be sent.
+
+  #+cindex:query i/o
+  #+vindex:*query-io*
+- =*query-io*= ::
+
+  The value of  =*query-io*=, called /query I/O/, is a  bidirectional stream to
+  be used when asking  questions of the user. The question  should be output to
+  this stream, and the answer read from it.
+
+  #+cindex:debug i/o
+  #+vindex:*debug-io*
+- =*debug-io*= ::
+
+  The value  of =*debug-io*=, called  /debug I/O/, is a  stream to be  used for
+  interactive debugging purposes.
+
+*** Stream Functions
+Some operations may be performed on any kind of stream; the following is a list
+of standardized operations that are potentially useful with any kind of stream.
+
+#+texinfo: @heading Some General-Purpose Stream Operations
+
+- ~close~
+- ~input-stream-p~
+- ~output-stream-p~
+- ~interactive-stream-p~
+- ~stream-element-type~
+- ~streamp~
+- ~with-open-stream~
+
+#+attr_texinfo: :options close stream &key abort => result
+#+begin_defun
+~close~ closes stream.  Closing a stream means  that it may no longer  be used in
+input  or  output  operations. The  act  of  closing  a  file stream  ends  the
+association between  the stream and  its associated file; the  transaction with
+the file system  is terminated, and input/output may no  longer be performed on
+the stream.
+
+- STREAM :: a stream (either open or closed).
+
+- ABORT ::  a boolean  with a  =false= default  value. If  abort is  =true=, an
+  attempt is  made to clean  up any side effects  of having created  stream. If
+  stream  performs output  to  a file  that  was created  when  the stream  was
+  created,  the  file is  deleted  and  any  previously  existing file  is  not
+  superseded.
+
+#+end_defun
+
+#+attr_texinfo: :options input-stream-p stream => boolean
+#+begin_defun
+#+texinfo: @defunx output-stream-p stream => boolean
+
+~input-stream-p~ returns  =true= if stream is an input  stream; otherwise, returns
+=false=.
+
+~output-stream-p~ returns =true= if stream is an output stream; otherwise, returns
+=false=.
+
+#+end_defun
+
+#+attr_texinfo: :options interactive-stream-p stream => boolean
+#+begin_defun
+Returns =true= if stream is an interactive stream[fn:5]; otherwise, returns
+=false=.
+#+end_defun
+
+#+attr_texinfo: :options stream-element-type stream => typespec
+#+begin_defun
+~stream-element-type~  returns a  type specifier  that indicates  the types  of
+objects that may be  read from or written to stream.  Streams created by ~open~
+have an element type restricted to integer or a subtype of type character.
+#+end_defun
+
+#+attr_texinfo: :options streamp object => boolean
+#+begin_defun
+Returns =true= if object is of type stream; otherwise, returns =false=.
+#+end_defun
+
+#+attr_texinfo: :options with-open-stream (var stream) declaration* form* => results
+#+begin_defun
+~with-open-stream~ performs a series of operations on @@texinfo:@var{stream}@@,
+returns a value, and then closes  the stream. @@texinfo:@var{Var}@@ is bound to
+the  value of  @@texinfo:@var{stream}@@, and  then @@texinfo:@var{form}@@s  are
+executed as an implicit ~progn~.
+
+- VAR :: a variable name; bound to @@texinfo:@var{stream}@@.
+
+- STREAM  :: a  form; evaluated  to produce  a stream.  The stream  has dynamic
+  extent; its extent ends when the form is exited.
+
+- DECLARATION :: a ~declare~ expression; not evaluated.
+
+- FORM :: an implicit ~progn~.
+
+- RESULTS :: the values returned by the @@texinfo:@var{form}@@s.
+
+
+#+caption:Example of ~with-open-stream~
+#+name:example-with-open-stream
+#+begin_src lisp
+(with-open-stream (s (make-string-input-stream "1 2 3 4"))
+    (+ (read s) (read s) (read s))) =>  6
+#+end_src
+#+end_defun
+
+*** Input Stream Functions
+The following are operators relating to input streams:
+
+- ~clear-input~
+- ~listen~
+- ~peek-char~
+- ~read~
+- ~read-byte~
+- ~read-char~
+- ~read-char-no-hang~
+- ~read-delimited-list~
+- ~read-from-string~
+- ~read-line~
+- ~read-preserving-whitespace~
+- ~unread-char~
+
+*** Output Stream Functions
+The following are operators relating to output streams:
+
+- ~clear-output~
+- ~finish-output~
+- ~force~output~
+- ~format~
+- ~fresh-line~
+- ~pprint~
+- ~prin1~
+- ~prin1-to-string~
+- ~princ~
+- ~princ-to-string~
+- ~print~
+- ~terpri~
+- ~write~
+- ~write-byte~
+- ~write-char~
+- ~write-line~
+- ~write-string~
+- ~write-to-string~
+
+*** Bidirectional Functions
+Any of the operators listed above under *Input Stream Functions* and *Output
+Stream Functions* can be used on bidirectional streams.  In addition, the
+following operators relate specifically to bidirectional streams:
+
+- ~y-or-n-p~
+- ~yes-or-no-p~
+
+*** Functions Taking Stream Arguments
+**** Either Open or Closed Streams
+These operators accept stream arguments that might be either open or closed
+streams.
+
+- ~broadcast-stream-streams~
+- ~close~
+- ~compile-file~
+- ~compile-file-pathname~
+- ~concatenated-stream-streams~
+- ~delete-file~
+- ~directory~
+- ~directory-namestring~
+- ~dribble~
+- ~echo-stream-input-stream~
+- ~echo-stream-ouput-stream~
+- ~ed~
+- ~enough-namestring~
+- ~file-author~
+- ~file-namestring~
+- ~file-write-date~
+- ~host-namestring~
+- ~load~
+- ~logical-pathname~
+- ~merge-pathnames~
+- ~namestring~
+- ~open~
+- ~open-stream-p~
+- ~parse-namestring~
+- ~pathname~
+- ~pathname-match-p~
+- ~pathnamep~
+- ~probe-file~
+- ~rename-file~
+- ~streamp~
+- ~synonym-stream-symbol~
+- ~translate-logical-pathname~
+- ~translate-pathname~
+- ~truename~
+- ~two-way-stream-input-stream~
+- ~two-way-stream-output-stream~
+- ~wild-pathname-p~
+- ~with-open-file~
+
+**** Open Streams
+These opertors require open streams:
+
+- clear-input
+- clear-output
+- file-length
+- file-position
+- file-string-length
+- finish-output
+- force-output
+- format
+- fresh-line
+- get-output-stream-string
+- input-stream-p
+- interactive-stream-p
+- listen
+- make-broadcast-stream
+- make-concatenated-stream
+- make-echo-stream
+- make-synonym-stream
+- make-two-way-stream
+- output-stream-p
+- peek-char
+- pprint
+- pprint-fill
+- pprint-indent
+- pprint-linear
+- pprint-logical-block
+- pprint-newline
+- pprint-tab
+- pprint-tabular
+- prin1
+- princ
+- print
+- print-object
+- print-unreadable-object
+- read
+- read-byte
+- read-char
+- read-char-no-hang
+- read-delimited-list
+- read-line
+- read-preserving-whitespace
+- stream-element-type
+- stream-external-format
+- terpri
+- unread-char
+- with-open-stream
+- write
+- write-byte
+- write-char
+- write-line
+- write-string
+- y-or-n-p
+- yes-or-no-p
+- 
 
 * Common Lisp on Emacs
 ** Emacs Lisp
@@ -1244,7 +1777,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:1] does emphasize a  side-effect-free, applicative approach to
+book[fn:3] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -2914,29 +3447,24 @@ Copyright \copy 2020 by {{{author}}}
 
 * Concept Index
 :PROPERTIES:
-:unnumbered: t
-:index:	   cp
+:index: cp
 :END:
 
 * Program Index
 :PROPERTIES:
-:index:	   pg
-:unnumbered: t
+:index: pg
 :END:
 
 * Function Index
 :PROPERTIES:
-:index:	   fn
-:unnumbered: t
+:index: fn
 :END:
 
 * Variable Index
 :PROPERTIES:
-:index:	   vr
-:unnumbered: t
+:index: vr
 :END:
 
-
 
 * Configuration							   :noexport:
 #+todo: SOMEDAY(s@) TODO(t@) INPROGRESS(i@) WAIT(w@) | CANCEL(c@) DONE(d!)
@@ -2954,11 +3482,22 @@ Copyright \copy 2020 by {{{author}}}
 
 * Footnotes
 
-[fn:3]The libraries were last updated on July 15, 2020.
+[fn:5]A stream  on which it  makes sense  to perform interactive  querying. The
+general intent of having some streams be classified as /interactive/ streams is
+to allow them to be distinguished  from streams containing batch (or background
+or command-file) input. Output to batch streams is typically discarded or saved
+for later  viewing, so interactive queries  to such streams might  not have the
+expected effect.
 
-[fn:2]Markdown requires the standard Perl library module Digest::MD5.
+[fn:2]namestring:  a  string  that  represents  a  filename  using  either  the
+standardized    notation    for    naming    logical    pathnames    or    some
+implementation-defined notation for naming a physical pathname.
 
-[fn:1]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:1]The libraries were last updated on July 15, 2020.
+
+[fn:4]Markdown requires the standard Perl library module Digest::MD5.
+
+[fn:3]In the browser, add =index.text= to the end of the URL to see the source.
 
 * Local Variables						   :noexport:
 # Local Variables:
