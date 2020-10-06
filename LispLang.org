@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-02 14:02
-#+macro:version Version 0.0.16
+#+date:2020-10-05 23:50
+#+macro:version Version 0.0.17
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -446,8 +446,8 @@ MacTeX 2014 works.
 ** Common Lisp The Language 2nd Edition
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
 - https://wiki.c2.com/?CommonLispTheLanguage
+- [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/cltl2/cltl2.html][Common Lisp the Language, 2nd Edition]]
 - Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
-
 
 ** ANSI Common Lisp---Paul Graham
 - http://www.paulgraham.com/acl.html
@@ -1723,6 +1723,10 @@ others:
 * Scheme
 - https://wiki.c2.com/?SchemeLanguage
 
+- [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/schintro/schintro_toc.html][An Introduction to Scheme and its Implementation]]
+
+- [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/t-y-scheme/t-y-scheme.html][Teach Yourself Scheme in Fixnum Days]]
+
 Scheme was introduced in 1975 by Gerald J. Sussman and Guy L. Steele Jr.
 
 Scheme is a  statically scoped and properly  tail-recursive dialect of
@@ -2333,6 +2337,53 @@ SLIB-PSD is a portable debugger for Scheme (requires emacs editor):
 
 ** Scheme on Emacs
 
+On Emacs, there are a couple of major modes designed for Scheme:
+
+#+texinfo: @heading Work with Different Implementations of Scheme
+
+- ~scheme-mode~     ::    a major mode distributed with Emacs; it is a modified
+  form of  ~lisp-mode~ (whose  parent mode  is ~prog-mode~)  and uses  the same
+  source-code editing commands  as ~lisp-mode~; it is started  with the command
+  =M-x scheme-mode=; it runs the ~scheme-mode-hook~ during initialization.
+
+  ~scheme-mode~ provides the following functionality:
+  - syntax highlighting
+  - works with language expressions
+  - indents source code
+  - highlights paired brackets
+
+  ~scheme-mode~ is enabled automatically for  all files with standard extensions
+  of Scheme source code:
+  - ~.scm~
+  - ~.ss~
+
+  To enable ~scheme-mode~ for other file extensions:
+  : (add-to-list 'auto-mode-alist '("\\.<ext>$" . scheme-mode))
+
+  Check out the ~scheme~ customization group.
+
+
+- ~cmuscheme-mode~ ::  this is  an old major  mode extension  of ~scheme-mode~;
+  adds functions for code execution directly from within Emacs buffers;
+
+  - [[https://github.com/typester/emacs/blob/master/lisp/cmuscheme.el][~cmuscheme.el~ source]]
+
+- ~quack~ ::
+
+- [[http://www.nongnu.org/geiser/][~geiser~]]  :: Geiser  is a  collection  of Emacs  major and  minor modes  that
+  conspire with one or more Scheme interpreters to keep the Lisp Machine Spirit
+  alive. It draws inspiration (and a bit more) from environments such as Common
+  Lisp’s Slime,  Factor’s FUEL, Squeak  or Emacs itself,  and does its  best to
+  make Scheme hacking inside Emacs (even more) fun.
+
+
+#+texinfo: @heading Work with Concrete Implementations of Scheme
+
+- ~xscheme~
+- ~gds~
+- ~bee-mode~
+- ~gambit~
+
 *** Scheme Mode
  - Is there an Emacs mode for Scheme? Emacs comes with two Scheme modes. Most
    people prefer the one that is not the default. To switch to that mode, put
@@ -2350,18 +2401,15 @@ SLIB-PSD is a portable debugger for Scheme (requires emacs editor):
    buffer. You can evaluate sections of a  program in the buffer or type into it
    directly.
 
-
 *** CMU Scheme Mode
 For  more advanced  syntax-highlighting and  indenting, check  out the  various
 extensions to the ~cmuscheme~ mode at
 
 - http://www.cs.indiana.edu/proglang/scheme/iucs.html.
 
-
 *** MIT Scheme Mode
 MIT Scheme includes a specialized  mode (~mit-scheme.el~) that understands some
 of MIT's extensions and provides a closer integration with the REPL.
-
 
 *** Quack
 =Quack= (http://www.neilvandyke.org/quack/)  provides numerous  enhancements to
