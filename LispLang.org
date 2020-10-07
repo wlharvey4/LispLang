@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-05 23:50
-#+macro:version Version 0.0.17
+#+date:2020-10-06 23:10
+#+macro:version Version 0.0.18
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -2153,12 +2153,140 @@ Windows, many Unix flavours
 *** MIT/GNU Scheme
 - http://groups.csail.mit.edu/mac/projects/scheme/
 - https://www.gnu.org/software/mit-scheme/
+- [[https://www.gnu.org/software/mit-scheme/documentation/stable/mit-scheme-user/index.html][MIT/GNU Scheme 10.1.11]]
+- [[http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/scheme/0.html][CMU Scheme Repository]]
+
+
+MIT/GNU Scheme is a complete programming environment that runs on many unix
+platforms and Windows.  It features a:
+
+- interpreter
+- native-code compiler
+- rich runtime library
+- powerful source-level debugger
+- integrated Emacs-like editor
 
 *** Kawa Scheme
 [[https://www.gnu.org/software/kawa/][The Kawa Scheme Language]]
+[[https://www.gnu.org/software/kawa/tutorial/index.html][Kawa Scheme Tutorial]]
+[[https://gitlab.com/kashell/Kawa][Kawa on GitLab]]
 
 Kawa is a general-purpose programming language that runs on the Java
 platform.
+
+- Runs on the Java platform, with no native code needed
+- Extends the Scheme language, following the R7RS specification from 2013
+- Programs run fast - roughly as fast as Java programs, and much faster than
+  other “scripting languages”.
+- Full, convenient, and efficient access to the huge set of Java libraries; you
+  can access objects, methods, fields, and classes without run-time overhead.
+- Start-up times are fast.
+- Scripts are simple Kawa source files that can run as an application or
+  command.
+- You can embed Kawa as a scripting language for Java applications.
+- Deployment is easy and flexible. You just need the Kawa jar file.
+- Kawa provides the usual read-eval-print loop
+- Kawa has builtin pretty-printer support, and fancy formatting.
+- Kawa supports class-definition facilities, and separately-compiled modules.
+- You can allocate  and initialize objects with a compact  “builder” syntax. It
+  works out-of-the-box (with no run-time overhead)
+- JavaFX programming is simpler.
+- Flexible shell-like functionality, including process literals.
+- Web page  scripts are  easy to  write and  install with  self-configuring web
+  servers, optionally using servlets and XML literals.
+- Arrays and sequences have a lot of flexibility
+- Many useful features for mathematics and numerics
+  - infinite-precision rational numbers and complex numbers.
+  - Compile-time optimization of arithmetic with the use of type declarations
+    and inference.
+  - A quantity is a real number with a unit, such as 3cm.
+  - Quaternions are a 4-dimensional generalization of complex numbers.
+  - Unsigned primitive integer types (ubyte, ushort, uint, ulong) are
+    implemented efficiently without object allocation.
+- A lazy value wraps an expression which is evaluated only when it is needed.
+- Kawa provides a framework for implementing other programming languages,
+  - comes with incomplete support for CommonLisp, Emacs Lisp, and EcmaScript,
+    and XQuery.
+
+
+**** Installing Kawa Scheme
+These instructions install the pre-compiled binary distribution. The
+pre-compiled release is at:
+
+- ftp://ftp.gnu.org/pub/gnu/kawa/kawa-3.1.1.zip
+
+
+The binary release  comes as a ~.zip~  archive that includes Kawa  itself (as a
+~.jar~  file  ~$KAWA_HOME/lib/kawa.jar~),  some third-party  helper  libraries,
+~kawa~ command scripts (for GNU/Linux/Unix/MacOS or Windows), and documentation
+(basically  this  manual).  The  ~.zip~  file unzips  into  a  directory  named
+~kawa-3.1.1~ with ~lib~, ~bin~, and ~doc~ sub-directories. Place this directory
+somewhere  suitable  and name  the  location  =KAWA_HOME=. The  binary  release
+requires  Java 8  or later.  If you  want to  use Kawa  as part  of some  other
+application, you just need the =$KAWA_HOME/lib/kawa.jar=.
+
+**** Running Kawa Scheme
+To  run a  Kawa  script file  or  the Kawa  read-eval-print-loop  run the  Kawa
+application. There are various way to do  so. The recommended way is to execute
+the $KAWA_HOME/bin/kawa  Bash shell  script. The script  assumes that  either a
+suitable ~java~  program is in  your PATH;  or the =JAVA=  environment variable
+names  a   suitable  ~java~   executable;  or  that   =JAVA_HOME=  is   set  so
+=$JAVA_HOME/bin/java= is suitable.
+
+Add the following to a startup script:
+: export KAWA_HOME='/usr/local/kawa/kawa-3.1.1'
+: alias kawaj='java -jar $KAWA_HOME/lib/kawa.jar'
+
+The alias ~kawaj~ runs the ~kawa.jar~ directly, producing a repl.
+
+Add the kawa ~bin~ directory to your =PATH= variable:
+: export $KAWA_HOME/bin
+
+To open the documentation manual as an html file, type:
+: kawa --brownse-manual
+
+**** Running Kawa Command Scripts
+Use the following header command in your scripts:
+: #!/usr/bin/env kawa
+
+then make the program executable with:
+: chmod +x <script>
+
+and run it with:
+: ./<script> <args...>
+
+**** Sending Options to Kawa in a Command Script
+If you need to  specify extra arguments to ~kawa~, you  can run arbitrary shell
+commands inside Scheme block comments.
+
+#+begin_src sh
+#!/bin/sh
+#|
+exec kawa out:base=16 out:radix=yes "$0" "$*"
+|#
+(format #t "The command-line is:~{ ~w~}.~%" (command-line))
+(display "It has ")
+(display (apply + (map string-length (command-line))))
+(display " characters.")
+(newline)
+#+end_src
+
+The trick is to hide the shell code from Kawa inside a =#|...|#= block-comment.
+The start of the block comment is a  line starting with a =#=, so it is treated
+as a comment by  the shell. You can then invoke ~kawa~  (or ~java~ directly) as
+you prefer,  setting up  class-path and  jars as  needed, and  passing whatever
+arguments you want. You need to make  sure the shell finishes before it reaches
+the end of the block comment or the Scheme code, which would confuse it.
+
+Using comments this way  has the advantage that you have  the option of running
+the script “manually” if you prefer:
+
+#+begin_example
+$ kawa /tmp/scm-echo out:base=8 "x y"
+The command-line is: "/tmp/scm-echo" "out:base=8" "x y".
+It has 26 characters.
+#+end_example
+
 *** SCM Scheme
 - [[http://people.csail.mit.edu/jaffer/SCM.html][The SCM Implementation of Scheme]] ::
 
@@ -2368,7 +2496,9 @@ On Emacs, there are a couple of major modes designed for Scheme:
 
   - [[https://github.com/typester/emacs/blob/master/lisp/cmuscheme.el][~cmuscheme.el~ source]]
 
-- ~quack~ ::
+- ~quack~ :: [[http://community.schemewiki.org/?Quack][Quack]] is a package  for Emacs by neil-van-dyke that enhances Emacs
+  support for Scheme. It is  layered atop the standard packages ~cmuscheme.el~,
+  by Olin Shivers, and ~scheme.el~, by Bill Rozas and Dave Love.
 
 - [[http://www.nongnu.org/geiser/][~geiser~]]  :: Geiser  is a  collection  of Emacs  major and  minor modes  that
   conspire with one or more Scheme interpreters to keep the Lisp Machine Spirit
@@ -2379,15 +2509,16 @@ On Emacs, there are a couple of major modes designed for Scheme:
 
 #+texinfo: @heading Work with Concrete Implementations of Scheme
 
-- ~xscheme~
+- ~xscheme~ ::  run MIT Scheme under  Emacs; a major mode  for interacting with
+  MIT Scheme.
 - ~gds~
 - ~bee-mode~
 - ~gambit~
 
 *** Scheme Mode
- - Is there an Emacs mode for Scheme? Emacs comes with two Scheme modes. Most
-   people prefer the one that is not the default. To switch to that mode, put
-   something like this into your ~.emacs~ file:
+ - Emacs comes with  two Scheme modes. Most  people prefer the one  that is not
+   the  default. To  switch to  that mode,  put something  like this  into your
+   ~.emacs~ file:
 
    #+begin_src elisp
    (autoload 'scheme-mode "cmuscheme" "Major mode for Scheme." t)
