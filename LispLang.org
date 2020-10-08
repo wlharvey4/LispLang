@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-06 23:10
-#+macro:version Version 0.0.18
+#+date:2020-10-07 18:03
+#+macro:version Version 0.0.19
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -15,22 +15,41 @@
 #+texinfo:@insertcopying
 
 
-"Pascal is for building pyramids -- imposing, breathtaking structures
-built by armies pushing heavy blocks into place. Lisp is for building
-organisms..."
+"Pascal is for building pyramids  -- imposing, breathtaking structures built by
+armies pushing heavy blocks into place. Lisp is for building organisms..."
 
 - Alan Perlis, from https://www.cons.org/cmucl/
 
 #+begin_quote
-Alan Jay Perlis (April 1, 1922 – February 7, 1990) was an American
-computer scientist and professor at Purdue University, Carnegie Mellon
-University and Yale University. He is best known for his pioneering
-work in programming languages and was the first recipient of the
-Turing Award.
+Alan Jay  Perlis (April 1,  1922 – February 7,  1990) was an  American computer
+scientist and  professor at Purdue  University, Carnegie Mellon  University and
+Yale  University. He  is  best known  for his  pioneering  work in  programming
+languages   and    was   the   first    recipient   of   the    Turing   Award.
 [fn::https://amturing.acm.org/award_winners/perlis_0132439.cfm]
 #+end_quote
 
 - [[https://web.archive.org/web/19990117034445/http://www-pu.informatik.uni-tuebingen.de/users/klaeren/epigrams.html][Alan Perlis' Epigrams]]
+
+
+"LISP has survived for  21 years because it is an  approximate local optimum in
+the space of programming languages."
+
+- John McCarthy, 1980, from http://jmc.stanford.edu/articles/lisp20th.html
+
+- [[http://jmc.stanford.edu/articles/index.html][Articles by John McCarthy]]
+
+
+"It seems  to me that  there have been two  really clean, consistent  models of
+programming so far:  the C model and  the Lisp model. These two  seem points of
+high ground,  with swampy lowlands between  them. As computers have  grown more
+powerful, the  new languages being  developed have been moving  steadily toward
+the Lisp model. A  popular recipe for new programming languages  in the past 20
+years has been to take the C model of computing and add to it, piecemeal, parts
+taken from the Lisp model, like runtime typing and garbage collection."
+
+- Paul Graham, "The Roots of Lisp", May 2001
+
+- [[http://www.paulgraham.com/articles.html][Essays by Paul Graham]]
 
 
 * Introduction to Lisp
@@ -71,6 +90,120 @@ written in MacLisp.
 - [[http://www.maclisp.info/pitmanual/index.html][The MacLISP Manual]]
 
 - [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
+** The Roots of Lisp
+
+*** John McCarthy and LISP
+ - http://jmc.stanford.edu/articles/recursive.html
+
+
+ #+texinfo: @heading Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I
+
+ #+texinfo: @subheading This was the original paper on LISP.
+
+ - http://jmc.stanford.edu/articles/recursive.html
+
+ It is copied with  minor notational changes from CACM, April  1960. If you want
+ the exact typography,  look there. A few typographical changes  have been made,
+ but the notation  has not been modernized. There are  also some new explanatory
+ footnotes. Part  II, which never appeared,  was to have had  some Lisp programs
+ for algebraic computation.
+
+ In  this  article,  we  first  describe  a  formalism  for  defining  functions
+ recursively. We  believe this  formalism has advantages  both as  a programming
+ language and  as a  vehicle for  developing a theory  of computation.  Next, we
+ describe S-expressions and  S-functions, give some examples,  and then describe
+ the universal S-function apply which plays  the theoretical role of a universal
+ Turing machine and  the practical role of an interpreter.  Then we describe the
+ representation of S-expressions in the memory of the IBM 704 by list structures
+ similar to  those used  by Newell,  Shaw and Simon,  and the  representation of
+ S-functions  by  program.  Then  we  mention the  main  features  of  the  LISP
+ programming  system for  the  IBM 704.  Next comes  another  way of  describing
+ computations  with  symbolic  expressions,  and finally  we  give  a  recursive
+ function interpretation of flow charts.
+
+ [[http://jmc.stanford.edu/articles/recursive/recursive.pdf][Download the article in PDF]]
+
+*** Paul Graham's "The Roots of Lisp"
+
+ - [[http://www.paulgraham.com/rootsoflisp.html][The Roots of Lisp, by Paul Graham]] January 18, 2002
+
+(I  wrote  this  article  to  help  myself  understand  exactly  what  McCarthy
+discovered. You don't need to know this stuff to program in Lisp, but it should
+be helpful to anyone who wants to understand  the essence of Lisp — both in the
+sense of its origins and its semantic core. The fact that it has such a core is
+one  of  Lisp's distinguishing  features,  and  the  reason why,  unlike  other
+languages, Lisp has dialects.) -- Paul Graham
+
+ #+begin_quote
+ Paul Graham's  The Roots of Lisp,  a cogent essay dealing  with John McCarthy's
+ astonishing 1960's  paper[fn:1] which  introduced the  LISP language,  and more
+ importantly, the functional model of programing.
+
+ Graham stresses  his essay is  more important today  than ever, given  how more
+ languages have  moved (albeit in a  piecemeal fashion) towards the  LISP model.
+ Working with seven primitive operators, the paper shows how the entire language
+ is built.  Most importantly, the paper  shows the LISP trademark,  how to write
+ the language in itself.
+
+ An interesting aspect  for Scheme programmers like myself is  the discussion of
+ dynamic versus lexical scoping.
+
+ Reading the paper reminds us of why functional languages, especially LISP based
+ ones, aren't just the best for  expressing algorithms, but are the most elegant
+ models  of  programming  since  the  are  easily  transcribed  in  mathematical
+ notation.
+
+ I can't  recommend The Roots  of Lisp enough. The  paper is available  for free
+ download on Paul Graham's site.
+ #+end_quote
+
+ Posted by Robert D. Skeels * rdsathene Saturday, January 2, 2010 @
+ http://tech-rdsathene.blogspot.com/search/label/Scheme
+
+*** History of Lisp
+
+- http://jmc.stanford.edu/articles/lisp.html
+
+
+The history  of LISP according to  McCarthy's memory in 1978,  presented at the
+ACM SIGPLAN History of Programming Languages Conference.
+
+This  paper concentrates  on the  development of  the basic  ideas of  LISP and
+distinguishes two  periods - Summer 1956  through Summer 1958 when  most of the
+key ideas were  developed (some of which were implemented  in the FORTRAN based
+FLPL), and Fall 1958 through 1962 when the programming language was implemented
+and applied to problems of artificial intelligence. After 1962, the development
+of LISP  became multi-stranded, and  different ideas were pursued  in different
+places.
+
+- [[http://jmc.stanford.edu/articles/lisp/lisp.pdf][Download the article in PDF.]]
+
+*** LISP --- Notes on its Past and Future --- 1980
+
+- http://jmc.stanford.edu/articles/lisp20th.html
+
+
+This paper  was published in 1980.  I put it  up since it mostly  represents my
+present opinions. There are some 1999 footnotes.
+
+LISP has survived for 21 years because it is an approximate local optimum in
+the space of programming languages. However, it has accumulated some barnacles
+that should be scraped off, and some long-standing opportunities for
+improvement have been neglected. It would benefit from some co-operative
+maintenance especially in creating and maintaining program libraries. Computer
+checked proofs of program correctness are now possible for pure LISP and some
+extensions, but more theory and some smoothing of the language itself are
+required before we can take full advantage of LISP's mathematical basis.LISP
+has survived for 21 years because it is an approximate local optimum in the
+space of programming languages. However, it has accumulated some barnacles that
+should be scraped off, and some long-standing opportunities for improvement
+have been neglected. It would benefit from some co-operative maintenance
+especially in creating and maintaining program libraries. Computer checked
+proofs of program correctness are now possible for pure LISP and some
+extensions, but more theory and some smoothing of the language itself are
+required before we can take full advantage of LISP's mathematical basis.
+
+- [[http://jmc.stanford.edu/articles/lisp20th/lisp20th.pdf][Download the article in PDF.]]
 
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
@@ -742,7 +875,7 @@ https://www.quicklisp.org/beta/
 
 Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
 Common Lisp  implementation to download,  install, and  load any of  over 1,500
-[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:1]  It works with:
+[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:2]  It works with:
 
 - ABCL,
 - Allegro CL,
@@ -840,7 +973,7 @@ used by this interface assumes that:
   filename it represents ([[a-stream][stream)]].
 
 
-Pathnames and namestrings[fn:2] are two kinds of objects that
+Pathnames and namestrings[fn:3] are two kinds of objects that
 substitute for filenames in Common Lisp ([[pathname--class][pathname class]])
 #+end_deftp
 
@@ -955,7 +1088,7 @@ Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 A designator for a pathname; that is, an object that denotes a pathname and
 that is one of:
 
-- pathname namestring[fn:2] (denoting the corresponding pathname)
+- pathname namestring[fn:3] (denoting the corresponding pathname)
 - a stream associated with a file (denoting the pathname used to open the file)
 - pathname (denoting itself)
 #+end_deftp
@@ -1172,7 +1305,7 @@ the stream.
 
 #+attr_texinfo: :options interactive-stream-p stream => boolean
 #+begin_defun
-Returns =true= if stream is an interactive stream[fn:5]; otherwise, returns
+Returns =true= if stream is an interactive stream[fn:4]; otherwise, returns
 =false=.
 #+end_defun
 
@@ -1781,7 +1914,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:3] does emphasize a  side-effect-free, applicative approach to
+book[fn:5] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -2511,9 +2644,12 @@ On Emacs, there are a couple of major modes designed for Scheme:
 
 - ~xscheme~ ::  run MIT Scheme under  Emacs; a major mode  for interacting with
   MIT Scheme.
-- ~gds~
-- ~bee-mode~
-- ~gambit~
+
+- ~gds~ ::
+
+- ~bee-mode~ ::
+
+- ~gambit~ ::
 
 *** Scheme Mode
  - Emacs comes with  two Scheme modes. Most  people prefer the one  that is not
@@ -3661,22 +3797,27 @@ Copyright \copy 2020 by {{{author}}}
 
 * Footnotes
 
-[fn:5]A stream  on which it  makes sense  to perform interactive  querying. The
+[fn:1]Recursive Functions of Symbolic Expressions and Their Computation by
+Machine, Part I, by John McCarthy, April 1960 @
+http://www-formal.stanford.edu/jmc/recursive/recursive.html.
+Note: Part II never appeared.
+
+[fn:4]A stream  on which it  makes sense  to perform interactive  querying. The
 general intent of having some streams be classified as /interactive/ streams is
 to allow them to be distinguished  from streams containing batch (or background
 or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:2]namestring:  a  string  that  represents  a  filename  using  either  the
+[fn:3]namestring:  a  string  that  represents  a  filename  using  either  the
 standardized    notation    for    naming    logical    pathnames    or    some
 implementation-defined notation for naming a physical pathname.
 
-[fn:1]The libraries were last updated on July 15, 2020.
+[fn:2]The libraries were last updated on July 15, 2020.
 
-[fn:4]Markdown requires the standard Perl library module Digest::MD5.
+[fn:6]Markdown requires the standard Perl library module Digest::MD5.
 
-[fn:3]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:5]In the browser, add =index.text= to the end of the URL to see the source.
 
 * Local Variables						   :noexport:
 # Local Variables:
