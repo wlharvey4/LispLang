@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-07 18:03
-#+macro:version Version 0.0.19
+#+date:2020-10-07 21:24
+#+macro:version Version 0.0.20
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -2419,6 +2419,105 @@ $ kawa /tmp/scm-echo out:base=8 "x y"
 The command-line is: "/tmp/scm-echo" "out:base=8" "x y".
 It has 26 characters.
 #+end_example
+
+**** Kawa Implementation of Asymmetric Encryption Keys Via KeyPairGenerator
+- http://rdsathene.org/scheme/docs/kawa-example-exec-1.html
+
+
+=AsymmetricKeyMaker=  is an  excellent example  for  several reasons.  It is  a
+command line  program takes user  input and returns  a result. It  utilizes the
+Java exception  system and gives us  an opportunity to deal  with both abstract
+and concrete classes.
+
+- Asymmetric Encryption Keys With the KeyPairGenerator
+  - January 16, 2004
+  - 'Core Java Technologies Tech Tips' article
+  - https://www.java-tips.org/java-se-tips-100019/39-javax-crypto/915-asymmetric-encryption-keys-with-the-keypairgenerator.html
+
+
+Example of standalone  executable program duplicating the  functionality of the
+January  16,  2004  'Core  Java Technologies  Tech  Tips'  article  'Asymmetric
+Encryption Keys With the KeyPairGenerator'. This example assumes the reader has
+obtained their  own copy of  that document and will  reference it and  the Java
+source for our  purpose of reproducing the functionality. It  is not reproduced
+here due  to the  lengthy and confusing  amount of copyright  and terms  of use
+information  Sun uses  on  all  their documentation.  The  Sun  source for  the
+=AsymmetricKeyMaker= program  is 25 lines, so  we can reference things  by line
+number.
+
+#+begin_src lisp
+; -*-scheme-*- Copyright © Robert D. Skeels 02/07/2004 <athene@earthlink.net>
+
+(module-name <AsymmetricKeyMaker>)
+
+(define-namespace key-pair-generator "class:java.security.KeyPairGenerator")
+
+(define gen-keys
+  (lambda (algorithm)
+    (let* ((our-kpg (key-pair-generator:getInstance algorithm))
+           (our-key-pair (invoke our-kpg 'generateKeyPair))
+           (writeln (lambda (args) (display args) (newline))))
+           (writeln (invoke our-key-pair 'getPublic))
+           (writeln (invoke our-key-pair 'getPrivate)))))
+
+(define try-gen-keys
+  (lambda (algorithm)
+    (try-catch (gen-keys algorithm)
+        (ex <java.security.NoSuchAlgorithmException>
+          (begin
+          (display  "usage: java AsymmetricKeyMaker <RSA | DSA>")
+          (newline))))))
+
+(if (> (vector-length command-line-arguments) 0)
+  (try-gen-keys (vector-ref command-line-arguments 0)))
+#+end_src
+
+#+begin_src java
+KeyPairGenerator generator =
+                 KeyPairGenerator.getInstance("RSA");
+ generator.initialize(1024);
+ KeyPair keyPair = generator.generateKeyPair();
+
+import java.security.KeyPairGenerator;
+ import java.security.NoSuchAlgorithmException;
+ import java.security.KeyPair;
+
+ public class AsymmetricKeyMaker {
+
+    public static void main(String[] args) {
+      String algorithm = "";
+      if (args.length == 1) algorithm = args[0];
+
+      try {
+        KeyPair keyPair = KeyPairGenerator
+                             .getInstance(algorithm)
+                             .generateKeyPair();
+
+        System.out.println(keyPair.getPublic());
+        System.out.println(keyPair.getPrivate());
+
+      } catch (NoSuchAlgorithmException e) {
+        System.err.println(
+          "usage: java AsymmetricKeyMaker <RSA | DSA>");
+      }
+
+    }
+ }
+#+end_src
+
+**** JEmacs---The Java/Scheme-based Emacs
+- [[http://jemacs.sourceforge.net][JEmacs Home]]
+- http://jemacs.sourceforge.net/JEmacs-FSM.html
+- Per Bothner
+
+
+JEmacs is  a re-implementation  of the  Emacs programmable  text editor.  It is
+written in Java,  and currently uses the  Swing GUI toolkit. Emacs  is based on
+the extension language Emacs Lisp (Elisp), which is a dynamically-scoped member
+of the Lisp family. JEmacs supports Elisp, as well as the use of Scheme, a more
+modern  statically-scoped Lisp  dialect. Both  languages get  compiled to  Java
+bytecodes,  either  in  advance  or  on-the-fly,  using  the  Kawa  compilation
+framework.
 
 *** SCM Scheme
 - [[http://people.csail.mit.edu/jaffer/SCM.html][The SCM Implementation of Scheme]] ::
