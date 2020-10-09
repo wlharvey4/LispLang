@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-07 21:24
-#+macro:version Version 0.0.20
+#+date:2020-10-08 19:50
+#+macro:version Version 0.0.21
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -1597,62 +1597,95 @@ editing the Emacs InitFile.
 It is useful for evaluating EmacsLisp expressions. Typing ‘C-j’ after
 an expression will print the result on the next line.
 ** Lisp Mode
-** SLIME
+*** ILISP Mode
+A GNU Emacs Interface for Interacting with Lisp
+
+[[http://www.inf.ufsc.br/~aldo.vw/func/ilisp/ilisp.html][ILISP]] is an interface from GNU Emacs to an inferior LISP.
+
+ILISP is  a powerful GNU  Emacs interface to  many dialects of  Lisp, including
+Lucid, Allegro,  Xanalys/Harlequin LispWorks,  GCL, KCL,  AKCL, ECL,  IBCL, and
+CMUCL. Also some Scheme implementations are  supported as well as a preliminary
+version of Xlisp/XlispStat.
+
+ILISP was a package designed  to integrate various Lisp implementations (mostly
+Common Lisp systems and various Scheme dialects) within Emacs (or XEmacs).
+
+ILISP development stopped in 2004. You should use SlimeMode instead.
+** SLIME Mode
 http://www.common-lisp.net/project/slime/images2/slime-small.png
 
  - https://common-lisp.net/project/slime/
  - [[https://github.com/slime][SLIME on GitHub]]
  - [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual]]
 
- SLIME is a Emacs mode for Common Lisp development. SLIME extends Emacs
- with  support  for  interactive  programming  in  Common  Lisp.  While
- lisp-mode supports editing Lisp  source files, slime-mode adds support
- for interacting  with a running  Common Lisp process  for compilation,
- debugging, documentation lookup, and so on.
+ SLIME is  a Emacs mode for  Common Lisp development. SLIME  extends Emacs with
+ support for interactive programming in Common Lisp. While ~lisp-mode~ supports
+ editing Lisp  source files, ~slime-mode~  adds support for interacting  with a
+ running Common Lisp process  for compilation, debugging, documentation lookup,
+ and so on.
 
 - Provides REPL which is hooked to implementation directly in Emacs
 - Has integrated Common Lisp debugger with Emacs interface
 - Interactive object-inspector in Emacs buffer
-- Has its own minor mode which enhances lisp-mode in many ways
+- Has its own minor mode which enhances ~lisp-mode~ in many ways
 - Supports every common Common Lisp implementation
 - Symbol completion
 - Cross-referencing
 - Can perform macroexpansions
 
-  - Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
 
-    "SLIME is a Emacs mode for Common Lisp development. Inspired by
-    existing systems such Emacs Lisp and ILISP, we are working to
-    create an environment for hacking Common Lisp in."
+#+texinfo: @heading Featured Highlights
 
-  - -slime-mode= ::
+- Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
+
+    "SLIME is  a Emacs mode for  Common Lisp development. Inspired  by existing
+  systems such as Emacs Lisp and ILISP, we are working to create an environment
+  for hacking Common Lisp in."
+
+- ~slime-mode~ ::
     An Emacs minor-mode to enhance lisp-mode with:
-    - Code evaluation, compilation, and macroexpansion
-    - Online documentation
-      - =describe=
-      - =apropos=
-      - =hyperspec=
-    - Definition finding
-    - Symbol and package name completion
-    - Automatic macro indentation based on =&body=.
-    - Cross-reference interface
+  - Code evaluation, compilation, and macroexpansion
+  - Online documentation
+    - =describe=
+    - =apropos=
+    - =hyperspec=
+  - Definition finding
+  - Symbol and package name completion
+  - Automatic macro indentation based on =&body=.
+  - Cross-reference interface
 
-  - SLDB ::
+- SLDB ::
     Common Lisp debugger with an Emacs-based user interface
 
-  - REPL ::
+- REPL ::
     The Read-Eval-Print Loop ("top-level") is written in Emacs Lisp for
     tighter integration with Emacs.
 
-  - Compilation Notes ::
-    SLIME is able to take compiler messages and annotate them directly
-    into source buffers.
+- Compilation Notes ::
+  SLIME  is able  to take  compiler messages  and annotate  them directly  into
+  source buffers.
 
-  - Inspector ::
-    Interactive object-inspector in an Emacs buffer.
+- Inspector ::
+  Interactive object-inspector in an Emacs buffer.
+
+- The currently supported Common Lisp implementations are:
+  - Steel Bank Common Lisp (SBCL) ::
+    ~/opt/local/bin/sbcl~
+  - Clozure CL (a.k.a. OpenMCL) (CCL) ::
+    ~/usr/local/dev/bin/ccl~
+  - CLISP ::
+    ~/opt/local/bin/clisp~
+  - ABCL ::
+    ~/opt/local/bin/abcl~
+  - ECL ::
+  - CMU Common Lisp (CMUCL) ::
+  - LispWorks ::
+  - Allegro CL ::
+  - Scieneer CL ::
+  - Corman CL ::
 
 *** Setting Up SLIME
- - inferior-lisp-program ::
+ - ~inferior-lisp-program~ ::
    Point the =inferior-lisp-program= variable to your favourite Common
    Lisp implementation:
    : (setq inferior-lisp-program "sbcl")
@@ -1854,20 +1887,36 @@ others:
    REPL) and ignore the =*inferior-lisp*= buffer.
 
 * Scheme
-- https://wiki.c2.com/?SchemeLanguage
+- [[https://schemers.org][Schemers.org]]
+- [[http://www.scheme.dk/planet/][Planet Scheme]]
+
+- [[https://wiki.c2.com/?SchemeLanguage]]
 
 - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/schintro/schintro_toc.html][An Introduction to Scheme and its Implementation]]
 
 - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/t-y-scheme/t-y-scheme.html][Teach Yourself Scheme in Fixnum Days]]
 
-Scheme was introduced in 1975 by Gerald J. Sussman and Guy L. Steele Jr.
+Scheme is a  member of the Lisp  family of languages. Scheme  was introduced in
+1975  by Gerald  J. Sussman  and Guy  L.  Steele Jr..  Scheme is  defined in  a
+document called  The Revised^5  Report on the  Algorithmic Language  Scheme, or
+R5RS for short. A newer report, R6RS, was released in 2007, but this report has
+attracted considerable controversy, and a number of Scheme implementations have
+chosen not  to be compliant  with it. Yet another  report was released  in 2013
+("R7RS"), that was less ambitious than R6RS and more minimal.
 
-Scheme is a  statically scoped and properly  tail-recursive dialect of
-the Lisp  programming language  invented by Guy  Lewis Steele  Jr. and
-Gerald Jay Sussman. It was designed to have an exceptionally clear and
-simple semantics  and few different  ways to form expressions.  A wide
-variety  of programming  paradigms, including  imperative, functional,
-and message passing styles, find convenient expression in Scheme.
+Even though Scheme is consciously minimalist,  it is recognized that a language
+must be more than a minimal core in order to be useful. Accordingly, the Scheme
+community uses a  process known as `Scheme Requests  For Implementation' (SRFI,
+pronounced `SUR-fee') to define new  language features. A typical Scheme system
+therefore complies  with one  of the  Scheme reports  plus some  or all  of the
+accepted SRFIs.
+
+Scheme is a  statically scoped and properly tail-recursive dialect  of the Lisp
+programming language invented  by Guy Lewis Steele Jr. and  Gerald Jay Sussman.
+It was  designed to have  an exceptionally clear  and simple semantics  and few
+different ways  to form expressions.  A wide variety of  programming paradigms,
+including imperative,  functional, and message passing  styles, find convenient
+expression in Scheme.
 
 It was the first dialect of Lisp to fully support:
 
@@ -2273,16 +2322,40 @@ that  can be  extended by  users or  other programmers  with plug-ins,
 modules, or scripts."
 
 *** Chicken Scheme
-http://www.call-cc.org
+- [[http://www.call-cc.org][Chicken Home]]
+- [[http://wiki.call-cc.org/][Chicken Wiki]]
+- [[http://api.call-cc.org/4/doc/][Search Chicken documentation]]
 
-CHICKEN is a compiler for the Scheme programming language. It produces
-portable  and efficient  C and  supports the  R5RS and  R7RS (work  in
-progress)  standards, and  many extensions.  It runs  on Linux,  OS X,
+CHICKEN  Scheme  combines  an  optimising   compiler  with  a  reasonably  fast
+interpreter.  It supports  almost  all of  R7RS and  the  important SRFIs.  The
+compiler generates  portable C code  that supports tail  recursion, first-class
+continuations  and  lightweight  threads,  and  the interface  to  and  from  C
+libraries is  flexible, efficient,  and easy to  use. It runs  on Linux,  OS X,
 Windows, many Unix flavours
 
+CHICKEN is a compiler that translates Scheme source files into C, which in turn
+can be fed to a C compiler  to generate a standalone executable. An interpreter
+is also  available and can  be used as a  scripting environment or  for testing
+programs  before  compilation. The  interpreter  allows  interactive use,  fast
+prototyping, debugging, and scripting.
+
+To invoke the CHICKEN interpreter, you use the ~csi~ command.
+
+To run a script, add the following command header to the script file:
+: #! /usr/local/bin/csi -script
+
+The parameter ~command-line-arguments~ is set to  a list of the parameters that
+were  passed to  the  Scheme  script. Scripts  can  be  compiled to  standalone
+executables.
+
 *** Gambit Scheme
+- [[http://dynamo.iro.umontreal.ca/wiki/index.php/Main_Page][Gambit Home]]
 - https://wiki.c2.com/?SchemeLanguage
 - https://github.com/gambit/gambit/blob/master/INSTALL.txt
+
+The  Gambit Scheme  system  is  a complete,  portable,  efficient and  reliable
+implementation of the Scheme programming language.
+
 *** MIT/GNU Scheme
 - http://groups.csail.mit.edu/mac/projects/scheme/
 - https://www.gnu.org/software/mit-scheme/
@@ -2701,32 +2774,25 @@ On Emacs, there are a couple of major modes designed for Scheme:
 
 #+texinfo: @heading Work with Different Implementations of Scheme
 
-- ~scheme-mode~     ::    a major mode distributed with Emacs; it is a modified
-  form of  ~lisp-mode~ (whose  parent mode  is ~prog-mode~)  and uses  the same
-  source-code editing commands  as ~lisp-mode~; it is started  with the command
-  =M-x scheme-mode=; it runs the ~scheme-mode-hook~ during initialization.
-
-  ~scheme-mode~ provides the following functionality:
-  - syntax highlighting
-  - works with language expressions
-  - indents source code
-  - highlights paired brackets
-
-  ~scheme-mode~ is enabled automatically for  all files with standard extensions
-  of Scheme source code:
-  - ~.scm~
-  - ~.ss~
-
-  To enable ~scheme-mode~ for other file extensions:
-  : (add-to-list 'auto-mode-alist '("\\.<ext>$" . scheme-mode))
-
-  Check out the ~scheme~ customization group.
-
-
-- ~cmuscheme-mode~ ::  this is  an old major  mode extension  of ~scheme-mode~;
-  adds functions for code execution directly from within Emacs buffers;
+- ~cmuscheme-mode~ :: Inferior Scheme mode---Major mode for interacting with an
+  inferior  Scheme   process.  This   is  an  old   major  mode   extension  of
+  ~scheme-mode~; adds functions  for code execution directly  from within Emacs
+  buffers;  this package  implements interactive  work with  interactive Scheme
+  interpreters. This interactive work is  implemented via the ~comint~ package,
+  included into Emacs distribution.
 
   - [[https://github.com/typester/emacs/blob/master/lisp/cmuscheme.el][~cmuscheme.el~ source]]
+
+  - Installation ::  put into your  initialization file the following  lines of
+    code, and the package will be loaded when you call ~run-scheme~.
+
+    #+begin_src lisp
+      (autoload 'run-scheme "cmuscheme" "Run an inferior Scheme" t)
+      (setq scheme-program-name "<scheme>")
+    #+end_src
+
+    All settings  for this  package are available  via the  customization group
+    named =cmuscheme=.
 
 - ~quack~ :: [[http://community.schemewiki.org/?Quack][Quack]] is a package  for Emacs by neil-van-dyke that enhances Emacs
   support for Scheme. It is  layered atop the standard packages ~cmuscheme.el~,
@@ -2741,8 +2807,11 @@ On Emacs, there are a couple of major modes designed for Scheme:
 
 #+texinfo: @heading Work with Concrete Implementations of Scheme
 
-- ~xscheme~ ::  run MIT Scheme under  Emacs; a major mode  for interacting with
-  MIT Scheme.
+- ~xscheme~ ::   Scheme  Interaction Mode---major mode for  interacting with an
+  inferior MIT Scheme process; it is used to run (only) MIT Scheme under Emacs.
+
+  : (require 'xscheme)
+  : M-x run-scheme
 
 - ~gds~ ::
 
@@ -2751,9 +2820,39 @@ On Emacs, there are a couple of major modes designed for Scheme:
 - ~gambit~ ::
 
 *** Scheme Mode
- - Emacs comes with  two Scheme modes. Most  people prefer the one  that is not
-   the  default. To  switch to  that mode,  put something  like this  into your
-   ~.emacs~ file:
+
+~scheme-mode~ is a  major mode for editing Scheme code;  it is distributed with
+Emacs and is a modified form  of ~lisp-mode~ (whose parent mode is ~prog-mode~)
+and uses the same source-code editing commands as ~lisp-mode~.
+
+~scheme-mode~  is started  with  the  command =M-x  scheme-mode=;  it runs  the
+~scheme-mode-hook~ during initialization.
+
+Using the  command =M-x run-scheme=  will start  an inferior Scheme  process in
+~inferior-scheme-mode~ in a dedicated  buffer (usually called =*scheme*=) using
+the general  ~cmuscheme~ package. When  an inferior Scheme process  is running,
+some  additional  commands will  be  defined,  for evaluating  expressions  and
+controlling the interpreter, and the state  of the process will be displayed in
+the mode line of all Scheme buffers.
+
+~scheme-mode~ provides the following functionality:
+  - syntax highlighting
+  - works with language expressions
+  - indents source code
+  - highlights paired brackets
+
+
+~scheme-mode~ is enabled automatically for  all files with standard extensions
+  of Scheme source code:
+  - ~.scm~
+  - ~.ss~
+
+
+To enable ~scheme-mode~ for other file extensions:
+  : (add-to-list 'auto-mode-alist '("\\.<ext>$" . scheme-mode))
+
+
+ - To switch to that mode, put something like this into your ~.emacs~ file:
 
    #+begin_src elisp
    (autoload 'scheme-mode "cmuscheme" "Major mode for Scheme." t)
