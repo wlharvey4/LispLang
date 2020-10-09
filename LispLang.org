@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-08 19:50
-#+macro:version Version 0.0.21
+#+date:2020-10-09 16:17
+#+macro:version Version 0.0.22
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -50,6 +50,7 @@ taken from the Lisp model, like runtime typing and garbage collection."
 - Paul Graham, "The Roots of Lisp", May 2001
 
 - [[http://www.paulgraham.com/articles.html][Essays by Paul Graham]]
+
 
 
 * Introduction to Lisp
@@ -488,6 +489,21 @@ MacTeX 2014 works.
 ** Armed Bear Common Lisp---JVM
 - https://common-lisp.net/project/armedbear/
 - [[https://github.com/slyrus/abcl][ABCL on GitHub]]
+
+
+- Java has great GUI libraries
+: <religious-statement>
+:   but it's not the world's greatest programming language
+: </religious-statement>
+
+- Lisp on the other hand
+: <religious-statement>
+:   is the world's greatest programming language
+: </religious-statement>
+: but has no standard GUI libraries.
+
+- Therefore:
+: Write great applications using Java for your front-end GUI backed with Lisp code and get the best of both worlds.
 
 
 - ABCL ::
@@ -1668,7 +1684,7 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
 - Inspector ::
   Interactive object-inspector in an Emacs buffer.
 
-- The currently supported Common Lisp implementations are:
+- The currently supported Common Lisp implementations are ::
   - Steel Bank Common Lisp (SBCL) ::
     ~/opt/local/bin/sbcl~
   - Clozure CL (a.k.a. OpenMCL) (CCL) ::
@@ -1678,6 +1694,7 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
   - ABCL ::
     ~/opt/local/bin/abcl~
   - ECL ::
+    *NOTE*: fails to install using Xcode 12
   - CMU Common Lisp (CMUCL) ::
   - LispWorks ::
   - Allegro CL ::
