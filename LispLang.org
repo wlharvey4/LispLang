@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-09 16:17
-#+macro:version Version 0.0.22
+#+date:2020-10-10 16:19
+#+macro:version Version 0.0.23
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -51,6 +51,49 @@ taken from the Lisp model, like runtime typing and garbage collection."
 
 - [[http://www.paulgraham.com/articles.html][Essays by Paul Graham]]
 
+
+#+texinfo: @heading Why Common Lisp for Scientific Programming?
+- https://drmeister.wordpress.com
+
+#+attr_texinfo: :author Christian Schafmeister, 2015-11-23
+#+begin_quote
+I’ve programmed  in many languages  and Common Lisp  is the best  at expressing
+ideas. Every language  gets translated into an abstract syntax  tree on its way
+to native code, Lisp  code is an abstract syntax tree.  There is no programming
+concept that can’t  be expressed compactly in  Lisp, this is not  true in other
+languages.  You  cannot  yet   express  multiple  dispatch  functions,  dynamic
+variables  or Common  Lisp style  macros (a  few CL  features) compactly  in R,
+Fortran, C++, or Python.
+
+Why are R, Fortran, C++, or Python considered suitable for scientific
+computing?
+
+It is the wrong  question – those languages are just  the languages that people
+started using and so they keep using them.  It is not a choice most people make
+– it is inertia.
+
+I choose Common Lisp.
+#+end_quote
+
+#+texinfo: @subheading About Christian Schafmeister
+- https://drmeister.wordpress.com/about/
+
+#+begin_quote
+I’m a chemistry  professor who writes software to design  molecules that I hope
+will make  the world a better  place. I’ve been  programming since I was  12, I
+have  written code  in  a lot  of programming  languages  including Basic,  X86
+assembler, Pascal,  Prolog, Fortran,  Smalltalk, TCL, PHP,  Python, C,  C++ and
+Common Lisp....
+
+I run  a research  group in  the Chemistry Department  at Temple  University in
+Philadelphia, PA. We have developed a way to make the largest, most complex and
+most “programmable” molecules outside of biology. We call them “spiroligomers”,
+they are large, shape-programmable  and functional group programmable molecules
+that  let  us  construct  molecules  that bind  proteins  as  therapeutics  and
+accelerate chemical  reactions the way that  enzymes do. The goal  is to create
+molecules  that  can do  everything  that  proteins can  do  in  nature but  be
+designable and evolvable by human beings.
+#+end_quote
 
 
 * Introduction to Lisp
@@ -538,21 +581,16 @@ MacTeX 2014 works.
 
 ** CLASP---C++
 - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
+- [[https://github.com/roswell/clasp][CLASP on Roswell on GitHub]]
 
 
-- CLASP ::
-  - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
-  - Interoperates with  C++ libraries using LLVM  for compilation to
-    native code
-  - Clasp  is  a  new  Common Lisp  implementation  that  seamlessly
-    interoperates  with C++  libraries and  programs using  LLVM for
-    compilation to native code.
-  - This  allows  Clasp  to  take  advantage  of  a  vast  array  of
-    preexisting  libraries   and  programs,  such  as   out  of  the
-    scientific computing ecosystem.
-  - Embedding them in  a Common Lisp environment allows  you to make
-    use  of rapid  prototyping, incremental  development, and  other
-    capabilities that make it a powerful language.
+Clasp is  a new Common  Lisp implementation that seamlessly  interoperates with
+C++ libraries  and programs  using LLVM  for compilation  to native  code. This
+allows Clasp  to take advantage  of a vast  array of preexisting  libraries and
+programs, such as out of the  scientific computing ecosystem. Embedding them in
+a  Common  Lisp environment  allows  you  to  make  use of  rapid  prototyping,
+incremental  development,  and  other  capabilities that  make  it  a  powerful
+language.
 
 ** CMUCL
 - https://www.cons.org/cmucl/
@@ -740,8 +778,68 @@ work as a starting point for new programmers.
 *** Common Lisp Documentation
  - https://common-lisp.net/documentation
 
-** Iwanna Learn Lisp
-- https://wiki.c2.com/?IwannaLearnLisp
+** Lisp Tutorials
+*** Iwanna Learn Lisp
+ - https://wiki.c2.com/?IwannaLearnLisp
+
+*** Lisp Quickstart
+ - https://cs.gmu.edu/~sean/lisp/LispTutorial.html
+
+
+Lisp is a  deep language with many  unusual and powerful features.  The goal of
+this tutorial is not to teach you  many of those powerful features: rather it's
+to teach you just enough of Lisp that  you can get up and coding quickly if you
+have a previous background in a procedural  language such as C or Java. Notably
+this tutorial  does not teach  macros, CLOS,  the condition system,  much about
+packages and symbols, or very much I/O.
+
+**** Running Lisp
+On your laptop you have several options for running Lisp:
+
+- ~sbcl~
+- ~clisp~
+- ~ccl~
+
+***** Run SBCL
+
+#+begin_quote
+$ sbcl
+
+This is SBCL 2.0.9, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+#+end_quote
+
+***** Run CLISP
+#+begin_quote
+$ clisp
+
+  i i i i i i i       ooooo    o        ooooooo   ooooo   ooooo
+  I I I I I I I      8     8   8           8     8     o  8    8
+  I  \ `+' /  I      8         8           8     8        8    8
+   \  `-+-'  /       8         8           8      ooooo   8oooo
+    `-__|__-'        8         8           8           8  8
+        |            8     o   8           8     o     8  8
+  ------+------       ooooo    8oooooo  ooo8ooo   ooooo   8
+
+Welcome to GNU CLISP 2.49.92 (2018-02-18) <http://clisp.org/>
+#+end_quote
+
+***** Run CCL
+#+begin_quote
+$ ccl
+
+Clozure Common Lisp Version 1.12  DarwinX8664
+
+For more information about CCL, please see http://ccl.clozure.com.
+
+CCL is free software.  It is distributed under the terms of the Apache
+Licence, Version 2.0.
+#+end_quote
 
 ** Planet Lisp
  http://planet.lisp.org
