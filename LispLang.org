@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-10 16:19
-#+macro:version Version 0.0.23
+#+date:2020-10-10 23:30
+#+macro:version Version 0.0.24
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -55,7 +55,7 @@ taken from the Lisp model, like runtime typing and garbage collection."
 #+texinfo: @heading Why Common Lisp for Scientific Programming?
 - https://drmeister.wordpress.com
 
-#+attr_texinfo: :author Christian Schafmeister, 2015-11-23
+#+attr_texinfo: :author Christian Schafmeister, 2015-11-23, creator of CLASP
 #+begin_quote
 I’ve programmed  in many languages  and Common Lisp  is the best  at expressing
 ideas. Every language  gets translated into an abstract syntax  tree on its way
@@ -134,8 +134,17 @@ written in MacLisp.
 - [[http://www.maclisp.info/pitmanual/index.html][The MacLISP Manual]]
 
 - [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
-** The Roots of Lisp
+** What is Common Lisp?
+Common  Lisp is  well  suited  to large  programming  projects and  explorative
+programming. The language  has a dynamic semantics which  distinguishes it from
+languages  such as  C  and Ada.  It features  automatic  memory management,  an
+interactive  incremental  development environment,  a  module  system, a  large
+number  of  powerful  data  structures,  a large  standard  library  of  useful
+functions, a  sophisticated object  system supporting multiple  inheritance and
+generic functions, an  exception system, user-defined types and  a macro system
+which allows programmers to extend the language.
 
+** The Roots of Lisp
 *** John McCarthy and LISP
  - http://jmc.stanford.edu/articles/recursive.html
 
@@ -248,6 +257,129 @@ extensions, but more theory and some smoothing of the language itself are
 required before we can take full advantage of LISP's mathematical basis.
 
 - [[http://jmc.stanford.edu/articles/lisp20th/lisp20th.pdf][Download the article in PDF.]]
+*** Common Lisp: The Untold Story
+    :PROPERTIES:
+    :author:   Kent M. Pitman
+    :date:     2008
+    :END:
+
+This paper summarizes a talk given  at “Lisp50@OOPSLA,” the 50th Anniversary of
+Lisp workshop, Monday, October 20, 2008, an event co-located with the OOPSLA’08
+in Nashville, TN, in  which I offered my personal, subjective  account of how I
+came to be involved with Common Lisp  and the Common Lisp standard, and of what
+I learned from the process.
+*** Lisp 1 Programmer's Manual
+    :PROPERTIES:
+    :author:   Phyllis Fox
+    :date:     1960
+    :END:
+- http://history.siam.org/sup/Fox_1960_LISP.pdf
+
+
+*** Lisp 1.5 Programmer's Manual
+- http://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf
+
+
+By John McCarthy, Paul W. Abrahams, Daniel J. Edwards, Timothy P. Hart and
+Michael I. Levin, 1962
+
+#+texinfo: @heading Summary
+
+The LISP language  is designed primarily for symbolic data  processing used for
+symbolic calculations in differential and integral calculus, electrical circuit
+theory,  mathematical  logic, game  playing,  and  other fields  of  artificial
+intelligence. The manual  describes LISP, a formal  mathematical language. LISP
+differs from most programming languages in  three important ways. The first way
+is in the nature of the data. In the LISP language, all data are in the form of
+symbolic  expressions  usually  referred  to as  S-expressions,  of  indefinite
+length, and which have a branching  tree-type of structure, so that significant
+subexpressions can  be readily isolated.  In the LISP  system, the bulk  of the
+available  memory  is used  for  storing  S-expressions  in  the form  of  list
+structures. The  second distinction  is that  the LISP  language is  the source
+language  itself which  specifies  in  what way  the  S-expressions  are to  be
+processed. Third, LISP  can interpret and execute programs written  in the form
+of S-expressions. Thus, like machine language, and unlike most other high level
+languages, it can be used to generate programs for further executions.
+
+** Essays About Lisp
+*** What's Wrong With Lisp
+    :PROPERTIES:
+    :author:   Robert Standh
+    :END:
+- http://metamodular.com/Essays/wrong.html
+
+
+Contrary to what the title says,  we don't think there is anything particularly
+wrong with  the Lisp programming  language. However,  a large number  of people
+seem  to  have very  strong  and  very  strange  reactions to  this  particular
+programming language.
+
+I will ... attempt  to analyze some commonly recurring criticism  of Lisp in an
+attempt to shed some light on the question and why it is often asked.
+
+Today,  it is  a modern,  multi-paradigm language  which has  perhaps the  most
+sophisticated  features of  all general-purpose  languages in  use (the  object
+system, macros,  reader macros, conditions,  etc, etc). The first  question one
+might ask is then "If Lisp is so good, why is it not more popular?". People who
+ask such  a question typically assume  that "good" implies "popular",  and thus
+look for some part of Lisp that is  NOT good, which would explain why it is not
+popular. However, there  is absolutely no reason to assume  that "good" implies
+"popular", so the question is really quite naive.
+
+\dots
+
+Lisp is not THAT unpopular (and now I will include Emacs Lisp for convenience).
+In a  recent line count, Lisp  came in as number  4 when it comes  to number of
+source lines of code (SLOC) in the Debian GNU/Linux (Woody) distribution, after
+C, C++, and  shell with some 4  million SLOC (around 4%),  before Perl, Python,
+ML, Fortran, etc.
+
+\dots
+
+Lisp is sufficiently different from what most people already know and expect in
+a programming language, that they just aren't  willing to make the effort. In a
+different  essay,  I  called  these people  "performance  oriented",  and  they
+(unfortunately) make up the vast majority  of people in general, though perhaps
+disproportionally so in software developers.  To summarize that essay, they are
+simply victims of an incredibly strong  psychological force (that exist to some
+degree in all  of us) that makes  the person attempt to  explain away something
+new as being bad or useless, just in  order to avoid the hard work of having to
+learn it.  The stranger  the new thing  is (like Lisp),  the harder  the victim
+estimates the work to learn it, and the more important it becomes to declare it
+bad or useless.
+
+\dots
+
+Why should all that counts in a programming language be popularity?
+
+I often see the  very revealing parallel drawn between Lisp  and a fine violin.
+Should we alter violins in order to  attract people who are used to playing the
+accordion, and who are  not willing to learn the violin because  it is too hard
+and too different from the accordion? Of  course not! The violin has its place,
+and is a great instrument when played by someone who really masters it. Lisp is
+a great  programming language  when used by  someone who knows  how to  use it.
+Dumbing it down to attract mediocre performance-oriented programmers would be a
+grave mistake.
+*** Lisp---Good News Bad News How to Win Big
+    :PROPERTIES:
+    :author:   Richard P. Gabriel
+    :date:     1991
+    :END:
+
+#+texinfo: @heading Abstract
+Lisp has done quite well over the last ten years: becoming nearly standardized,
+forming  the basis  of a  commercial sector,  achieving excellent  performance,
+having good environments, able to  deliver applications. Yet the Lisp community
+has  failed to  do as  well as  it  could have.  In this  paper I  look at  the
+successes, the failures, and what to do next.
+*** Parenthetically Speaking (with Kent M. Pitman)
+- http://www.nhplace.com/kent/PS/About-PS.html
+
+
+Parenthetically Speaking expresses opinions and  analysis about the Lisp family
+of languages. Except as explicitly  indicated otherwise, the opinions expressed
+are those of  the author and do not necessarily  reflect the official positions
+of any organization or company with which the author is affiliated.
 
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
@@ -290,8 +422,14 @@ implementation.
 - [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
 
 
+A branch from CMUCL. "Broadly speaking, SBCL  is distinguished from CMU CL by a
+greater  emphasis on  maintainability.  SBCL  does not  use  an interpreter  by
+default; all expressions  are compiled to native code unless  the user switches
+the interpreter on. The SBCL compiler generates fast native code according to a
+previous version of The Computer Language Benchmarks Game.
+
 - SBCL ::
-  - Steel Bank Common Lisp
+  - Steel Bank Common Lisp[fn:7]
   - In doubt, just get [[http://www.sbcl.org/platform-table.html][SBCL]]
   - Articulate Lisp also [[http://articulate-lisp.com/implementations/summary.html][recommends SBCL]] for beginners
   - A high performance Common Lisp compiler and runtime system
@@ -584,22 +722,48 @@ MacTeX 2014 works.
 - [[https://github.com/roswell/clasp][CLASP on Roswell on GitHub]]
 
 
+"Bringing Common Lisp and C++ Together"
+
+Clasp is an implementation of  Common Lisp primarily designed for compatibility
+with C++-language programs and libraries.  Clasp conforms with the requirements
+of =ANSI INCITS 226-1994= (R2004) with  some exceptions. Any deviation from the
+standard  not   listed  there   is  a   bug,  and   should  be   reported  (see
+"Contributing"). Clasp  is the project  of Dr. Christian  Schafmeister. Clasp's
+source code is derived substantially from that  of [[*Embeddable Common Lisp---C][Embeddable Common Lisp]]. Code
+from [[*Steel Bank Common Lisp][SBCL]] and SICL has been incorporated as well. Most notably, the compiler is
+SICL's Cleavir compiler with some minor customizations.
+
 Clasp is  a new Common  Lisp implementation that seamlessly  interoperates with
-C++ libraries  and programs  using LLVM  for compilation  to native  code. This
+C++ libraries  and programs  using [[http://llvm.org][LLVM]]  for compilation  to native  code. This
 allows Clasp  to take advantage  of a vast  array of preexisting  libraries and
 programs, such as out of the  scientific computing ecosystem. Embedding them in
 a  Common  Lisp environment  allows  you  to  make  use of  rapid  prototyping,
 incremental  development,  and  other  capabilities that  make  it  a  powerful
 language.
 
-** CMUCL
-- https://www.cons.org/cmucl/
-- [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL on GitLab]]
+*** CLASP Manual
+- https://github.com/clasp-developers/clasp/wiki/Manual
+
+*** Build CLASP
+- https://github.com/clasp-developers/clasp/wiki/Build-Instructions
 
 
-- CMUCL ::
-  - [[https://gitlab.common-lisp.net/cmucl/cmucl][CMUCL]] is a high-performance, free Common Lisp implementation
-    which runs on most major Unix platforms.
+#+texinfo: @heading MacOS installation of dependencies
+While Clasp  requires a  specific release of  llvm and does  not use  the Xcode
+version, it does use Xcode files.  You will need to first install Homebrew.
+
+1. ~brew install cmake llvm@6 libffi bdw-gc gmp boost libunwind-headers sbcl~
+2. git clone https://github.com/clasp-developers/clasp.git
+3. If on mojave, after reinstalling xcode execute (from the gui):
+   - ~/Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg~
+     to get the headers in ~/usr/include/~
+4. ~cd clasp~
+5. ~./waf configure~; if ~./waf configure~ fails, see hint in linux instructions.
+6. ~./waf build_cboehm~
+
+
+The executables will be in ~clasp/build/boehm/cclasp-boehm~ and
+~clasp/build/mps/cclasp-mps~
 
 ** Embeddable Common Lisp---C
 - https://common-lisp.net/project/ecl/
@@ -610,6 +774,45 @@ language.
 - Embeddable CL ::
   Compiles to C
 
+** CMU Common Lisp
+- https://www.cons.org/cmucl/
+- [[https://www.cons.org/cmucl/FAQ.html][FAQ]]
+- [[https://www.cons.org/cmucl/doc/index.html][Documentation]]
+
+
+CMUCL is  a free implementation of  the Common Lisp programming  language which
+runs on most major  Unix platforms. It mainly conforms to  the ANSI Common Lisp
+standard.
+
+#+texinfo: @heading Features
+- Support for static arrays that are never moved by GC but are properly removed
+  when no longer referenced.
+- Unicode support, including  many of the most common external  formats such as
+  UTF-8 and support for handling Unix, DOS, and Mac end-of-line schemes.
+- native  double-double  floats  including  complex  double-double  floats  and
+  specialized  arrays for  double-double floats  and and  complex double-double
+  floats that give approximately 106 bits (32 digits) of precision.
+- a  sophisticated  native-code compiler  which  is  capable of  powerful  type
+  inferences, and generates code competitive in speed with C compilers.
+- generational  garbage collection  and multiprocessing  capability on  the x86
+  ports.
+- a foreign function interface which allows  interfacing with C code and system
+  libraries, including shared libraries on most platforms, and direct access to
+  Unix system calls.
+- support for interprocess communication and remote procedure calls.
+- an  implementation of  CLOS, the  Common Lisp  Object System,  which includes
+  multimethods and a metaobject protocol.
+- a  graphical  source-level debugger  using  a  Motif  interface, and  a  code
+  profiler.
+- an interface  to the X11 Window  System (CLX), and a  sophisticated graphical
+  widget library (Garnet).
+- programmer-extensible input and output streams.
+- an Emacs-like editor implemented in Common Lisp.
+- freely redistributable
+
+** Spice List
+- 
+
 ** Allegra Common Lisp
 
 - Allegra CL ::
@@ -619,6 +822,26 @@ language.
 
 - LispWorks ::
   Proprietary
+
+** SICL
+- [[https://github.com/robert-strandh/SICL][SICL on GitHub]]
+
+
+"A fresh implementation of Common Lisp"
+
+SICL is a  new implementation of Common Lisp. It  is intentionally divided into
+many  implementation-independent  modules that  are  written  in a  totally  or
+near-totally portable way, so as  to allow other implementations to incorporate
+these modules  from SICL,  rather than  having to  maintain their  own, perhaps
+implementation-specific versions.
+
+** Kyoto Common Lisp
+- [[https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/impl/kcl/0.html][KCL: Kyoto Common Lisp]]
+- [[http://web.cecs.pdx.edu/~mperkows/=LISP/kcl][Frequently Asked Questions about KCL and AKCL]]
+- https://en.wikipedia.org/wiki/Kyoto_Common_Lisp
+- https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/impl/kcl/kcl.faq
+- http://www.aiai.ed.ac.uk/project/pub/packages/lisp/kcl/
+- https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/impl/kcl/kcl/broadcst.txt
 
 * Common Lisp Documentation Resources
 ** Common Lisp Hyper Spec
@@ -698,14 +921,26 @@ uninitiated.
 *** Recommended Libraries
 - https://lisp-lang.org/wiki/article/recommended-libraries
 
-** Common Lisp Cookbook
-- [[https://lispcookbook.github.io/cl-cookbook/][Home]]
+** Common-Lisp dot Net
+ - https://common-lisp.net
 
-*** Editor Support
-- https://lispcookbook.github.io/cl-cookbook/editor-support.html
 
-*** Using Emacs as an IDE
-- https://lispcookbook.github.io/cl-cookbook/emacs-ide.html
+This site is one among many gateways to Common Lisp. Its goal is to
+provide the Common Lisp community with development resources and to
+work as a starting point for new programmers.
+
+*** Getting Started in Common Lisp
+ - https://common-lisp.net/downloads
+
+*** Common Lisp Documentation
+ - https://common-lisp.net/documentation
+
+** Planet Lisp
+- http://planet.lisp.org
+
+
+Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
+blogs.
 
 ** CLiki
 - https://cliki.net
@@ -716,8 +951,72 @@ contains resources for learning about and using the programming language Common
 Lisp, and information about DFSG-compliant  free software implemented in Common
 Lisp.
 
+** Common Lisp Cookbook
+- [[https://lispcookbook.github.io/cl-cookbook/][Home]]
+
+  - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
+
+*** Editor Support
+- https://lispcookbook.github.io/cl-cookbook/editor-support.html
+
+*** Using Emacs as an IDE
+- https://lispcookbook.github.io/cl-cookbook/emacs-ide.html
+
 ** Common Lisp Books
 - https://wiki.c2.com/?DefinitiveCommonLispBooks
+
+- [[http://metamodular.com/Common-Lisp/bibliography.html][Bibliography of documents related to Common Lisp]]
+
+  - Peter Seibel, Practical Common Lisp ::
+    This is an  excellent introduction to the Common Lisp  language. Instead of
+    focusing on mechanisms the way most  other books do, this book is organized
+    around practical examples related to contemporary problems.
+  - Paul Graham, ANSI Common Lisp, Prentice Hall ::
+    This book is  an introduction to the Common Lisp  programming language. The
+    programming style of Paul  Graham is a bit different from  the one you will
+    find in most  modern Common Lisp programs,  but this fact is  not likely to
+    make a big difference to the debutant.
+  - Paul Graham, On Lisp, Prentice Hall ::
+    This book is  about advanced programming Common Lisp,  and specifically how
+    to use the Common Lisp language  to create Domain Specific Languages (DSLs)
+    using a technique called embedded  languages. This entire book is available
+    as a free download.
+  - Sonya E. Keene, Object-Oriented Programming  in Common Lisp, Addison Wesley
+    :: The Common  Lisp object system (CLOS) is quite  different from, and more
+    power than  that of  other object-oriented languages.  This books  gives an
+    introduction to object-oriented  programming using CLOS. The book  is a bit
+    old,  and this  is  particularly obvious  in the  examples  given, but  the
+    mechanisms discussed have not changed, of course.
+  - Peter  Norvig,  Paradigms  of  Artificial  Intelligence  Programming:  Case
+    Studies in Common Lisp, Morgan Kaufmann  :: This is a very good programming
+    book. Peter  Norvig shows how to  use advanced features of  the Common Lisp
+    language  to  program  some  of  the  traditional  problems  of  Artificial
+    Intelligence  (search  problems,  natural   languages,  etc.),  but  it  is
+    definitely not a book about AI,  but about programming techniques, so it is
+    worth reading  for everyone, and not  only for those who  are interested in
+    AI.
+  - Gregor  Kiczales, Jim  des  Rivières,  Daniel G.  Bobrow,  The  Art of  the
+    Metaobject Protocol ::  In this book, the authors show  how the Common Lisp
+    Object System  (CLOS) can be  defined in a  meta-circular way, i.e.,  as an
+    object-oriented program  using CLOS.  Though this might  sound like  a cute
+    exercise with little or no practical  use, this is definitely not the case,
+    because  that is  in fact  how CLOS  is written.  The authors  also discuss
+    bootstrapping problems  that invariably  occur with  such systems,  and how
+    these problems were solved in their  implementation of CLOS called PCL. The
+    second part of the book contains a complete specification of CLOS, and that
+    part is available for free as online html.
+  - David Touretzky, COMMON LISP: A Gentle Introduction to Symbolic Calculation
+    :: The 1990 edition  of this book is available as download  for free. For a
+    long time  it was out  of print, but  now it is  back in print  "with minor
+    revisions".
+  - Guy L. Steele, [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, second Edition]] ::
+    This book  is as close to  a reference manual  for Common Lisp at  it gets.
+    Unfortunately,  the book  was  published before  the  Common Lisp  standard
+    process was entirely finished, and there are some discrepancies between the
+    contents of the book and what finally ended up in the standard. Having said
+    that, I  think it  is a  great book, and  it explains  many things  in much
+    greater depth than what the  HyperSpec is able to communicate. Furthermore,
+    the entire books is available to download for free, or to consult as HTML.
 
 *** Practical Common Lisp by Peter Seibel
 - https://wiki.c2.com/?PracticalCommonLisp
@@ -757,27 +1056,6 @@ language.
 
 *** The Common Lisp Cookbook
 - https://lispcookbook.github.io/cl-cookbook/getting-started.html
-** Planet Lisp
-- http://planet.lisp.org
-
-
-Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
-blogs.
-
-** Common-Lisp dot Net
- - https://common-lisp.net
-
-
-This site is one among many gateways to Common Lisp. Its goal is to
-provide the Common Lisp community with development resources and to
-work as a starting point for new programmers.
-
-*** Getting Started in Common Lisp
- - https://common-lisp.net/downloads
-
-*** Common Lisp Documentation
- - https://common-lisp.net/documentation
-
 ** Lisp Tutorials
 *** Iwanna Learn Lisp
  - https://wiki.c2.com/?IwannaLearnLisp
@@ -841,11 +1119,8 @@ CCL is free software.  It is distributed under the terms of the Apache
 Licence, Version 2.0.
 #+end_quote
 
-** Planet Lisp
- http://planet.lisp.org
-
- "Planet Lisp is a meta blog that collects the contents of various
- Lisp-related blogs."
+*** Brief Guide to CLOS
+- http://www.aiai.ed.ac.uk/project/pub/packages/lisp/random/clos-guide
 
 ** Planet SBCL
  http://planet.sbcl.org
@@ -862,124 +1137,9 @@ https://github.com/ledger/cl-ledger
 
 CL-Ledger is a Common Lisp port of the [[http://ledger-cli.org/][Ledger]] double-entry accounting
 system.
-** Getting Started in Common Lisp
- - https://common-lisp.net/downloads
+*** Brain
+- http://www.aiai.ed.ac.uk/project/pub/packages/lisp/random/coherent.l
 
- - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
-
-*** Portacle
- - https://portacle.github.io
- - https://common-lisp.net/downloads
-
-
- If you are  a newbie or you  want to get started as  fast as possible,
- then  Portacle   is  probably   your  best   option.  Portacle   is  a
- multiplatform, complete IDE for Common  Lisp. It includes Emacs, SBCL,
- Git, Quicklisp, all configured and ready to use.
-
-*** CMUCL
- - Carnegie Mellon University Common Lisp :: https://www.cons.org/cmucl/
-   CMUCL is a free implementation of the Common Lisp programming
-   language which runs on most major Unix platforms. It mainly conforms
-   to the ANSI Common Lisp standard.
-
-*** SBCL
- - Steel Bank Common Lisp : :http://www.sbcl.org
-
- SBCL is a high performance Common Lisp *compiler*. In addition to the
- compiler and *runtime system* for ANSI Common Lisp, it provides an
- *interactive environment* including a *debugger*, a *statistical
- profiler*, a *code coverage tool*, and many other extensions.
-
-**** Getting Started with SBCL
- http://www.sbcl.org/getting.html
-
-**** SBCL History
- http://www.sbcl.org/history.html
-
- In December 1999, SBCL forked off the main branch of CMUCL. Broadly
- speaking, SBCL is distinguished from CMU CL by a greater emphasis on
- maintainability.
-
- SBCL derives most of its code from CMU CL, created at Carnegie Mellon
- University. Radical changes have been made to some parts of the system
- (particularly bootstrapping) but many fundamentals (like the mapping
- of Lisp abstractions onto the underlying hardware, the basic
- architecture of the compiler, and much of the runtime support code)
- are only slightly changed. Enough changes have been made to the
- interface and architecture that calling the new system CMU Common Lisp
- would cause confusion - the world does not need multiple incompatible
- systems named CMU CL. But it's appropriate to acknowledge the descent
- from the CMU hackers (and post-CMU CMU CL hackers) who did most of the
- heavy lifting to make the system work. So the system is named Steel
- Bank after the industries where Andrew Carnegie and Andrew Mellon,
- respectively, made the big bucks.
-
-*** ABCL
- - Armed Bear Common Lisp :: https://common-lisp.net/project/armedbear/
-
- ABCL is a full implementation of the Common Lisp language featuring
- both an interpreter and a compiler, running in the JVM.
-
- It now supports JSR-223 (Java scripting API): it can be a scripting
- engine in any Java application. Additionally, it can be used to
- implement (parts of) the application using Java to Lisp integration
- APIs.
-
-*** Clozure CL
- - CCL :: https://ccl.clozure.com/
-
- Some distinguishing features of the implementation include fast
- compilation speed, native threads, a precise, generational, compacting
- garbage collector, and a convenient foreign-function interface.
-
-*** Clasp
- - Clasp :: https://github.com/clasp-developers/clasp
-
- This is a new Common Lisp implementation that seamlessly interoperates
- with C++ libraries and programs using LLVM for compilation to native
- code. This allows Clasp to take advantage of a vast array of
- preexisting libraries and programs, such as out of the scientific
- computing ecosystem. Embedding them in a Common Lisp environment
- allows you to make use of rapid prototyping, incremental development,
- and other capabilities that make it a powerful language.
-
-*** CLISP
- - CLISP :: https://clisp.sourceforge.io/
-
- CLISP is a Common Lisp implementation by Bruno Haible, then of
- Karlsruhe University, and Michael Stoll, then of Munich University,
- both in Germany. It implements the language described in the ANSI
- Common Lisp standard with many extensions.
-
-*** GCL---Gnu Common Lisp
- - https://directory.fsf.org/wiki/Gcl
- - https://web.ma.utexas.edu/users/wfs/gcl.html
-*** ECL
- - Embeddable Common Lisp :: https://common-lisp.net/project/ecl/main.html
-
- ECL is an interpreter of the Common-Lisp language as described in the
- X3J13 Ansi specification, featuring CLOS (Common-Lisp Object System),
- conditions, loops, etc, plus a translator to C, which can produce
- standalone executables.
-
-*** CMUCL Wiki
- https://gitlab.common-lisp.net/cmucl/cmucl/-/wikis/home
-
-*** Installing CMUCL
- https://trac.common-lisp.net/cmucl/wiki/InstallingCmucl
-
-*** Allegro CL
- - Allegro CL :: https://franz.com/products/allegro-common-lisp/
-
- Commercial product.
-
-*** LispWorks
- - LispWorks :: http://www.lispworks.com/products/lispworks.html
-
- Commercial product
-*** ANSI Common Lisp
- - ANSI CL :: http://www.paulgraham.com/acl.html
 ** CMU Common Lisp Repository
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
 
@@ -4109,6 +4269,10 @@ Copyright \copy 2020 by {{{author}}}
 
 
 * Footnotes
+
+[fn:7]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
+University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
+in the steel industry and Andrew Mellon was a successful banker.
 
 [fn:1]Recursive Functions of Symbolic Expressions and Their Computation by
 Machine, Part I, by John McCarthy, April 1960 @
