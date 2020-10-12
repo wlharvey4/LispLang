@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-12 12:25
-#+macro:version Version 0.0.30
+#+date:2020-10-12 14:10
+#+macro:version Version 0.0.31
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -660,17 +660,25 @@ $ sbcl --script hello.lisp
 Hello, World!
 #+end_example
 
-** Clozure Common Lisp
+** Clozure Common Lisp --- CCL
 - https://ccl.clozure.com
 - [[https://ccl.clozure.com/manual/][Clozure CL Documentation]]
 - [[https://ccl.clozure.com/docs/ccl.html][CCL Manual (one page HTML)]]
 - [[https://github.com/Clozure/ccl][CCL on GitHub]]
 - [[https://ccl.clozure.com/openmcl-overview.pdf][Overview]]
 
+"Clozure CL is a fast, mature, open source Common Lisp implementation that runs
+on Linux, Mac OS X, FreeBSD, and Windows. Clozure CL was forked from Macintosh
+Common Lisp (MCL) in 1998 and the development has been entirely separate
+since."
 
-Some  distinguishing features  of the  implementation include  fast compilation
-speed, native  threads, a precise, generational,  compacting garbage collector,
-and a convenient foreign-function interface.
+
+Some  distinguishing features  of the  implementation include:
+- fast compilation speed,
+- native  threads,
+- a precise, generational,  compacting garbage collector, and
+- a convenient foreign-function interface.
+
 
 Clozure CL is available for the following platforms:
 
@@ -701,6 +709,7 @@ Clozure CL is available for the following platforms:
   - On all supported platforms, Clozure CL can run as a command-line
     process, or as an inferior Emacs process using either SLIME or
     ILISP.
+  - Documentation for CCL is written in a notation called [[https://github.com/Clozure/ccldoc][CCLDoc]].
   - [[https://ccl.clozure.com/docs/ccl.html][Clozure CL Manual]]
 
 
@@ -749,19 +758,30 @@ you could write something like:
 
 : (setq inferior-lisp-program "/opt/local/share/ccl/1.12/dx86cl64")
 
-or make the equivalent changes to =slime-lisp-implementations=.
+or make the equivalent changes to =slime-lisp-implementations=, a list of known
+Lisp implementations of the form:
+
+: ((NAME (PROGAM PROGRAM-ARGS...) &key KEYWORD-ARGS) ...)
+:
+: ((ccl
+:  ("/opt/local/share/ccl/1.12/dx86cl64"))
+: (sbcl
+:  ("/opt/local/bin/sbcl")
+:  :coding-system utf-8-unix))
+
+
 
 **** Running CCL from the Command-Line as a Script
 
- It can also be handy to run Clozure  CL straight from a terminal prompt. In the
- ~scripts/~ directory of the ~ccl~ directory, there are two files named:
+It can also be handy to run Clozure  CL straight from a terminal prompt. In the
+~scripts/~ directory of the ~ccl~ directory, there are two files named:
 
  - ~ccl~
  - ~ccl64~
 
 
- Copy these files into ~/usr/local/bin~ or  some other directory that is on your
- path, and then  edit them so that the value  of
+Copy these files into ~/usr/local/bin~ or  some other directory that is on your
+path, and then edit them so that the value of
 
 : CCL_DEFAULT_DIRECTORY
 
@@ -772,10 +792,24 @@ can then start up the lisp by typing:
  or
  : ccl64
 
- You may  wish to  install ~scripts/ccl64~ with  the name ~ccl~  if you  use the
- 64-bit lisp more. If you want the 32-bit  lisp to be available as well, you can
- install  ~scripts/ccl~ as  ~ccl32~. Note  that there  is nothing  magical about
- these scripts. You should feel free to edit them as desired.
+You may  wish to  install ~scripts/ccl64~ with  the name ~ccl~  if you  use the
+64-bit lisp more. If you want the 32-bit  lisp to be available as well, you can
+install  ~scripts/ccl~ as  ~ccl32~. Note  that there  is nothing  magical about
+these scripts. You should feel free to edit them as desired.
+
+*NOTE*: the  scripts start the kernel  using the shell's ~exec~  command, which
+replaces  the current  process  with the  new ~ccl~  process.   The process  is
+stopped using the:
+: (ccl:quit) ; or
+: (quit)
+command, which  terminates the process.   If you  are running ~tmux~,  and have
+only one window with one pane open, this instantly terminates that session, and
+~tmux~ will exit.  There are two options to get around this.  One is not to use
+~exec~.   The other  is to  have an  additional window  or pane  in the  ~tmux~
+session, which will become current when the ~ccl~ process exits.
+
+To obtain a list of available command-line options, type:
+: ccl --help
 
 **** The CCL Init File
 
@@ -828,6 +862,28 @@ There  is   also  a   not-quite-complete  LaTeX  converter.   To  use   it,  do
 =(output-latex  *d*  "ccl.tex")=  and  then process  the  ~ccl.tex~  file  with
 ~xelatex~  to produce  a PDF  file. The  version of  ~xelatex~ that  comes with
 MacTeX 2014 works.
+
+*** CCL History
+- 1984 :: Coral Software began the development of a Common Lisp for the
+  Macintosh, called Coral Common Lisp (CCL).
+- 1987 :: CCL 1.0 was released. It ran on a 1 MB Macintosh Plus.
+- 1988 :: Coral  entered into a marketing relationship with  Franz, under which
+  CCL was  renamed to Macintosh  Allegro Common  Lisp (MACL). That  didn't last
+  long.
+- 1988 ::  Coral was acquired  by Apple, who released  the Lisp under  the name
+  Macintosh Common Lisp (MCL).
+- 1994 ::  In the midst of  switching from the 68K  to the PowerPC CPU  for its
+  Macintosh line, Apple transferred MCL to Digitool.
+- 1995 :: Digitool completed the PowerPC port and released a PowerPC version of
+  MCL.
+- 1998  ::  Erann Gat  (now known  as Ron Garret)  of JPL  wanted to  develop a
+  small-footprint Lisp  for use on  PowerPC-based robots and flight  systems. A
+  source  license for  MCL was  acquired from  Digitool.  Gary  Byers ported  a
+  version of the MCL compiler and runtime to VxWorks and LinuxPPC.
+- 2007 ::  Alice  Hartley of Digitool announced that the  code for the original
+  MCL would  be released  under an  open source license.   Largely in  order to
+  avoid confusion  with this  newly open  sourced version  of MCL,  OpenMCL was
+  renamed to Clozure CL.
 
 ** Armed Bear Common Lisp---JVM
 - https://common-lisp.net/project/armedbear/
