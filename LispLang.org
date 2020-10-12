@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-12 10:38
-#+macro:version Version 0.0.28
+#+date:2020-10-12 11:51
+#+macro:version Version 0.0.29
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -14,9 +14,7 @@
 
 
 "CommonLisp, the  mud ball of strength,  [is] the acting patriarch  of the Lisp
-family."
-
-- https://wiki.c2.com/?CommonLisp
+family." (https://wiki.c2.com/?CommonLisp)
 
 #+texinfo: @ifnothtml
 [[./resources/images/MfcSJ3gl.jpg]]
@@ -24,6 +22,7 @@ family."
 #+texinfo: @ifhtml
 [[../resources/images/MfcSJ3gl.jpg]]
 #+texinfo: @end ifhtml
+(https://wiki.c2.com/?SmugLispWeenie)
 
 
 #+texinfo: @heading Creator of Organisms
@@ -49,8 +48,8 @@ languages   and    was   the   first    recipient   of   the    Turing   Award.
 #+texinfo: @heading Local Optimum
 #+attr_texinfo: :author John McCarthy, 1980
 #+begin_quote
-"LISP has survived for  21 years because it is an  approximate local optimum in
-the space of programming languages."
+"LISP  has survived  for 21  years [61  years  as of  2020!] because  it is  an
+approximate local optimum in the space of programming languages."
 #+end_quote
 
 
@@ -1463,20 +1462,19 @@ This section  discusses the Common  Lisp interface  to file systems.  The model
 used by this interface assumes that:
 
 - files are named by filenames ([[a-file][files)]]
-- a filename can be represented by a pathname object ([[a-filename][filename)]]
-- given a pathname  a stream can be  constructed that connects to  a file whose
+- a filename can be represented by a pathname object ([[a-filename][filename)]] ([[pathname--class][pathname]])
+- given a pathname, a  stream can be constructed that connects  to a file whose
   filename it represents ([[a-stream][stream)]].
 
 
-Pathnames and namestrings[fn:3] are two kinds of objects that
-substitute for filenames in Common Lisp ([[pathname--class][pathname class]])
-#+end_deftp
+Pathnames and  namestrings[fn:3] are two  kinds of objects that  substitute for
+filenames in Common Lisp ([[pathname--class][pathname class]])
 
 ** Files and Filenames
 
 #+texinfo: @heading Files
-A ~file~<<a-file>>  is a named entry  in a file system,  having an implementation-defined
-nature.
+A  ~file~   <<a-file>>  is  a  named   entry  in  a  file   system,  having  an
+implementation-defined nature.
 
 #+texinfo: @heading Filenames
 #+cindex:filename
@@ -1494,10 +1492,10 @@ object, that can be used to refer to a file in a file system ([[a-file][file]])
 returns its @@texinfo:@var{truename}@@.  If the filespec designator  is an open
 stream, its associated file is used.
 
-- FILESPEC ::  a pathname designator. If filespec is a /pathname/ it represents
-  the name used to open the file
+- ~FILESPEC~  ::   a  pathname  designator.  If filespec  is  a  /pathname/  it
+  represents the name used to open the file
 
-- TRUENAME :: a physical pathname
+- ~TRUENAME~ :: a physical pathname
 #+end_defun
 
 *** Reading File Streams
@@ -1513,7 +1511,7 @@ the ~open~ function.
 ~Open~ returns a character-based input stream that can be passed along to other
 functions that read characters of text.
 
-- FILESPEC  ::   The name  of the file  to read.  This can be  one of  a string
+- ~FILESPEC~  ::   The name  of the file to read.  This can be  one of a string
   ("namestring"),  a pathname  object,  or a  stream  object, all  collectively
   called /pathname designators/. Pathnames  represent filenames in a structured
   way that  makes them easy  to manipulate without  tying them to  a particular
@@ -4629,7 +4627,7 @@ or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:3]namestring:  a  string  that  represents  a  filename  using  either  the
+[fn:3]*namestring*:  a  string that  represents  a  filename using  either  the
 standardized    notation    for    naming    logical    pathnames    or    some
 implementation-defined notation for naming a physical pathname.
 
