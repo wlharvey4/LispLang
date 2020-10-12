@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-11 21:43
-#+macro:version Version 0.0.27
+#+date:2020-10-11 23:27
+#+macro:version Version 0.0.28
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -13,10 +13,27 @@
 #+texinfo:@insertcopying
 
 
+"CommonLisp, the  mud ball of strength,  [is] the acting patriarch  of the Lisp
+family."
+
+- https://wiki.c2.com/?CommonLisp
+
+#+texinfo: @ifnothtml
+[[./resources/images/MfcSJ3gl.jpg]]
+#+texinfo: @end ifnothtml
+#+texinfo: @ifhtml
+[[../resources/images/MfcSJ3gl.jpg]]
+#+texinfo: @end ifhtml
+
+
+#+texinfo: @heading Creator of Organisms
+#+attr_texinfo: :author Alan Perlis
+#+begin_quote
 "Pascal is for building pyramids  -- imposing, breathtaking structures built by
 armies pushing heavy blocks into place. Lisp is for building organisms..."
+#+end_quote
+- https://www.cons.org/cmucl/
 
-- Alan Perlis, from https://www.cons.org/cmucl/
 
 #+begin_quote
 Alan Jay  Perlis (April 1,  1922 – February 7,  1990) was an  American computer
@@ -29,14 +46,23 @@ languages   and    was   the   first    recipient   of   the    Turing   Award.
 - [[https://web.archive.org/web/19990117034445/http://www-pu.informatik.uni-tuebingen.de/users/klaeren/epigrams.html][Alan Perlis' Epigrams]]
 
 
+#+texinfo: @heading Local Optimum
+#+attr_texinfo: :author John McCarthy, 1980
+#+begin_quote
 "LISP has survived for  21 years because it is an  approximate local optimum in
 the space of programming languages."
+#+end_quote
 
-- John McCarthy, 1980, from http://jmc.stanford.edu/articles/lisp20th.html
 
+
+- http://jmc.stanford.edu/articles/lisp20th.html
 - [[http://jmc.stanford.edu/articles/index.html][Articles by John McCarthy]]
 
 
+#+texinfo: @heading LISP: A Point of High Ground
+
+#+attr_texinfo: :author Paul Graham in "The Roots of Lisp", May 2001
+#+begin_quote
 "It seems  to me that  there have been two  really clean, consistent  models of
 programming so far:  the C model and  the Lisp model. These two  seem points of
 high ground,  with swampy lowlands between  them. As computers have  grown more
@@ -44,8 +70,7 @@ powerful, the  new languages being  developed have been moving  steadily toward
 the Lisp model. A  popular recipe for new programming languages  in the past 20
 years has been to take the C model of computing and add to it, piecemeal, parts
 taken from the Lisp model, like runtime typing and garbage collection."
-
-- Paul Graham, "The Roots of Lisp", May 2001
+#+end_quote
 
 - [[http://www.paulgraham.com/articles.html][Essays by Paul Graham]]
 
@@ -98,6 +123,16 @@ designable and evolvable by human beings.
 :PROPERTIES:
 :unnumbered: t
 :END:
+
+- Common Lisp :: https://wiki.c2.com/?CommonLisp
+
+  Descended  from  one of  the  oldest  surviving programming  languages  (only
+  Fortran is older),  CommonLisp is the first language  with integrated support
+  for ObjectOrientedProgramming to get ANSI standardized.
+
+  It  is a  rich  language with  clear semantics  which  allows programming  in
+  procedural, functional, object oriented and logical (rule based) style all in
+  the same program.
 
 - Common-Lisp :: https://common-lisp.net
 
@@ -964,6 +999,7 @@ implementation-specific versions.
 ** ANSI Common Lisp---Paul Graham
 - http://www.paulgraham.com/acl.html
 - Prentice Hall, 1995, 432 pages, paperback. ISBN 0133708756.
+- https://wiki.c2.com/?AnsiCommonLisp
 
 
 ANSI  Common  Lisp  combines  an   introduction  to  Lisp  programming,  and  a
