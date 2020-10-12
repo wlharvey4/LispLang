@@ -3,12 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-11 18:16
-#+macro:version Version 0.0.26
-#+macro:upload-date (eval (current-time-string))
-#+bucket:pinecone-forest.com
-#+macro:upload-date (eval (current-time-string))
-#+bucket:pinecone-forest.com
+#+date:2020-10-11 21:43
+#+macro:version Version 0.0.27
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -961,6 +957,7 @@ implementation-specific versions.
 ** Common Lisp The Language 2nd Edition
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
 - https://wiki.c2.com/?CommonLispTheLanguage
+- [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, 2nd Edition from CMU]]
 - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/cltl2/cltl2.html][Common Lisp the Language, 2nd Edition]]
 - Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
 
@@ -1138,11 +1135,11 @@ Lisp.
     the entire books is available to download for free, or to consult as HTML.
 
 *** Practical Common Lisp by Peter Seibel
-- https://wiki.c2.com/?PracticalCommonLisp
-- http://www.gigamonkeys.com/book/
+- [[https://wiki.c2.com/?PracticalCommonLisp][About Practical Common Lisp]]
+- [[http://www.gigamonkeys.com/book/][Practical Common Lisp in HTML]]
 
 *** ANSI Common Lisp by Paul Graham
-- https://wiki.c2.com/?AnsiCommonLisp
+- [[https://wiki.c2.com/?AnsiCommonLisp][About ANSI Common Lisp]]
 - https://courses.cs.northwestern.edu/325/readings/graham/graham-notes.html
 
 *** Common Lisp---A Gentle Introduction to Symbolic Computation
@@ -1175,6 +1172,15 @@ language.
 
 *** The Common Lisp Cookbook
 - https://lispcookbook.github.io/cl-cookbook/getting-started.html
+
+*** Successful Lisp---How to Understand and Use Common Lisp
+    :PROPERTIES:
+    :author:   David Lamkins
+    :cite:     http://ebixio.com/online_docs/SuccessfulLisp.pdf
+    :END:
+- [[http://ebixio.com/online_docs/SuccessfulLisp.pdf][Successful Lisp HTML]]
+
+
 ** Lisp Tutorials
 *** Iwanna Learn Lisp
  - https://wiki.c2.com/?IwannaLearnLisp
@@ -1938,6 +1944,128 @@ These opertors require open streams:
 - y-or-n-p
 - yes-or-no-p
 - 
+
+* Common Lisp Help System
+** Apropos
+   #+findex:apropos
+Common Lisp defines 978 symbols. There  are probably hundreds of others as well
+for language extensions,  libraries, a graphical user interface,  etc. You will
+not remember all  of the names, but  you will probably remember  parts of them.
+Once you  have a good  guess at a  part of  the name, you  can find all  of the
+matching names by using a tool called ~APROPOS~.
+
+#+begin_src sh
+$ sbcl
+,* (apropos "MAP" :cl)
+MAP (fbound)
+MAP-INTO (fbound)
+MAPC (fbound)
+MAPCAN (fbound)
+MAPCAR (fbound)
+MAPCON (fbound)
+MAPHASH (fbound)
+MAPL (fbound)
+MAPLIST (fbound)
+#+end_src
+
+#+begin_src sh
+$ clisp
+[1]> (apropos "MAP" :cl)
+MAP                                        function
+MAP-DEPENDENTS                             function
+MAP-INTO                                   function
+MAPC                                       function
+MAPCAN                                     function
+MAPCAR                                     function
+MAPCON                                     function
+MAPHASH                                    function
+MAPL                                       function
+MAPLIST                                    function
+#+end_src
+
+APROPOS expects a string or a symbol --- this provides the fragment of the name
+that you’d like to find. An  optional second argument designates a package; use
+it if you’d like  to limit your search to the symbols  in a particular package.
+The package designator can be a string  or symbol matching the name or nickname
+of a package  or it can be the  package object itself. If you  omit the package
+designator, then APROPOS will search for symbols in all packages.
+
+** Describe
+   #+findex:describe
+Once you know the name of a symbol, you can get additional information by using
+the ~DESCRIBE~ function.
+
+~DESCRIBE~ =object=  =stream= sends information  about an =object= to  a stream
+(=standard-output= by default). =object= can be a symbol, string, or function.
+
+~DESCRIBE~  prints,   to  the  stream  in   the  variable  =*standard-output*=,
+information  about the  object. Sometimes  it will  describe something  that it
+finds  inside   something  else;  such  recursive   descriptions  are  indented
+appropriately. For instance,  ~DESCRIBE~ of a symbol will  exhibit the symbol's
+value,  its   definition,  and  each   of  its  properties.  ~DESCRIBE~   of  a
+floating-point number will exhibit its internal representation in a way that is
+useful for tracking  down round-off errors and the like.  The nature and format
+of the output is implementation-dependent.
+
+The output  is sent  to the specified  stream, which defaults  to the  value of
+=*standard-output*=; the stream may also be =nil= (meaning =*standard-output*=)
+or  =t= (meaning  =*terminal-io*=). ~DESCRIBE~  is forbidden  to prompt  for or
+require user input when given exactly one argument.
+
+#+begin_src sh
+$ sbcl
+
+,* (describe 'mapl)
+COMMON-LISP:MAPL
+  [symbol]
+
+MAPL names a compiled function:
+  Lambda-list: (FUNCTION LIST &REST SB-IMPL::MORE-LISTS)
+  Dynamic-extent arguments: positional=(0)
+  Declared type: (FUNCTION ((OR FUNCTION SYMBOL) LIST &REST LIST)
+                  (VALUES LIST &OPTIONAL))
+  Derived type: (FUNCTION (T T &REST T) (VALUES T &OPTIONAL))
+  Documentation:
+    Apply FUNCTION to successive tuples of CDRs of LIST and MORE-LISTS.
+    Return LIST.
+  Known attributes: call, foldable
+  Source file: SYS:SRC;CODE;LIST.LISP
+#+end_src
+
+** Inspect
+   #+findex:inspect
+~INSPECT~  is  an  interactive  version   of  ~DESCRIBE~.  The  nature  of  the
+interaction is  implementation-dependent, but  the purpose  of ~INSPECT~  is to
+make it easy to wander through  a data structure, examining and modifying parts
+of it.
+
+~INSPECT~  is like  ~DESCRIBE~,  but  instead of  printing  the information  it
+presents the information in some  kind of interactive display; typically either
+a  command loop  in the  current listener  or a  new window  with its  own user
+interface.
+
+Implementations are encouraged to respond to the  typing of =?= or a ``help key''
+by providing help, including a list of commands.
+
+** Documentation
+   #+findex:documentation
+The  generic   function  ~DOCUMENTATION~   returns  the   documentation  string
+associated  with the  given object  if it  is available;  otherwise it  returns
+=nil=.  The  ~DOCUMENTATION~ function  gives  you  access to  the  programmer’s
+innermost thoughts.
+
+The ~DOCUMENTATION~ function expects two arguments.  The first is an object for
+which you wish  to retrieve documentation, or a symbol  naming that object. The
+second is  a symbol designating the  kind of documentation (there  are several)
+you wish to retrieve.
+
+- variable :: defvar, defparameter, defconstant
+- function :: defun, defmacro, special forms
+- structure :: defstruct
+- type :: deftype
+- setf :: defsetf
+- compiler-macro :: define-compiler-macro
+- method-combination :: define-method-combination
 
 * Common Lisp on Emacs
 ** Emacs Lisp
