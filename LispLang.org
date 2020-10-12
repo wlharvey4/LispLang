@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-10 23:30
-#+macro:version Version 0.0.24
+#+date:2020-10-11 17:54
+#+macro:version Version 0.0.25
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -257,7 +257,7 @@ extensions, but more theory and some smoothing of the language itself are
 required before we can take full advantage of LISP's mathematical basis.
 
 - [[http://jmc.stanford.edu/articles/lisp20th/lisp20th.pdf][Download the article in PDF.]]
-*** Common Lisp: The Untold Story
+*** Common Lisp --- The Untold Story
     :PROPERTIES:
     :author:   Kent M. Pitman
     :date:     2008
@@ -380,6 +380,109 @@ Parenthetically Speaking expresses opinions and  analysis about the Lisp family
 of languages. Except as explicitly  indicated otherwise, the opinions expressed
 are those of  the author and do not necessarily  reflect the official positions
 of any organization or company with which the author is affiliated.
+*** Alan Kay’s advice to computer science students
+    :PROPERTIES:
+    :date:     2018-11-09
+    :author:   Mark Miller
+    :cite:     https://tekkie.wordpress.com/2018/11/09/alan-kays-advice-to-computer-science-students/
+    :END:
+#+texinfo: @heading Tekkie
+- https://tekkie.wordpress.com/2018/11/09/alan-kays-advice-to-computer-science-students/
+- by Mark Miller, Nov 9, 2018
+
+"I’m once again going to quote a Quora answer verbatim, because I think there’s
+a lot of value in it. Alan Kay answered /What book(s) would you recommend to a
+computer science student?/"
+
+#+attr_texinfo: :author Alan Kay
+#+begin_quote
+My basic answer is: read a lot outside of the computer field.
+
+It is worth trying to understand what “science” means in “Computer Science” and
+what “engineering” means in “Software Engineering”.
+
+“Science” in its  modern sense means trying to reconcile  phenomena into models
+that are as  explanatory and predictive as possible. There  can be “Sciences of
+the Artificial”  (see the important  book by Herb Simon).  One way to  think of
+this is that if people (especially engineers) build bridges, then these present
+phenomena for  scientists to understand  by making models.  The fun of  this is
+that  the science  will almost  always  indicate new  and better  ways to  make
+bridges, so  friendly collegial relationships between  scientists and engineers
+can really make progress.
+
+An example in  computing is John McCarthy thinking about  computers in the late
+50s, the really large  range of things they can do (maybe  AI?), and creating a
+model  of computing  as a  language that  could serve  as its  own metalanguage
+(LISP).  MY FAVORITE  BOOK ON  THIS IS  “The Lisp  1.5 Manual”  from MIT  Press
+(written by McCarthy et al.). THE FIRST PART OF THIS BOOK IS STILL A CLASSIC ON
+HOW TO THINK IN GENERAL, AND ABOUT COMPUTING IN PARTICULAR.
+
+(A  later  book inspired  by  all  this is  “Smalltalk:  the  language and  its
+implementation” (by  Adele Goldberg and  Dave Robson  — the “Blue  Book”). Also
+contains a complete implementation in Smalltalk written in itself, etc.)
+
+A still later  book that I like a  lot that is “real computer  science” is “The
+Art of the  Metaobject Protocol” by Kiszales, Bobrow, Rivera,).  The early part
+of this book especially is quite illuminating.
+
+An early thesis  (1970) that is real computer science  is “A Control Definition
+Language” by Dave Fisher (CMU).
+
+Perhaps  my favorite  book about  computing might  seem far  afield, but  it is
+wonderful  and the  writing  is wonderful:  “Computation:  Finite and  Infinite
+Machines” by Marvin Minsky (ca 1967). Just a beautiful book.
+
+To  help with  “science”,  I usually  recommend a  variety  of books:  Newton’s
+“Principia” (the ultimate  science book and founding  document), “The Molecular
+Biology of  the Cell”  by Bruce  Alberts, et  al. There’s  a book  of Maxwell’s
+papers, etc.
+
+You need to  wind up realizing that “Computer Science”  is still an aspiration,
+not an accomplished field.
+
+“Engineering” means “designing and building  things in principled expert ways”.
+The level of this is very high for the engineering fields of Civil, Mechanical,
+Electrical, Biological, etc. Engineering. These  should be studied carefully to
+get the larger sense of what it means to do “engineering”.
+
+To help  with “engineering” try  reading about the  making of the  Empire State
+Building, Boulder Dam, the Golden Gate Bridge, etc. I like “Now It Can Be Told”
+by  Maj Gen  Leslie  Groves (the  honcho  on the  Manhattan  Project). He’s  an
+engineer, and this history  is very much not from the Los  Alamos POV (which he
+also  was in  charge of)  but about  Oak Ridge,  Hanford, etc  and the  amazing
+mobilization of  600,000 plus people  and lots of  money to do  the engineering
+necessary to create the materials needed.
+
+Then think about  where “software engineering” isn’t — again,  you need to wind
+up realizing that “software engineering” in  any “engineering” sense is at best
+still an aspiration not a done deal.
+
+Computing  is  also a  kind  of  “media” and  “intermediary”,  so  you need  to
+understand what these do for us and to us. Read Marshall McLuhan, Neil Postman,
+Innis, Havelock,  etc. Mark Miller (comment  below) just reminded me  that I’ve
+recommended “Technics  and Human Development,”  Vol. 1 of Lewis  Mumford’s “The
+Myth  of  the  Machine” series,  as  a  great  predecessor  of both  the  media
+environment ideas and of an important facet of anthropology.
+
+I don’t know of a great anthropology  book (maybe someone can suggest), but the
+understanding of human beings is the most important thing to accomplish in your
+education. In a  comment below, Matt Gaboury recommended  “Human Universals” (I
+think he means  the book by Donald  Brown.) This book certainly  should be read
+and understood  — it  is not in  the same  class as books  about a  field, like
+“Molecular Biology of the Cell”.
+
+I like Ed Tufte’s books on “Envisioning Information”: read all of them.
+
+Bertrand Russell’s  books are  still very  good just  for thinking  more deeply
+about “this and that” (“A History of Western Philosophy” is still terrific).
+
+Multiple points  of view  are the only  way to fight  against human  desires to
+believe and create  religions, so my favorite current history  book to read is:
+“Destiny Disrupted” by Tamim Ansary. He grew up in Afghanistan, moved to the US
+at age 16, and is able to write  a clear illuminating history of the world from
+the time of Mohammed from the point  of view of this world, and without special
+pleading.
+#+end_quote
 
 * Common Lisp Implementations
 - https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
@@ -968,48 +1071,62 @@ Lisp.
 - [[http://metamodular.com/Common-Lisp/bibliography.html][Bibliography of documents related to Common Lisp]]
 
   - Peter Seibel, Practical Common Lisp ::
+
     This is an  excellent introduction to the Common Lisp  language. Instead of
     focusing on mechanisms the way most  other books do, this book is organized
     around practical examples related to contemporary problems.
+
   - Paul Graham, ANSI Common Lisp, Prentice Hall ::
+
     This book is  an introduction to the Common Lisp  programming language. The
     programming style of Paul  Graham is a bit different from  the one you will
     find in most  modern Common Lisp programs,  but this fact is  not likely to
     make a big difference to the debutant.
+
   - Paul Graham, On Lisp, Prentice Hall ::
+
     This book is  about advanced programming Common Lisp,  and specifically how
     to use the Common Lisp language  to create Domain Specific Languages (DSLs)
     using a technique called embedded  languages. This entire book is available
     as a free download.
-  - Sonya E. Keene, Object-Oriented Programming  in Common Lisp, Addison Wesley
-    :: The Common  Lisp object system (CLOS) is quite  different from, and more
+
+  - Sonya E. Keene, Object-Oriented Programming  in Common Lisp, Addison Wesley ::
+
+    The Common  Lisp object system (CLOS) is quite  different from, and more
     power than  that of  other object-oriented languages.  This books  gives an
     introduction to object-oriented  programming using CLOS. The book  is a bit
     old,  and this  is  particularly obvious  in the  examples  given, but  the
     mechanisms discussed have not changed, of course.
-  - Peter  Norvig,  Paradigms  of  Artificial  Intelligence  Programming:  Case
-    Studies in Common Lisp, Morgan Kaufmann  :: This is a very good programming
-    book. Peter  Norvig shows how to  use advanced features of  the Common Lisp
-    language  to  program  some  of  the  traditional  problems  of  Artificial
-    Intelligence  (search  problems,  natural   languages,  etc.),  but  it  is
-    definitely not a book about AI,  but about programming techniques, so it is
-    worth reading  for everyone, and not  only for those who  are interested in
-    AI.
-  - Gregor  Kiczales, Jim  des  Rivières,  Daniel G.  Bobrow,  The  Art of  the
-    Metaobject Protocol ::  In this book, the authors show  how the Common Lisp
-    Object System  (CLOS) can be  defined in a  meta-circular way, i.e.,  as an
-    object-oriented program  using CLOS.  Though this might  sound like  a cute
-    exercise with little or no practical  use, this is definitely not the case,
-    because  that is  in fact  how CLOS  is written.  The authors  also discuss
-    bootstrapping problems  that invariably  occur with  such systems,  and how
-    these problems were solved in their  implementation of CLOS called PCL. The
-    second part of the book contains a complete specification of CLOS, and that
-    part is available for free as online html.
-  - David Touretzky, COMMON LISP: A Gentle Introduction to Symbolic Calculation
-    :: The 1990 edition  of this book is available as download  for free. For a
+
+  - Peter  Norvig,  Paradigms  of  Artificial  Intelligence  Programming:  Case Studies in Common Lisp, Morgan Kaufmann  ::
+
+    This  is a  very  good programming  book.  Peter Norvig  shows  how to  use
+    advanced  features of  the  Common Lisp  language to  program  some of  the
+    traditional problems  of Artificial Intelligence (search  problems, natural
+    languages,  etc.), but  it is  definitely not  a book  about AI,  but about
+    programming techniques, so  it is worth reading for everyone,  and not only
+    for those who are interested in AI.
+
+  - Gregor  Kiczales, Jim  des  Rivières,  Daniel G.  Bobrow,  The  Art of  the Metaobject Protocol ::
+
+    In this book, the authors show how the Common Lisp Object System (CLOS) can
+    be  defined in  a meta-circular  way, i.e.,  as an  object-oriented program
+    using CLOS. Though this might sound like  a cute exercise with little or no
+    practical use, this is definitely not the case, because that is in fact how
+    CLOS  is written.  The  authors also  discuss  bootstrapping problems  that
+    invariably occur with  such systems, and how these problems  were solved in
+    their  implementation of  CLOS  called PCL.  The second  part  of the  book
+    contains a complete  specification of CLOS, and that part  is available for
+    free as online html.
+
+  - David Touretzky, COMMON LISP: A Gentle Introduction to Symbolic Calculation ::
+
+    The 1990 edition  of this book is available as download  for free. For a
     long time  it was out  of print, but  now it is  back in print  "with minor
     revisions".
+
   - Guy L. Steele, [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, second Edition]] ::
+
     This book  is as close to  a reference manual  for Common Lisp at  it gets.
     Unfortunately,  the book  was  published before  the  Common Lisp  standard
     process was entirely finished, and there are some discrepancies between the
@@ -3560,7 +3677,7 @@ https://clojure.org/api/api
 			  (org-texinfo-export-to-texinfo)))"
 	   @echo Done making TEXI.
   open-texi: texi
-	   @$(EDITOR) $(TEXI)
+	   @$(EDITOR) -n $(TEXI)
 
   info: $(INFO)
   $(INFO): $(TEXI)
