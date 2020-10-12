@@ -3,7 +3,7 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-11 23:27
+#+date:2020-10-12 10:38
 #+macro:version Version 0.0.28
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
@@ -820,7 +820,9 @@ MacTeX 2014 works.
 : but has no standard GUI libraries.
 
 - Therefore:
-: Write great applications using Java for your front-end GUI backed with Lisp code and get the best of both worlds.
+: Write great applications using Java for your front-end GUI...
+: backed with Lisp code and ...
+: get the best of both worlds.
 
 
 - ABCL ::
@@ -830,6 +832,13 @@ MacTeX 2014 works.
   - features both an interpreter and a compiler, running in the JVM.
   - [[https://abcl.org/doc/abcl-user.html][User Documentation]]
   - [[https://abcl.org/releases/1.7.1/abcl-1.7.1.pdf][Armed Bear Common Lisp User Manual Version 1.7.1 July 2020]]
+*** Install ABCL
+- Go to [[https://abcl.org/][ABCL Home]] and download ABCL
+- Build according to [[http://common-lisp.net/project/armedbear/doc/abcl-install-with-java.html][instructions]]
+- or install using MacPorts: ~port install abcl~
+- Add ~<abcl-dir>/dist/abcl.jar~ to your =CLASSPATH= for ABCL projects
+- when installed with MacPorts, ~abcl.jar~ is at:
+: /opt/local/share/java/abcl/abcl.jar
 
 ** GNU Common Lisp
 - https://www.gnu.org/software/gcl/
