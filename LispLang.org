@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-12 11:51
-#+macro:version Version 0.0.29
+#+date:2020-10-12 12:25
+#+macro:version Version 0.0.30
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -117,6 +117,26 @@ molecules  that  can do  everything  that  proteins can  do  in  nature but  be
 designable and evolvable by human beings.
 #+end_quote
 
+#+texinfo: @heading The Power of Runtime Compilation
+
+#+attr_texinfo: :author https://wiki.c2.com/?RuntimeCompilation (2005)
+#+begin_quote
+While there are projects to implement CL on top of a C compiler (see ECL), that
+behaviour is  the exception,  not the  rule. There are,  however, very  good CL
+compilers  (see  CMUCL for  a  free  one) which  will  compile  CL to  Assembly
+Language, generally within a factor of 2  of a good optimizing C compiler. This
+is  pretty amazing,  considering how  much more  power you  get in  CL compared
+to  C.  To  put it  another  way:  a  lot  of  people like  languages  such  as
+tcl/perl/python, because it's abstractions let  them code much faster than they
+would in C. However, the "abstraction penalty", if you want to call it that, is
+sometimes quite high, often a couple or  even three of orders of magnitude.  So
+often people  optimize by  going back and  writing critical bits  in C  or C++,
+which is  a bit of  a mess. With  CL, you get  more power and  abstraction than
+these languages, and  with appropriately written code you can  have very little
+penalty.  Why  this hasn't  sunk it for  more people I  am not  sure (actually,
+that's a fib - I have some ideas). [[https://wiki.c2.com/?WhyNotLisp][(Why Not Lisp?)]]
+#+end_quote
+
 
 * Introduction to Lisp
 :PROPERTIES:
@@ -132,6 +152,13 @@ designable and evolvable by human beings.
   It  is a  rich  language with  clear semantics  which  allows programming  in
   procedural, functional, object oriented and logical (rule based) style all in
   the same program.
+
+- Standardized Features ::
+  - A well designed, well integrated object system (CLOS)
+  - A well designed exception/condition handling mechanism
+  - A not so easy to use/understand, but working, Package system
+  - Support for Runtime Compilation[fn:1]
+  - A MetaObjectProtocol (the MOP is supplied in most implementations)[fn:2]
 
 - Common-Lisp :: https://common-lisp.net
 
@@ -221,7 +248,7 @@ languages, Lisp has dialects.) -- Paul Graham
 
  #+begin_quote
  Paul Graham's  The Roots of Lisp,  a cogent essay dealing  with John McCarthy's
- astonishing 1960's  paper[fn:1] which  introduced the  LISP language,  and more
+ astonishing 1960's  paper[fn:3] which  introduced the  LISP language,  and more
  importantly, the functional model of programing.
 
  Graham stresses  his essay is  more important today  than ever, given  how more
@@ -564,7 +591,7 @@ the interpreter on. The SBCL compiler generates fast native code according to a
 previous version of The Computer Language Benchmarks Game.
 
 - SBCL ::
-  - Steel Bank Common Lisp[fn:7]
+  - Steel Bank Common Lisp[fn:4]
   - In doubt, just get [[http://www.sbcl.org/platform-table.html][SBCL]]
   - Articulate Lisp also [[http://articulate-lisp.com/implementations/summary.html][recommends SBCL]] for beginners
   - A high performance Common Lisp compiler and runtime system
@@ -1369,7 +1396,7 @@ https://www.quicklisp.org/beta/
 
 Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
 Common Lisp  implementation to download,  install, and  load any of  over 1,500
-[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:2]  It works with:
+[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5]  It works with:
 
 - ABCL,
 - Allegro CL,
@@ -1467,7 +1494,7 @@ used by this interface assumes that:
   filename it represents ([[a-stream][stream)]].
 
 
-Pathnames and  namestrings[fn:3] are two  kinds of objects that  substitute for
+Pathnames and  namestrings[fn:6] are two  kinds of objects that  substitute for
 filenames in Common Lisp ([[pathname--class][pathname class]])
 
 ** Files and Filenames
@@ -1531,9 +1558,27 @@ There are two kinds of pathnames:
 
 - physical pathnames ([[physical-pathname][physical pathname]])
 - logical pathnames ([[logical-pathname][logical pathname]])
+#+end_deftp
 
+#+cindex:logical pathname
+<<logical-pathname>>
+#+attr_texinfo: :options Pathname {logical pathname}
+#+begin_deftp
+An object of type ~logical-pathname~.
 
-An object  of type  pathname is a  structured representation of  the name  of a
+A    /pathname/     that    uses     a    /namestring/    syntax     that    is
+implementation-independent,   and   that   has  component   values   that   are
+implementation-independent.  Logical   pathnames  do  not  refer   directly  to
+filenames.
+#+end_deftp
+
+#+cindex:physical pathname
+<<physical-pathname>>
+#+attr_texinfo: :options Pathname {physical pathname}
+#+begin_deftp
+A pathname that is not a logical pathname.
+
+An object of  type ~pathname~ is a  structured representation of the  name of a
 file. A pathname has six components:
 
 - host
@@ -1544,31 +1589,13 @@ file. A pathname has six components:
 - version
 #+end_deftp
 
-#+cindex:logical pathname
-<<logical-pathname>>
-#+attr_texinfo: :options Pathname {logical pathname}
-#+begin_deftp
-An object of type logical-pathname.
-
-A    /pathname/     that    uses     a    /namestring/    syntax     that    is
-implementation-independent,   and   that   has  component   values   that   are
-implementation-independent.  Logical   pathnames  do  not  refer   directly  to
-filenames
-#+end_deftp
-
-#+cindex:physical pathname
-<<physical-pathname>>
-#+attr_texinfo: :options Pathname {physical pathname}
-#+begin_deftp
-A pathname that is not a logical pathname.
-#+end_deftp
-
 #+attr_texinfo: :options pathname pathspec => pathname
 #+begin_defun
-Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
+Returns the @@texinfo:@var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 
-- PATHSPEC :: If the @@texinfo:@var{pathspec}@@ designator is a file stream
-  created by opening a logical pathname, a logical pathname is returned.
+- PATHSPEC ::  If the  @@texinfo:@var{pathspec}@@ designator  is a  file stream
+  created   by   opening   a   logical  pathname,   a   logical   pathname   is
+  returned.
 
 - PATHNAME  ::  the  @@texinfo:@var{pathname}@@  returned  corresponds  to  the
   filename used to open the file.
@@ -1581,7 +1608,7 @@ Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 A designator for a pathname; that is, an object that denotes a pathname and
 that is one of:
 
-- pathname namestring[fn:3] (denoting the corresponding pathname)
+- pathname namestring[fn:6] (denoting the corresponding pathname)
 - a stream associated with a file (denoting the pathname used to open the file)
 - pathname (denoting itself)
 #+end_deftp
@@ -1798,7 +1825,7 @@ the stream.
 
 #+attr_texinfo: :options interactive-stream-p stream => boolean
 #+begin_defun
-Returns =true= if stream is an interactive stream[fn:4]; otherwise, returns
+Returns =true= if stream is an interactive stream[fn:7]; otherwise, returns
 =false=.
 #+end_defun
 
@@ -2579,7 +2606,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:5] does emphasize a  side-effect-free, applicative approach to
+book[fn:8] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -4609,35 +4636,39 @@ Copyright \copy 2020 by {{{author}}}
 #+texinfo_printed_title:LispLang---The Universe Known as LISP
 
 
+* Local Variables						   :noexport:
+
 * Footnotes
 
-[fn:7]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
-University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
-in the steel industry and Andrew Mellon was a successful banker.
+[fn:1] Runtime Compilation: https://wiki.c2.com/?RuntimeCompilation
 
-[fn:1]Recursive Functions of Symbolic Expressions and Their Computation by
+[fn:2] MetaObjectProtocol: https://wiki.c2.com/?MetaObjectProtocol
+
+[fn:3]Recursive Functions of Symbolic Expressions and Their Computation by
 Machine, Part I, by John McCarthy, April 1960 @
 http://www-formal.stanford.edu/jmc/recursive/recursive.html.
 Note: Part II never appeared.
 
-[fn:4]A stream  on which it  makes sense  to perform interactive  querying. The
+[fn:4]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
+University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
+in the steel industry and Andrew Mellon was a successful banker.
+
+[fn:5]The libraries were last updated on July 15, 2020.
+
+[fn:6]*namestring*:  a  string that  represents  a  filename using  either  the
+standardized    notation    for    naming    logical    pathnames    or    some
+implementation-defined notation for naming a physical pathname.
+
+[fn:7]A stream  on which it  makes sense  to perform interactive  querying. The
 general intent of having some streams be classified as /interactive/ streams is
 to allow them to be distinguished  from streams containing batch (or background
 or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:3]*namestring*:  a  string that  represents  a  filename using  either  the
-standardized    notation    for    naming    logical    pathnames    or    some
-implementation-defined notation for naming a physical pathname.
+[fn:8]In the browser, add =index.text= to the end of the URL to see the source.
 
-[fn:2]The libraries were last updated on July 15, 2020.
-
-[fn:6]Markdown requires the standard Perl library module Digest::MD5.
-
-[fn:5]In the browser, add =index.text= to the end of the URL to see the source.
-
-* Local Variables						   :noexport:
+[fn:9]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
