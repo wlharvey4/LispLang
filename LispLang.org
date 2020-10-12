@@ -3,8 +3,10 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-11 17:54
-#+macro:version Version 0.0.25
+#+date:2020-10-11 18:16
+#+macro:version Version 0.0.26
+#+macro:upload-date (eval (current-time-string))
+#+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -1236,6 +1238,57 @@ CCL is free software.  It is distributed under the terms of the Apache
 Licence, Version 2.0.
 #+end_quote
 
+**** Breaking Lisp
+Pressing =Control-C=  in Lisp halts  whatever is presently running  and returns
+you to the command line. After  you press =Control-C=, the command line changes
+to a  "subsidiary" command line  to reflect  that you are  in a break  or error
+condition. Kinda like pressing =Control-C=  in a debugger. These conditions can
+be stacked: if you  keep working while in a condition, and  then get in another
+condition and so on, you're piling up conditions on a stack.
+
+#+begin_example
+$ sbcl
+
+,* (loop)
+^C
+debugger invoked on a SB-SYS:INTERACTIVE-INTERRUPT in thread
+#<THREAD "main thread" RUNNING {1001890143}>:
+  Interactive interrupt at #x52BB2ED0.
+
+Type HELP for debugger help, or (SB-EXT:EXIT) to exit from SBCL.
+
+restarts (invokable by number or by possibly-abbreviated name):
+  0: [CONTINUE] Return from SB-UNIX:SIGINT.
+  1: [ABORT   ] Exit debugger, returning to top level.
+
+((LAMBDA ()))
+   source: (PROGN)
+#+end_example
+
+#+begin_example
+$ clisp
+
+[1]> (loop)
+^C
+,** - Continuable Error
+EVAL: User break
+If you continue (by typing 'continue'): Continue execution
+The following restarts are also available:
+ABORT          :R1      Abort main loop
+#+end_example
+
+Just like in a  debugger, at any break or error condition, you  have a bunch of
+options (like  examining the stack, changing  what the return value  should be,
+etc.) You  can even continue the  infinite loop we  just broke out of.  But you
+probably just  want to escape. The  easiest option is  to escape out of  all of
+your error conditions, right back up to the top.
+
+- SBCL :: In SBCL on your laptop, this is done by typing :top or :n (where n is
+  the largest number presented to you -- here it's 1).
+
+- CLISP :: In clisp on zeus, you'd type :R1
+**** Quitting Lisp
+Type ~(quit)~ to exit from Lisp.
 *** Brief Guide to CLOS
 - http://www.aiai.ed.ac.uk/project/pub/packages/lisp/random/clos-guide
 
@@ -3360,7 +3413,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
-:org-template-version: 0.6.25
+:org-template-version: 0.6.27
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -3378,7 +3431,7 @@ https://clojure.org/api/api
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
 :env_var4: COLORS
-:org-template-version: 0.6.25
+:org-template-version: 0.6.27
 :END:
 
 #+name:Makefile
