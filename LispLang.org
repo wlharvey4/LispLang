@@ -3,8 +3,10 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-12 14:10
+#+date:2020-10-12 17:05
 #+macro:version Version 0.0.31
+#+macro:upload-date (eval (current-time-string))
+#+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3667,7 +3669,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
-:org-template-version: 0.6.27
+:org-template-version: 0.6.29
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -3685,7 +3687,7 @@ https://clojure.org/api/api
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
 :env_var4: COLORS
-:org-template-version: 0.6.27
+:org-template-version: 0.6.29
 :END:
 
 #+name:Makefile
@@ -3705,6 +3707,16 @@ https://clojure.org/api/api
 
   # The absolute path to this Template file
   TEMPLATE := $(SYNC_ORG_TEMPLATE)
+
+
+  ### TOOLS & RESOURCES
+  # tools is a directory holding tangled scripts, such as cmprpl
+  # resources is a directory holding static resources for the project
+  # images is a directory holding jpg and png image files
+  TOOLS	:= tools
+  CMPRPL	:= $(TOOLS)/cmprpl
+  RESOURCES := resources
+  IMAGES  := $(RESOURCES)/images
 
   # Use emacsclient as $EDITOR; make sure it is set in a shell startup file and
   # the server has been started.
@@ -3883,11 +3895,6 @@ https://clojure.org/api/api
 		 my $$json = JSON::PP->new->loose->allow_barekey->decode(<STDIN>); \
 		 print $$json->{login};' \
 	    )
-
-  ### TOOLS & RESOURCES
-  # tools is a directory holding tangled scripts, such as cmprpl
-  TOOLS	:= tools
-  CMPRPL	:= $(TOOLS)/cmprpl
   SAVE	:= resources
 
   ### TEXINFO
@@ -3902,12 +3909,14 @@ https://clojure.org/api/api
   ### AWS S3
   DST_OLD	:= $(S3_BUCKET)/$(S3PROJ)
   DST_NEW	:= $(S3_BUCKET)/$(DIR)-$(VERS)
-  EXCL_INCL	:= --exclude "*" --include "*.html"
+  EXCL_INCL   := --exclude "*" --include "*.html"
+  INCL_IMAGES := --exclude "*" --include "*.jpg" --include "*.png"
   GRANTS	:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
   S3SYNC	:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(REGION) $(GRANTS)
   S3MOVE	:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(REGION) $(GRANTS)
   S3COPY	:= $(S3) cp $(INDEX) $(S3_BUCKET) $(REGION) $(GRANTS)
-  S3REMOVE	:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+  S3REMOVE:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+  S3IMAGESYNC := $(S3) sync $(INCL_IMAGES) $(IMAGES) $(S3_BUCKET)/$(IMAGES) $(REGIONS) $(GRANTS)
 
   ###############################################################################
 
@@ -4029,6 +4038,7 @@ https://clojure.org/api/api
   sync:   $(HTML)
 	  @echo Syncing version $(VERS) onto $(S3VERS)...
 	  $(S3SYNC)
+	  $(S3IMAGESYNC)
 	  @echo Done syncing.
 	  [[ $(VERS) != $(S3VERS) ]] && { echo Moving...; $(S3MOVE); echo Done moving.;  make homepage; } || :
 	  [[ $(PROJINS3) = "NO" ]] && make homepage || :
@@ -4114,10 +4124,10 @@ https://clojure.org/api/api
 	      "(kill-buffer \"$(ORG)\")"
 	    -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
 	    -@for dir in *; \
-	    	do \
+		do \
 		    [ -d $$dir -a $$dir != "$(DIR_OLD)" -a $$dir != $(SAVE) ] && \
 		    rm -vr $$dir; \
-	    	done
+		done
 
   wipe-clean: dist-clean
 	  @echo Wipe Clean...
