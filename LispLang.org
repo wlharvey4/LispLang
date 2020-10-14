@@ -3,8 +3,10 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-11 23:27
-#+macro:version Version 0.0.28
+#+date:2020-10-12 17:05
+#+macro:version Version 0.0.31
+#+macro:upload-date (eval (current-time-string))
+#+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -14,9 +16,7 @@
 
 
 "CommonLisp, the  mud ball of strength,  [is] the acting patriarch  of the Lisp
-family."
-
-- https://wiki.c2.com/?CommonLisp
+family." (https://wiki.c2.com/?CommonLisp)
 
 #+texinfo: @ifnothtml
 [[./resources/images/MfcSJ3gl.jpg]]
@@ -24,6 +24,7 @@ family."
 #+texinfo: @ifhtml
 [[../resources/images/MfcSJ3gl.jpg]]
 #+texinfo: @end ifhtml
+(https://wiki.c2.com/?SmugLispWeenie)
 
 
 #+texinfo: @heading Creator of Organisms
@@ -49,8 +50,8 @@ languages   and    was   the   first    recipient   of   the    Turing   Award.
 #+texinfo: @heading Local Optimum
 #+attr_texinfo: :author John McCarthy, 1980
 #+begin_quote
-"LISP has survived for  21 years because it is an  approximate local optimum in
-the space of programming languages."
+"LISP  has survived  for 21  years [61  years  as of  2020!] because  it is  an
+approximate local optimum in the space of programming languages."
 #+end_quote
 
 
@@ -118,6 +119,26 @@ molecules  that  can do  everything  that  proteins can  do  in  nature but  be
 designable and evolvable by human beings.
 #+end_quote
 
+#+texinfo: @heading The Power of Runtime Compilation
+
+#+attr_texinfo: :author https://wiki.c2.com/?RuntimeCompilation (2005)
+#+begin_quote
+While there are projects to implement CL on top of a C compiler (see ECL), that
+behaviour is  the exception,  not the  rule. There are,  however, very  good CL
+compilers  (see  CMUCL for  a  free  one) which  will  compile  CL to  Assembly
+Language, generally within a factor of 2  of a good optimizing C compiler. This
+is  pretty amazing,  considering how  much more  power you  get in  CL compared
+to  C.  To  put it  another  way:  a  lot  of  people like  languages  such  as
+tcl/perl/python, because it's abstractions let  them code much faster than they
+would in C. However, the "abstraction penalty", if you want to call it that, is
+sometimes quite high, often a couple or  even three of orders of magnitude.  So
+often people  optimize by  going back and  writing critical bits  in C  or C++,
+which is  a bit of  a mess. With  CL, you get  more power and  abstraction than
+these languages, and  with appropriately written code you can  have very little
+penalty.  Why  this hasn't  sunk it for  more people I  am not  sure (actually,
+that's a fib - I have some ideas). [[https://wiki.c2.com/?WhyNotLisp][(Why Not Lisp?)]]
+#+end_quote
+
 
 * Introduction to Lisp
 :PROPERTIES:
@@ -133,6 +154,13 @@ designable and evolvable by human beings.
   It  is a  rich  language with  clear semantics  which  allows programming  in
   procedural, functional, object oriented and logical (rule based) style all in
   the same program.
+
+- Standardized Features ::
+  - A well designed, well integrated object system (CLOS)
+  - A well designed exception/condition handling mechanism
+  - A not so easy to use/understand, but working, Package system
+  - Support for Runtime Compilation[fn:1]
+  - A MetaObjectProtocol (the MOP is supplied in most implementations)[fn:2]
 
 - Common-Lisp :: https://common-lisp.net
 
@@ -222,7 +250,7 @@ languages, Lisp has dialects.) -- Paul Graham
 
  #+begin_quote
  Paul Graham's  The Roots of Lisp,  a cogent essay dealing  with John McCarthy's
- astonishing 1960's  paper[fn:1] which  introduced the  LISP language,  and more
+ astonishing 1960's  paper[fn:3] which  introduced the  LISP language,  and more
  importantly, the functional model of programing.
 
  Graham stresses  his essay is  more important today  than ever, given  how more
@@ -565,7 +593,7 @@ the interpreter on. The SBCL compiler generates fast native code according to a
 previous version of The Computer Language Benchmarks Game.
 
 - SBCL ::
-  - Steel Bank Common Lisp[fn:7]
+  - Steel Bank Common Lisp[fn:4]
   - In doubt, just get [[http://www.sbcl.org/platform-table.html][SBCL]]
   - Articulate Lisp also [[http://articulate-lisp.com/implementations/summary.html][recommends SBCL]] for beginners
   - A high performance Common Lisp compiler and runtime system
@@ -634,17 +662,25 @@ $ sbcl --script hello.lisp
 Hello, World!
 #+end_example
 
-** Clozure Common Lisp
+** Clozure Common Lisp --- CCL
 - https://ccl.clozure.com
 - [[https://ccl.clozure.com/manual/][Clozure CL Documentation]]
 - [[https://ccl.clozure.com/docs/ccl.html][CCL Manual (one page HTML)]]
 - [[https://github.com/Clozure/ccl][CCL on GitHub]]
 - [[https://ccl.clozure.com/openmcl-overview.pdf][Overview]]
 
+"Clozure CL is a fast, mature, open source Common Lisp implementation that runs
+on Linux, Mac OS X, FreeBSD, and Windows. Clozure CL was forked from Macintosh
+Common Lisp (MCL) in 1998 and the development has been entirely separate
+since."
 
-Some  distinguishing features  of the  implementation include  fast compilation
-speed, native  threads, a precise, generational,  compacting garbage collector,
-and a convenient foreign-function interface.
+
+Some  distinguishing features  of the  implementation include:
+- fast compilation speed,
+- native  threads,
+- a precise, generational,  compacting garbage collector, and
+- a convenient foreign-function interface.
+
 
 Clozure CL is available for the following platforms:
 
@@ -675,6 +711,7 @@ Clozure CL is available for the following platforms:
   - On all supported platforms, Clozure CL can run as a command-line
     process, or as an inferior Emacs process using either SLIME or
     ILISP.
+  - Documentation for CCL is written in a notation called [[https://github.com/Clozure/ccldoc][CCLDoc]].
   - [[https://ccl.clozure.com/docs/ccl.html][Clozure CL Manual]]
 
 
@@ -723,19 +760,30 @@ you could write something like:
 
 : (setq inferior-lisp-program "/opt/local/share/ccl/1.12/dx86cl64")
 
-or make the equivalent changes to =slime-lisp-implementations=.
+or make the equivalent changes to =slime-lisp-implementations=, a list of known
+Lisp implementations of the form:
+
+: ((NAME (PROGAM PROGRAM-ARGS...) &key KEYWORD-ARGS) ...)
+:
+: ((ccl
+:  ("/opt/local/share/ccl/1.12/dx86cl64"))
+: (sbcl
+:  ("/opt/local/bin/sbcl")
+:  :coding-system utf-8-unix))
+
+
 
 **** Running CCL from the Command-Line as a Script
 
- It can also be handy to run Clozure  CL straight from a terminal prompt. In the
- ~scripts/~ directory of the ~ccl~ directory, there are two files named:
+It can also be handy to run Clozure  CL straight from a terminal prompt. In the
+~scripts/~ directory of the ~ccl~ directory, there are two files named:
 
  - ~ccl~
  - ~ccl64~
 
 
- Copy these files into ~/usr/local/bin~ or  some other directory that is on your
- path, and then  edit them so that the value  of
+Copy these files into ~/usr/local/bin~ or  some other directory that is on your
+path, and then edit them so that the value of
 
 : CCL_DEFAULT_DIRECTORY
 
@@ -746,10 +794,24 @@ can then start up the lisp by typing:
  or
  : ccl64
 
- You may  wish to  install ~scripts/ccl64~ with  the name ~ccl~  if you  use the
- 64-bit lisp more. If you want the 32-bit  lisp to be available as well, you can
- install  ~scripts/ccl~ as  ~ccl32~. Note  that there  is nothing  magical about
- these scripts. You should feel free to edit them as desired.
+You may  wish to  install ~scripts/ccl64~ with  the name ~ccl~  if you  use the
+64-bit lisp more. If you want the 32-bit  lisp to be available as well, you can
+install  ~scripts/ccl~ as  ~ccl32~. Note  that there  is nothing  magical about
+these scripts. You should feel free to edit them as desired.
+
+*NOTE*: the  scripts start the kernel  using the shell's ~exec~  command, which
+replaces  the current  process  with the  new ~ccl~  process.   The process  is
+stopped using the:
+: (ccl:quit) ; or
+: (quit)
+command, which  terminates the process.   If you  are running ~tmux~,  and have
+only one window with one pane open, this instantly terminates that session, and
+~tmux~ will exit.  There are two options to get around this.  One is not to use
+~exec~.   The other  is to  have an  additional window  or pane  in the  ~tmux~
+session, which will become current when the ~ccl~ process exits.
+
+To obtain a list of available command-line options, type:
+: ccl --help
 
 **** The CCL Init File
 
@@ -803,6 +865,28 @@ There  is   also  a   not-quite-complete  LaTeX  converter.   To  use   it,  do
 ~xelatex~  to produce  a PDF  file. The  version of  ~xelatex~ that  comes with
 MacTeX 2014 works.
 
+*** CCL History
+- 1984 :: Coral Software began the development of a Common Lisp for the
+  Macintosh, called Coral Common Lisp (CCL).
+- 1987 :: CCL 1.0 was released. It ran on a 1 MB Macintosh Plus.
+- 1988 :: Coral  entered into a marketing relationship with  Franz, under which
+  CCL was  renamed to Macintosh  Allegro Common  Lisp (MACL). That  didn't last
+  long.
+- 1988 ::  Coral was acquired  by Apple, who released  the Lisp under  the name
+  Macintosh Common Lisp (MCL).
+- 1994 ::  In the midst of  switching from the 68K  to the PowerPC CPU  for its
+  Macintosh line, Apple transferred MCL to Digitool.
+- 1995 :: Digitool completed the PowerPC port and released a PowerPC version of
+  MCL.
+- 1998  ::  Erann Gat  (now known  as Ron Garret)  of JPL  wanted to  develop a
+  small-footprint Lisp  for use on  PowerPC-based robots and flight  systems. A
+  source  license for  MCL was  acquired from  Digitool.  Gary  Byers ported  a
+  version of the MCL compiler and runtime to VxWorks and LinuxPPC.
+- 2007 ::  Alice  Hartley of Digitool announced that the  code for the original
+  MCL would  be released  under an  open source license.   Largely in  order to
+  avoid confusion  with this  newly open  sourced version  of MCL,  OpenMCL was
+  renamed to Clozure CL.
+
 ** Armed Bear Common Lisp---JVM
 - https://common-lisp.net/project/armedbear/
 - [[https://github.com/slyrus/abcl][ABCL on GitHub]]
@@ -820,7 +904,9 @@ MacTeX 2014 works.
 : but has no standard GUI libraries.
 
 - Therefore:
-: Write great applications using Java for your front-end GUI backed with Lisp code and get the best of both worlds.
+: Write great applications using Java for your front-end GUI...
+: backed with Lisp code and ...
+: get the best of both worlds.
 
 
 - ABCL ::
@@ -830,6 +916,13 @@ MacTeX 2014 works.
   - features both an interpreter and a compiler, running in the JVM.
   - [[https://abcl.org/doc/abcl-user.html][User Documentation]]
   - [[https://abcl.org/releases/1.7.1/abcl-1.7.1.pdf][Armed Bear Common Lisp User Manual Version 1.7.1 July 2020]]
+*** Install ABCL
+- Go to [[https://abcl.org/][ABCL Home]] and download ABCL
+- Build according to [[http://common-lisp.net/project/armedbear/doc/abcl-install-with-java.html][instructions]]
+- or install using MacPorts: ~port install abcl~
+- Add ~<abcl-dir>/dist/abcl.jar~ to your =CLASSPATH= for ABCL projects
+- when installed with MacPorts, ~abcl.jar~ is at:
+: /opt/local/share/java/abcl/abcl.jar
 
 ** GNU Common Lisp
 - https://www.gnu.org/software/gcl/
@@ -1361,7 +1454,7 @@ https://www.quicklisp.org/beta/
 
 Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
 Common Lisp  implementation to download,  install, and  load any of  over 1,500
-[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:2]  It works with:
+[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5]  It works with:
 
 - ABCL,
 - Allegro CL,
@@ -1454,20 +1547,19 @@ This section  discusses the Common  Lisp interface  to file systems.  The model
 used by this interface assumes that:
 
 - files are named by filenames ([[a-file][files)]]
-- a filename can be represented by a pathname object ([[a-filename][filename)]]
-- given a pathname  a stream can be  constructed that connects to  a file whose
+- a filename can be represented by a pathname object ([[a-filename][filename)]] ([[pathname--class][pathname]])
+- given a pathname, a  stream can be constructed that connects  to a file whose
   filename it represents ([[a-stream][stream)]].
 
 
-Pathnames and namestrings[fn:3] are two kinds of objects that
-substitute for filenames in Common Lisp ([[pathname--class][pathname class]])
-#+end_deftp
+Pathnames and  namestrings[fn:6] are two  kinds of objects that  substitute for
+filenames in Common Lisp ([[pathname--class][pathname class]])
 
 ** Files and Filenames
 
 #+texinfo: @heading Files
-A ~file~<<a-file>>  is a named entry  in a file system,  having an implementation-defined
-nature.
+A  ~file~   <<a-file>>  is  a  named   entry  in  a  file   system,  having  an
+implementation-defined nature.
 
 #+texinfo: @heading Filenames
 #+cindex:filename
@@ -1485,10 +1577,10 @@ object, that can be used to refer to a file in a file system ([[a-file][file]])
 returns its @@texinfo:@var{truename}@@.  If the filespec designator  is an open
 stream, its associated file is used.
 
-- FILESPEC ::  a pathname designator. If filespec is a /pathname/ it represents
-  the name used to open the file
+- ~FILESPEC~  ::   a  pathname  designator.  If filespec  is  a  /pathname/  it
+  represents the name used to open the file
 
-- TRUENAME :: a physical pathname
+- ~TRUENAME~ :: a physical pathname
 #+end_defun
 
 *** Reading File Streams
@@ -1504,7 +1596,7 @@ the ~open~ function.
 ~Open~ returns a character-based input stream that can be passed along to other
 functions that read characters of text.
 
-- FILESPEC  ::   The name  of the file  to read.  This can be  one of  a string
+- ~FILESPEC~  ::   The name  of the file to read.  This can be  one of a string
   ("namestring"),  a pathname  object,  or a  stream  object, all  collectively
   called /pathname designators/. Pathnames  represent filenames in a structured
   way that  makes them easy  to manipulate without  tying them to  a particular
@@ -1524,9 +1616,27 @@ There are two kinds of pathnames:
 
 - physical pathnames ([[physical-pathname][physical pathname]])
 - logical pathnames ([[logical-pathname][logical pathname]])
+#+end_deftp
 
+#+cindex:logical pathname
+<<logical-pathname>>
+#+attr_texinfo: :options Pathname {logical pathname}
+#+begin_deftp
+An object of type ~logical-pathname~.
 
-An object  of type  pathname is a  structured representation of  the name  of a
+A    /pathname/     that    uses     a    /namestring/    syntax     that    is
+implementation-independent,   and   that   has  component   values   that   are
+implementation-independent.  Logical   pathnames  do  not  refer   directly  to
+filenames.
+#+end_deftp
+
+#+cindex:physical pathname
+<<physical-pathname>>
+#+attr_texinfo: :options Pathname {physical pathname}
+#+begin_deftp
+A pathname that is not a logical pathname.
+
+An object of  type ~pathname~ is a  structured representation of the  name of a
 file. A pathname has six components:
 
 - host
@@ -1537,31 +1647,13 @@ file. A pathname has six components:
 - version
 #+end_deftp
 
-#+cindex:logical pathname
-<<logical-pathname>>
-#+attr_texinfo: :options Pathname {logical pathname}
-#+begin_deftp
-An object of type logical-pathname.
-
-A    /pathname/     that    uses     a    /namestring/    syntax     that    is
-implementation-independent,   and   that   has  component   values   that   are
-implementation-independent.  Logical   pathnames  do  not  refer   directly  to
-filenames
-#+end_deftp
-
-#+cindex:physical pathname
-<<physical-pathname>>
-#+attr_texinfo: :options Pathname {physical pathname}
-#+begin_deftp
-A pathname that is not a logical pathname.
-#+end_deftp
-
 #+attr_texinfo: :options pathname pathspec => pathname
 #+begin_defun
-Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
+Returns the @@texinfo:@var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 
-- PATHSPEC :: If the @@texinfo:@var{pathspec}@@ designator is a file stream
-  created by opening a logical pathname, a logical pathname is returned.
+- PATHSPEC ::  If the  @@texinfo:@var{pathspec}@@ designator  is a  file stream
+  created   by   opening   a   logical  pathname,   a   logical   pathname   is
+  returned.
 
 - PATHNAME  ::  the  @@texinfo:@var{pathname}@@  returned  corresponds  to  the
   filename used to open the file.
@@ -1574,7 +1666,7 @@ Returns the @var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 A designator for a pathname; that is, an object that denotes a pathname and
 that is one of:
 
-- pathname namestring[fn:3] (denoting the corresponding pathname)
+- pathname namestring[fn:6] (denoting the corresponding pathname)
 - a stream associated with a file (denoting the pathname used to open the file)
 - pathname (denoting itself)
 #+end_deftp
@@ -1791,7 +1883,7 @@ the stream.
 
 #+attr_texinfo: :options interactive-stream-p stream => boolean
 #+begin_defun
-Returns =true= if stream is an interactive stream[fn:4]; otherwise, returns
+Returns =true= if stream is an interactive stream[fn:7]; otherwise, returns
 =false=.
 #+end_defun
 
@@ -2572,7 +2664,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:5] does emphasize a  side-effect-free, applicative approach to
+book[fn:8] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -3577,7 +3669,7 @@ https://clojure.org/api/api
 :PROPERTIES:
 :appendix: t
 :custom_id: build-tools
-:org-template-version: 0.6.27
+:org-template-version: 0.6.29
 :END:
 ** Makefile					:dependencies:env_vars:perl:
 :PROPERTIES:
@@ -3595,7 +3687,7 @@ https://clojure.org/api/api
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
 :env_var4: COLORS
-:org-template-version: 0.6.27
+:org-template-version: 0.6.29
 :END:
 
 #+name:Makefile
@@ -3615,6 +3707,16 @@ https://clojure.org/api/api
 
   # The absolute path to this Template file
   TEMPLATE := $(SYNC_ORG_TEMPLATE)
+
+
+  ### TOOLS & RESOURCES
+  # tools is a directory holding tangled scripts, such as cmprpl
+  # resources is a directory holding static resources for the project
+  # images is a directory holding jpg and png image files
+  TOOLS	:= tools
+  CMPRPL	:= $(TOOLS)/cmprpl
+  RESOURCES := resources
+  IMAGES  := $(RESOURCES)/images
 
   # Use emacsclient as $EDITOR; make sure it is set in a shell startup file and
   # the server has been started.
@@ -3793,11 +3895,6 @@ https://clojure.org/api/api
 		 my $$json = JSON::PP->new->loose->allow_barekey->decode(<STDIN>); \
 		 print $$json->{login};' \
 	    )
-
-  ### TOOLS & RESOURCES
-  # tools is a directory holding tangled scripts, such as cmprpl
-  TOOLS	:= tools
-  CMPRPL	:= $(TOOLS)/cmprpl
   SAVE	:= resources
 
   ### TEXINFO
@@ -3812,12 +3909,14 @@ https://clojure.org/api/api
   ### AWS S3
   DST_OLD	:= $(S3_BUCKET)/$(S3PROJ)
   DST_NEW	:= $(S3_BUCKET)/$(DIR)-$(VERS)
-  EXCL_INCL	:= --exclude "*" --include "*.html"
+  EXCL_INCL   := --exclude "*" --include "*.html"
+  INCL_IMAGES := --exclude "*" --include "*.jpg" --include "*.png"
   GRANTS	:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
   S3SYNC	:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(REGION) $(GRANTS)
   S3MOVE	:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(REGION) $(GRANTS)
   S3COPY	:= $(S3) cp $(INDEX) $(S3_BUCKET) $(REGION) $(GRANTS)
-  S3REMOVE	:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+  S3REMOVE:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+  S3IMAGESYNC := $(S3) sync $(INCL_IMAGES) $(IMAGES) $(S3_BUCKET)/$(IMAGES) $(REGIONS) $(GRANTS)
 
   ###############################################################################
 
@@ -3939,6 +4038,7 @@ https://clojure.org/api/api
   sync:   $(HTML)
 	  @echo Syncing version $(VERS) onto $(S3VERS)...
 	  $(S3SYNC)
+	  $(S3IMAGESYNC)
 	  @echo Done syncing.
 	  [[ $(VERS) != $(S3VERS) ]] && { echo Moving...; $(S3MOVE); echo Done moving.;  make homepage; } || :
 	  [[ $(PROJINS3) = "NO" ]] && make homepage || :
@@ -4024,10 +4124,10 @@ https://clojure.org/api/api
 	      "(kill-buffer \"$(ORG)\")"
 	    -@rm -rf *.{texi*,info*,html*,pdf*} $(DIR) $(TOOLS)
 	    -@for dir in *; \
-	    	do \
+		do \
 		    [ -d $$dir -a $$dir != "$(DIR_OLD)" -a $$dir != $(SAVE) ] && \
 		    rm -vr $$dir; \
-	    	done
+		done
 
   wipe-clean: dist-clean
 	  @echo Wipe Clean...
@@ -4602,35 +4702,39 @@ Copyright \copy 2020 by {{{author}}}
 #+texinfo_printed_title:LispLang---The Universe Known as LISP
 
 
+* Local Variables						   :noexport:
+
 * Footnotes
 
-[fn:7]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
-University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
-in the steel industry and Andrew Mellon was a successful banker.
+[fn:1] Runtime Compilation: https://wiki.c2.com/?RuntimeCompilation
 
-[fn:1]Recursive Functions of Symbolic Expressions and Their Computation by
+[fn:2] MetaObjectProtocol: https://wiki.c2.com/?MetaObjectProtocol
+
+[fn:3]Recursive Functions of Symbolic Expressions and Their Computation by
 Machine, Part I, by John McCarthy, April 1960 @
 http://www-formal.stanford.edu/jmc/recursive/recursive.html.
 Note: Part II never appeared.
 
-[fn:4]A stream  on which it  makes sense  to perform interactive  querying. The
+[fn:4]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
+University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
+in the steel industry and Andrew Mellon was a successful banker.
+
+[fn:5]The libraries were last updated on July 15, 2020.
+
+[fn:6]*namestring*:  a  string that  represents  a  filename using  either  the
+standardized    notation    for    naming    logical    pathnames    or    some
+implementation-defined notation for naming a physical pathname.
+
+[fn:7]A stream  on which it  makes sense  to perform interactive  querying. The
 general intent of having some streams be classified as /interactive/ streams is
 to allow them to be distinguished  from streams containing batch (or background
 or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:3]namestring:  a  string  that  represents  a  filename  using  either  the
-standardized    notation    for    naming    logical    pathnames    or    some
-implementation-defined notation for naming a physical pathname.
+[fn:8]In the browser, add =index.text= to the end of the URL to see the source.
 
-[fn:2]The libraries were last updated on July 15, 2020.
-
-[fn:6]Markdown requires the standard Perl library module Digest::MD5.
-
-[fn:5]In the browser, add =index.text= to the end of the URL to see the source.
-
-* Local Variables						   :noexport:
+[fn:9]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
