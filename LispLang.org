@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-12 17:05
-#+macro:version Version 0.0.31
+#+date:2020-10-14 12:33
+#+macro:version Version 0.0.32
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -581,6 +581,55 @@ needs facilities not  defined by the standard, Common Lisp  provides a flexible
 way to write  code "conditionalized" on the features available  in a particular
 implementation.
 
+** CMU Common Lisp
+- [[https://cmucl.org][CMUCL Home]]
+- [[https://gitlab.common-lisp.net/cmucl/cmucl/-/wikis/home][CMUCL Wiki]]
+- [[https://www.cons.org/cmucl/doc/index.html][CMUCL Documentation]]
+- Current Released Version is [[https://cmucl.org/downloads/release/21d/][CMUCL 21d]] (12/08/2018) ([[https://gitlab.common-lisp.net/cmucl/cmucl/blob/master/src/general-info/release-21d.md][see release notes]])
+- [[https://common-lisp.net/project/cmucl/downloads/snapshots/2020/04/][Latest Snapshot 2020-04]] issued on 2020-03-28 ([[https://common-lisp.net/project/cmucl/downloads/snapshots/2020/04/release-21e.md][see release notes]])
+- [[https://common-lisp.net/project/cmucl/downloads/][Downloads]]
+- [[https://gitlab.common-lisp.net/cmucl/cmucl/-/tree/master][Source on GitLab]]
+- [[https://www.cons.org/cmucl/FAQ.html][FAQ]]
+
+
+CMUCL is a free, high performance implementation of the Common Lisp programming
+language which  runs on most  major Unix platforms.  It mainly conforms  to the
+ANSI Common Lisp standard. CMUCL provides:
+- a sophisticated native code compiler;
+- a powerful  foreign function interface;
+- an  implementation of  CLOS, the  Common Lisp  Object System;  which includes
+  multimethods;
+- a  metaobject protocol;
+- a source-level debugger and  code profiler; and
+- an  Emacs-like editor implemented in Common Lisp.
+
+
+#+texinfo: @heading Summary of Main Features
+- Support for static arrays that are never moved by GC but are properly removed
+  when no longer referenced.
+- Unicode support, including  many of the most common external  formats such as
+  UTF-8 and support for handling Unix, DOS, and Mac end-of-line schemes.
+- native  double-double  floats  including  complex  double-double  floats  and
+  specialized  arrays for  double-double floats  and and  complex double-double
+  floats that give approximately 106 bits (32 digits) of precision.
+- a  sophisticated  native-code compiler  which  is  capable of  powerful  type
+  inferences, and generates code competitive in speed with C compilers.
+- generational  garbage collection  and multiprocessing  capability on  the x86
+  ports.
+- a foreign function interface which allows  interfacing with C code and system
+  libraries, including shared libraries on most platforms, and direct access to
+  Unix system calls.
+- support for interprocess communication and remote procedure calls.
+- an  implementation of  CLOS, the  Common Lisp  Object System,  which includes
+  multimethods and a metaobject protocol.
+- a  graphical  source-level debugger  using  a  Motif  interface, and  a  code
+  profiler.
+- an interface  to the X11 Window  System (CLX), and a  sophisticated graphical
+  widget library (Garnet).
+- programmer-extensible input and output streams.
+- an Emacs-like editor implemented in Common Lisp.
+- freely redistributable
+
 ** Steel Bank Common Lisp
 - http://www.sbcl.org
 - [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
@@ -1002,42 +1051,6 @@ The executables will be in ~clasp/build/boehm/cclasp-boehm~ and
 
 - Embeddable CL ::
   Compiles to C
-
-** CMU Common Lisp
-- https://www.cons.org/cmucl/
-- [[https://www.cons.org/cmucl/FAQ.html][FAQ]]
-- [[https://www.cons.org/cmucl/doc/index.html][Documentation]]
-
-
-CMUCL is  a free implementation of  the Common Lisp programming  language which
-runs on most major  Unix platforms. It mainly conforms to  the ANSI Common Lisp
-standard.
-
-#+texinfo: @heading Features
-- Support for static arrays that are never moved by GC but are properly removed
-  when no longer referenced.
-- Unicode support, including  many of the most common external  formats such as
-  UTF-8 and support for handling Unix, DOS, and Mac end-of-line schemes.
-- native  double-double  floats  including  complex  double-double  floats  and
-  specialized  arrays for  double-double floats  and and  complex double-double
-  floats that give approximately 106 bits (32 digits) of precision.
-- a  sophisticated  native-code compiler  which  is  capable of  powerful  type
-  inferences, and generates code competitive in speed with C compilers.
-- generational  garbage collection  and multiprocessing  capability on  the x86
-  ports.
-- a foreign function interface which allows  interfacing with C code and system
-  libraries, including shared libraries on most platforms, and direct access to
-  Unix system calls.
-- support for interprocess communication and remote procedure calls.
-- an  implementation of  CLOS, the  Common Lisp  Object System,  which includes
-  multimethods and a metaobject protocol.
-- a  graphical  source-level debugger  using  a  Motif  interface, and  a  code
-  profiler.
-- an interface  to the X11 Window  System (CLX), and a  sophisticated graphical
-  widget library (Garnet).
-- programmer-extensible input and output streams.
-- an Emacs-like editor implemented in Common Lisp.
-- freely redistributable
 
 ** Spice List
 - 
