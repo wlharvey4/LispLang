@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-14 12:33
-#+macro:version Version 0.0.32
+#+date:2020-10-21 13:06
+#+macro:version Version 0.0.33
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 #+macro:upload-date (eval (current-time-string))
@@ -546,8 +546,13 @@ pleading.
 #+end_quote
 
 * Common Lisp Implementations
-- https://en.wikipedia.org/wiki/Common_Lisp#List_of_implementations
-- https://common-lisp.net/implementations
+- [[https://www.cliki.net/Common%20Lisp%20implementation][Cliki Comparison of Actively Developed Common Lisp Implementations]]
+  - All the implementations provide an FFI and sockets interface
+- [[https://en.wikipedia.org/wiki/Common_Lisp#Implementations][Wiki Common Lisp Implementations]]
+- [[https://common-lisp.net/implementations]]
+- [[http://web.archive.org/web/20161105160832/https://common-lisp.net/~dlw/LispSurvey.html][Daniel Weinreb Survey of Common Lisp Implementations (2010)]]
+  - This paper is a November, 2007 (updated February, 2010) survey of Common
+    Lisp implementations that are currently being actively maintained
 
 
 Common Lisp comes in many different flavors, or implementations.
@@ -588,8 +593,11 @@ implementation.
 - Current Released Version is [[https://cmucl.org/downloads/release/21d/][CMUCL 21d]] (12/08/2018) ([[https://gitlab.common-lisp.net/cmucl/cmucl/blob/master/src/general-info/release-21d.md][see release notes]])
 - [[https://common-lisp.net/project/cmucl/downloads/snapshots/2020/04/][Latest Snapshot 2020-04]] issued on 2020-03-28 ([[https://common-lisp.net/project/cmucl/downloads/snapshots/2020/04/release-21e.md][see release notes]])
 - [[https://common-lisp.net/project/cmucl/downloads/][Downloads]]
-- [[https://gitlab.common-lisp.net/cmucl/cmucl/-/tree/master][Source on GitLab]]
+- [[https://gitlab.common-lisp.net/cmucl/cmucl/-/wikis/GitAndCmucl][Git and CMUCL]]
 - [[https://www.cons.org/cmucl/FAQ.html][FAQ]]
+
+
+*NOTE:* CMUCL does not appear to run on modern Mac systems as it is 32bit only.
 
 
 CMUCL is a free, high performance implementation of the Common Lisp programming
@@ -769,7 +777,7 @@ Clozure CL is available for the following platforms:
 You should have a directory on your system named ~ccl~. This directory is
 called the ~ccl directory~.
 
-: /opt/local/share/ccl
+: /opt/local/share/ccl/<ver>
 
 Clozure CL is made up of two parts:
 
@@ -866,7 +874,7 @@ To obtain a list of available command-line options, type:
 
 By default, Clozure CL will look for a file named:
 
-: .ccl-init.lisp
+: ~/.ccl-init.lisp
 
 in your home directory, and load it  upon startup. If you wish, you can compile
 your init file,  and Clozure CL will  load the compiled version if  it is newer
