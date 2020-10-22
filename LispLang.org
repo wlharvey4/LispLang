@@ -3,10 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-21 13:06
-#+macro:version Version 0.0.33
-#+macro:upload-date (eval (current-time-string))
-#+bucket:pinecone-forest.com
+#+date:2020-10-21 23:21
+#+macro:version Version 0.0.34
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -335,7 +333,6 @@ I learned from the process.
     :date:     1960
     :END:
 - http://history.siam.org/sup/Fox_1960_LISP.pdf
-
 
 *** Lisp 1.5 Programmer's Manual
 - http://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf
@@ -771,7 +768,6 @@ Clozure CL is available for the following platforms:
   - Documentation for CCL is written in a notation called [[https://github.com/Clozure/ccldoc][CCLDoc]].
   - [[https://ccl.clozure.com/docs/ccl.html][Clozure CL Manual]]
 
-
 *** Running CCL
 
 You should have a directory on your system named ~ccl~. This directory is
@@ -827,7 +823,6 @@ Lisp implementations of the form:
 : (sbcl
 :  ("/opt/local/bin/sbcl")
 :  :coding-system utf-8-unix))
-
 
 
 **** Running CCL from the Command-Line as a Script
@@ -1329,7 +1324,6 @@ language.
     :cite:     http://ebixio.com/online_docs/SuccessfulLisp.pdf
     :END:
 - [[http://ebixio.com/online_docs/SuccessfulLisp.pdf][Successful Lisp HTML]]
-
 
 ** Lisp Tutorials
 *** Iwanna Learn Lisp
@@ -2691,6 +2685,20 @@ does so in purely Common Lisp style."
 #+end_quote
 - https://wiki.c2.com/?CommonLispaGentleIntroductionToSymbolicComputation
 
+
+#+texinfo: @heading Namespaces
+
+#+attr_texinfo: :author Peter Seibel, @i{Practical Common Lisp}
+#+begin_quote
+In Common Lisp  a symbol can name both  an operator---function, macro,
+or  special  operator---and a  variable.  This  is  one of  the  major
+differences  between  Common  Lisp   and  Scheme.  The  difference  is
+sometimes described as  Common Lisp being a Lisp-2 vs.  Scheme being a
+Lisp-1---a Lisp-2  has two namespaces,  one for operators and  one for
+variables, but  a Lisp-1  uses a single  namespace. Both  choices have
+advantages, and partisans can debate endlessly which is better.
+#+end_quote
+
 ** Standardizations of Scheme
 Scheme has been standardized both formally and informally.
 
@@ -3135,7 +3143,6 @@ platform.
 - Kawa provides a framework for implementing other programming languages,
   - comes with incomplete support for CommonLisp, Emacs Lisp, and EcmaScript,
     and XQuery.
-
 
 **** Installing Kawa Scheme
 These instructions install the pre-compiled binary distribution. The
