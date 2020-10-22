@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-21 23:35
-#+macro:version Version 0.0.36
+#+date:2020-10-22 10:28
+#+macro:version Version 0.0.37
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1495,18 +1495,27 @@ any other systems that this system depends on.<
 To get started with the Quicklisp beta, download and load:
 : https://beta.quicklisp.org/quicklisp.lisp
 
-The following command will setup ~quicklisp~ for your user account:
+The following  command will  setup ~quicklisp~  for your  user account
+using Clozure  Common Lisp  (CCL)[fn::Other implementations  will have
+slightly different commandline requirements.]:
 
-#+begin_src sh
-curl -O https://beta.quicklisp.org/quicklisp.lisp
-sbcl   --load  quicklisp.lisp \
-       --eval '(quicklisp-quickstart:install :path .quicklisp/)' \
-       --eval '(ql:add-to-init-file)' \
-       --eval '(quit)'
+#+header: :dir ~
+#+begin_src sh :exports code :results verbatim output
+  [[ ! -d ".quicklisp" ]] && { \
+  echo "Installing quicklisp...";
+  mkdir -v ./.quicklisp;
+  curl -O https://beta.quicklisp.org/quicklisp.lisp;
+  echo "\n" | \
+  ccl    --load  quicklisp.lisp \
+         --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
+         --eval '(ql:add-to-init-file)';
+  rm quicklisp.lisp;
+  echo "Done installing.";
+  } || { echo "Quicklisp is already installed."; }
 #+end_src
 
 To load Quicklisp into your Common Lisp session after the initial installation,
-(before ~add-to-init-file~ has been run) load the file ~setup.lisp~:
+(unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
 
 : (load "~/quicklisp/setup.lisp")
 
