@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-21 23:21
-#+macro:version Version 0.0.34
+#+date:2020-10-21 23:24
+#+macro:version Version 0.0.35
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -4730,8 +4730,6 @@ Copyright \copy 2020 by {{{author}}}
 #+texinfo_printed_title:LispLang---The Universe Known as LISP
 
 
-* Local Variables						   :noexport:
-
 * Footnotes
 
 [fn:1] Runtime Compilation: https://wiki.c2.com/?RuntimeCompilation
@@ -4763,8 +4761,10 @@ expected effect.
 [fn:8]In the browser, add =index.text= to the end of the URL to see the source.
 
 [fn:9]Markdown requires the standard Perl library module Digest::MD5.
+
+* Local Variables						   :noexport:
 # Local Variables:
-# fill-column: 79
+# fill-column: 70
 # eval: (auto-fill-mode)
 # time-stamp-pattern: "8/^\\#\\+date:%:y-%02m-%02d %02H:%02M$"
 # End:
