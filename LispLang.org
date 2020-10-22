@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-21 23:24
-#+macro:version Version 0.0.35
+#+date:2020-10-21 23:35
+#+macro:version Version 0.0.36
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2651,7 +2651,7 @@ a de facto one, often called  "RnRS", short for the Revised^nth Report
 on  the  Algorithmic  Language  Scheme.  In  colloquial  use,  "Scheme
 standard" usually refers to the latter.
 
-** What is the difference between Scheme and Common Lisp?
+** What are some differences between Scheme and Common Lisp?
 - http://community.schemewiki.org/?scheme-faq-general
 
 
@@ -2688,7 +2688,7 @@ does so in purely Common Lisp style."
 
 #+texinfo: @heading Namespaces
 
-#+attr_texinfo: :author Peter Seibel, @i{Practical Common Lisp}
+#+attr_texinfo: :author Peter Seibel in Practical Common Lisp
 #+begin_quote
 In Common Lisp  a symbol can name both  an operator---function, macro,
 or  special  operator---and a  variable.  This  is  one of  the  major
@@ -2697,6 +2697,17 @@ sometimes described as  Common Lisp being a Lisp-2 vs.  Scheme being a
 Lisp-1---a Lisp-2  has two namespaces,  one for operators and  one for
 variables, but  a Lisp-1  uses a single  namespace. Both  choices have
 advantages, and partisans can debate endlessly which is better.
+#+end_quote
+
+#+texinfo: @heading The False Value
+
+#+attr_texinfo: :author Peter Seibel in Practical Common Lisp
+#+begin_quote
+Not all Lisps handle boolean values  the same way. Another of the many
+subtle differences upon which a good  Common Lisp vs. Scheme flame war
+can rage  for days  is Scheme's  use of a  distinct false  value =#f=,
+which isn't  the same value  as either the  symbol =nil= or  the empty
+list, which are also distinct from each other.
 #+end_quote
 
 ** Standardizations of Scheme
