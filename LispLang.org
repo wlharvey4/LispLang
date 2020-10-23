@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-22 10:28
-#+macro:version Version 0.0.37
+#+date:2020-10-23 06:13
+#+macro:version Version 0.0.38
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1098,6 +1098,14 @@ implementation-specific versions.
  Xanalys (formerly Harlequin) at:
 
  - http://www.lispworks.com/reference/HyperSpec/
+** Common Lisp Cookbook
+- [[http://cl-cookbook.sourceforge.net/index.html][The Common Lisp Cookbook home]]
+- [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
+
+
+This is a  collaborative project that aims to provide  for Common Lisp
+something similar to the Perl Cookbook published by O'Reilly
+
 ** Common Lisp The Language 2nd Edition
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
 - https://wiki.c2.com/?CommonLispTheLanguage
@@ -1197,17 +1205,6 @@ CLiki  is a  Common  Lisp wiki  hosted  by The  Common  Lisp Foundation.  CLiki
 contains resources for learning about and using the programming language Common
 Lisp, and information about DFSG-compliant  free software implemented in Common
 Lisp.
-
-** Common Lisp Cookbook
-- [[https://lispcookbook.github.io/cl-cookbook/][Home]]
-
-  - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
-
-*** Editor Support
-- https://lispcookbook.github.io/cl-cookbook/editor-support.html
-
-*** Using Emacs as an IDE
-- https://lispcookbook.github.io/cl-cookbook/emacs-ide.html
 
 ** Common Lisp Books
 - https://wiki.c2.com/?DefinitiveCommonLispBooks
