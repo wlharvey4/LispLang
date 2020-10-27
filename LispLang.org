@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-23 06:13
-#+macro:version Version 0.0.38
+#+date:2020-10-26 23:21
+#+macro:version Version 0.0.39
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2339,7 +2339,7 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
  - [[https://github.com/slime][SLIME on GitHub]]
  - [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual]]
 
- SLIME is  a Emacs mode for  Common Lisp development. SLIME  extends Emacs with
+ SLIME is an  Emacs mode for Common Lisp development.  SLIME extends Emacs with
  support for interactive programming in Common Lisp. While ~lisp-mode~ supports
  editing Lisp  source files, ~slime-mode~  adds support for interacting  with a
  running Common Lisp process  for compilation, debugging, documentation lookup,
@@ -2359,7 +2359,7 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
 
 - Superior Lisp Interactive Mode for Emacs :: https://common-lisp.net/project/slime/
 
-    "SLIME is  a Emacs mode for  Common Lisp development. Inspired  by existing
+    "SLIME is an  Emacs mode for Common Lisp development.  Inspired by existing
   systems such as Emacs Lisp and ILISP, we are working to create an environment
   for hacking Common Lisp in."
 
@@ -2392,13 +2392,13 @@ http://www.common-lisp.net/project/slime/images2/slime-small.png
 - The currently supported Common Lisp implementations are ::
   - Steel Bank Common Lisp (SBCL) ::
     ~/opt/local/bin/sbcl~
-  - Clozure CL (a.k.a. OpenMCL) (CCL) ::
+  - Clozure Common Lisp (a.k.a. OpenMCL) (CCL) ::
     ~/usr/local/dev/bin/ccl~
   - CLISP ::
     ~/opt/local/bin/clisp~
-  - ABCL ::
+  - Armed Bear Common Lisp (ABCL) ::
     ~/opt/local/bin/abcl~
-  - ECL ::
+  - Embedded Common Lisp (ECL) ::
     *NOTE*: fails to install using Xcode 12
   - CMU Common Lisp (CMUCL) ::
   - LispWorks ::
