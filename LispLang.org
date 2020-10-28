@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-26 23:21
-#+macro:version Version 0.0.39
+#+date:2020-10-28 11:59
+#+macro:version Version 0.0.40
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1722,6 +1722,7 @@ A stream associated with a file is either:
   stream. The  basic operation for  opening a  file is ~open~,  which typically
   returns a /file stream/. The basic operation for closing a stream is ~close~.
 
+  #+findex:with-open-file
   The macro ~with-open-file~ is useful to express the common idiom of opening a
   file  for the  duration  of a  given  body  of code,  and  assuring that  the
   resulting stream is closed upon exit from that body.
@@ -1807,7 +1808,10 @@ The following are subclasses of /stream/.
 
 *** Predefined Streams---Stream Variables
 
-Variables whose values must be streams are sometimes called stream variables.
+#+texinfo: @heading The Standardized I/O Customization Variables
+
+#+cindex:stream variables
+Variables whose values must be streams are sometimes called /stream variables/.
 
 #+cindex:standardized i/o customization variables
 These  variables are  collectively called  the /standardized  I/O customization
@@ -1857,6 +1861,119 @@ facilities.
 
   The value  of =*debug-io*=, called  /debug I/O/, is a  stream to be  used for
   interactive debugging purposes.
+
+
+*** Redirecting the Standard Output of your Program
+    :PROPERTIES:
+    :source:   http://cl-cookbook.sourceforge.net/io.html#bulk
+    :END:
+
+#+cindex:standard output, redirect
+#+cindex:redirect standard output
+To redirect the standard output of your program:
+
+#+begin_src lisp
+  (let ((*standard-output* <some form generating a stream>))
+    ...)
+#+end_src
+
+#+cindex:dynamic variable
+#+cindex:variable, dynamic
+#+attr_texinfo: :author The Common Lisp Cookbook---I/O
+#+begin_quote
+Because  =*STANDARD-OUTPUT*= is  a  *dynamic variable*,  all  references to  it
+during execution  of the body of  the =LET= form  refer to the stream  that you
+bound it to. After exiting the =LET= form, the old value of =*STANDARD-OUTPUT*=
+is restored,  no matter if  the exit was  by normal execution,  a =RETURN-FROM=
+leaving  the  whole  function,  an   exception,  or  what-have-you.  (This  is,
+incidentally, why global variables lose much of their brokenness in Common Lisp
+compared to  other languages: since  they can be bound  for the execution  of a
+specific form without the risk of losing  their former value after the form has
+finished, their  use is quite  safe; they  act much like  additional parameters
+that are passed to every function.)
+#+end_quote
+
+#+findex:with-open-file
+To send the output to a file:
+
+#+begin_src lisp
+  (with-open-file (*standard-output* "somefile.dat" :direction :output
+				     :if-exists :supersede)
+    ...)
+#+end_src
+
+#+attr_texinfo: :author The Common Lisp Cookbook---I/O
+#+begin_quote
+~WITH-OPEN-FILE~  opens  the  file  ---  creating it  if  necessary  ---  binds
+=*STANDARD-OUTPUT*=,  executes   its  body,  closes  the   file,  and  restores
+=*STANDARD-OUTPUT*= to its  former value. It doesn't get  more comfortable than
+this!
+#+end_quote
+
+#+attr_texinfo: :options with-open-file (stream filespec options*) declaration* form* => results
+#+begin_defun
+Uses   ~open~   to   create   a   /file    stream/   to   a   file   named   by
+@@texinfo:@var{@@filespec@@texinfo:}@@.  When control  leaves the  body, either
+normally or abnormally  (such as by use of ~throw~),  the file is automatically
+closed. If a  new output file is being written,  and control leaves abnormally,
+the file is aborted and the file system  is left, so far as possible, as if the
+file had never been opened.
+
+The keyword arguments to ~open~ specify  the characteristics of the file stream
+that is returned, and how to handle errors.
+
+- STREAM :: The stream object to which the stream variable is bound has dynamic
+  extent; its extent ends when the form is exited.
+
+- FILESPEC :: Filespec is the name of the file to be opened.
+
+- OPTIONS    ::   are used as  keyword arguments to  ~open~:
+  - =:direction= ::  one of =:input=, =:output=, =:io=, or =:probe=. The default
+    is =:input=.
+
+  - =:if-exists=    ::    one    of   =:error=,    =:new-version=,    =:rename=,
+    =:rename-and-delete=, =:overwrite=, =:append=, =:supersede=, or =nil=.
+
+  - =:if-does-not-exist=  :: one of =:error=,  =:create=, or =nil=. The default
+    is:
+    - =:error=  if direction  is  =:input= or  =if-exists=  is =:overwrite=  or
+      =:append=;
+    - =:create= if direction is =:output= or =:io=, and =if-exists= is neither =:overwrite=
+       nor =:append=; or
+    - =nil= when direction is =:probe=.
+
+  - =:element-type= :: The default is =character=.
+
+  - =:external-format= :: default is =:default=
+
+- DECLARATION :: a declare expression; not evaluated.
+
+- FORMS    ::    The  forms   are  evaluated  as   an  implicit   ~progn~  with
+  @@texinfo:@var{@@stream@@texinfo:}@@ bound to the value returned by ~open~.
+
+- RESULTS :: the values returned by the forms.
+#+end_defun
+
+
+#+texinfo:@heading Example
+
+#+begin_lisp
+(setq p (merge-pathnames "test"))
+=>  #<PATHNAME :HOST NIL :DEVICE device-name :DIRECTORY directory-name
+    :NAME "test" :TYPE NIL :VERSION :NEWEST>
+
+ (with-open-file (s p :direction :output :if-exists :supersede)
+    (format s "Here are a couple~%of test data lines~%")) =>  NIL
+
+ (with-open-file (s p)
+    (do ((l (read-line s) (read-line s nil 'eof)))
+        ((eq l 'eof) "Reached end of file.")
+     (format t "~&*** ~A~%" l)))
+
+>>  *** Here are a couple
+>>  *** of test data lines
+=>  "Reached end of file."
+#+end_lisp
 
 *** Stream Functions
 Some operations may be performed on any kind of stream; the following is a list
@@ -4781,7 +4898,7 @@ expected effect.
 
 * Local Variables						   :noexport:
 # Local Variables:
-# fill-column: 70
+# fill-column: 79
 # eval: (auto-fill-mode)
 # time-stamp-pattern: "8/^\\#\\+date:%:y-%02m-%02d %02H:%02M$"
 # End:
