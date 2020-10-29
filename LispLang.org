@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-28 11:59
-#+macro:version Version 0.0.40
+#+date:2020-10-29 07:38
+#+macro:version Version 0.0.41
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1099,7 +1099,8 @@ implementation-specific versions.
 
  - http://www.lispworks.com/reference/HyperSpec/
 ** Common Lisp Cookbook
-- [[http://cl-cookbook.sourceforge.net/index.html][The Common Lisp Cookbook home]]
+- [[https://lispcookbook.github.io/cl-cookbook/][The Common Lisp Cookbook Home---GithubGroup Addendum]]
+- [[http://cl-cookbook.sourceforge.net/index.html][The Common Lisp Cookbook home---Sourceforge Version]]
 - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
 
 
@@ -1862,7 +1863,6 @@ facilities.
   The value  of =*debug-io*=, called  /debug I/O/, is a  stream to be  used for
   interactive debugging purposes.
 
-
 *** Redirecting the Standard Output of your Program
     :PROPERTIES:
     :source:   http://cl-cookbook.sourceforge.net/io.html#bulk
@@ -1974,6 +1974,79 @@ that is returned, and how to handle errors.
 >>  *** of test data lines
 =>  "Reached end of file."
 #+end_lisp
+
+*** Reading Lines of a File using Standard Input
+    :PROPERTIES:
+    :source:   http://cl-cookbook.sourceforge.net/files.html#line
+    :END:
+~READ-LINE~ will  read one  line from  a stream  (which defaults  to =*STANDARD
+INPUT*=) the end  of which is determined  by either a newline  character or the
+end of  the file. It  will return  this line as  a string without  the trailing
+newline character.  (Note that ~READ-LINE~ has  a second return value  which is
+=true= if there was no trailing newline, i.e. if the line was terminated by the
+end of the file.) ~READ-LINE~ will by default signal an error if the end of the
+file  is  reached. You  can  inhibit  this by  supplying  =NIL=  as the  second
+argument. If you do  this, ~READ-LINE~ will return =NIL= if  it reaches the end
+of the file.
+
+
+#+findex: with-open-file
+#+findex:read-line
+#+begin_src lisp
+  (with-open-file (stream "/etc/passwd")
+      (do ((line (read-line stream nil)
+		 (read-line stream nil)))
+	  ((null line))
+	(print line)))
+#+end_src
+
+You can  also supply  a third  argument which will  be used  instead of  NIL to
+signal the end of the file:
+
+#+begin_src lisp
+  (with-open-file (stream "/etc/passwd")
+    (loop for line = (read-line stream nil 'foo)
+	  until (eq line 'foo)
+	  do (print line)))
+#+end_src
+
+#+attr_texinfo: :options read-line &optional input-stream eof-error-p eof-value recursive-p => line
+#+begin_defun
+Reads from  @@texinfo:@var{@@input-stream@@texinfo:}@@ a  line of text  that is
+terminated by a  newline or end of  file. Two values are  returned: the primary
+value is the line that was read, while the secondary value is a boolean that is
+=false= if  the line was  terminated by  a newline, or  =true= if the  line was
+terminated  by  the end  of  file  for input-stream  (or  if  the line  is  the
+eof-value).
+
+- INPUT-STREAM   ::    an   input    stream   designator.   The    default   is
+  =*STANDARD-INPUT*=.
+
+- EOF-ERROR-P    ::    If an end of  file occurs before any characters are read
+  in  the  line,   an  error  is  signaled  if  =eof-error-p=   is  =true=.  If
+  =eof-error-p= is  =false= and the end  of file for =input-stream=  is reached
+  before any characters are read, =eof-value= is returned as the line.
+
+- EOF-VALUE :: an object. The default is =nil=.
+
+= RECURSIVE-P :: A boolean.  The default is =false=.
+
+- RETURN :: =LINE= is  the line that is read, represented  as a string (without
+  the trailing newline, if any).
+#+end_defun
+
+#+begin_example
+ (setq a "line 1
+ line2")
+=>  "line 1
+ line2"
+ (read-line (setq input-stream (make-string-input-stream a)))
+=>  "line 1", false
+ (read-line input-stream)
+=>  "line2", true
+ (read-line input-stream nil nil)
+=>  NIL, true
+#+end_example
 
 *** Stream Functions
 Some operations may be performed on any kind of stream; the following is a list
