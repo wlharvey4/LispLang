@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-29 07:38
-#+macro:version Version 0.0.41
+#+date:2020-10-31 07:55
+#+macro:version Version 0.0.42
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2797,6 +2797,116 @@ others:
    integration is available using the ~inferior-slime-mode~.
  - Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
    REPL) and ignore the =*inferior-lisp*= buffer.
+** GNU Emacs Common Lisp Emulation
+This file documents the GNU Emacs Common Lisp emulation package.
+
+- [[https://www.gnu.org/software/emacs/manual/html_node/cl/index.html#Top][cl-lib Manual]]
+- [[https://github.com/emacs-mirror/emacs/blob/master/lisp/emacs-lisp/cl-lib.el][cl-lib on GitHub]]
+
+This document  describes a set  of Emacs  Lisp facilities borrowed  from Common
+Lisp.  Common Lisp  is a  huge language,  and Common  Lisp systems  tend to  be
+massive and extremely complex. Emacs Lisp, by contrast, is rather minimalist in
+the choice of Lisp features it offers the programmer. As Emacs Lisp programmers
+have  grown  in  number,  and  the applications  they  write  have  grown  more
+ambitious, it has become  clear that Emacs Lisp could benefit  from many of the
+conveniences of Common Lisp.
+
+The CL package adds a number of Common Lisp functions and control structures to
+Emacs Lisp.  This package  is distributed with  Emacs, so there  is no  need to
+install any additional files in order to start using it.
+
+*** Organization
+
+The Common Lisp package is organized into four main files:
+
+- cl-lib.el  :: This  is  the main  file, which  contains  basic functions  and
+  information about the package.
+
+  The  file  ~cl-lib.el~  includes  all necessary  autoload  commands  for  the
+  functions  and macros  in  the other  three  files.  All you  have  to do  is
+  ~(require 'cl-lib)~, and  ~cl-lib.el~ will take care of pulling  in the other
+  files when they are needed.
+
+- cl-extra.el  ::  This file  contains  the  larger,  more complex  or  unusual
+  functions. It is kept separate so that packages which only want to use Common
+  Lisp fundamentals like the cl-incf function won’t need to pay the overhead of
+  loading the more advanced functions.
+
+- cl-seq.el :: This file contains most  of the advanced functions for operating
+  on sequences or lists, such as cl-delete-if and cl-assoc.
+
+- cl-macs.el ::  This file  contains the  features that  are macros  instead of
+  functions. Macros expand when the caller is  compiled, not when it is run, so
+  the  macros generally  only  need to  be present  when  the byte-compiler  is
+  running (or when the macros are used  in uncompiled code). Most of the macros
+  of this package are isolated in cl-macs.el  so that they won’t take up memory
+  unless you are compiling.
+
+- cl.el :: There  is another file, ~cl.el~,  which was the main  entry point to
+  this package  prior to Emacs 24.3.  Nowadays, it is replaced  by ~cl-lib.el~.
+  The two provide the same features (in most cases), but use different function
+  names  (in  fact,  cl.el  mainly   just  defines  aliases  to  the  cl-lib.el
+  definitions).
+
+  Since the old ~cl.el~ does not use a clean namespace, Emacs has a policy that
+  packages distributed with Emacs must not load ~cl~ at run time. (It is ok for
+  them to  load ~cl~  at compile  time, with  ~eval-when-compile~, and  use the
+  macros it provides.) There is no such restriction on the use of ~cl-lib~. New
+  code should use ~cl-lib~ rather than ~cl~.
+
+- cl-compat.el  :: There  is one more file, ~cl-compat.el~,  which defines some
+  routines from the older Quiroz ~cl.el~ package that are not otherwise present
+  in the new package. This file is obsolete and should not be used in new code.
+
+*** Usage
+
+: (require 'cl-lib)
+
+Add this  ~require~ statement  to your init  file if you  make frequent  use of
+features from this package.
+
+Code  that  only  uses macros  from  this  package  can  enclose the  above  in
+~eval-when-compile~.
+
+Except where noted, all functions defined by this package have the same calling
+conventions as  their Common  Lisp counterparts,  and names  that are  those of
+Common Lisp plus a ‘cl-’ prefix.
+
+Internal function  and variable names  in the  package are prefixed  by =cl--=.
+Here is a complete list of functions prefixed by =cl-= that were not taken from
+Common Lisp:
+
+: cl-callf           cl-callf2          cl-defsubst
+: cl-letf            cl-letf*
+
+The following simple  functions and macros are defined in  ~cl-lib.el~; they do
+not cause other components like ~cl-extra~ to be loaded.
+
+#+begin_example
+cl-evenp           cl-oddp            cl-minusp
+cl-plusp           cl-endp            cl-subst
+cl-copy-list       cl-list*           cl-ldiff
+cl-rest            cl-decf [1]        cl-incf [1]
+cl-acons           cl-adjoin [2]      cl-pairlis
+cl-pushnew [1,2]   cl-declaim         cl-proclaim
+cl-caaar…cl-cddddr                  cl-first…cl-tenth
+cl-mapcar [3]
+
+[1] Only when place is a plain variable name.
+
+[2] Only if :test is eq, equal, or unspecified, and :key is not used.
+
+[3] Only for one sequence argument or two list arguments.
+#+end_example
+
+*** Program Structure
+This section describes  features of this package that have  to do with programs
+as  a whole:  advanced argument  lists  for functions,  and the  ~cl-eval-when~
+construct.
+
+**** Argument Lists
+
+
 
 * Scheme
 - [[https://schemers.org][Schemers.org]]
