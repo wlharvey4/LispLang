@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-03 07:26
-#+macro:version Version 0.0.43
+#+date:2020-11-03 15:02
+#+macro:version Version 0.0.44
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1461,9 +1461,14 @@ system.
 ** CMU Common Lisp Repository
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
 
-  It works with  your existing
-Common Lisp  implementation to download,  install, and  load any of  over 1,500
-[[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5]  It works with:
+** QuickLisp Library Manager
+- [[https://www.quicklisp.org/beta/][QuickLisp Home]]
+- [[http://blog.quicklisp.org][Quicklisp News]]
+
+
+It works  with your existing  Common Lisp implementation to  download, install,
+and load any of over 1,500 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5] It works
+with:
 
 - ABCL,
 - Allegro CL,
@@ -1485,88 +1490,245 @@ QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
 other languages call a  library or module, i.e., a set of files,  and a list of
 any other systems that this system depends on.<
 
-** QuickLisp Setup
-To get started with the Quicklisp beta, download and load:
-: https://beta.quicklisp.org/quicklisp.lisp
+*** QuickLisp Installation and Setup
+ To get started with the Quicklisp beta, download and load:
+ : https://beta.quicklisp.org/quicklisp.lisp
 
-The following  command will  setup ~quicklisp~  for your  user account
-using Clozure  Common Lisp  (CCL)[fn::Other implementations  will have
-slightly different commandline requirements.]:
+ Then, to install and configure SLIME for QuickLisp:
+ : (ql:quickload "quicklisp-slime-helper")
 
-#+header: :dir ~
-#+begin_src sh :exports code :results verbatim output
-  [[ ! -d ".quicklisp" ]] && { \
-  echo "Installing quicklisp...";
-  mkdir -v ./.quicklisp;
-  curl -O https://beta.quicklisp.org/quicklisp.lisp;
-  echo "\n" | \
-  ccl    --load  quicklisp.lisp \
-         --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
-         --eval '(ql:add-to-init-file)';
-  rm quicklisp.lisp;
-  echo "Done installing.";
-  } || { echo "Quicklisp is already installed."; }
-#+end_src
+ The  following shell  script will  install ~quicklisp~  for your  user account
+ using Clozure Common Lisp (CCL), update its init file, and configure it to use
+ SLIME[fn::Other  implementations  will  have  slightly  different  commandline
+ requirements.]:
 
-To load Quicklisp into your Common Lisp session after the initial installation,
-(unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
+ #+caption: Shell Script to Install Quicklisp Using CCL
+ #+name:ccl-quicklisp-install
+ #+header: :dir ~
+ #+begin_src sh :exports code :results verbatim output
+   [[ ! -d ".quicklisp" ]] && { \
+   echo "Installing quicklisp...";
+   mkdir -v ./.quicklisp;
+   curl -O https://beta.quicklisp.org/quicklisp.lisp;
+   # The installation script is expecting the user to hit the <RETURN> key;
+   # as well, the @@texinfo:@opt{@@--batch@@texinfo:}@@ expects an EOF marker.
+   # The use of ~echo~ seems to satisfy both requirements.
+   echo | \
+   ccl -Q --batch \
+          --load  quicklisp.lisp \
+          --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
+          --eval '(ql:add-to-init-file)' \
+          --eval '(ql:quickload "quicklisp-slime-helper")';
+   rm quicklisp.lisp;
+   echo "Done installing.";
+   } || { echo "Quicklisp is already installed."; }
+ #+end_src
 
-: (load "~/quicklisp/setup.lisp")
+ #+RESULTS: ccl-quicklisp-install
+ #+begin_example
+ Installing quicklisp...
+ mkdir: created directory './.quicklisp'
 
-To get updated software, use:
+   ==== quicklisp quickstart 2015-01-28 loaded ====
 
-: (ql:update-dist "quicklisp")
+     To continue with installation, evaluate: (quicklisp-quickstart:install)
 
-To update the Quicklisp client, use:
+     For installation options, evaluate: (quicklisp-quickstart:help)
 
-: (ql:update-client)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/quicklisp.sexp">
+ ; 0.82KB
+ ==================================================
+ 838 bytes in 0.00 seconds (897.32KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2020-01-04/quicklisp.tar">
+ ; 250.00KB
+ ==================================================
+ 256,000 bytes in 0.04 seconds (5591.84KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2015-09-24/setup.lisp">
+ ; 4.94KB
+ ==================================================
+ 5,054 bytes in 0.00 seconds (6434.87KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/asdf/2.26/asdf.lisp">
+ ; 194.07KB
+ ==================================================
+ 198,729 bytes in 0.05 seconds (4305.33KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp.txt">
+ ; 0.40KB
+ ==================================================
+ 408 bytes in 0.00 seconds (543.57KB/sec)
+ Installing dist "quicklisp" version "2020-10-16".
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/releases.txt">
+ ; 468.69KB
+ ==================================================
+ 479,939 bytes in 0.07 seconds (6496.51KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/systems.txt">
+ ; 341.59KB
+ ==================================================
+ 349,788 bytes in 0.05 seconds (6902.90KB/sec)
 
-** QuickLisp Libraries
-To find out what's available in Quicklisp, use:
+   ==== quicklisp installed ====
 
-: (ql:system-apropos substring)
+     To load a system, use: (ql:quickload "system-name")
 
-To see what systems depend on a particular system, use:
+     To find systems, use: (ql:system-apropos "term")
 
-: (ql:who-depends-on system-name)
+     To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
 
-** QuickLisp Load
-To load software, use:
+     For more information, see http://www.quicklisp.org/beta/
 
-: (ql:quickload "system-name")
+ I will append the following lines to #P"/Users/minilolh/.ccl-init.lisp":
 
-Quicklisp will automatically download any  supporting software it needs to load
-the system.
+   ;;; The following lines added by ql:add-to-init-file:
+   #-quicklisp
+   (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp" (user-homedir-pathname))))
+     (when (probe-file quicklisp-init)
+       (load quicklisp-init)))
 
-By default, ~ql:quickload~ hides most compilation and loading output, including
-warnings, and shows progess as a series  of dots. You can show full compilation
-and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
-output can be especially helpful when reporting and troubleshooting problems.
+ Press Enter to continue.
+ To load "quicklisp-slime-helper":
+   Load 1 ASDF system:
+     asdf
+   Install 3 Quicklisp releases:
+     alexandria quicklisp-slime-helper slime
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz">
+ ; 802.88KB
+ ==================================================
+ 822,146 bytes in 0.11 seconds (7054.23KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz">
+ ; 53.45KB
+ ==================================================
+ 54,730 bytes in 0.02 seconds (3438.89KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2015-07-09/quicklisp-slime-helper-20150709-git.tgz">
+ ; 2.16KB
+ ==================================================
+ 2,211 bytes in 0.00 seconds (2898.23KB/sec)
+ ; Loading "quicklisp-slime-helper"
+ [package swank-loader]............................
+ [package swank/backend]...........................
+ [package swank/rpc]...............................
+ [package swank/match].............................
+ [package swank-mop]...............................
+ [package swank]...................................
+ [package swank-monitor]...........................
+ [package swank/ccl]...............................
+ [package cross-reference].........................
+ [package swank/gray]..............................
+ ...............................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-util.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-repl.lisp"....................
+ [package swank-repl]...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-c-p-c.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-arglists.lisp"............................
+ ...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fuzzy.lisp".......
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fancy-inspector.lisp".................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentations.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentation-streams.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-asdf.lisp".........
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-package-fu.lisp"...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-hyperdoc.lisp"....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-mrepl.lisp".....................
+ [package swank-api]...............................
+ [package swank-mrepl]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-trace-dialog.lisp"..............................
+ [package swank-trace-dialog]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-macrostep.lisp".......................
+ [package swank-macrostep]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-quicklisp.lisp"...
+ .......................
+ [package alexandria]..............................
+ ..................................................
+ ..................................................
+ [package alexandria-2]............................
+ [package quicklisp-slime-helper]
+ slime-helper.el installed in "/Users/minilolh/.quicklisp/slime-helper.el"
 
-#+texinfo: @heading Silent Option
+ To use, add this to your ~/.emacs:
 
-: (ql:quickload "system-name" :silent t)
-
-#+texinfo: @heading ASDF Manifest File
-
-: (ql:write-asdf-manifest-file)
-now includes systems from the local-projects directories.
-
-** QuickLisp Unload
-To remove software, use:
-
-: (ql:uninstall system-name)
-
-An uninstall does the following:
-
-- Deletes the system's tarball archive and unpacked source files
-- Deletes Quicklisp metadata files associated with the system
-- Clears ASDF's system cache via asdf:clear-system.
+   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+   ;; Replace "sbcl" with the path to your implementation
+   (setq inferior-lisp-program "sbcl")
 
 
-Uninstalling does not alter  the current Lisp session in any  other way; if the
-given  system has  been  loaded, it  remains loaded  and  accessible until  the
-session is ended.
+ Done installing.
+ #+end_example
+
+*** QuickLisp Load
+
+ To load Quicklisp into your Common Lisp session after the initial installation,
+ (unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
+
+ : (load "~/quicklisp/setup.lisp")
+
+ To load software, use:
+
+ : (ql:quickload "system-name")
+
+ Quicklisp will automatically download any  supporting software it needs to load
+ the system.
+
+ By default, ~ql:quickload~ hides most compilation and loading output, including
+ warnings, and shows progess as a series  of dots. You can show full compilation
+ and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
+ output can be especially helpful when reporting and troubleshooting problems.
+ There is also a =:silent t= mode.
+
+ : (ql:quickload “system-name” :verbose t)
+ : (ql:quickload "system-name" :silent t)
+
+ #+texinfo: @heading ASDF Manifest File
+
+ : (ql:write-asdf-manifest-file)
+ now includes systems from the local-projects directories.
+
+*** Quicklisp Updates
+ To get updated software, use:
+
+ : (ql:update-dist "quicklisp")
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-dist "quicklisp")
+ #+end_src
+
+ #+RESULTS:
+ : You already have the latest version of "quicklisp": 2020-10-16.
+
+ To update the Quicklisp client use:
+
+ : (ql:update-client)
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-client)
+ #+end_src
+
+ #+RESULTS:
+ : The most up-to-date client, version 2020-01-04, is already installed.
+
+*** QuickLisp Libraries
+ To find out what's available in Quicklisp, use:
+
+ : (ql:system-apropos substring)
+
+ To see what systems depend on a particular system, use:
+
+ : (ql:who-depends-on system-name)
+
+*** QuickLisp Unload
+ To remove software, use:
+
+ : (ql:uninstall system-name)
+
+ An uninstall does the following:
+
+ - Deletes the system's tarball archive and unpacked source files
+ - Deletes Quicklisp metadata files associated with the system
+ - Clears ASDF's system cache via asdf:clear-system.
+
+
+ Uninstalling does not alter  the current Lisp session in any  other way; if the
+ given  system has  been  loaded, it  remains loaded  and  accessible until  the
+ session is ended.
 
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
