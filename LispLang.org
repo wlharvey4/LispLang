@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-10-31 07:55
-#+macro:version Version 0.0.42
+#+date:2020-11-03 07:26
+#+macro:version Version 0.0.43
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1461,11 +1461,7 @@ system.
 ** CMU Common Lisp Repository
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
 
-* Quicklisp Library Manager
-https://www.quicklisp.org/beta/
-
-
-Quicklisp is  a library manager  for Common Lisp.  It works with  your existing
+  It works with  your existing
 Common Lisp  implementation to download,  install, and  load any of  over 1,500
 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5]  It works with:
 
@@ -1546,6 +1542,15 @@ By default, ~ql:quickload~ hides most compilation and loading output, including
 warnings, and shows progess as a series  of dots. You can show full compilation
 and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
 output can be especially helpful when reporting and troubleshooting problems.
+
+#+texinfo: @heading Silent Option
+
+: (ql:quickload "system-name" :silent t)
+
+#+texinfo: @heading ASDF Manifest File
+
+: (ql:write-asdf-manifest-file)
+now includes systems from the local-projects directories.
 
 ** QuickLisp Unload
 To remove software, use:
@@ -2905,8 +2910,6 @@ as  a whole:  advanced argument  lists  for functions,  and the  ~cl-eval-when~
 construct.
 
 **** Argument Lists
-
-
 
 * Scheme
 - [[https://schemers.org][Schemers.org]]
