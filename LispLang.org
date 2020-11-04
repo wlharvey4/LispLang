@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-03 21:22
-#+macro:version Version 0.0.46
+#+date:2020-11-03 22:36
+#+macro:version Version 0.0.47
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -14,8 +14,7 @@
 
 
 "47. The first  Lisp interpreter was a  result of a programmer  ignoring his boss's
-advice." [[http://norvig.com][Peter Norvig]], [[A Retrospective on
-Paradigms of AI Programming][A Retrospective on Paradigms of AI Programming]]
+advice." [[http://norvig.com][Peter Norvig]], [[http://norvig.com/Lisp-retro.html][A Retrospective on Paradigms of AI Programming]]
 
 "48. Abelson and  Sussman (1985) is probably the best  introduction to computer
 science ever written. Id.
@@ -2524,14 +2523,14 @@ This library is available on Quicklisp.
 
 *** Usage---DBI Connections
 
-**** SQLite dbi:connect
+**** SQLite connect
 #+begin_src lisp
 (defvar *connection*
   (dbi:connect :sqlite3
                :database-name "/home/gt/test.sqlite3"))
 #+end_src
 
-**** MySQL dbi:connect
+**** MySQL connect
 #+begin_src lisp
 (defvar *connection*
   (dbi:connect :mysql
@@ -2540,7 +2539,7 @@ This library is available on Quicklisp.
                :password "1234"))
 #+end_src
 
-**** Usage---dbi:with-connection
+**** Usage---with-connection
 #+begin_src lisp
 (dbi:with-connection (conn :sqlite3 :database-name "/home/fukamachi/test.db")
   (let* ((query (dbi:prepare conn "SELECT * FROM People"))
@@ -2635,7 +2634,114 @@ The hook function takes these 4 values:
 : (push #'dbi:simple-sql-logger dbi:*sql-execution-hooks*)
 
 ** CLSQL
+CLSQL is  a Common  Lisp interface to  SQL databases. A  number of  Common Lisp
+implementations and SQL databases are supported. The general structure of CLSQL
+is based on the CommonSQL package by LispWorks Ltd.
+
+CLSQL  is a  Database  interface that  can  access a  number  of different  SQL
+database  engines. It  also includes  a  CLOS ORM.  It is  maintained by  Kevin
+Rosenberg.  CLSQL now includes the CommonSQL API interface.
+
+#+attr_texinfo: :author Bill Clementson
+#+begin_quote
+In summary, the CLSQL package is quite easy  to work with and allows you to use
+a mixture of  functional and OO approaches in working  with relational data. It
+provides high-performing native access to  the underlying databases (as well as
+ODBC access as either an alternative or as a means to access databases that are
+not supported with a native API).  Kevin Rosenberg (and contributors) are to be
+commended for an excellent package!
+
+- https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html
+#+end_quote
+
+- [[https://www.cliki.net/CLSQL][CLSQL on CLiki]]
+- [[http://clsql.kpe.io/documentation.html][CLSQL Documentation]]
+- [[https://web.archive.org/web/20150509221006/http://clsql.b9.com/manual/index.html][CLSQL Users' Guide]]
+- [[http://git.kpe.io/?p=clsql.git][CLSQL Source]]
+
+*** Bill Clementson has written two entries about CLSQL
+- [[https://web.archive.org/web/20130719003355/http://bc.tech.coop/blog/040606.html][CLSQL - Part 1]]
+- [[https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html][CLSQL - Part 2]]
+
+*** CommonSQL Tutorials
+- https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
+
+- [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
+/Common SQL/ is  the name of LispWorks' interface to  relational databases. The
+interface dates back to  the very early 1990's, when it  was written to support
+Watson, Harlequin's emerging "intelligent  database application". The interface
+ships as standard with LispWorks on the "commercial unix" platforms, and in the
+"Enterprise" editions for Windows and Linux
+
+The intended audience  for the tutorial is anybody with  a working knowledge of
+lisp and at  least some knowledge of  SQL, who is interested in  seeing how the
+two  can be  combined.  On the  other  hand  most of  this  material should  be
+accessible to people with little or no SQL experience.
+
+- [[http://clsql.kpe.io/manual/csql.html][CommonSQL Tutorial]]
+"Based on the UncommonSQL Tutorial"
+
+The goal  of this  tutorial is  to guide a  new developer  thru the  process of
+creating  a set  of  CLSQL  classes providing  a  Object-Oriented interface  to
+persistent data stored in an SQL database.
+
+*** History
+The CLSQL  project was  started by Kevin  M. Rosenberg in  2001 to  support SQL
+access  on multiple  Common Lisp  implementations using  the UFFI  library. The
+initial  code was  based  substantially  on Pierre  R.  Mai's excellent  MaiSQL
+package. In  late 2003,  the UncommonSQL  library was  orphaned by  its author,
+onShore Development, Inc.  In April 2004, Marcus Pearce  ported the UncommonSQL
+library to CLSQL.  The UncommonSQL library provides  a CommonSQL-compatible API
+for CLSQL.
+
 ** cl-sqlite
+CL-SQLITE package is an interface to the SQLite embedded relational database
+engine.
+
+- https://common-lisp.net/project/cl-sqlite/
+- https://github.com/TeMPOraL/cl-sqlite
+*** cl-sqlite Usage
+**** Connect
+ - connect :: connects to the database
+ - disconnect :: disconnects from the database
+ - with-open-database ::  macro that opens the  database and ensures that  it is
+   properly closed after the code is run
+**** Queries
+ - execute-non-query ::
+ - execute-single ::
+ - execute-one-row-m-v ::
+ - execute-to-list ::
+ - execute-to-list/named :: macro is used to execute code within transaction.
+ - Support for  ITERATE is  provided :: This  clause will bind  vars (a  list of
+   variables) to the values of the columns of query.
+   : (for (vars) in-sqlite-query sql on-database db &optional with-parameters (&rest parameters))
+
+
+ Positional and named parameters in queries are supported. Positional parameters
+ are denoted by question  mark in SQL code, and named  parameters are denoted by
+ prefixing color (:), at sign (@) or dollar sign ($) before parameter name.
+
+**** Prepared Statement API
+ Additionally, it  is possible  to use  the prepared  statements API  of sqlite.
+ Create  the prepared  statement with  ~prepare-statement~, bind  its parameters
+ with  ~bind-parameter~, step  through  it with  ~step-statement~, retrieve  the
+ results with  ~statement-column-value~, and finally  reset it to be  used again
+ with ~reset-statement~ or dispose of it with ~finalize-statement~.
+
+**** Supported Types
+ Following types are supported:
+
+ - Integer. Integers are stored as 64-bit integers.
+ - Float.  Stored as  double.  Single-float, double-float  and  rational may  be
+   passed as a parameter, and double-float will be returned.
+ - String. Stored as an UTF-8 string.
+ - Vector of bytes. Stored as a blob.
+ - Null. Passed as NIL to and from database.
+** clisp-sqlite
+clisp-sqlite is an interface to the sqlite SQL database by Scott Williams.
+
+- https://github.com/juancolarte/colarte-dev/tree/master/lisp/clisp/sqlite
+
 ** SQLite Lisp Interface
 ** cl-mongo
 ** berkeley-db
@@ -5402,6 +5508,11 @@ Copyright \copy 2020 by {{{author}}}
 
 
 * Footnotes
+
+[fn:10] Also, the tremendous CommonSQL tutorial that Nick Levine gave at
+ILC2002 is an excellent introduction to CLSQL. Even though his tutorial is
+targetted towards Xanalys CommonSQL, the examples work equally well in CLSQL
+(with the occasional minor tweak). 
 
 [fn:1] Runtime Compilation: https://wiki.c2.com/?RuntimeCompilation
 
