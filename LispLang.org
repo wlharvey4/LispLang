@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-03 20:37
-#+macro:version Version 0.0.45
+#+date:2020-11-03 21:22
+#+macro:version Version 0.0.46
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2498,6 +2498,148 @@ These opertors require open streams:
 - [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
 - [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
 - [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
+* Common Lisp Databases
+- https://www.cliki.net/Database
+** CL-DBI
+"Database independent interface for Common Lisp"
+
+[[https://8arrow.org/cl-dbi/][CL-DBI]] is intended to provide the same SQL interface for each database.
+
+- SQLite3
+- PostgreSQL
+- MySQL
+
+
+[[https://github.com/fukamachi/cl-dbi][CL-DBI on GitHub]]
+
+This library is especially convenient when  you want to use different databases
+in different  environments. For example,  you might  use MySQL as  a production
+database,  but use  SQLite3  on  your development  system.  To switch  database
+backends you need only change the arguments to dbi:connect.
+*** Installation
+
+This library is available on Quicklisp.
+
+: CL-USER> (ql:quickload :cl-dbi)
+
+*** Usage---DBI Connections
+
+**** SQLite dbi:connect
+#+begin_src lisp
+(defvar *connection*
+  (dbi:connect :sqlite3
+               :database-name "/home/gt/test.sqlite3"))
+#+end_src
+
+**** MySQL dbi:connect
+#+begin_src lisp
+(defvar *connection*
+  (dbi:connect :mysql
+               :database-name "test"
+               :username "nobody"
+               :password "1234"))
+#+end_src
+
+**** Usage---dbi:with-connection
+#+begin_src lisp
+(dbi:with-connection (conn :sqlite3 :database-name "/home/fukamachi/test.db")
+  (let* ((query (dbi:prepare conn "SELECT * FROM People"))
+         (query (dbi:execute query)))
+    (loop for row = (dbi:fetch query)
+          while row
+          do (format t "~A~%" row))))
+#+end_src
+
+**** Executing a Query
+#+begin_src lisp
+(let* ((query (dbi:prepare *connection*
+                           "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?"))
+       (query (dbi:execute query (list 0 "2011-11-01"))))
+  (loop for row = (dbi:fetch query)
+        while row
+        ;; process "row".
+        ))
+
+;; Do it all at once
+(dbi:fetch-all (dbi:execute (dbi:prepare *connection* "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?")
+                            (list 0 "2011-11-01")))
+#+end_src
+
+~dbi:do-sql~ is another  option that prepares and executes  a single statement.
+It returns  the number  of rows  affected. It's  typically used  for non-SELECT
+statements.
+#+begin_src lisp
+(dbi:do-sql *connection*
+            "INSERT INTO somewhere (flag, updated_at) VALUES (?, NOW())"
+            (list 0))
+;=> 1
+#+end_src
+
+*** API
+
+**** User-Level API
+- connect [driver-name & params] => <dbi-connection>
+- connect-cached [driver-name & params] => <dbi-connection>
+- disconnect [<dbi-connection>] => T or NIL
+- prepare [conn sql] => <dbi-query>
+- execute [query &optional params] => something
+- fetch [result] => a row data as plist
+- fetch-all [result] => a list of all row data
+- do-sql [conn sql &optional params]
+- list-all-drivers [] => (<dbi-driver> ..)
+- find-driver [driver-name] => <dbi-driver>
+- with-transaction [conn]
+- begin-transaction [conn]
+- commit [conn]
+- rollback [conn]
+- ping [conn] => T or NIL
+- row-count [conn] => a number of rows modified by the last executed
+  INSERT/UPDATE/DELETE
+- with-connection [connection-variable-name &body body]
+
+**** Driver-Level API
+
+- <dbi-driver>
+- <dbi-connection>
+- make-connection [driver params]
+- disconnect [<dbi-connection>] => T or NIL
+- prepare [conn sql] => <dbi-query>
+- fetch-using-connection [conn result] => a row data as plist
+- do-sql [conn sql &optional params]
+- execute-using-connection => something
+- escape-sql => string
+- begin-transaction [conn]
+- commit [conn]
+- rollback [conn]
+- ping [conn] => T or NIL
+- row-count [conn] => a number of rows modified by the last executed INSERT/UPDATE/DELETE
+- free-query-resources [query] free resources associated with a prepared query (this is required only for sqlite3 driver at the moment)
+
+**** Hook of SQL execution
+CL-DBI  provides  ~dbi:*sql-execution-hooks*~,  a  hook to  run  for  each  SQL
+execution, particularly used for logging.
+
+The hook function takes these 4 values:
+
+- SQL (string)
+- placeholder parameters (list)
+- Row count of the results (integer or null)
+- Took time in miliseconds (integer or null)
+
+  The row  count and its execution  time can be  null, if those values  are not
+  available for the driver for some reason.
+
+~dbi:simple-sql-logger~ is also provided for  printing those values directly to
+*standard-output*. It can be enabled as so:
+
+: (push #'dbi:simple-sql-logger dbi:*sql-execution-hooks*)
+
+** CLSQL
+** cl-sqlite
+** SQLite Lisp Interface
+** cl-mongo
+** berkeley-db
+
 * Common Lisp Help System
 ** Apropos
    #+findex:apropos
