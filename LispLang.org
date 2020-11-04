@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-03 15:02
-#+macro:version Version 0.0.44
+#+date:2020-11-03 20:37
+#+macro:version Version 0.0.45
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -12,6 +12,13 @@
 
 #+texinfo:@insertcopying
 
+
+"47. The first  Lisp interpreter was a  result of a programmer  ignoring his boss's
+advice." [[http://norvig.com][Peter Norvig]], [[A Retrospective on
+Paradigms of AI Programming][A Retrospective on Paradigms of AI Programming]]
+
+"48. Abelson and  Sussman (1985) is probably the best  introduction to computer
+science ever written. Id.
 
 "CommonLisp, the  mud ball of strength,  [is] the acting patriarch  of the Lisp
 family." (https://wiki.c2.com/?CommonLisp)
@@ -135,6 +142,31 @@ which is  a bit of  a mess. With  CL, you get  more power and  abstraction than
 these languages, and  with appropriately written code you can  have very little
 penalty.  Why  this hasn't  sunk it for  more people I  am not  sure (actually,
 that's a fib - I have some ideas). [[https://wiki.c2.com/?WhyNotLisp][(Why Not Lisp?)]]
+#+end_quote
+
+#+attr_texinfo: :author Peter Norvig, Retrospective
+#+begin_quote
+In 1991 Lisp offered  a combination of features that could not  be found in any
+other language. This combination made Lisp almost a necessity for certain kinds
+of work (in AI and other applications) and made Lisp the language of choice for
+a  large community  of  users. Since  then  Lisp has  maintained  and added  to
+features, but other languages have caught up. ...
+
+One more  important feature that didn't  make this list is  efficiency. Lisp is
+about 1.5  to 4 times faster  than Java, and about  10 to 50 times  faster than
+Python. Lisp  is probably  within 20%  to 60%  of C/C++  in efficiency  on most
+tasks,  which  is  close  enough  that  the  differences  depend  more  on  the
+programmers  involved  than  the  language,  and close  enough  that  for  most
+applications that speed is not an issue  for Lisp. Python is a different story:
+there is a large class of problems for which Python is too slow. ...
+
+New Lisp Books
+
+The best, in my opinion, are Paul Graham's On Lisp and ANSI Common Lisp.
+Probably the best book ever on how to write Lisp compilers and interpreters is
+Christian Queinnec's Lisp in Small Pieces.
+
+- http://norvig.com/Lisp-retro.html
 #+end_quote
 
 
@@ -1240,7 +1272,9 @@ Lisp.
     old,  and this  is  particularly obvious  in the  examples  given, but  the
     mechanisms discussed have not changed, of course.
 
-  - Peter  Norvig,  Paradigms  of  Artificial  Intelligence  Programming:  Case Studies in Common Lisp, Morgan Kaufmann  ::
+  - Peter  Norvig,  [[https://github.com/norvig/paip-lisp][Paradigms  of  Artificial  Intelligence  Programming:]]  Case Studies in Common Lisp, Morgan Kaufmann  ::
+
+    - https://wiki.c2.com/?ParadigmsOfArtificialIntelligenceProgramming
 
     This  is a  very  good programming  book.  Peter Norvig  shows  how to  use
     advanced  features of  the  Common Lisp  language to  program  some of  the
@@ -1248,6 +1282,8 @@ Lisp.
     languages,  etc.), but  it is  definitely not  a book  about AI,  but about
     programming techniques, so  it is worth reading for everyone,  and not only
     for those who are interested in AI.
+
+    - [[http://norvig.com/Lisp-retro.html][A Retrospective on Paradigms of AI Programming]]
 
   - Gregor  Kiczales, Jim  des  Rivières,  Daniel G.  Bobrow,  The  Art of  the Metaobject Protocol ::
 
@@ -1729,6 +1765,10 @@ any other systems that this system depends on.<
  Uninstalling does not alter  the current Lisp session in any  other way; if the
  given  system has  been  loaded, it  remains loaded  and  accessible until  the
  session is ended.
+
+** Lisp for the Web
+- [[https://www.adamtornhill.com/articles/lispweb.htm][LispWeb]]
+- [[https://leanpub.com/lispweb][On LeanPub]]
 
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
@@ -2451,6 +2491,13 @@ These opertors require open streams:
 - yes-or-no-p
 - 
 
+* Common Lisp Packages
+** Common Lisp Packages for MongoDB
+*** cl-mongo
+- [[https://www.mongodb.com][MongoDB]]
+- [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
+- [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
+- [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
 * Common Lisp Help System
 ** Apropos
    #+findex:apropos
