@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-03 22:36
-#+macro:version Version 0.0.47
+#+date:2020-11-04 00:15
+#+macro:version Version 0.0.48
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2491,6 +2491,25 @@ These opertors require open streams:
 - 
 
 * Common Lisp Packages
+** Iterate
+- [[https://common-lisp.net/project/iterate/][Iterate]]
+- [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
+- [[https://gitlab.common-lisp.net/iterate/iterate][Iterate on GitLab]]
+
+~iterate~  is an  iteration construct  for Common  Lisp. It  is similar  to the
+=CL:LOOP= macro, with these distinguishing marks:
+
+- it is extensible,
+- it helps editors  like Emacs indent iterate forms by  having a more lisp-like
+  syntax, and
+- it isn't part of the ANSI standard  for Common Lisp (which is sometimes a bad
+  thing and sometimes good).
+
+
+It is available from QuickLisp.
+
+: #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
+
 ** Common Lisp Packages for MongoDB
 *** cl-mongo
 - [[https://www.mongodb.com][MongoDB]]
@@ -2499,6 +2518,81 @@ These opertors require open streams:
 - [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
 * Common Lisp Databases
 - https://www.cliki.net/Database
+** CLSQL
+CLSQL is  a Common  Lisp interface to  SQL databases. A  number of  Common Lisp
+implementations and SQL databases are supported. The general structure of CLSQL
+is based on the CommonSQL package by LispWorks Ltd.
+
+CLSQL  is a  Database  interface that  can  access a  number  of different  SQL
+database  engines. It  also includes  a  CLOS ORM.  It is  maintained by  Kevin
+Rosenberg.  CLSQL now includes the CommonSQL API interface.
+
+#+attr_texinfo: :author Bill Clementson
+#+begin_quote
+In summary, the CLSQL package is quite easy  to work with and allows you to use
+a mixture of  functional and OO approaches in working  with relational data. It
+provides high-performing native access to  the underlying databases (as well as
+ODBC access as either an alternative or as a means to access databases that are
+not supported with a native API).  Kevin Rosenberg (and contributors) are to be
+commended for an excellent package!
+
+- https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html
+#+end_quote
+
+#+attr_texinfo: :author Randall Squared
+#+begin_quote
+CLSQL is the gold  standard of SQL interface libraries on  Common Lisp, and is,
+as you'd expect, large and complex, with various embedded languages. I'd rather
+not carry around  all the extra code  this implies with my  system. Further, it
+doesn't support CMUCL/PPC, because CMUCL on PPC doesn't have multiprocessing.
+
+- https://web.archive.org/web/20060715192939/http://www.randallsquared.com/download/sqlite/cmucl-sqlite3/cs-docs.txt
+#+end_quote
+
+- [[https://www.cliki.net/CLSQL][CLSQL on CLiki]]
+- [[http://clsql.kpe.io/documentation.html][CLSQL Documentation]]
+- [[https://web.archive.org/web/20150509221006/http://clsql.b9.com/manual/index.html][CLSQL Users' Guide]]
+- [[http://git.kpe.io/?p=clsql.git][CLSQL Source]]
+
+*** Bill Clementson has written two entries about CLSQL
+- [[https://web.archive.org/web/20130719003355/http://bc.tech.coop/blog/040606.html][CLSQL - Part 1]]
+- [[https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html][CLSQL - Part 2]]
+
+*** CommonSQL Tutorials
+- https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
+
+- [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
+/Common SQL/ is  the name of LispWorks' interface to  relational databases. The
+interface dates back to  the very early 1990's, when it  was written to support
+Watson, Harlequin's emerging "intelligent  database application". The interface
+ships as standard with LispWorks on the "commercial unix" platforms, and in the
+"Enterprise" editions for Windows and Linux
+
+The intended audience  for the tutorial is anybody with  a working knowledge of
+lisp and at  least some knowledge of  SQL, who is interested in  seeing how the
+two  can be  combined.  On the  other  hand  most of  this  material should  be
+accessible to people with little or no SQL experience.
+
+- [[http://clsql.kpe.io/manual/csql.html][CommonSQL Tutorial]]
+"Based on the UncommonSQL Tutorial"
+
+The goal  of this  tutorial is  to guide a  new developer  thru the  process of
+creating  a set  of  CLSQL  classes providing  a  Object-Oriented interface  to
+persistent data stored in an SQL database.
+
+*** History
+The CLSQL  project was  started by Kevin  M. Rosenberg in  2001 to  support SQL
+access  on multiple  Common Lisp  implementations using  the UFFI  library. The
+initial  code was  based  substantially  on Pierre  R.  Mai's excellent  MaiSQL
+package. In  late 2003,  the UncommonSQL  library was  orphaned by  its author,
+onShore Development, Inc.  In April 2004, Marcus Pearce  ported the UncommonSQL
+library to CLSQL.  The UncommonSQL library provides  a CommonSQL-compatible API
+for CLSQL.
+
+*** iterate-clsql
+This extensions adds ability to iterate over results of queries to databases via CLSQL.
+
+- https://common-lisp.net/project/iterate-clsql/
 ** CL-DBI
 "Database independent interface for Common Lisp"
 
@@ -2633,67 +2727,6 @@ The hook function takes these 4 values:
 
 : (push #'dbi:simple-sql-logger dbi:*sql-execution-hooks*)
 
-** CLSQL
-CLSQL is  a Common  Lisp interface to  SQL databases. A  number of  Common Lisp
-implementations and SQL databases are supported. The general structure of CLSQL
-is based on the CommonSQL package by LispWorks Ltd.
-
-CLSQL  is a  Database  interface that  can  access a  number  of different  SQL
-database  engines. It  also includes  a  CLOS ORM.  It is  maintained by  Kevin
-Rosenberg.  CLSQL now includes the CommonSQL API interface.
-
-#+attr_texinfo: :author Bill Clementson
-#+begin_quote
-In summary, the CLSQL package is quite easy  to work with and allows you to use
-a mixture of  functional and OO approaches in working  with relational data. It
-provides high-performing native access to  the underlying databases (as well as
-ODBC access as either an alternative or as a means to access databases that are
-not supported with a native API).  Kevin Rosenberg (and contributors) are to be
-commended for an excellent package!
-
-- https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html
-#+end_quote
-
-- [[https://www.cliki.net/CLSQL][CLSQL on CLiki]]
-- [[http://clsql.kpe.io/documentation.html][CLSQL Documentation]]
-- [[https://web.archive.org/web/20150509221006/http://clsql.b9.com/manual/index.html][CLSQL Users' Guide]]
-- [[http://git.kpe.io/?p=clsql.git][CLSQL Source]]
-
-*** Bill Clementson has written two entries about CLSQL
-- [[https://web.archive.org/web/20130719003355/http://bc.tech.coop/blog/040606.html][CLSQL - Part 1]]
-- [[https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html][CLSQL - Part 2]]
-
-*** CommonSQL Tutorials
-- https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
-
-- [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
-/Common SQL/ is  the name of LispWorks' interface to  relational databases. The
-interface dates back to  the very early 1990's, when it  was written to support
-Watson, Harlequin's emerging "intelligent  database application". The interface
-ships as standard with LispWorks on the "commercial unix" platforms, and in the
-"Enterprise" editions for Windows and Linux
-
-The intended audience  for the tutorial is anybody with  a working knowledge of
-lisp and at  least some knowledge of  SQL, who is interested in  seeing how the
-two  can be  combined.  On the  other  hand  most of  this  material should  be
-accessible to people with little or no SQL experience.
-
-- [[http://clsql.kpe.io/manual/csql.html][CommonSQL Tutorial]]
-"Based on the UncommonSQL Tutorial"
-
-The goal  of this  tutorial is  to guide a  new developer  thru the  process of
-creating  a set  of  CLSQL  classes providing  a  Object-Oriented interface  to
-persistent data stored in an SQL database.
-
-*** History
-The CLSQL  project was  started by Kevin  M. Rosenberg in  2001 to  support SQL
-access  on multiple  Common Lisp  implementations using  the UFFI  library. The
-initial  code was  based  substantially  on Pierre  R.  Mai's excellent  MaiSQL
-package. In  late 2003,  the UncommonSQL  library was  orphaned by  its author,
-onShore Development, Inc.  In April 2004, Marcus Pearce  ported the UncommonSQL
-library to CLSQL.  The UncommonSQL library provides  a CommonSQL-compatible API
-for CLSQL.
-
 ** cl-sqlite
 CL-SQLITE package is an interface to the SQLite embedded relational database
 engine.
@@ -2744,6 +2777,35 @@ clisp-sqlite is an interface to the sqlite SQL database by Scott Williams.
 
 ** SQLite Lisp Interface
 ** cl-mongo
+"lisp interface to mongo db"
+
+- [[https://github.com/fons/cl-mongo][cl-mongo on GitHub]]
+
+
+~cl-mongo~  provides  the  ability  to insert,  update  and  delete  documents,
+indexing, searching using regexs etc. In addition it supports javascript in the
+repl (using a commonly available lisp  to javascript compiler). This allows you
+to do use mongodb's ~map-reduce~ from the lisp repl.
+
+Install using QuickLisp:
+
+: #<SYSTEM cl-mongo / cl-mongo-20160531-git / quicklisp 2020-10-16>
+
+#+begin_quote
+CL-USER> (ql:quickload "cl-mongo")
+To load "cl-mongo":
+  Load 5 ASDF systems:
+    alexandria asdf babel lisp-unit split-sequence
+  Install 12 Quicklisp releases:
+    anaphora bordeaux-threads cl-mongo cl-ppcre cl-who
+    documentation-template ironclad named-readtables
+    parenscript trivial-utf-8 usocket uuid
+#+end_quote
+
+To run the quick test, do this:
+
+: (use-package :cl-mongo-test) (quick-test) # did not work
+: (ql:quickload "cl-mongo-test)(cl-mongo-test::quick-test) # worked
 ** berkeley-db
 
 * Common Lisp Help System
