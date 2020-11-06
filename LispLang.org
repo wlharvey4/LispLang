@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-04 00:15
-#+macro:version Version 0.0.48
+#+date:2020-11-05 21:23
+#+macro:version Version 0.0.49
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1119,6 +1119,20 @@ implementation-specific versions.
 - http://www.aiai.ed.ac.uk/project/pub/packages/lisp/kcl/
 - https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/impl/kcl/kcl/broadcst.txt
 
+** Corman Lisp
+- https://github.com/sharplispers/cormanlisp
+
+
+Corman  Lisp is  a Common  Lisp development  environment for  Microsoft Windows
+operating systems running on Intel platforms.  Corman Lisp consists of a Common
+Lisp  native   code  compiler  for   Intel  processors,  80x86   assembler  and
+disassembler, incremental  linker and multi-window  text editor. It  requires a
+system  running a  Microsoft  Windows  operating system  (such  as Windows  XP,
+Windows 2000, Windows ME or Windows NT).  It is fully integrated with the Win32
+API, and all the Windows API  functions are readily available from Lisp. Corman
+Lisp incorporates  state-of-the-art compiler technology  to bring you  a Common
+Lisp system unmatched on Windows platforms.
+
 * Common Lisp Documentation Resources
 ** Common Lisp Hyper Spec
  - https://wiki.c2.com/?CommonLispHyperSpec
@@ -1769,6 +1783,22 @@ any other systems that this system depends on.<
 - [[https://www.adamtornhill.com/articles/lispweb.htm][LispWeb]]
 - [[https://leanpub.com/lispweb][On LeanPub]]
 
+** awesome-cl
+"A curated list of awesome Common Lisp frameworks, libraries and other shiny
+stuff."
+
+- https://awesome-cl.com
+- [[https://github.com/CodyReichert/awesome-cl][awesome-cl on GitHub]]
+
+
+All libraries listed here are available from Quicklisp unless stated otherwise.
+The ones  marked with  a :star: are  so widespread and  solid that  they became
+community  standards. You  can’t  be wrong  with  them. This  is  the case  for
+Quicklisp, BordeauxThreads and  such. Libraries denoted with a 👍  are the ones
+we like  and want to  promote here at the  Awesome-cl list. They  proved solid,
+they may solve  a problem better than  a community standard but  they aren’t as
+widespread, or not considered as stable.  For example, we prefer Spinneret over
+Cl-Who.
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
 This section  discusses the Common  Lisp interface  to file systems.  The model
@@ -2491,6 +2521,80 @@ These opertors require open streams:
 - 
 
 * Common Lisp Packages
+** ASDF---Another System Definition Facility
+#+cindex:asdf
+"ASDF is the de facto standard build facility for Common Lisp."
+
+- https://common-lisp.net/project/asdf/
+
+: (require "asdf")
+
+
+The latest release is 3.3.4, published on February 14th, 2019.
+*** What asdf Is
+ASDF is what Common Lisp hackers use to build and load software.
+
+ASDF 3 contains two parts: ~asdf/defsystem~ and ~uiop~.
+
+~asdf/defsystem~  is the  part that  people usually  refer to  as =ASDF=,  with
+~uiop~ being only  a supporting library, that happens to  be distributed at the
+same time, by necessity.
+
+**** asdf/defsystem
+#+cindex:asdf/defsystem
+is a tool to *describe* how Lisp source code is organized in /systems/, and how
+to *build* and *load* these systems. The  build happens based on a plan in term
+of /actions/  that depend on  previous actions; the  plan is computed  from the
+structure of the systems.
+
+Typical /actions/ consist of:
+- *compiling* a Lisp source file
+- *loading* the resulting compilation output
+
+
+You  must  typically compile  and  load  files  that define  packages,  macros,
+variables,  before  you  may  compile  and load  other  files  that  use  them.
+Importantly, ASDF builds all software in  the current Lisp image, as opposed to
+building software into separate processes.
+
+**** uiop
+
+#+cindex:uiop
+the  /Utilities for  Implementation- and  OS- Portability/,  formerly known  as
+~asdf/driver~, is a Common Lisp  portability library and runtime support system
+that helps you write Common Lisp software in a portable way.
+
+~uiop~ is distributed as part of =ASDF=:  its source code is transcluded in the
+single-file ~asdf.lisp~ being distributed and the precompiled fasls provided by
+Lisp implementations. =ASDF= relies heavily on it for its portability layer and
+runtime support, particularly so as  to handle pathnames and filesystem access.
+~uiop~  is  useful  on  its  own  and can  also  be  compiled  and  distributed
+separately.
+
+*** What asdf Is Not
+#+cindex:Quicklisp
+=ASDF= will  not download missing  software components  for you. For  that, you
+want  =Quicklisp=, that  builds  upon  =ASDF=, and  is  great  for pulling  and
+installing tarballs of packages you may depend upon.
+
+#+cindex:clbuild
+We also recommend [[https://common-lisp.net/project/clbuild/][~clbuild~]], that now  builds upon =Quicklisp=, as a great tool
+for  pulling from  version  control packages  you  need to  modify  or want  to
+contribute to.
+
+#+cindex:asdf-install
+We  recommend you  should not  use ~asdf-install~  anymore, as  it is  an older
+similar piece of software that is both unmaintained and obsolete.
+
+#+cindex:cl-launch
+#+cindex:buildapp
+#+cindex:roswell
+=ASDF= is also  not a tool to build  or run Common Lisp software  from the Unix
+command-line. For that, you want:
+- [[https://cliki.net/cl-launch][~cl-launch~]],
+- [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
+- [[https://github.com/roswell/roswell][~roswell~]]
+
 ** Iterate
 - [[https://common-lisp.net/project/iterate/][Iterate]]
 - [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
