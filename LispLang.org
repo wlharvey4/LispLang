@@ -3,14 +3,18 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-05 21:23
-#+macro:version Version 0.0.49
+#+date:2020-11-06 06:35
+#+macro:version Version 0.0.50
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
 {{{version}}} {{{date}}}
 
 #+texinfo:@insertcopying
+
+"Lisp programmers  are of  the opinion that  =[]= and ={}=  are just  =()= with
+delusions of grandeur."
+- Joe Marshall — Apropos of Nothing @2020-10-15 22:18 http://planet.lisp.org
 
 
 "47. The first  Lisp interpreter was a  result of a programmer  ignoring his boss's
@@ -2620,6 +2624,23 @@ It is available from QuickLisp.
 - [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
 - [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
 - [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
+** ZS3---Amazon S3 and CloudFront from Common Lisp
+#+cindex:ZS3
+#+cindex:Amazon S3
+#+cindex:S3, Amazon
+#+cindex:Amazon CloudFront
+#+cindex:CloudFront, Amazon
+ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
+(S3) and CloudFront content delivery service.
+
+- https://www.xach.com/lisp/zs3/
+- [[https://github.com/xach/zs3/][ZS3 on GitHub]]
+
+** SharpListers
+A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
+quasi-abandoned Common Lisp software packages.
+
+- https://github.com/sharplispers
 * Common Lisp Databases
 - https://www.cliki.net/Database
 ** CLSQL
