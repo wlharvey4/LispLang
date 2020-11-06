@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-06 06:35
-#+macro:version Version 0.0.50
+#+date:2020-11-06 07:32
+#+macro:version Version 0.0.51
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3555,6 +3555,10 @@ construct.
 
 **** Argument Lists
 
+* Common Lisp Blogs
+** Lispology
+"RANDOM THOUGHTS ABOUT COMMON LISP"
+- http://www.lispology.com/
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
