@@ -3,14 +3,21 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-06 07:32
-#+macro:version Version 0.0.51
+#+date:2020-11-09 06:45
+#+macro:version Version 0.0.52
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
 {{{version}}} {{{date}}}
 
 #+texinfo:@insertcopying
+
+#+texinfo:@ifnothtml
+[[file:resources/images/lisp.jpg]]
+#+texinfo:@end ifnothtml
+#+texinfo:@ifhtml
+[[file:/usr/local/dev/programming/Lisp/resources/images/lisp.jpg]]
+#+texinfo:@end ifhtml
 
 "Lisp programmers  are of  the opinion that  =[]= and ={}=  are just  =()= with
 delusions of grandeur."
