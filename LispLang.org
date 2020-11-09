@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 14:10
-#+macro:version Version 0.0.55
+#+date:2020-11-09 15:24
+#+macro:version Version 0.0.56
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3798,6 +3798,88 @@ construct.
 ** Lispology
 "RANDOM THOUGHTS ABOUT COMMON LISP"
 - http://www.lispology.com/
+
+* Common Lisp Learning
+** Practical Common Lisp
+** Common Lisp---An Interactive Approach
+:PROPERTIES:
+:cite:     https://cse.buffalo.edu/~shapiro/Commonlisp/
+:author:   Stuart C. Shapiro
+:date:     1992
+:copyright: Stuart C. Shapiro
+:errata:   Online version has been corrected
+:last-modified: Thu Nov 13 16:37:19 2014
+:END:
+
+- https://cse.buffalo.edu/~shapiro/Commonlisp/
+
+  This  book is  out of  print. The  publisher has  returned the  copyright and
+  rights to  me, the author.   I am  making it available  here in pdf,  and dvi
+  formats, and in two  versions of ps format, a heavier font  and a finer font,
+  under  the  following  conditions:  hardcopies  must  retain  the  title  and
+  copyright pages; web links must point to  this page rather than to a separate
+  copy of the dvi, ps, or pdf file;  quotes and other copies of material in the
+  book,  including programs,  must include  the citation:  "Stuart C.  Shapiro,
+  /COMMON LISP: An Interactive Approach./ W. H. Freeman, New York, 1992."
+
+  A Baker's Dozen  of Reasons to Adopt Common Lisp:  An Interactive Approach by
+  Stuart C. Shapiro
+
+  1. Contains many sample interactions to illustrate the material in the text,
+     helping students know what to expect when they experiment on their own.
+
+  2. Introduces pure Lisp before imperative Lisp to give students a familiarity
+     with the functional approach and to help develop a balanced programming
+     style.
+
+  3. Labels each exercise as either review, instruction, drill, utility, or
+     part of one of the extended programming projects, so that an intelligent
+     choice can be made when only selected exercises are to be done.
+
+  4. Presents coverage of packages early in Chapter 7, and then uses packages
+     consistently and frequently. From Chapter 7 on, every set of exercises
+     utilizes a different package for thorough student familiarity.
+
+  5. Carefully distinguishes S-expressions from forms beginning with the first
+     chapter and consistently throughout.
+
+  6. Discusses the important Common Lisp types: numbers (integers, floating
+     point numbers, and ratios), strings, characters, symbols, packages, lists,
+     conses, functions, hash tables, and single dimensional arrays.
+
+  7. Provides two chapters on the Common Lisp Object System (CLOS) to introduce
+     students to object-oriented programming.
+
+  8. Introduces check-type in Chapter 16 and uses it consistently afterwards to
+     help students ensure that the objects passed to a function are of the
+     correct type.
+
+  9. Views the documentation string as a required part of a function
+     definition.
+
+  10. Uses first and rest instead of car and cdr, eql instead of eq, and setf
+      instead of setq to correspond with modern Common Lisp.
+
+  11. Contains solutions to about one-third of the programming exercises in
+      Appendix A.
+
+  12. Includes a Common Lisp reference manual that documents all the Common
+      Lisp functions, macros, and special forms introcuced in the text.
+
+  13. An Instructor's Guide, available free upon adoption, presents chapter
+      objectives and solutions to all programming exercises.
+
+
+- [[https://cse.buffalo.edu/~shapiro/Courses/CSE202/Notes/][CSE202: Programming in Lisp]]
+
+  The notes  from an  on-line course, CSE  202, using this  book, and  given in
+  Fall, 2000, is available.
+
+- [[https://cse.buffalo.edu/~shapiro/Courses/CSE202/Summer2004/][A Short Course in Common Lisp]]
+
+  An  even more  up-to-date, faster  introduction  to Common  Lisp, written  in
+  Summer   2004  and   somewhat   biased  toward   Allegro   Common  Lisp,   is
+  Stuart C. Shapiro & David R. Pierce, A Short Course in Common Lisp.
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
