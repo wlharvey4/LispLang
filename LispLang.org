@@ -3,14 +3,21 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 07:17
-#+macro:version Version 0.0.53
+#+date:2020-11-09 12:50
+#+macro:version Version 0.0.54
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
 {{{version}}} {{{date}}}
 
 #+texinfo:@insertcopying
+
+#+attr_texinfo: :author Richard P. Gabriel, The Art of Lisp & Writing, 2003
+#+begin_quote
+Lisp is the language of loveliness.
+#+end_quote
+- https://www.dreamsongs.com/ArtOfLisp.html
+
 
 #+texinfo:@ifnothtml
 [[./resources/images/lisp-universe.jpg]]
@@ -3084,6 +3091,84 @@ you wish to retrieve.
 - compiler-macro :: define-compiler-macro
 - method-combination :: define-method-combination
 
+* Common Lisp Object system---CLOS
+- https://www.dreamsongs.com/CLOS.html
+
+** CLOS History
+- Levine, /Fundamentals of CLOS/ 2003-07-15 ([[Livine][see below]])
+
+The functionality  belonging to this name  [CLOS] was added to  the Common Lisp
+language between the publication of Steele's first edition of "Common Lisp, the
+Language" in 1984 and the formalization of the language as an ANSI standard ten
+years later.
+
+The source material for CLOS was a  report written in three chapters. The first
+two,  consisting  of "Programmer  Interface  Concepts"  and "Functions  in  the
+Programmer Interface",  will now be  found as the two  halves of chapter  28 in
+[Steele 1990] and  were the basis for relevant parts  of the ANSI specification
+when it  later appeared.  The third  chapter, on  the Metaobject  protocol, was
+regarded (by its authors, I believe) as incomplete and never published.
+
+- Linda G. DeMichiel, /The Common Lisp Object System/
+
+The Common  Lisp Object System  is an object-oriented programming  paradigm de-
+signed for Common Lisp. Over a period  of twenty months, the Common Lisp Object
+System  design group  took  the best  ideas from  CommonLoops  and Flavors  and
+combined  them  into a  new  object-oriented  paradigm  for Common  Lisp.  This
+combination is not simply a union: it is  a new paradigm that is similar in its
+outward  appearances to  Com- monLoops  and Flavors,  and it  has been  given a
+firmer underlying semantic basis. The  major participants in this design effort
+were Daniel Bobrow  and Gregor Kiczales from Xerox, David  Moon and Sonya Keene
+from Symbolics, and Richard Gabriel and Linda DeMichiel from Lucid.
+
+The Common Lisp Object  System has been proposed as a  standard for ANSI Common
+Lisp. In 1987, the X3J13 committee endorsed an earlier, but incomplete, version
+of the specification, stating that it would almost certainly be adopted as part
+of the Common Lisp standard, and  encouraged implementors to proceed with trial
+implementations. In  June 1988,  the X3J13 committee  accepted the  Common Lisp
+Object  System  Programmer  Interface,  as defined  in  Document  88-002R,  for
+inclusion into the Common Lisp language being specified by X3J13. This paper is
+a  report on  the specification  of the  Common Lisp  Object System  Programmer
+Interface that was adopted by X3J13 in June 1988.
+
+** Common Lisp Object System Specification
+- [[https://www.dreamsongs.com/CLOS.html][CLOS]]
+
+  The specification was published in  the journal Lisp and Symbolic Computation
+  (LASC)  in Volume  1, Numbers  3-4,  and was  formally accepted  by X3J13  in
+  June 1988.
+
+- [[https://www.dreamsongs.com/Files/ECOOP.pdf][Overview]]
+
+  The introduction to that double issue.
+
+- [[https://www.dreamsongs.com/Files/concepts.pdf][Conceptual Material]]
+
+- [[https://www.dreamsongs.com/Files/Functions.pdf][Functional Material]]
+
+- [[https://www.dreamsongs.com/Files/LASC-Overview.pdf][Companion Description]] by Linda DeMichiel
+
+  It  should  be read  by  people  unfamiliar with  Lisp-based  object-oriented
+  languages or by people who do not wish to read the full specification.
+
+- [[https://www.dreamsongs.com/Files/clos-cacm.pdf][CLOS: Integrating Object-Oriented and Functional Programming]], 2004
+
+- [[https://www.dreamsongs.com/Files/clos-book.pdf][CLOS in Context: The Shape of the Design Space]], 2004
+
+** CLOS Fundamentals
+- <<Livine>>[[http://cl-cookbook.sourceforge.net/clos-tutorial/][Fundamentals of CLOS]] by Nick Levine 2003-07-15
+
+
+The intention  of this  tutorial is  to provide a  sufficient grounding  in the
+(say) 10% of  CLOS which covers 90% of  use cases - enough to get  a novice off
+the ground.
+
+** CLOS Programming
+- Sonya Keene, /Object-Oriented Programming in Common Lisp--A Programmer's
+  Guide to CLOS/, 1989
+
+  "[This] is a very easy introduction and more thorough than the single chapter
+  in [Graham 1995], but it will obviously take you longer to read." --Levine.
 * Common Lisp on Emacs
 ** Emacs Lisp
 *** Emacs Lisp vs Common Lisp
