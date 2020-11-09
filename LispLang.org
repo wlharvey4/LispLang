@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 06:45
-#+macro:version Version 0.0.52
+#+date:2020-11-09 07:17
+#+macro:version Version 0.0.53
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -13,11 +13,33 @@
 #+texinfo:@insertcopying
 
 #+texinfo:@ifnothtml
-[[file:resources/images/lisp.jpg]]
+[[./resources/images/lisp-universe.jpg]]
 #+texinfo:@end ifnothtml
 #+texinfo:@ifhtml
-[[file:/usr/local/dev/programming/Lisp/resources/images/lisp.jpg]]
+[[../resources/images/lisp-universe.jpg]]
 #+texinfo:@end ifhtml
+
+- https://xkcd.com/224/
+- A testimonial from Chris Crawford in
+  - /Perl is Dead. Python is the New Java/
+  - published in https://medium.com/netdef/perl-is-dead-python-is-the-new-java-5c11af86c17a
+  - on Nov 6, 2020
+
+
+#+attr_texinfo: :author Chris Crawford
+#+begin_quote
+What has been, for me, the most mind-expanding programming language? LISP.
+
+To quote Eric Steven Raymond from his manifesto “How To Become A Hacker”:
+
+"LISP is  worth learning  for a  different reason  — the  profound enlightenment
+experience you will have when you finally get it. That experience will make you
+a better programmer for  the rest of your days, even if  you never actually use
+LISP itself a lot."
+
+He’s not wrong! I’ve had that exact type of experience with LISP.
+#+end_quote
+
 
 "Lisp programmers  are of  the opinion that  =[]= and ={}=  are just  =()= with
 delusions of grandeur."
