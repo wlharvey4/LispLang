@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 12:50
-#+macro:version Version 0.0.54
+#+date:2020-11-09 14:10
+#+macro:version Version 0.0.55
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -218,7 +218,7 @@ Christian Queinnec's Lisp in Small Pieces.
 
   Descended  from  one of  the  oldest  surviving programming  languages  (only
   Fortran is older),  CommonLisp is the first language  with integrated support
-  for ObjectOrientedProgramming to get ANSI standardized.
+  for Object Oriented Programming to get ANSI standardized.
 
   It  is a  rich  language with  clear semantics  which  allows programming  in
   procedural, functional, object oriented and logical (rule based) style all in
@@ -613,6 +613,110 @@ the time of Mohammed from the point  of view of this world, and without special
 pleading.
 #+end_quote
 
+** A Note on S-expressions--Forms--Types
+The development of  the package system is  related to the change  of focus from
+S-expressions  to   forms.   The  index   of  CLtL-2  contains  no   entry  for
+S-expressions  or symbolic  expressions, but  the entry  for forms  contains 14
+subentries and points to a total of 39 different pages.
+
+The change  in focus from  S-expressions to forms is  bound up with  the devel-
+opment of  a mature typing system,  since Common Lisp has  typed objects rather
+than typed expressions.
+
+- S-expressions ::
+
+  S-expressions  are syntactic  units, sequences  of characters  that form  the
+  written version of Lisp programs and data structures.
+
+  We used to  say that the Lisp language consisted  of S-expressions, the major
+  action of Lisp  was the evaluation of S-expressions,  and the read-eval-print
+  loop consisted of  reading an S-expression, evaluating it,  and then printing
+  the value as an S-expression.
+
+- Forms ::
+
+  A form, on the other hand, is a Common Lisp object that can be evaluated, and
+  the major action of Common Lisp is the evaluation of such forms, or objects.
+
+  The  Common Lisp  read-eval-print  loop  really has  five  steps:
+
+  1. reading  an  S-expression,
+  2. creating  the object  the S-expression denotes,
+  3. evaluating the object,
+  4. choosing a printed representation of the value, and
+  5. printing that representation.
+
+- Types ::
+
+  Common Lisp  has an  extensive set of  types, each with  a predicate  to rec-
+  ognize objects  of that type and  a collection of operations  defined for it,
+  all organized into a type hierarchy.
+
+  Types  covered  include:
+  - numbers   (integers,  floating-point  numbers,  and ratios),
+  - characters,
+  - strings,
+  - symbols,
+  - packages,
+  - lists,
+  - conses,
+  - functions,
+  - hash tables, and
+  - single dimensional arrays
+
+  Common Lisp  is an object-oriented  language similar to  the way that  CLU is
+  object-oriented,  as  opposed  to  the  modern  meaning  of  that  phrase  in
+  object-oriented  programming.  Common  Lisp is  object-oriented in  the sense
+  that:
+
+  - variables have objects as their  values, and
+  - two variables can be bound to the same  object;
+  - composite objects have objects as  their parts;
+  - objects, rather than expressions, have values and types
+
+  To  see the  significance  of Common  Lisp’s typing  of  objects, compare  an
+  untyped  language such  as Fortran  with a  strongly typed  language such  as
+  Pascal with Common Lisp. In Fortran, one may store a value of one type into a
+  variable,  and then  pass  that variable  by reference  to  a procedure  that
+  operates on  it as  if it were  another type. In  Pascal, the  compiler would
+  catch this as  an error because the  variable would be declared  as one type,
+  whereas the  formal parameter would  be declared  as another type.  In Common
+  Lisp, this would be caught as  an error during execution because the operator
+  would complain that  the object it was  given to operate on was  of the wrong
+  type.
+
+  Common Lisp has a macro check-type that  can be used to make sure the objects
+  passed to a  function are of the  correct type.  One may choose  never to use
+  check-type, but  one then runs the  risk of a built-in  function, called many
+  levels deep in user-defined functions, complaining that some object is of the
+  wrong type. It then can be very hard to find which function actually made the
+  mistake.
+
+- Evaluation ::
+
+  Unlike other  programming languages,  Lisp does  not operate  on a  series of
+  imperative statements---“do this, then do this, and so on,” but rather on ex-
+  pressions,  called   symbolic  expressions   or  S-expressions,   which  Lisp
+  evaluates.
+
+  More accurately,  a session with Common  Lisp involves an interaction  with a
+  Lisp /listener/, during which the following five steps are repeated until you
+  decide to stop:
+
+  1. You type an S-expression to the Lisp listener.
+
+  2.  The   Lisp  listener   interprets  your   S-expression  as   the  printed
+     representation of a Common Lisp object.
+
+  3. That object is evaluated. Its value is also a Common Lisp object.
+
+  4. The Lisp listener chooses a printed representation for the value object.
+
+  5. That printed representation is printed for you to read.
+
+  Common Lisp is object-oriented in the sense that objects, rather than expres-
+  sions, are evaluated,  and unlike many other  programming languages, objects,
+  rather than expressions, have types.
 * Common Lisp Implementations
 - [[https://www.cliki.net/Common%20Lisp%20implementation][Cliki Comparison of Actively Developed Common Lisp Implementations]]
   - All the implementations provide an FFI and sockets interface
@@ -1365,6 +1469,22 @@ Lisp.
     that, I  think it  is a  great book, and  it explains  many things  in much
     greater depth than what the  HyperSpec is able to communicate. Furthermore,
     the entire books is available to download for free, or to consult as HTML.
+
+  - Stuart C. Shapiro Common Lisp---An Interactive Approach ::
+
+    The purpose of  this book is to  help you learn the Common  Lisp dialect of
+    the programming  language Lisp (LISt Processing  language) by experimenting
+    with it via an interactive computer  terminal. The recommended method is to
+    read a  chapter or two,  sit down  at a terminal  and try the  examples and
+    exercises  of those  chapters, leave  the terminal  and go  on to  the next
+    chapters, and so on.  The book is  intended to be a self-paced study guide,
+    requiring additional information from an instructor, manual, consultant, or
+    friend only to fill in the details  of the local operating system and a few
+    implementation-dependent features.
+
+    In this edition, ..., I am  strictly following the Common Lisp standard set
+    out in  Guy L.   Steele, Jr.’s  COMMON LISP:  The Language,  Second Edition
+    (Bedford, MA: Digital Press, 1990).
 
 *** Practical Common Lisp by Peter Seibel
 - [[https://wiki.c2.com/?PracticalCommonLisp][About Practical Common Lisp]]
@@ -3166,9 +3286,14 @@ the ground.
 ** CLOS Programming
 - Sonya Keene, /Object-Oriented Programming in Common Lisp--A Programmer's
   Guide to CLOS/, 1989
+  - https://doc.lagout.org/programmation/Lisp/Object-Oriented%20Programming%20in%20Common%20Lisp_%20A%20Programmer%27s%20Guide%20to%20CLOS%20%5BKeene%201989-01-11%5D.pdf
 
   "[This] is a very easy introduction and more thorough than the single chapter
   in [Graham 1995], but it will obviously take you longer to read." --Levine.
+** CLOS References
+- [[https://lifegoo.pluskid.org/upload/doc/object_models/CLOS.pdf][CLOS: The Common Lisp Object System A Overview]]
+
+- [[https://engineering.purdue.edu/RVL/Publications/Kersten93ATutorial2.pdf][A TUTORIAL ON LISP OBJECT-ORIENTED PROGRAMMING FOR BLACKBOARD COMPUTATION]]
 * Common Lisp on Emacs
 ** Emacs Lisp
 *** Emacs Lisp vs Common Lisp
