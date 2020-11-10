@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 19:59
-#+macro:version Version 0.0.59
+#+date:2020-11-10 11:56
+#+macro:version Version 0.0.60
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -46,6 +46,11 @@ LISP itself a lot."
 
 He’s not wrong! I’ve had that exact type of experience with LISP.
 #+end_quote
+
+
+"There’s also a special place in my  heart for Emacs Lisp, a venerable goofball
+language that’s so much fun to discuss."
+- Chris Wellons, https://nullprogram.com/about/
 
 
 "Lisp programmers  are of  the opinion that  =[]= and ={}=  are just  =()= with
@@ -221,11 +226,59 @@ Christian Queinnec's Lisp in Small Pieces.
 [[../resources/images/lisp-creature.png]]
 #+texinfo:@end ifhtml
 
-- Start Here :: [[https://github.com/CodyReichert/awesome-cl][Awesome Common Lisp]]
+
+- Introducing Commong Lisp :: [[https://lisp-lang.org][Common Lisp]]
+
+  Welcome to ~lisp-lang.org~, the new home of Common Lisp on the web.
+
+  Previously, if someone wanted to learn  Common Lisp, the language, their best
+  bet was  Peter Seibel’s  /Practical Common  Lisp/. But  the book,  written in
+  2005, doesn’t cover setting up a *modern Common Lisp environment*: tools like
+  ~Quicklisp~ and ~Quickdocs~ are more recent inventions.
+
+  Learning how  to write =ASDF=  systems (think ~package.json~), how  a library
+  should  be   structured,  where   to  find   documentation  (the   answer  is
+  ~Quickdocs~), all of  that information is spread across  dozens of tutorials,
+  manuals and blog posts across different websites.
+
+  Languages  created by  a  single person  or  a small  group,  around which  a
+  community accretes, tend to do better  here: ~Python~, ~Ruby~ and ~Scala~ all
+  have  websites that  provide all  of  these resources.  Languages created  by
+  commitees, like  ~JavaScript~ or ~Common  Lisp~ or ~C~, rarely  have official
+  websites.
+
+  The goal of ~lisp-lang.org~ is to lower  the barrier to entry to Common Lisp:
+  - provide a central location to both advertise Common Lisp, and
+
+  - provide all  the information  prospective users  need to  become productive
+    with it,
+
+  - without having  to collect it from  different sites and blogs,  and
+
+  - without falling into  choice paralysis.
+
+
+  ‘Productive’ means  going beyond teaching  users about lists and  macros, and
+  including information on
+    - how to write libraries,
+    - unit-test them,
+    - use CI and code coverage, and
+    - publish them to Quicklisp.
+
+
+  Currently we have:
+
+  - tutorials
+  - style guide
+  - success stories
+  - lisp books
+
+
+- Awesome Common Lisp :: [[https://github.com/CodyReichert/awesome-cl][Awesome Common Lisp]]
 
   A curated list of awesome Common Lisp libraries (and more)
 
-- Common Lisp :: https://wiki.c2.com/?CommonLisp
+- Common Lisp Wiki :: https://wiki.c2.com/?CommonLisp
 
   Descended  from  one of  the  oldest  surviving programming  languages  (only
   Fortran is older),  CommonLisp is the first language  with integrated support
@@ -1289,6 +1342,12 @@ Lisp incorporates  state-of-the-art compiler technology  to bring you  a Common
 Lisp system unmatched on Windows platforms.
 
 * Common Lisp Documentation Resources
+** Common Lisp Specification
+"The ANSI Common  Lisp draft specification, parsed from  TeX sources, available
+as a Common Lisp library."
+
+- [[https://github.com/LispLang/ansi-spec][ANSI Common Lisp Specification]]
+
 ** Common Lisp Hyper Spec
  - https://wiki.c2.com/?CommonLispHyperSpec
 
