@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 15:24
-#+macro:version Version 0.0.56
+#+date:2020-11-09 17:17
+#+macro:version Version 0.0.57
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -213,6 +213,18 @@ Christian Queinnec's Lisp in Small Pieces.
 :PROPERTIES:
 :unnumbered: t
 :END:
+
+#+texinfo:@ifnothtml
+[[./resources/images/lisp-creature.png]]
+#+texinfo:@end ifnothtml
+#+texinfo:@ifhtml
+[[../resources/images/lisp-creature.png]]
+#+texinfo:@end ifhtml
+
+- Start Here :: [[https://github.com/CodyReichert/awesome-cl
+][Awesome Common Lisp]]
+
+  A curated list of awesome Common Lisp libraries (and more)
 
 - Common Lisp :: https://wiki.c2.com/?CommonLisp
 
@@ -2755,6 +2767,12 @@ command-line. For that, you want:
 - [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
 - [[https://github.com/roswell/roswell][~roswell~]]
 
+** Common Lisp Packages for MongoDB
+*** cl-mongo
+- [[https://www.mongodb.com][MongoDB]]
+- [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
+- [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
+- [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
 ** Iterate
 - [[https://common-lisp.net/project/iterate/][Iterate]]
 - [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
@@ -2774,12 +2792,11 @@ It is available from QuickLisp.
 
 : #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
 
-** Common Lisp Packages for MongoDB
-*** cl-mongo
-- [[https://www.mongodb.com][MongoDB]]
-- [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
-- [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
-- [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
+** SharpListers
+A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
+quasi-abandoned Common Lisp software packages.
+
+- https://github.com/sharplispers
 ** ZS3---Amazon S3 and CloudFront from Common Lisp
 #+cindex:ZS3
 #+cindex:Amazon S3
@@ -2792,11 +2809,6 @@ ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
 - https://www.xach.com/lisp/zs3/
 - [[https://github.com/xach/zs3/][ZS3 on GitHub]]
 
-** SharpListers
-A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
-quasi-abandoned Common Lisp software packages.
-
-- https://github.com/sharplispers
 * Common Lisp Databases
 - https://www.cliki.net/Database
 ** CLSQL
@@ -3176,21 +3188,6 @@ MAPL names a compiled function:
   Source file: SYS:SRC;CODE;LIST.LISP
 #+end_src
 
-** Inspect
-   #+findex:inspect
-~INSPECT~  is  an  interactive  version   of  ~DESCRIBE~.  The  nature  of  the
-interaction is  implementation-dependent, but  the purpose  of ~INSPECT~  is to
-make it easy to wander through  a data structure, examining and modifying parts
-of it.
-
-~INSPECT~  is like  ~DESCRIBE~,  but  instead of  printing  the information  it
-presents the information in some  kind of interactive display; typically either
-a  command loop  in the  current listener  or a  new window  with its  own user
-interface.
-
-Implementations are encouraged to respond to the  typing of =?= or a ``help key''
-by providing help, including a list of commands.
-
 ** Documentation
    #+findex:documentation
 The  generic   function  ~DOCUMENTATION~   returns  the   documentation  string
@@ -3211,6 +3208,81 @@ you wish to retrieve.
 - compiler-macro :: define-compiler-macro
 - method-combination :: define-method-combination
 
+** Inspect
+   #+findex:inspect
+~INSPECT~  is  an  interactive  version   of  ~DESCRIBE~.  The  nature  of  the
+interaction is  implementation-dependent, but  the purpose  of ~INSPECT~  is to
+make it easy to wander through  a data structure, examining and modifying parts
+of it.
+
+~INSPECT~  is like  ~DESCRIBE~,  but  instead of  printing  the information  it
+presents the information in some  kind of interactive display; typically either
+a  command loop  in the  current listener  or a  new window  with its  own user
+interface.
+
+Implementations are encouraged to respond to the  typing of =?= or a ``help key''
+by providing help, including a list of commands.
+
+* Common Lisp Testing
+** Prove
+Yet another unit testing framework for Common Lisp by Eitaro Fukamachi.
+
+(This project was originally called =CL-TEST-MORE=.)
+
+- [[https://github.com/fukamachi/prove][Prove on GitHub]] (archived)
+
+
+The advantages of 'prove' are:
+
+- Various simple functions for testing and informative error messages
+- ASDF integration
+- Extensible test reporters
+- Colorizes the report if it's available (note for SLIME)
+- Reports test durations
+
+
+You can install 'prove' via Quicklisp.
+
+: (ql:quickload :prove)
+
+See [[*SLIME Colors for Testing using Prove][SLIME Colors for Testing using Prove]] to add colored output in SLIME when
+using Prove.
+** Rove
+"Rove  is a  unit  testing  framework for  Common  Lisp  applications. This  is
+intended to be a successor of Prove."  Eitaro Fukamachi (author of Prove)
+
+- [[https://github.com/fukamachi/rove][Rove on GitHub]]
+** FiveAM
+"Common Lisp regression testing framework"
+
+- [[https://github.com/lispci/fiveam][FiveAM on GitHub]]
+** clunit
+"A Common Lisp Unit Testing Framework."
+
+- [[https://github.com/tgutu/clunit][clunit on GitHub]]
+** Parachute
+"An extensible and cross-compatible testing framework."
+
+- [[https://github.com/Shinmera/parachute][Parachute on GitHub]]
+** Mockingbird
+"A small stubbing and mocking library for Common Lisp"
+
+- [[https://github.com/Chream/mockingbird][Mockingbird on GitHub]]
+
+
+This  package  provides  some  useful  stubbing and  mocking  macros  for  unit
+testing. Used  when specified functions  in a test  should not be  computed but
+should instead return a provided constant value.
+** check-it
+"Randomized specification-based testing for Common Lisp. Available through
+Quicklisp."
+
+- [[https://github.com/DalekBaldwin/check-it][check-it on GitHub]]
+
+
+This is  a randomized  property-based testing library  for Common  Lisp. Rather
+than  being a  full-fledged  general  test framework  in  its  own right,  it's
+designed to embed randomized tests in whatever framework you like.
 * Common Lisp Object system---CLOS
 - https://www.dreamsongs.com/CLOS.html
 
@@ -3685,6 +3757,28 @@ others:
    integration is available using the ~inferior-slime-mode~.
  - Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
    REPL) and ignore the =*inferior-lisp*= buffer.
+*** SLIME Colors for Testing using Prove
+
+SLIME doesn't support to color with ANSI colors in the REPL buffer officially.
+
+You can add the feature by using [[https://github.com/enriquefernandez/slime-repl-ansi-color][slime-repl-ansi-color.el]].
+
+After installing it, set ~prove:*enable-colors*~ to =T= before running tests.
+
+#+begin_src lisp
+;; A part of my ~/.sbclrc
+(ql:quickload :prove)
+(setf prove:*enable-colors* t)
+#+end_src
+
+If you would prefer not to load ~prove~ in every lisp session, set up this
+method instead of the former:
+
+#+begin_src lisp
+defmethod asdf:perform :after ((op asdf:load-op) (c (eql (asdf:find-system :prove))))
+  (setf (symbol-value (intern (string :*enable-colors*) :prove)) t))
+#+end_src
+
 ** GNU Emacs Common Lisp Emulation
 This file documents the GNU Emacs Common Lisp emulation package.
 
@@ -3793,7 +3887,6 @@ as  a whole:  advanced argument  lists  for functions,  and the  ~cl-eval-when~
 construct.
 
 **** Argument Lists
-
 * Common Lisp Blogs
 ** Lispology
 "RANDOM THOUGHTS ABOUT COMMON LISP"
