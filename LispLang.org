@@ -3,7 +3,7 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 18:02
+#+date:2020-11-09 19:40
 #+macro:version Version 0.0.58
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
@@ -221,8 +221,7 @@ Christian Queinnec's Lisp in Small Pieces.
 [[../resources/images/lisp-creature.png]]
 #+texinfo:@end ifhtml
 
-- Start Here :: [[https://github.com/CodyReichert/awesome-cl
-][Awesome Common Lisp]]
+- Start Here :: [[https://github.com/CodyReichert/awesome-cl][Awesome Common Lisp]]
 
   A curated list of awesome Common Lisp libraries (and more)
 
@@ -3320,7 +3319,7 @@ intended to be a successor of Prove."  Eitaro Fukamachi (author of Prove)
 This  package  provides  some  useful  stubbing and  mocking  macros  for  unit
 testing. Used  when specified functions  in a test  should not be  computed but
 should instead return a provided constant value.
-** check-it
+** Check-it
 "Randomized specification-based testing for Common Lisp. Available through
 Quicklisp."
 
@@ -3330,6 +3329,10 @@ Quicklisp."
 This is  a randomized  property-based testing library  for Common  Lisp. Rather
 than  being a  full-fledged  general  test framework  in  its  own right,  it's
 designed to embed randomized tests in whatever framework you like.
+** CL-Coverals
+"A helper library to post test coverage to [[https://coveralls.io/][Coveralls]]."
+
+- [[https://github.com/fukamachi/cl-coveralls][CL-Coveralls on GitHub]]
 * Common Lisp Object system---CLOS
 - https://www.dreamsongs.com/CLOS.html
 
