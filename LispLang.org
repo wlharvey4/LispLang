@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-09 17:17
-#+macro:version Version 0.0.57
+#+date:2020-11-09 18:02
+#+macro:version Version 0.0.58
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1512,13 +1512,60 @@ Lisp.
 - http://www.cs.cmu.edu/~dst/LispBook/index.html
 
 *** On Lisp by Paul Graham
-- https://wiki.c2.com/?OnLisp
 - http://www.paulgraham.com/onlisptext.html
 - http://www.paulgraham.com/lisp.html
+- https://wiki.c2.com/?OnLisp
+- https://cliki.net/On+Lisp
+- https://bitbucket.org/blevyq/onlisp/src/master/
+- https://cliki.net/PgUtils a package containing all the utility functions and
+  macros from On Lisp
 
 "This is simply the best book written about any computing topic that I
 have ever come  across. Even if you  don't know lisp, you  can get the
 general gist of this book and enjoy it."
+
+- https://code.google.com/archive/p/onlisp/
+- https://code.google.com/archive/p/onlisp/downloads
+
+  #+texinfo:@ifnothtml
+  [[./resouces/src/onlisp.html]]
+  #+texinfo:@end ifnothtml
+  #+texinfo:@ifhtml
+  [[../resources/src/onlisp.html]]
+  #+texinfo:@end ifhtml
+
+
+- [[https://github.com/DalekBaldwin/on-lisp][DalekBaldwin's on-lisp GitHub repo]]
+
+  This repository  contains a version of  the code from /On  Lisp/ modified for
+  use in  modern Lisp environments.  Paul  Graham's original code can  be found
+  [[http://ep.yimg.com/ty/cdn/paulgraham/onlisp.lisp][here]].  The PDF  file of the book  available from Paul Graham's  site isn't so
+  great for reading on a screen. A version with smaller margins and the missing
+  figures re-added can be  found [[http://www.lurklurk.org/onlisp/onlisp.html][here]] and [[http://www.lurklurk.org/onlisp/onlisp.pdf][here]].
+
+  Among other necessary changes, this version:
+
+  - Updates code that relied on pre-ANSI built-ins
+  - Includes the bug fixes mentioned on pg's errata page
+  - Organizes everything into a modern system structure with ASDF and
+    named-readtables
+  - Adapts most of the example code into test suites
+  - Makes it easy to load each version of the query system, Prolog system, and
+    OOP system separately
+
+
+  It was  written to  follow along  with the  book page  by page  and catalogue
+  dependencies between the chapters, which become quite complex toward the end.
+
+  The simplest way to  get it up and running is to  install Quicklisp and clone
+  this repository into your quicklisp/local-projects directory.
+
+
+- [[https://github.com/showgood/onlisp][showgood's onlisp org-mode format on GitHub]]
+
+  This is the  org-mode format version of  the on lisp book from  Paul Graham I
+  adopted       from       the       online       free       version       from
+  https://code.google.com/archive/p/onlisp/.
 
 *** Paradigms Of Artificial Intelligence Programming by Peter Norvig
 - https://wiki.c2.com/?ParadigmsOfArtificialIntelligenceProgramming
