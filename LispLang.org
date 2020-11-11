@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-10 11:56
-#+macro:version Version 0.0.60
+#+date:2020-11-10 22:00
+#+macro:version Version 0.0.61
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -4546,6 +4546,11 @@ method instead of the former:
 defmethod asdf:perform :after ((op asdf:load-op) (c (eql (asdf:find-system :prove))))
   (setf (symbol-value (intern (string :*enable-colors*) :prove)) t))
 #+end_src
+
+** Redshank
+"Common Lisp Editing Extensions (for Emacs)"
+
+- [[https://github.com/michaelw/redshank/][Redshank on GitHub]]
 
 ** GNU Emacs Common Lisp Emulation
 This file documents the GNU Emacs Common Lisp emulation package.
