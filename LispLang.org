@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-13 06:51
-#+macro:version Version 0.0.62
+#+date:2020-11-16 00:29
+#+macro:version Version 0.0.63
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -4690,6 +4690,412 @@ development model in mind.
   recompilation required. (this is exactly what LispUnit and FReT do)
 
 ** Lisp Unit
+"A  Test  Framework  for Common  Lisp  in  the  style  of JUnit,  designed  and
+implemented with simplicity of use in mind."
+
+- [[https://github.com/OdonataResearchLLC/lisp-unit/wiki][Lisp Unit wiki]]
+- [[https://github.com/OdonataResearchLLC/lisp-unit][Lisp Unit on GitHub]]
+
+
+~lisp-unit~  is a  Common Lisp  library that  supports unit  testing. It  is an
+extension  of the  library written  by Chris  Riesbeck ([[https://courses.cs.northwestern.edu/325/readings/lisp-unit.php][see]]).  There is  a long
+history of testing packages in  Lisp, usually called "regression" testers. More
+recent packages  in Lisp and  other languages have  been inspired by  JUnit for
+Java.
+
+
+#+texinfo: @heading Features
+
+- Written in portable Common Lisp
+- Loadable as a single file
+- Loadable with ASDF or Quicklisp
+- Simple to define and run tests
+- Redefine functions and macros without reloading tests
+- Test return values, printed output, macro expansions, and conditions
+- Fine-grained control over the testing output
+- Store all test results in a database object that can be examined
+- Group tests by package for modularity
+- Group tests using tags
+- Signal test completion and return results with the condition.
+
+
+*** How To Use Test Unit
+The core  definitions of  ~lisp-unit~ may  be used by  loading the  single file
+~lisp-unit.lisp~.  To use  the  extensions, ~lisp-unit~  must  be loaded  using
+neither =Quicklisp= or =ASDF=.
+
+1. Load (or compile and load) as a single file : ~(load "lisp-unit")~; or
+2. Load using =Quicklisp= : ~(ql:quickload :lisp-unit)~; or
+3. Load using =ASDF= : ~(asdf:load-system :lisp-unit)~.
+4. Load a file of tests.
+5. Run the tests with ~run-tests~.
+
+*** How to Test
+#+begin_src sh
+> (in-package :cs325-user)
+    #<PACKAGE CS325-USER>
+> (define-test pick-greater
+       (assert-equal 5 (pick-greater 2 5))
+       (assert-equal 5 (pick-greater 5 2))
+       (assert-equal 10 (pick-greater 10 10))
+       (assert-equal 0 (pick-greater -5 0))
+   )
+   ==> PICK-GREATER
+#+end_src
+
+Following  good test-first  programming  practice, we  run  these tests  before
+writing any code.
+
+#+begin_src sh
+> (run-tests pick-greater)
+  ==> PICK-GREATER: Undefined function PICK-GREATER called with arguments (2 5).
+#+end_src
+
+This shows  that we need to  do some work. So  we define our broken  version of
+~pick-greater~.
+
+#+begin_src sh
+> (defun pick-greater (x y) x)  ;; deliberately wrong
+    PICK-GREATER
+#+end_src
+
+Now we run the tests again:
+
+#+begin_src sh
+> (run-tests pick-greater)
+  PICK-GREATER: (PICK-GREATER 2 5) failed: Expected 5 but saw 2
+  PICK-GREATER: (PICK-GREATER -5 0) failed: Expected 0 but saw -5
+  PICK-GREATER: 2 assertions passed, 2 failed.
+#+end_src
+
+This shows  two failures. In both  cases, the equality test  returned =NIL=. In
+the  first case  it was  because ~(pick-greater  2 5)~  returned 2  when 5  was
+expected, and in the second case, it was because ~(pick-greater -5 0)~ returned
+-5 when 0 was expected.
+
+**** Assertion Forms
+The most commonly used assertion form is
+: (assert-equal value form)
+
+This tallies a failure  if form returns a value not equal  to value. Both value
+and test  are evaluated in the  local lexical environment. This  means that you
+can use local variables  in tests. In particular, you can  write loops that run
+many tests at once:
+
+#+begin_src sh
+> (define-test my-sqrt
+      (dotimes (i 5)
+        (assert-equal i (my-sqrt (* i i)))))
+    MY-SQRT
+
+    > (defun my-sqrt (n) (/ n 2))   ;; wrong!!
+
+    > (run-tests my-sqrt)
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 1 but saw 1/2
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 3 but saw 9/2
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 4 but saw 8
+    MY-SQRT: 2 assertions passed, 3 failed.
+#+end_src
+
+However, the  above output  doesn't tell us  for which values  of =i=  the code
+failed. Fortunately, you can  fix this by adding expressions at  the end of the
+~assert-equal~. These expression and their values will be printed on failure.
+
+#+begin_src sh
+> (define-test my-sqrt
+      (dotimes (i 5)
+        (assert-equal i (my-sqrt (* i i)) i)))  ;; added i at the end
+    MY-SQRT
+    > (run-tests my-sqrt)
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 1 but saw 1/2
+       I => 1
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 3 but saw 9/2
+       I => 3
+    MY-SQRT: (MY-SQRT (* I I)) failed: Expected 4 but saw 8
+       I => 4
+    MY-SQRT: 2 assertions passed, 3 failed.
+#+end_src
+
+The next most useful assertion form is:
+: (assert-true test)
+
+This tallies a failure  if test returns false. Again, if you  need to print out
+extra information, just add expressions after test.
+
+There  are also  assertion forms  to test  what code  prints, what  errors code
+returns, or what a macro expands into. A complete list of assertion forms is in
+the reference section.
+
+
+#+cindex:assert-true v. assert macro
+#+cindex:assert macro v. assert-true
+#+begin_quote
+Do not  confuse ~assert-true~  with Common Lisp's  ~assert~ macro.  ~assert~ is
+used in code  to guarantee that some  condition is true. If it  isn't, the code
+halts. ~assert~  has options you  can use  to let a  user fix what's  wrong and
+resume execution. A similar collision of names exists in JUnit and Java.
+#+end_quote
+
+**** How to Organize Tests with Packages
+Tests are grouped internally by the current package, so that a set of tests can
+be defined  for one package  of code without  interfering with tests  for other
+packages.
+
+If  your code  is being  defined in  ~cl-user~, which  is common  when learning
+Common Lisp,  but not for  production-level code,  then you should  define your
+tests in ~cl-user~ as well.
+
+If your code is being defined in  its own package, you should define your tests
+either in that  same package, or in  another package for test  code. The latter
+approach has the advantage  of making sure that your tests  have access to only
+the exported symbols of your code package.
+
+For example, if you were defining a =date= package, your ~date.lisp~ file would
+look like this:
+
+#+name:date.lisp
+#+begin_src lisp
+(defpackage :date
+      (:use :common-lisp)
+      (:export #:date->string #:string->date))
+
+    (in-package :date)
+
+    (defun date->string (date) ...)
+    (defun string->date (string) ...)
+#+end_src
+
+Your ~date-tests.lisp~ file would look like this:
+
+#+name:date-tests.lisp
+#+begin_src lisp
+defpackage :date-tests
+      (:use :common-lisp :lisp-unit :date))
+
+    (in-package :date-tests)
+
+    (define-test date->string
+      (assert-true (string= ... (date->string ...)))
+      ...)
+    ...
+#+end_src
+
+You could then run all your =date= tests in the test package:
+
+#+begin_src lisp
+(in-package :date-tests)
+
+    (run-tests)
+#+end_src
+
+Alternately, you could run all your date tests from any package with:
+
+#+begin_src lisp
+(lisp-unit:run-all-tests :date-tests)
+#+end_src
+
+**** Reference Section
+Here is a list of the functions and macros exported by ~lisp-unit~.
+
+***** Test definition forms
+
+: (define-test name exp1 exp2 ...)
+
+: (get-tests [package)
+
+: (get-test-code name [package)
+
+: (remove-tests names [package])
+
+: (remove-all-tests [package])
+
+: (run-all-tests package)
+
+: (run-tests name1 name2 ...)
+
+: (use-debugger [flag])
+
+***** Assertion forms
+
+All of the assertion  forms are macros. They tally a  failure if the associated
+predication returns false. Assertions can  be made about return values, printed
+output, macro  expansions, and even  expected errors. Assertion  form arguments
+are evaluated in the local lexical environment.
+
+All assertion forms  allow you to include additional expressions  at the end of
+the form. These expressions and their values will be printed only when the test
+fails.
+
+Return values are unspecified for all assertion forms.
+
+: (assert-eq value form [form1 form2 ...])
+
+: (assert-eql value form [form1 form2 ...])
+
+: (assert-equal value form [form1 form2 ...])
+
+: (assert-equalp value form [form1 form2 ...])
+
+: (assert-equality predicate value form [form1 form2 ...])
+
+These macros tally  a failure if value  is not equal to the  result returned by
+form, using the specified equality predicate.
+
+In general, ~assert-equal~ is used for most tests. But any binary predicate can
+be used, with ~assert-equality~, e.g.,
+
+: (assert-equality unordered-equal '(a b c) (unique-atoms '((b c) a ((b a) c))))
+
+: (assert-true test [form1 form2 ...])
+: (assert-false test [form1 form2 ...])
+
+~assert-true~ tallies a failure if test returns false. ~assert-false~ tallies a
+failure if test returns =true=.
+
+: (assert-prints "output" form [form1 form2 ...])
+
+: (assert-expands expansion form [form1 form2 ...])
+
+: (assert-error condition-type form [form1 form2 ...])
+
+: (fail format-string [form1 form2 ...])
+
+***** Utility predicates
+
+Several predicate functions are exported that are often useful in writing tests
+with ~assert-equality~.
+
+: (logically-equal value1 value2)
+
+: (set-equal list1 list2 [:test])
+
+: (unordered-equal list1 list2 [:test])
+
+*** Test Anything Protocol Extensions
+- [[http://testanything.org][Home]]  TAP, the  Test  Anything  Protocol, is  a  simple text-based  interface
+  between testing modules  in a test harness.  TAP started life as  part of the
+  test harness  for Perl but  now has implementations  in C, C++,  Python, PHP,
+  Perl, Java, JavaScript, and others.
+
+  Here’s what a TAP test stream looks like:
+
+  #+begin_example
+  1..4
+  ok 1 - Input file opened
+  not ok 2 - First line of the input valid
+  ok 3 - Read the rest of the file
+  not ok 4 - Summarized correctly # TODO Not written yet
+  #+end_example
+
+- [[https://github.com/OdonataResearchLLC/lisp-unit/wiki/Test-Anything-Protocol-Extensions][Wiki]] The  Test Anything Protocol  extension exports 2  functions, ~write-tap~
+  and ~write-tap-to-file~. These functions write  a test results database using
+  the TAP format.
+
+*** Code the Unit Test First
+- http://www.extremeprogramming.org/rules/testfirst.html
+
+
+When you create your tests first, before the code, you will find it much easier
+and faster  to create your code.  The combined time  it takes to create  a unit
+test and create some  code to make it pass is about the  same as just coding it
+up straight  away. But, if you  already have the  unit tests you don't  need to
+create them after the code saving you some time now and lots later.
+
+Creating a  unit test  helps a developer  to really consider  what needs  to be
+done.  Requirements  are  nailed  down  firmly   by  tests.  There  can  be  no
+misunderstanding a specification written in the form of executable code.
+
+You also have immediate  feedback while you work. It is often  not clear when a
+developer has finished  all the necessary functionality. Scope  creep can occur
+as extensions and error conditions are  considered. If we create our unit tests
+first then we know when we are done; the unit tests all run.
+
+There is a rhythm  to developing software unit test first.  You create one test
+to  define some  small aspect  of  the problem  at  hand. Then  you create  the
+simplest code that will make that test pass. Then you create a second test. Now
+you add to the  code you just created to make this new  test pass, but no more!
+Not until you have  yet a third test. You continue until  there is nothing left
+to test. The coffee maker problem shows an example written in Java.
+
+**** Extreme Programming---A gentle introduction
+- http://www.extremeprogramming.org/index.html
+
+
+[[file:../resources/images/project.gif]]
+
+
+Extreme Programming  is successful  because it stresses  customer satisfaction.
+Instead of  delivering everything you could  possibly want on some  date far in
+the future this process delivers the software  you need as you need it. Extreme
+Programming  empowers  your  developers  to  confidently  respond  to  changing
+customer requirements, even late in the life cycle.
+
+***** Simple Rules
+- http://www.extremeprogramming.org/rules.html
+
+****** Planning
+- User Stories
+- Release Planning---Release Schedule
+- Frequent small releases
+- Project divided into iterations
+- Iteration planning starts each iteration
+
+****** Managing
+- Open work space
+- Sustainable pace
+- Stand-up meeting to start each day
+- Project Velocity is measured
+- Move people around
+- Fix XP
+
+****** Designing
+- Simplicity
+- System metaphor
+- CRC cards
+- Spike solutions
+- No functionality is added early
+- Refactor
+
+****** Coding
+- Customer is always available
+- Code to agreed standards
+- Code the unit test first
+- Production code is pair programmed
+- One pair integrates code at a time
+- Integrate first
+- Dedicated integration computer
+- Collective ownership
+
+****** Testing
+- All code must have unit tests
+- All code must pass all unit tests
+- When a bug is found, tests must be created
+- Acceptance tests are run often
+
+**** The Values of Extreme Programming
+- http://www.extremeprogramming.org/values.html
+
+**** Simplicity is the Key
+- http://www.extremeprogramming.org/rules/simple.html
+
+**** User Stories
+- http://www.extremeprogramming.org/rules/userstories.html
+
+User stories serve the same purpose as use cases but are not the same. They are
+used to create  time estimates for the release planning  meeting. They are also
+used instead of a large requirements  document. User Stories are written by the
+customers as things that  the system needs to do for them.  They are similar to
+usage  scenarios,  except that  they  are  not  limited  to describing  a  user
+interface. They are in  the format of about three sentences  of text written by
+the customer in the customers terminology without techno-syntax.
+
+*** CS 325 Lisp Unit Tester
+- by Chris Riesbeck
+
+
+My main  goal for ~lisp-unit~  was to make it  simple to use,  particularly for
+beginning Lisp programmers.
+
 
 ** Lisp Unit2
 "A  Test  Framework  for Common  Lisp  in  the  style  of JUnit,  designed  and
@@ -4728,8 +5134,6 @@ it a bit.
 : (ql:quickload :lisp-unit2)
 or
 : (asdf:load-system :lisp-unit2)
-
-
 
 ** Prove
 Yet another unit testing framework for Common Lisp by Eitaro Fukamachi.
