@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-16 00:29
-#+macro:version Version 0.0.63
+#+date:2020-11-16 09:03
+#+macro:version Version 0.0.64
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -5893,6 +5893,88 @@ construct.
   An  even more  up-to-date, faster  introduction  to Common  Lisp, written  in
   Summer   2004  and   somewhat   biased  toward   Allegro   Common  Lisp,   is
   Stuart C. Shapiro & David R. Pierce, A Short Course in Common Lisp.
+* ANSI Common Lisp
+  :PROPERTIES:
+  :author:   Paul Graham
+  :date:     1996
+  :ISBN:     0133708756
+  :END:
+- [[http://www.paulgraham.com/acl.html][ANSI Common Lisp Author's Site]]
+- [[https://wiki.c2.com/?AnsiCommonLisp][ANSI Common Lisp Wiki]]
+- [[http://www.paulgraham.com/ancomliser.html][Errata]]
+- [[https://courses.cs.northwestern.edu/325/readings/graham/graham-notes.html][Annotations by Chris Riesbeck in EECS 325]]
+
+
+#+attr_texinfo: :author Chris Riesbeck
+#+begin_quote
+Graham  has an  excellent  Lisp  coding style.  His  code  is maintainable  and
+portable. Function definitions are short  and well-motivated, and, for the most
+part, variable and function names are clear and helpful.
+#+end_quote
+
+The aim of this book is to teach you Common Lisp quickly and thoroughly.
+
+It is two books in one:
+
+1. Tutorial that explains all the essential concepts of Lisp programming;
+2. Up-to-date  summary of  ANSI Common  Lisp describing  every operator  in the
+   language.
+
+
+It assumes no prior knowledge of Lisp.  It begins with the most basic concepts,
+and pays special attention to the points that tend to confuse someone seeing
+Lisp for the first time.
+
+The best way to learn Lisp is to use it.  This book is designed to get you
+started as quickly as possible.  After a brief Introduction,
+- Chapter Two explains, in 21 pages,  everything you need to start writing Lisp
+  programs;
+- Chapters  3-9 introduce  the essential  elements of  Lisp programming.  These
+  chapters pay special attention to critical concepts like the role of pointers
+  in Lisp,  the use  of recursion  to solve problems,  and the  significance of
+  first-class functions.
+- Chapters   10-14  cover   macros,   CLOS,  operations   on  list   structure,
+  optimization, and advanced topics like packages and read-macros.
+- Chapters 15-17 sum up the lessons of the preceding chapters in three examples
+  of real applications:
+  - a program for making logical inferences,
+  - an HTML generator, and
+  - an embedded language for object-oriented programming.
+- Four Appendices A-D:
+  - include a guide to debugging,
+  - source code for 58 Common Lisp operators,
+  - a summary of the differences between ANSI Common Lisp andprevious versions of the language, and
+  - a refernce describing every operatorin ANSI Common Lisp.
+- Section of notes containing clarifications, references, additional code, and
+  occasional heresies.
+
+
+** Features
+
+This book offers a broad description  of the CommonLisp language. There is some
+overlap with  (but newer  than) the  author's earlier  and more  advanced book,
+/OnLisp/.  It is unusually well-written and enjoyable.
+
+- An up-to-date reference manual for ANSI Common Lisp.
+- An in-depth  look at  object-oriented programming.  Explains the  Common Lisp
+  Object System  (CLOS), and also shows  how to write your  own object-oriented
+  language.
+- Over  20  substantial  examples,  including programs  for  ray-tracing,  text
+  generation, pattern-matching, logical inference, generating HTML, sorting and
+  searching, file I/O, compression, and date arithmetic.
+- Special attention  to critical  concepts, including  prefix syntax,  code vs.
+  data, recursion,  functional programming,  types, implicit  pointers, dynamic
+  allocation,  closures, macros,  class precedence,  and generic  functions vs.
+  message-passing.
+- A complete guide to optimization.
+- The  clearest and  most thorough  explanation of  macros in  any introductory
+  book.
+- Examples   that  illustrate   Lisp   programming   styles,  including   rapid
+  prototyping, bottom-up programming, object-oriented programming, and embedded
+  languages.
+- An appendix on debugging, with examples of common errors.
+
+
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
