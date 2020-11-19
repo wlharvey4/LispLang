@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-16 10:05
-#+macro:version Version 0.0.65
+#+date:2020-11-18 18:19
+#+macro:version Version 0.0.66
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3628,6 +3628,15 @@ These opertors require open streams:
 - 
 
 * Common Lisp Packages
+Avoiding name  conflicts between  independently developed  pieces of  code.  In
+Common Lisp the  namespace problem boils down to a  question of controlling how
+the reader translates  textual names into symbols: if you  want two occurrences
+of the same name  to be considered the same by the evaluator,  you need to make
+sure the  reader uses the same  symbol to represent each  name.  Conversely, if
+you want two names  to be considered distinct, even if they  happen to have the
+same textual name, you need the reader to create different symbols to represent
+each name.
+** Syntax of Names
 ** ASDF---Another System Definition Facility
 #+cindex:asdf
 "ASDF is the de facto standard build facility for Common Lisp."
@@ -4722,7 +4731,7 @@ Java.
 *** How To Use Test Unit
 The core  definitions of  ~lisp-unit~ may  be used by  loading the  single file
 ~lisp-unit.lisp~.  To use  the  extensions, ~lisp-unit~  must  be loaded  using
-neither =Quicklisp= or =ASDF=.
+either =Quicklisp= or =ASDF=.
 
 1. Load (or compile and load) as a single file : ~(load "lisp-unit")~; or
 2. Load using =Quicklisp= : ~(ql:quickload :lisp-unit)~; or
