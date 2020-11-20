@@ -4,7 +4,7 @@
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
 #+date:2020-11-20 00:16
-#+macro:version Version 0.0.70
+#+macro:version Version 0.0.71
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3691,6 +3691,13 @@ sure the  reader uses the same  symbol to represent each  name.  Conversely, if
 you want two names  to be considered distinct, even if they  happen to have the
 same textual name, you need the reader to create different symbols to represent
 each name.
+** The Reader and the Evaluator
+#+cindex:reader
+#+cindex:evaluator
+Common Lisp defines two "black boxes", one that translates text into Lisp
+objects and another that implements the semantics of the language in terms of
+those objects.  The first box is called the "reader", and the second is call
+the "evaluator".
 ** Syntax of Names
 ** ASDF---Another System Definition Facility
 #+cindex:asdf
