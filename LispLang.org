@@ -4,7 +4,7 @@
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
 #+date:2020-11-20 00:16
-#+macro:version Version 0.0.68
+#+macro:version Version 0.0.69
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -212,6 +212,39 @@ Christian Queinnec's Lisp in Small Pieces.
 
 - http://norvig.com/Lisp-retro.html
 #+end_quote
+
+#+texinfo: @heading The Demise of Lisp
+
+#+attr_texinfo: :author Ron Garret, f/k/a Erann Gat
+#+begin_quote
+The demise  of Lisp  at JPL  is a  tragedy. The  language is  particularly well
+suited  for  the  kind  of  software  development  that  is  often  done  here:
+one-of-a-kind, highly dynamic applications that  must be developed on extremely
+tight  budgets and  schedules. The  efficacy of  the language  in that  kind of
+environment  is  amply documented  by  a  long  record of  unmatched  technical
+achievements.
+
+The  situation  is particularly  ironic  because  the  argument that  has  been
+advanced for  discarding Lisp in favor  of C++ (and  now for Java) is  that JPL
+should use "industry best practice." The problem with this argument is twofold:
+first, we're  confusing best practice with  standard practice. The two  are not
+the same. And  second, we're assuming that best (or  even standard) practice is
+an  invariant with  respect to  the task,  that the  best way  to write  a word
+processor  is also  the best  way to  write a  spacecacraft control  system. It
+isn't.
+
+My job today (I  am now working on software verification  and validation) is to
+solve problems that can be traced directly back to the use of purely imperative
+langauges with  poorly defined semantics  like C and  C++. (The situation  is a
+little better with Java, but not much.) But, of course, the obvious solution --
+to use non-imperative languages with well defined semantics like Lisp -- is not
+an option. I can't even say the  word Lisp without cementing my reputation as a
+crazy lunatic who thinks  Lisp is the Answer to Everything. So  I keep my mouth
+shut (mostly) and watch helplessly as millions of tax dollars get wasted.
+#+end_quote
+
+- from /Lisping at JPL/
+- http://www.flownet.com/gat/jpl-lisp.html
 
 
 * Introduction to Lisp
@@ -791,13 +824,15 @@ than typed expressions.
     Lisp implementations that are currently being actively maintained
 
 
-Common Lisp comes in many different flavors, or implementations.
+Common Lisp comes  in many different flavors, or implementations.   You have to
+choose a Lisp implementation.  This may seem like a strange thing to have to do
+for folks used to languages such as Perl, Python, Visual Basic, C#, and Java.
 
-Common  Lisp   is  defined  by   its  standard---there  is  neither   a  single
-implementation controlled  by a benevolent  dictator, as with Perl  and Python,
-nor a canonical implementation controlled by  a single company, as with VB, C#,
-and Java. Anyone who  wants to read the standard and  implement the language is
-free to do so.
+The  difference is  that  Common Lisp  is defined  by  its standard---there  is
+neither a  single implementation controlled  by a benevolent dictator,  as with
+Perl and Python, nor a canonical implementation controlled by a single company,
+as with VB, C#,  and Java. Anyone who wants to read  the standard and implement
+the language is free to do so.
 
 Changes to the standard have to be made in accordance with a process controlled
 by  the  standards body  American  National  Standards Institute  (ANSI).  That
@@ -821,6 +856,26 @@ portable Common Lisp. For writing code  that should be mostly portable but that
 needs facilities not  defined by the standard, Common Lisp  provides a flexible
 way to write  code "conditionalized" on the features available  in a particular
 implementation.
+
+If you are looking for an open-source implementation, you have several options.
+
+- SBCL: ("Steel Bank Common Lisp") is a high-quality open-source implementation
+  that compiles to native code and runs  on a wide variety of Unixes, including
+  Linux and OS X.  It supports 21-bit Unicode.
+
+- CMUCL: ("Carnegie Mellon University Common Lisp") SBCL is derived from CMUCL,
+  which is a Common Lisp developed at  Carnegie Mellon University and is in the
+  public domain.
+
+- CCL: ("Clozure Common Lisp") (formerly OpenMCL) is an excellent choice for OS
+  X users.  It  compiles to machine code, supports threads,  and has quite good
+  integration with OS X's Carbon and Cocoa toolkits.
+
+Slime ("Superior Lisp Interaction Mode for  Emacs") will smooth out some of the
+differences  between  implementations  by  providing  a  common  interface  for
+interacting with Lisp.  Slime lets you interact with Lisp both via the REPL and
+while  editing source  files.   Slime will  let you  evaluate  or compile  both
+individual expressions and whole files directly from your editor.
 
 ** CMU Common Lisp
 - [[https://cmucl.org][CMUCL Home]]
