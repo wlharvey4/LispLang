@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-18 18:19
-#+macro:version Version 0.0.66
+#+date:2020-11-19 23:56
+#+macro:version Version 0.0.67
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -7070,31 +7070,156 @@ REPL and buffer execution support for Emacs.
 
 - Scheme Mode :: as a major mode, plus Quack and Geiser minor modes
 * Clojure
- https://clojure.org
+"Clojure is  a robust, practical, and  fast programming language with  a set of
+useful features that together form a simple, coherent, and powerful tool."
 
- "Clojure is a robust, practical, and fast programming language with a
- set of useful features that together form a simple, coherent, and
- powerful tool. Clojure provides easy access to the Java frameworks,
- with optional type hints and type inference, to ensure that calls to
- Java can avoid reflection."
+- https://clojure.org
 
-Clojure is a dialect of Lisp, and shares with Lisp the code-as-data
-philosophy and a powerful macro system. Clojure is predominantly a
-functional programming language, and features a rich set of immutable,
-persistent data structures. When mutable state is needed, Clojure
-offers a software transactional memory system and reactive Agent
-system that ensure clean, correct, multithreaded designs.
+#+texinfo: @heading The Clojure Programming Language
+
+#+attr_texinfo: :author Rich Hickey, author of Clojure and CTO Cognitect
+#+begin_quote
+Clojure  is  a dynamic,  general-purpose  programming  language, combining  the
+approachability and  interactive development  of a  scripting language  with an
+efficient and robust infrastructure for multithreaded programming. Clojure is a
+compiled language, yet remains completely  dynamic – every feature supported by
+Clojure  is supported  at runtime.  Clojure provides  easy access  to the  Java
+frameworks, with optional  type hints and type inference, to  ensure that calls
+to Java can avoid reflection.
+
+Clojure is a dialect of Lisp,  and shares with Lisp the code-as-data philosophy
+and a powerful macro system.  Clojure is predominantly a functional programming
+language, and  features a  rich set of  immutable, persistent  data structures.
+When mutable  state is needed,  Clojure offers a software  transactional memory
+system  and reactive  Agent system  that ensure  clean, correct,  multithreaded
+designs.
+#+end_quote
+
+** Why Clojure?
+
+ Why did I write yet another programming language? Basically because I wanted:
+
+ - A Lisp
+ - for Functional Programming
+ - symbiotic with an established Platform
+ - designed for Concurrency
+ and couldn’t find one.
+
+ #+texinfo: @subheading Lisp is a good thing
+
+ - Often emulated/pillaged, still not duplicated
+ - Lambda calculus yields an extremely small core
+ - Almost no syntax
+ - Core advantage still code-as-data and syntactic abstraction
+ - What about the standard Lisps (Common Lisp and Scheme)?
+   - Slow/no innovation post standardization
+   - Core data structures mutable, not extensible
+   - No concurrency in specs
+   - Good implementations already exist for JVM (ABCL, Kawa, SISC et al)
+   - Standard Lisps are their own platforms
+ - Clojure is a Lisp not constrained by backwards compatibility
+   - Extends the code-as-data paradigm to maps and vectors
+   - Defaults to immutability
+   - Core data structures are extensible abstractions
+   - Embraces a platform (JVM)
+
+ #+texinfo: @subheading Functional programming is a good thing
+
+ - Immutable data + first-class functions
+ - Could always be done in Lisp, by discipline/convention
+   - But if a data structure can be mutated, dangerous to presume it won’t be
+   - In traditional Lisp, only the list data structure is structurally recursive
+ - Pure functional languages tend to strongly static types
+   - Not for everyone, or every task
+ - Clojure is a functional language with a dynamic emphasis
+   - All data structures immutable & persistent, supporting recursion
+   - Heterogeneous collections, return types
+   - Dynamic polymorphism
+
+#+texinfo: @subheading Object Orientation is overrated
+
+- Born of simulation, now used for everything, even when inappropriate
+  - Encouraged by Java/C#  in all situations, due to their  lack of (idiomatic)
+    support for anything else
+- Mutable stateful objects are the new spaghetti code
+  - Hard to understand, test, reason about
+  - Concurrency disaster
+- Inheritance is not the only way to do polymorphism
+- "It is  better to have  100 functions operate on  one data structure  than to
+  have 10 functions operate on 10 data structures." - Alan J. Perlis
+- Clojure  models  its data  structures  as  immutable objects  represented  by
+  interfaces, and otherwise does not offer its own class system.
+- Many  functions defined  on few  primary data  structures (seq,  map, vector,
+  set).
+- Write Java in Java, consume and extend Java from Clojure.
+
+#+texinfo: @subheading Polymorphism is a good thing
+
+- Switch statements, structural matching etc yield brittle systems
+- Polymorphism yields extensible, flexible systems
+- Clojure multimethods decouple polymorphism from OO and types
+  - Supports multiple taxonomies
+  - Dispatches via static, dynamic or external properties, metadata, etc
+
+** Getting Started
+- https://clojure.org/guides/getting_started
+
+
+- [[https://clojure.org/guides/learn/syntax][Learn Clojure Syntax]]
+- [[https://clojure.org/community/resources][Community Resources]]
+- [[https://clojure.org/community/books][Books]]
+
+
+*** Dependencies
+Clojure requires Java. Clojure officially supports Java LTS releases (currently
+Java  8 and  Java  11). You  can  use  any Java  installation,  whether it’s  a
+commercial release from Oracle or an open source version based on OpenJDK (like
+adoptopenjdk).
+
+The Clojure tools require that either the ~java~ command is on the path or that
+the =JAVA_HOME= environment variable is set.
+
+*** CLI Tools
+Clojure provides [[https://clojure.org/guides/deps_and_cli][command line tools]] that can be used to  start a Clojure repl,
+use Clojure and Java libraries, and start Clojure programs.
+
+- ~clj~ ::
+- ~clojure~ ::
+- ~lein~ :: https://leiningen.org
+- ~boot~ :: http://boot-clj.com
+
+**** CLI Guide
+- https://clojure.org/guides/deps_and_cli
+
+Clojure provides command line tools for:
+
+- Running an interactive REPL (Read-Eval-Print Loop)
+- Running Clojure programs
+- Evaluating Clojure expressions
+
+In  all the  above scenarios  you  might want  to  use other  Clojure and  Java
+libraries. These may  be libraries you are writing locally,  projects in git or
+libraries available in  the Maven ecosystem and hosted  by central repositories
+like Maven Central or Clojars.
+
+Using a library involves:
+
+- a) specifying  which library you  want to use,  providing its name  and other
+  aspects like version
+- b) getting it (once) from the git or maven repositories to your local machine
+- c) making it available on the JVM classpath so Clojure can find it while your
+  REPL or program is running
+
+Clojure  tools specify  a syntax  and file  (~deps.edn~) for  (a), given  which
+they’ll handle (b) and (c) automatically.
 
 ** Clojure Reference
-
-*** Getting Started
-https://clojure.org/guides/getting_started
-
 *** The Reader
-https://clojure.org/reference/reader
+ https://clojure.org/reference/reader
 
 *** API
-https://clojure.org/api/api
+ https://clojure.org/api/api
+
 * Build Tools
 :PROPERTIES:
 :appendix: t
