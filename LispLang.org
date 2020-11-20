@@ -4,7 +4,7 @@
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
 #+date:2020-11-20 00:16
-#+macro:version Version 0.0.69
+#+macro:version Version 0.0.70
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -5604,6 +5604,12 @@ The elements of the list should look like:
  the Lisp-side  server (known as  “Swank”), and establishes a  socket connection
  between Emacs and  Lisp. Finally a REPL  buffer is created where  you can enter
  Lisp expressions for evaluation.
+
+ #+texinfo: @heading Slime Editing Commands
+
+ #+findex: slime-editing-commands.el
+ The  file ~slime-editing-commands.el~  contains the  commands  used to  control
+ =SLIME=.
 
  To tell SLIME which Lisp program to run, add a prefix argument:
  : C-u M-x slime
