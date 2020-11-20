@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-19 23:56
-#+macro:version Version 0.0.67
+#+date:2020-11-20 00:16
+#+macro:version Version 0.0.68
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -7212,6 +7212,155 @@ Using a library involves:
 
 Clojure  tools specify  a syntax  and file  (~deps.edn~) for  (a), given  which
 they’ll handle (b) and (c) automatically.
+
+***** Clojure REPL
+
+Start a =REPL= by running the ~clj~ tool:
+: $ clj
+: Clojure 1.10.1
+: user=>
+
+Once in the =REPL= you can type Clojure expressions and press enter to evaluate
+them. Type =Control-D= to exit the =REPL=:
+
+***** Java Libraries
+
+There are  many Clojure  and Java  libraries available  that provide  access to
+practically  any  functionality  you  might need.  For  example,  consider  the
+commonly used  Clojure library ~clojure.java-time~  for working with  dates and
+times.
+
+To work with this  library, you need to declare it as a  dependency so the tool
+can ensure it  has been downloaded and  add it to the classpath.  The readme in
+most projects shows the name and version to use.
+
+- Create a ~deps.edn~ file to declare the dependency
+- Restart the =REPL= with the ~clj~ tool
+- You will see messages about a library being downloaded the first time you use
+  a dependency. Once the  file is downloaded, it will be  reused in the future.
+- You can use the  same process to add other libraries  to your ~deps.edn~ file
+  and explore Clojure or Java libraries.
+
+#+begin_src clojure
+  {:deps
+   {clojure.java-time/clojure.java-time {:mvn/version "0.3.2"}}}
+#+end_src
+
+#+begin_example
+$ clj
+Downloading: clojure/java-time/clojure.java-time/0.3.2/clojure.java-time-0.3.2.pom from clojars
+Downloading: clojure/java-time/clojure.java-time/0.3.2/clojure.java-time-0.3.2.jar from clojars
+Clojure 1.10.1
+user=> (require '[java-time :as t])
+nil
+user=> (str (t/instant))
+"2020-09-01T03:42:47.691119Z"
+#+end_example
+
+***** Write a Clojure Program
+Create a new directory and copy the ~deps.edn~ file you created above into it:
+
+#+begin_src sh
+$ mkdir hello-world
+$ cp deps.edn hello-world
+$ cd hello-world
+$ mkdir src
+#+end_src
+
+By default, the ~clj~ tool will look  for source files in the ~src/~ directory.
+Create ~src/hello.clj~:
+
+#+begin_src clojure
+  (ns hello
+    (:require [java-time :as t]))
+
+  (defn time-str
+    "Returns a string representation of a datetime in the local time zone."
+    [instant]
+    (t/format
+      (t/with-zone (t/formatter "hh:mm a") (t/zone-id))
+      instant))
+
+  (defn run [opts]
+    (println "Hello world, the time is" (time-str (t/instant))))
+#+end_src
+
+This program has  an entry function ~run~  that can be executed  by ~clj~ using
+=-X=:
+
+#+begin_example
+$ clj -X hello/run
+Hello world, the time is 10:53 PM
+#+end_example
+
+***** Using a Local Library
+
+You might  decide to move  part of this application  into a library.  The ~clj~
+tool uses local  coordinates to support projects that exist  only on your local
+disk.
+
+Let’s extract the ~java-time~ parts of this application out into a library in a
+parallel directory  ~time-lib~. The  final structure  will look  something like
+this:
+
+#+begin_example
+├── time-lib
+│   ├── deps.edn
+│   └── src
+│       └── hello_time.clj
+└── hello-world
+    ├── deps.edn
+    └── src
+        └── hello.clj
+#+end_example
+
+Under  ~time-lib~, use  a copy  of the  ~deps.edn~ file  you already  have, and
+create a file ~src/hello_time.clj~:
+
+#+begin_src clojure
+  (ns hello-time
+    (:require [java-time :as t]))
+
+  (defn now
+    "Returns the current datetime"
+    []
+    (t/instant))
+
+  (defn time-str
+    "Returns a string representation of a datetime in the local time zone."
+    [instant]
+    (t/format
+      (t/with-zone (t/formatter "hh:mm a") (t/zone-id))
+      instant))
+#+end_src
+
+Update  the  application at  ~hello-world/src/hello.clj~  to  use your  library
+instead:
+
+#+begin_src clojure
+  (ns hello
+    (:require [hello-time :as ht]))
+
+  (defn run [opts]
+    (println "Hello world, the time is" (ht/time-str (ht/now))))
+#+end_src
+
+Modify ~hello-world/deps.edn~ to use a local coordinate that refers to the root
+directory of  the ~time-lib~  library (make  sure to update  the path  for your
+machine):
+
+#+begin_src clojure
+  {:deps
+   {time-lib/time-lib {:local/root "../time-lib"}}}
+#+end_src
+
+You can  then test  everything from  the hello-world  directory by  running the
+application:
+
+#+begin_src sh
+$ clj -X hello/run
+Hello world, the time is 02:07 PM
+#+end_src
 
 ** Clojure Reference
 *** The Reader
