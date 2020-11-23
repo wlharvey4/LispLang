@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-23 01:30
-#+macro:version Version 0.0.74
+#+date:2020-11-23 02:13
+#+macro:version Version 0.0.75
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3912,6 +3912,107 @@ The  third standard  package is  the =KEYWORD=  package, the  package the  Lisp
 reader uses to intern names starting with a colon.
 
 ** Common Lisp Package System
+*** Defining Your Own Packages
+#+cindex:package
+Packages provide  basic control over  namespaces by controlling how  the reader
+translates textual  names into symbol  objects. It is  not until later,  in the
+evaluator, that the symbol is interpreted as the name of a function or variable
+or whatever. It does not make sense  to talk about "exporting a function" or "a
+variable" from a  package. You can export symbols to  make certain names easier
+to refer to,  but the package system  does not allow you to  restrict how those
+names are used.
+
+#+findex:DEFPACKAGE
+You define  new packages with the  macro =DEFPACKAGE=, which allows  you to not
+only create the package  but to specify what packages it  uses, what symbols it
+exports,  and what  symbols  it  imports from  other  packages  and to  resolve
+conflicts by creating shadowing symbols.
+
+You can define a simple package like this:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp))
+#+end_src
+
+This defines  a package name  =COM.GIGAMONKEYS.EMAIL-DB= that inherits  all the
+symbols exported by the =COMMON-LISP= package.
+
+#+cindex:string designator
+Packages and symbols  are named with strings. However, in  a ~DEFPACKAGE~ form,
+you can specify the names of  packages and symbols with /string designators/. A
+string designator is  either a string, which desigates itself;  a symbol, which
+designates its  name; or a  character, which designates a  one-character string
+containing just  the character. Using  keyword symbols  is a common  style that
+allows you to write the names  in lowercase---the reader will convert the names
+to uppercase for  you. You could also write the  =DEFPACKAGE= with strings, but
+then you  have to write them  in all uppercase  because the true names  of most
+symbols and packages are uppercase because  of the case conversion performed by
+the reader.
+
+To read code in this package, you need  to make it the current package with the
+~IN-PACKAGE~ macro:
+
+#+begin_src lisp
+  (in-package :com.gigamonkeys.email-db)
+#+end_src
+
+If  you type  this  expression at  the  =REPL=,  it will  change  the value  of
+=*PACKAGE*=,  affecting how  the =REPL=  reads subsequent  expressions. If  you
+include an ~IN-PACKAGE~ in  a file that is loaded with  ~LOAD~ or compiled with
+~COMPILE-FILE~,  it  will change  the  package,  affecting the  way  subsequent
+expressions in the file are read.  ~IN-PACKAGE~ expands into code that will run
+when the file is compiled by ~COMPILE-FILE~ as well as when the file is loaded,
+changing the way the reader reads the rest of the file during compilation.
+
+With the current package set to the =COM.GIGAMONKEYS.EMAIL-DB= package, other
+than names inherited from the =COMMON-LISP= package, you can use any names you
+want for whatever purpose you want.
+*** Packaging Reusable Libraries
+Define a new package, but export certain  names to make them available to other
+packages.
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp)
+    (:export :open-db
+	     :save
+	     :store))
+#+end_src
+
+The   =:export=   clause   specifies   names   that   will   be   external   in
+=COM.GIGMONKEYS.TEXT-DB= and thus accessible in packages that =:use= it.  After
+you have defined this package, you can change the definition of the main
+application package to the following:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp :com.gigamonkeys.text-db))
+#+end_src
+
+Now  case written  in =COM.GIGMONKEYS.EMAIL-DB=  can use  unqualified names  to
+refer    to    the   exported    symbols    from    both   =COMMON-LISP=    and
+=COM-GIGAMONKEYS.TEXT-DB=.  All  other  names  will  continue  to  be  interned
+directly in the =COM.GIGAMONKEYS.EMAIL-DB= package.
+
+*** Importing Individual Names
+You  can import  an  individual symbol  with an  =:import-from=  clause in  the
+=DEFPACKAGE=.  For example:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp :com.gigamonkeys.text-db)
+    (:import-from :com.acme.email :parse-email-address))
+#+end_src
+
+Now  anywhere   the  name   ~parse-email-address~  appears   in  code   in  the
+=COM.GIGAMONKEYS.EMAIL-DB=  package,  it  will  be  read  as  the  symbol  from
+=COM.ACME.EMAIL=. If  you need  to import  more than one  symbol from  a single
+package, you  can include  multiple names  after the package  name in  a single
+=:import-from= clause. A =DEFPACKAGE=  can also include multiple =:import-from=
+clauses in order to import symbols from different packages.
+
+*** Shadowing Individual Names
 
 ** Common Lisp Packages for JSON
 *** FranzInc st-json
