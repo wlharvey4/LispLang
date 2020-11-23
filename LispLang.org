@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-21 21:45
-#+macro:version Version 0.0.72
+#+date:2020-11-22 20:04
+#+macro:version Version 0.0.73
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3691,26 +3691,6 @@ sure the  reader uses the same  symbol to represent each  name.  Conversely, if
 you want two names  to be considered distinct, even if they  happen to have the
 same textual name, you need the reader to create different symbols to represent
 each name.
-** The Reader and the Evaluator
-#+cindex:reader
-#+cindex:evaluator
-Common Lisp defines two "black boxes", one that translates text into Lisp
-objects and another that implements the semantics of the language in terms of
-those objects.  The first box is called the "reader", and the second is call
-the "evaluator".
-** Syntax of Names
-A package  is like a  table that  maps strings to  symbols. Each package  has a
-name, which can be used to find the package using the function ~find-package.~
-
-The two key functions that the reader uses to access the name-to-symbol
-mappings in a package are
-
-- ~find-symbol~; and
-- ~intern~
-
-Both of these functions take a string and, optionally, a package. The =package=
-argument defaults to the value of  the global variable =*PACKAGE*=, also called
-the /current package/.
 ** ASDF---Another System Definition Facility
 #+cindex:asdf
 "ASDF is the de facto standard build facility for Common Lisp."
@@ -3784,6 +3764,53 @@ command-line. For that, you want:
 - [[https://cliki.net/cl-launch][~cl-launch~]],
 - [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
 - [[https://github.com/roswell/roswell][~roswell~]]
+** The Reader and the Evaluator
+#+cindex:reader
+#+cindex:evaluator
+Common Lisp defines two "black boxes", one that translates text into Lisp
+objects and another that implements the semantics of the language in terms of
+those objects.  The first box is called the "reader", and the second is call
+the "evaluator".
+** Syntax of Names
+
+#+findex:find-packagea
+A package  is like a  table that  maps strings to  symbols. Each package  has a
+name, which can be used to find the package using the function:
+- ~find-package.~ ::
+
+#+findex:find-symbol
+#+findex:intern
+The two key functions that the reader uses to access the name-to-symbol
+mappings in a package are:
+
+- ~find-symbol~ :: looks in the package for  a symbol with the given string for
+  a name and returns it, or =nil= if no symbol is found.
+- ~intern~ :: will return an existing symbol; otherwise it creates a new symbol
+  with the string as its name and adds it to the package.
+
+Both of these functions take a string and, optionally, a package. The =package=
+argument defaults to the value of  the global variable =*PACKAGE*=, also called
+the /current package/.
+
+#+cindex:names
+#+cindex:unqualified name
+#+cindex:package-qualified name
+- unqualified names ::  Most names you  use are /unqualified/, that is, contain
+  no colons. When the reader reads such a name, it translates it to a symbol by
+  converting  any unescaped  letters  to uppercase  and  passing the  resulting
+  string to  ~intern~. Thus, each  time the reader reads  the same name  in the
+  same package,  it will  get the  same symbol object.  The evaluator  uses the
+  object  identity of  symbols to  determine which  function, variable,  or the
+  program element a given symbol refers to.
+
+- package-qualified  names ::  A name  containing either  a single  colon or  a
+  double  colon  is  a  /package-qualified  name/.  When  the  reader  reads  a
+  package-qualified name, it  splits the name on the colons  and uses the first
+  part as the  name of a package and  the second part as the name  of a symbol.
+  The reader  looks up  the appropriate  package and uses  it to  translate the
+  symbol name to a symbol object.
+
+** Common Lisp Package System
 
 ** Common Lisp Packages for JSON
 *** FranzInc st-json
