@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-23 02:13
-#+macro:version Version 0.0.75
+#+date:2020-11-23 23:07
+#+macro:version Version 0.0.76
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3691,7 +3691,7 @@ sure the  reader uses the same  symbol to represent each  name.  Conversely, if
 you want two names  to be considered distinct, even if they  happen to have the
 same textual name, you need the reader to create different symbols to represent
 each name.
-** ASDF---Another System Definition Facility
+** Another System Definition Facility---ASDF
 #+cindex:asdf
 "ASDF is the de facto standard build facility for Common Lisp."
 
@@ -3764,154 +3764,154 @@ command-line. For that, you want:
 - [[https://cliki.net/cl-launch][~cl-launch~]],
 - [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
 - [[https://github.com/roswell/roswell][~roswell~]]
-** The Reader and the Evaluator
-#+cindex:reader
-#+cindex:evaluator
-Common Lisp defines two "black boxes", one that translates text into Lisp
-objects and another that implements the semantics of the language in terms of
-those objects.  The first box is called the "reader", and the second is call
-the "evaluator".
-
-** Syntax of Names
-
-#+cindex:package
-#+cindex:symbol
-#+cindex:name, package
-#+findex:find-packagea
-A /package/ is  like a table that  maps strings to symbols. Each  package has a
-/name/, which can be used to find the package using the function:
-- ~find-package.~ ::
-
-#+cindex:name-to-symbol mapping
-#+findex:find-symbol
-#+findex:intern
-The two key functions that the reader uses to access the name-to-symbol
-mappings in a package are:
-
-#+cindex:accessible symbol
-- ~find-symbol~ :: looks in the package for  a symbol with the given string for
-  a name and returns it, or =nil= if  no symbol is found. All the symbols found
-  in a  given package using ~find-symbol~  are said to be  /accessible/ in that
-  package. In other words, the /accessible/ symbols in a package are those that
-  can be referred to with unqualified names when the package is current.
-
-  #+cindex:present symbol
-  #+cindex:inherited symbol
-  #+cindex:using a package
-  #+cindex:external symbol
-  #+cindex:export
-  A symbol  can be  accessible in two  ways. The *first*  is for  the package's
-  name-to-symbol table  to contain an entry  for the symbol, in  which case the
-  symbol  is  /present/ in  the  package.  The *second*  way  a  symbol can  be
-  accessible in a  package is if the package /inherits/  it. A package inherits
-  symbols from  other packages by  /using/ the other packages.  Only /external/
-  symbols in the  used packages are inherited.  A symbol is made  external in a
-  package by /exporting/ it. An exported symbol  can be referred to by use of a
-  single colon qualified name.
-
-- ~intern~ :: will return an existing symbol; otherwise it creates a new symbol
-  with the string as its name and adds it to the package.
-
-  #+cindex:home package
-  When the  reader interns  a new  symbol in the  package, it  is added  to the
-  package's  name-to-symbol table.  The  package  in which  a  symbol is  first
-  interned is called the symbol's /home package/.
-
-Both of these functions take a string and, optionally, a package. The =package=
-argument defaults to the value of  the global variable =*PACKAGE*=, also called
-the /current package/.
-
-#+cindex:names
-#+cindex:unqualified name
-#+cindex:package-qualified name
-#+cindex:symbol object
-#+cindex:reader
-#+cindex:evaluator
-- unqualified names ::  Most names you  use are /unqualified/, that is, contain
-  no colons. When the reader reads such a name, it translates it to a symbol by
-  converting  any unescaped  letters  to uppercase  and  passing the  resulting
-  string to  ~intern~. Thus, each  time the reader reads  the same name  in the
-  same package,  it will  get the  same symbol object.  The evaluator  uses the
-  object  identity of  symbols to  determine which  function, variable,  or the
-  program element a given symbol refers to.
-
-- package-qualified  names ::  A name  containing either  a single  colon or  a
-  double  colon  is  a  /package-qualified  name/.  When  the  reader  reads  a
-  package-qualified name, it  splits the name on the colons  and uses the first
-  part as the  name of a package and  the second part as the name  of a symbol.
-  The reader  looks up  the appropriate  package and uses  it to  translate the
-  symbol name to a symbol object.
-
-  #+cindex:external symbol
-  #+cindex:export
-- external symbol  :: A name  containing only a single  colon must refer  to an
-  /external symbol/---one that the package /exports/ for public use.
-
-- symbol :: A double-colon name can refer to any symbol from the named package.
-
-  #+cindex:keyword symbol
-  #+cindex:package =KEYWORD=
-  #+cindex:=KEYWORD= package
-- keyword symbol :: written with names  starting with a colon. Such symbols are
-  interned in the package named  =KEYWORD= and automatically exported. When the
-  reader interns a symbol in the =KEYWORD=, it also defines a constant variable
-  with the symbol as both its name and  value. This is why you can use keywords
-  in argument lists without quoting them--when they appear in a value position,
-  they evaluate to themselves. The names  of keyword symbols, like all symbols,
-  are converted  to all uppercase by  the reader before they  are interned. The
-  name does not include the leading colon.
-
-  #+cindex:uninterned symbol
-- uninterned symbol :: are written with  a leading =#:=. These names (minus the
-  =#:=) are converted to uppercase as  normal and then translated into symbols,
-  but the symbols are not interned in any package; each time the reader reads a
-  =#:= name,  it creates  a new symbol.  You will rarely,  if ever,  write this
-  syntax yourself, but you will sometimes see it when you print an s-expression
-  containing symbols returned by the function =GENSYM=.
-
-  : (gensym) ==> #:G3128
-
-  #+cindex:shadowing symbol
-- shadowing  symbol   ::   To   keep  the  mappings   from  names   to  symbols
-  deterministic, the package system allows only  one symbol to be accessible in
-  a given  package for  each name.  That is,  a package  cannot have  a present
-  symbol and  an inherited symbol with  the same name or  inherit two different
-  symbols,  from different  packages,  with  the same  name.  However, you  can
-  resolve  conflicts by  making one  of  the accessible  symbols a  /shadowing/
-  symbol, which  makes the other  symbols of  the same name  inaccessible. Each
-  package maintains a list of shadowing symbols.
-
-  #+cindex:imported symbol
-- imported symbol :: An existing symbol  can be /imported/ into another package
-  by adding it to the package's name-to-symbol table. Thus, the same symbol can
-  be present in multiple packages.
-
-  #+cindex:uninterened symbol
-- uninterned symbol   :: A present symbol  can be /uninterned/ from  a package,
-  which causes it to be removed from  the name-to-symbol table, and, if it is a
-  shadowing symbol, from the shadowing list. A symbol that isn't present in any
-  package is called an uninterned symbol, can  no longer be read by the reader,
-  will be printed using the =#:= syntax.
-
-** The Three Standard Packages
-When  you  first  start  Lisp,  the  value  of  =*PACKAGE*=  is  typically  the
-=COMMON-LISP-USER= package, also known as =CL-USER=. =CL=USER= uses the package
-=COMMON-LISP=, which exports all the names defined by the language standard.
-
-When you type an expression at the =REPL=, all the names of standard functions,
-macros, variables,  and so on will  be translated to the  symbols exported from
-=COMMON-LISP=, and all  other names will be interned  in the =COMMON-LISP-USER=
-package.
-
-The  =REPL= cannot  start  in the  =COMMON-LISP= package  because  you are  not
-allowed to intern  new symbols in it; =COMMON-LISP-USER= serves  as a "scratch"
-package where you can  create your own names while still  having easy access to
-all the symbols in =COMMON-LISP=.
-
-The  third standard  package is  the =KEYWORD=  package, the  package the  Lisp
-reader uses to intern names starting with a colon.
-
 ** Common Lisp Package System
+*** The Reader and the Evaluator
+ #+cindex:reader
+ #+cindex:evaluator
+ Common Lisp defines two "black boxes", one that translates text into Lisp
+ objects and another that implements the semantics of the language in terms of
+ those objects.  The first box is called the "reader", and the second is call
+ the "evaluator".
+
+*** Syntax of Names
+
+ #+cindex:package
+ #+cindex:symbol
+ #+cindex:name, package
+ #+findex:find-packagea
+ A /package/ is  like a table that  maps strings to symbols. Each  package has a
+ /name/, which can be used to find the package using the function:
+ - ~find-package.~ ::
+
+ #+cindex:name-to-symbol mapping
+ #+findex:find-symbol
+ #+findex:intern
+ The two key functions that the reader uses to access the name-to-symbol
+ mappings in a package are:
+
+ #+cindex:accessible symbol
+ - ~find-symbol~ :: looks in the package for  a symbol with the given string for
+   a name and returns it, or =nil= if  no symbol is found. All the symbols found
+   in a  given package using ~find-symbol~  are said to be  /accessible/ in that
+   package. In other words, the /accessible/ symbols in a package are those that
+   can be referred to with unqualified names when the package is current.
+
+   #+cindex:present symbol
+   #+cindex:inherited symbol
+   #+cindex:using a package
+   #+cindex:external symbol
+   #+cindex:export
+   A symbol  can be  accessible in two  ways. The *first*  is for  the package's
+   name-to-symbol table  to contain an entry  for the symbol, in  which case the
+   symbol  is  /present/ in  the  package.  The *second*  way  a  symbol can  be
+   accessible in a  package is if the package /inherits/  it. A package inherits
+   symbols from  other packages by  /using/ the other packages.  Only /external/
+   symbols in the  used packages are inherited.  A symbol is made  external in a
+   package by /exporting/ it. An exported symbol  can be referred to by use of a
+   single colon qualified name.
+
+ - ~intern~ :: will return an existing symbol; otherwise it creates a new symbol
+   with the string as its name and adds it to the package.
+
+   #+cindex:home package
+   When the  reader interns  a new  symbol in the  package, it  is added  to the
+   package's  name-to-symbol table.  The  package  in which  a  symbol is  first
+   interned is called the symbol's /home package/.
+
+ Both of these functions take a string and, optionally, a package. The =package=
+ argument defaults to the value of  the global variable =*PACKAGE*=, also called
+ the /current package/.
+
+ #+cindex:names
+ #+cindex:unqualified name
+ #+cindex:package-qualified name
+ #+cindex:symbol object
+ #+cindex:reader
+ #+cindex:evaluator
+ - unqualified names ::  Most names you  use are /unqualified/, that is, contain
+   no colons. When the reader reads such a name, it translates it to a symbol by
+   converting  any unescaped  letters  to uppercase  and  passing the  resulting
+   string to  ~intern~. Thus, each  time the reader reads  the same name  in the
+   same package,  it will  get the  same symbol object.  The evaluator  uses the
+   object  identity of  symbols to  determine which  function, variable,  or the
+   program element a given symbol refers to.
+
+ - package-qualified  names ::  A name  containing either  a single  colon or  a
+   double  colon  is  a  /package-qualified  name/.  When  the  reader  reads  a
+   package-qualified name, it  splits the name on the colons  and uses the first
+   part as the  name of a package and  the second part as the name  of a symbol.
+   The reader  looks up  the appropriate  package and uses  it to  translate the
+   symbol name to a symbol object.
+
+   #+cindex:external symbol
+   #+cindex:export
+ - external symbol  :: A name  containing only a single  colon must refer  to an
+   /external symbol/---one that the package /exports/ for public use.
+
+ - symbol :: A double-colon name can refer to any symbol from the named package.
+
+   #+cindex:keyword symbol
+   #+cindex:package =KEYWORD=
+   #+cindex:=KEYWORD= package
+ - keyword symbol :: written with names  starting with a colon. Such symbols are
+   interned in the package named  =KEYWORD= and automatically exported. When the
+   reader interns a symbol in the =KEYWORD=, it also defines a constant variable
+   with the symbol as both its name and  value. This is why you can use keywords
+   in argument lists without quoting them--when they appear in a value position,
+   they evaluate to themselves. The names  of keyword symbols, like all symbols,
+   are converted  to all uppercase by  the reader before they  are interned. The
+   name does not include the leading colon.
+
+   #+cindex:uninterned symbol
+ - uninterned symbol :: are written with  a leading =#:=. These names (minus the
+   =#:=) are converted to uppercase as  normal and then translated into symbols,
+   but the symbols are not interned in any package; each time the reader reads a
+   =#:= name,  it creates  a new symbol.  You will rarely,  if ever,  write this
+   syntax yourself, but you will sometimes see it when you print an s-expression
+   containing symbols returned by the function =GENSYM=.
+
+   : (gensym) ==> #:G3128
+
+   #+cindex:shadowing symbol
+ - shadowing  symbol   ::   To   keep  the  mappings   from  names   to  symbols
+   deterministic, the package system allows only  one symbol to be accessible in
+   a given  package for  each name.  That is,  a package  cannot have  a present
+   symbol and  an inherited symbol with  the same name or  inherit two different
+   symbols,  from different  packages,  with  the same  name.  However, you  can
+   resolve  conflicts by  making one  of  the accessible  symbols a  /shadowing/
+   symbol, which  makes the other  symbols of  the same name  inaccessible. Each
+   package maintains a list of shadowing symbols.
+
+   #+cindex:imported symbol
+ - imported symbol :: An existing symbol  can be /imported/ into another package
+   by adding it to the package's name-to-symbol table. Thus, the same symbol can
+   be present in multiple packages.
+
+   #+cindex:uninterened symbol
+ - uninterned symbol   :: A present symbol  can be /uninterned/ from  a package,
+   which causes it to be removed from  the name-to-symbol table, and, if it is a
+   shadowing symbol, from the shadowing list. A symbol that isn't present in any
+   package is called an uninterned symbol, can  no longer be read by the reader,
+   will be printed using the =#:= syntax.
+
+*** The Three Standard Packages
+ When  you  first  start  Lisp,  the  value  of  =*PACKAGE*=  is  typically  the
+ =COMMON-LISP-USER= package, also known as =CL-USER=. =CL=USER= uses the package
+ =COMMON-LISP=, which exports all the names defined by the language standard.
+
+ When you type an expression at the =REPL=, all the names of standard functions,
+ macros, variables,  and so on will  be translated to the  symbols exported from
+ =COMMON-LISP=, and all  other names will be interned  in the =COMMON-LISP-USER=
+ package.
+
+ The  =REPL= cannot  start  in the  =COMMON-LISP= package  because  you are  not
+ allowed to intern  new symbols in it; =COMMON-LISP-USER= serves  as a "scratch"
+ package where you can  create your own names while still  having easy access to
+ all the symbols in =COMMON-LISP=.
+
+ The  third standard  package is  the =KEYWORD=  package, the  package the  Lisp
+ reader uses to intern names starting with a colon.
+
 *** Defining Your Own Packages
 #+cindex:package
 Packages provide  basic control over  namespaces by controlling how  the reader
@@ -4527,6 +4527,181 @@ clauses in order to import symbols from different packages.
 ** Common Lisp Packages for SQLite
 *** Alain Picard's cl-sqlite
 - http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/index.html
+
+** Common Lisp Regular Expressions
+#+cindex:regular expressions
+The  ANSI  Common  Lisp  standard  does  not  include  facilities  for  regular
+expressions,  but a  couple of  libraries exist  for this  task, for  instance:
+~cl-ppcre~.
+
+- [[https://www.cliki.net/Regular%20Expression][CLiki Regular Expressions page]]
+
+*** CL-Portable Perl-compatible Regular Expressions---CL-PPCRE
+"Portable Perl-compatible regular expressions for Common Lisp"
+
+- [[https://edicl.github.io/cl-ppcre/][CL-PPCRE Home]]
+- [[https://github.com/edicl/cl-ppcre][CL-PPCRE on GitHub]]
+
+CL-PPCRE is a portable regular expression library for Common Lisp which has the
+following features:
+
+- It  is  compatible  with  Perl  (especially when  used  in  conjunction  with
+  cl-interpol, to allow compatible parsing of regexp strings).
+- It is pretty fast.
+- It is portable between ANSI-compliant Common Lisp implementations.
+- It is thread-safe.
+- In addition to specifying regular expressions as strings like in Perl you can
+  also use S-expressions.
+- It comes with  a BSD-style license so  you can basically do  with it whatever
+  you want.
+
+To use it, load it through ~quicklisp~:
+
+: (ql:quickload :cl-ppcre)
+
+**** CL-PPCRE Basic Operations
+***** Scan Functions---Looking for matching patterns
+     #+cindex:scan function
+- ~scan~ :: The ~scan~ function tries to match the given pattern and on success
+  returns four multiple-values values:
+
+  1. the start of the match
+  2. the end of the match
+  3. array denoting the beginnings of register matches
+  4. array denoting the endings of register matches
+
+  Returns =NIL= on failure.
+
+  #+cindex:create-scanner function
+  #+cindex:scanner
+- ~create-scanner~ ::   A regular expression  pattern can be compiled  with the
+  ~create-scanner~ function call. A “scanner” will  be created that can be used
+  by other functions.
+
+  #+begin_src lisp
+    (let ((ptrn (ppcre:create-scanner "(a)*b")))
+      (ppcre:scan ptrn "xaaabd"))
+  #+end_src
+
+  will yield the same results as:
+
+  #+begin_src lisp
+    (ppcre:scan "(a)*b" "xaaabd")
+  #+end_src
+
+  but  will  require  less  time  for repeated  ~scan~  calls  as  parsing  the
+  expression and compiling it is done only once.
+
+***** Extracting information
+
+- ~scan-to-strings~  :: The ~scan-to-strings~ function is similar to ~scan~ but
+  returns /substrings/  of =target-string= instead of  positions. This function
+  returns two values on  success: the whole match as a string  plus an array of
+  substrings (or =NIL=s) corresponding to the matched registers.
+
+- ~register-groups-bind~ ::  The ~register-groups-bind~ function tries to match
+  the given pattern against the target string and binds matching fragments with
+  the given variables.
+
+  #+begin_src lisp
+    (ppcre:register-groups-bind (first second third fourth)
+	  ("((a)|(b)|(c))+" "abababc" :sharedp t)
+	(list first second third fourth))
+  #+end_src
+
+  #+begin_example
+  ;; => ("c" "a" "b" "c")
+  #+end_example
+
+  CL-PPCRE also provides a shortcut for calling a function before assigning the
+  matching fragment to the variable:
+
+  #+begin_src lisp
+    (ppcre:register-groups-bind (fname lname (#'parse-integer date month year))
+	  ("(\\w+)\\s+(\\w+)\\s+(\\d{1,2})\\.(\\d{1,2})\\.(\\d{4})" "Frank Zappa 21.12.1940")
+	(list fname lname (encode-universal-time 0 0 0 date month year 0)))
+  #+end_src
+
+  #+begin_example
+  ;; => ("Frank" "Zappa" 1292889600)
+  #+end_example
+
+**** Scanning
+
+#+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode @
+			multi-line-mode single-line-mode extended-mode
+			destructive
+#+begin_defun
+The function accepts most of the regex  syntax of Perl 5.8 as described in ~man
+perlre~ including  extended features like non-greedy  repetitions, positive and
+negative  look-ahead and  look-behind assertions,  "standalone" subexpressions,
+and conditional subpatterns.
+
+The following Perl features /are/ currently supported:
+
+- =\t=, =\n=, =\r=, =\f=, =\a=, =\e=,
+- =\033= (octal character codes),
+- =\x1B= (hexadecimal character codes),
+- =\c[= (control characters),
+- =\w=, =\W=, =\s=, =\S=, =\d=, =\D=, =\b=, =\B=, =\A=, =\Z=, and =\z=
+- =\Q= and =\E=
+- =\p=  and =\P=  (named properties)  but  only the  long form  with braces  is
+  supported, i.e. =\p{Letter}= and =\p{L}= will work while =\pL= won't.
+
+
+The following Perl features are (currently) /not/ supported:
+
+- ~(?{ code })~ and  ~(??{ code })~ because they obviously  don't make sense in
+  Lisp.
+- =\N{name}= (named characters),
+- =\x{263a}= (wide hex characters),
+- =\l=, =\u=, =\L=, and =\U= because  they're actually not part of Perl's regex
+  syntax
+- =\X= (extended Unicode), and
+- =\C= (single character).
+- Posix  /character  classes/  like   =[[:alpha]]=.  Use  /Unicode  properties/
+  instead.
+- =\G= for Perl's ~pos()~ because we don't have it.
+
+
+- return        values         ::        @@texinfo:@var{@@scanner@@texinfo:}@@,
+  @@texinfo:@var{@@register-names@@texinfo:}@@
+
+- re-string ::  Accepts a string which  is a regular expression  in Perl syntax
+  and returns a closure which will scan strings for this regular expression.
+
+- =*ALLOW-NAMED-REGISTERS*=   ::  The   second  value   is  only   returned  if
+  =*ALLOW-NAMED-REGISTERS*= is =true=.
+
+- REGISTER-NAMES   ::   (return  value) represents  a list  of strings  mapping
+  registers  to their  respective names;  the  first element  stands for  first
+  register, the second element for second register, etc. You have to store this
+  value if  you want to map  a register number  to its name later  as ~scanner~
+  doesn't capture  any information  about register names.  If a  register isn't
+  named, it has =NIL= as its name.
+
+- MODEs :: The =mode= keyword arguments  are equivalent to the =imsx= modifiers
+  in Perl. The =destructive= keyword will be ignored.
+
+#+end_defun
+
+**** Splitting and Replacing
+
+**** Modifying scanner behaviour
+
+**** Miscellaneous
+
+**** Conditions
+
+**** Unicode Properties
+
+**** Filters
+
+**** Compatibility with Perl
+
+**** Bugs and Problems
+
+**** Hints---Comments---Performance
 
 ** Iterate
 - [[https://common-lisp.net/project/iterate/][Iterate]]
