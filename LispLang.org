@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-23 23:07
-#+macro:version Version 0.0.76
+#+date:2020-11-23 23:39
+#+macro:version Version 0.0.77
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3680,7 +3680,6 @@ These opertors require open streams:
 - write-string
 - y-or-n-p
 - yes-or-no-p
-- 
 
 * Common Lisp Packages
 Avoiding name  conflicts between  independently developed  pieces of  code.  In
@@ -4628,9 +4627,7 @@ To use it, load it through ~quicklisp~:
 
 **** Scanning
 
-#+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode @
-			multi-line-mode single-line-mode extended-mode
-			destructive
+#+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
 #+begin_defun
 The function accepts most of the regex  syntax of Perl 5.8 as described in ~man
 perlre~ including  extended features like non-greedy  repetitions, positive and
@@ -4683,6 +4680,53 @@ The following Perl features are (currently) /not/ supported:
 - MODEs :: The =mode= keyword arguments  are equivalent to the =imsx= modifiers
   in Perl. The =destructive= keyword will be ignored.
 
+#+end_defun
+
+#+texinfo: @heading Parse Tree
+
+#+attr_texinfo: :options create-scanner (parse-tree t) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
+#+begin_defun
+This  is similar  to ~CREATE-SCANNER~  for regex  strings above  but accepts  a
+/parse tree/ as its first argument.  A parse tree is an S-expression conforming
+to the following syntax:...
+
+- return values :: scanner, register-names
+
+#+end_defun
+
+#+texinfo: @heading Scan
+
+#+attr_texinfo: :options scan regex target-string &key start end
+#+begin_defun
+Searches the string ~target-string~ from ~start~ (which defaults to 0) to ~end~
+(which defaults to  the length of ~target-string~) and tries  to match ~regex~.
+On success returns four values:
+- the start of the match,
+- the end of the match
+- array denoting the beginnings of register matches
+- array denoting the endings of register matches
+
+On failure returns =NIL=.
+
+- return-values ::
+  - match-start,
+  - match-end,
+  - reg-starts,
+  - reg-ends
+#+end_defun
+
+#+texinfo: @heading ~scan-to-strings~ 
+
+#+attr_texinfo: :options scan-to-strings regex target-string &key start end sharedp
+#+begin_defun
+- return values :: match, regs
+
+Like ~SCAN~  but returns  substrings of  ~target-string~ instead  of positions,
+i.e. this function returns  two values on success:
+- the whole match as a string
+- plus  an  array  of  substrings  (or =NIL=s)  corresponding  to  the  matched
+  registers.  If ~sharedp~  is true,  the substrings  may share  structure with
+  ~target-string~.
 #+end_defun
 
 **** Splitting and Replacing
