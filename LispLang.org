@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-25 10:41
-#+macro:version Version 0.0.78
+#+date:2020-11-25 13:30
+#+macro:version Version 0.0.79
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6657,6 +6657,24 @@ list, which are also distinct from each other.
 ** Standardizations of Scheme
 Scheme has been standardized both formally and informally.
 
+The two dialects  in which most major  Lisp programs of the  1970s were written
+are MacLisp  (Moon 1978; Pitman  1983), developed at  the MIT Project  MAC, and
+Interlisp (Teitelman 1974),  developed at Bolt Beranek and Newman  Inc. and the
+Xerox  Palo  Alto   Research  Center.  Portable  Standard   Lisp  (Hearn  1969;
+Griss 1981) was a Lisp dialect designed to be easily portable between different
+machines. MacLisp  spawned a number of  subdialects, such as Franz  Lisp, which
+was developed at  the University of California at Berkeley,  and Zetalisp (Moon
+1981),  which was  based on  a special-purpose  processor designed  at the  MIT
+Artificial  Intelligence Laboratory  to  run Lisp  very  efficiently. The  Lisp
+dialect used in this book, called Scheme (Steele 1975), was invented in 1975 by
+Guy Lewis Steele Jr. and Gerald  Jay Sussman of the MIT Artificial Intelligence
+Laboratory and later reimplemented for  instructional use at MIT. Scheme became
+an IEEE  standard in 1990  (IEEE 1990). The  Common Lisp dialect  (Steele 1982,
+Steele 1990) was  developed by the Lisp community to  combine features from the
+earlier Lisp  dialects to  make an  industrial standard  for Lisp.  Common Lisp
+became an ANSI standard in 1994 (ANSI 1994).
+- https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-9.html
+
 *** IEEE Standard for the Scheme Programming Language
 describes the formal ANSI/IEEE Standard for Scheme.
 
@@ -6720,7 +6738,7 @@ http://www.r6rs.org
   - Guy Lewis Steele, Jr.
   - AI Memo No. 379, Artificial Intelligence Laboratory, Massachusetts
     Institute of Technology, November 1976
-- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-443.pdf][Debunking the "Expensive Procedure Call" Myth; or, Procedure Call
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-443.pdf][Debunking the "Expensive Procedure Call" Myth; or, Procedure Call]]
   Implementations Considered Harmful; or, LAMBDA: The Ultimate GOTO]]
   - Guy Lewis Steele, Jr.
   - AI Memo No. 443, Artificial Intelligence Laboratory, Massachusetts
@@ -6729,8 +6747,7 @@ http://www.r6rs.org
   - Guy Lewis Steele, Jr. and Gerald Jay Sussman
   - AI Memo No. 452, Artificial Intelligence Laboratory, Massachusetts
     Institute of Technology, January 1978
-- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-453.pdf][The Art of the Interpreter; or, The Modularity Complex (Parts Zero, One, and
-  Two)]]
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-453.pdf][The Art of the Interpreter; or, The Modularity Complex (Parts Zero, One, and Two)]]
   - Guy Lewis Steele, Jr. and Gerald Jay Sussman
   - AI Memo No. 453, Artificial Intelligence Laboratory, Massachusetts
     Institute of Technology, May 1978
@@ -6738,8 +6755,7 @@ http://www.r6rs.org
   - Guy Lewis Steele, Jr.
   - Technical Report 474, Artificial Intelligence Laboratory, Massachusetts
     Institute of Technology, May 1978
-- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-514.pdf][Design of LISP-based Processors; or, SCHEME: A Dielectric LISP, or Finite
-  Memories Considered Harmful; or, LAMBDA: The Ultimate Opcode.]]
+- [[ftp://publications.ai.mit.edu/ai-publications/pdf/AIM-514.pdf][Design of LISP-based Processors; or, SCHEME: A Dielectric LISP, or Finite Memories Considered Harmful; or, LAMBDA: The Ultimate Opcode.]]
   - Guy Lewis Steele, Jr. and Gerald Jay Sussman
   - AI Memo No. 514, Artificial Intelligence Laboratory, Massachusetts
     Institute of Technology, March 1979
@@ -6879,6 +6895,11 @@ visual interpreter for the Scheme functional programming languages.
 
 *** Structure and Interpretation of Computer Programs---SICP
 - https://mitpress.mit.edu/sites/default/files/sicp/index.html
+
+*** 6.001 Structure and Interpretation of Computer Programs
+- [[https://www.youtube.com/watch?v=-J_xL4IGhJA&list=PLE18841CABEA24090][YouTube with Abelson and Sussman]]
+- [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/][Spring 2005]]
+- [[https://dspace.mit.edu/bitstream/handle/1721.1/35852/6-001Fall-2002/OcwWeb/Electrical-Engineering-and-Computer-Science/6-001Structure-and-Interpretation-of-Computer-ProgramsFall2002/CourseHome/index.htm][Fall 2002]]
 
 ** Scheme Implementations
 [[http://www.r6rs.org/implementations.html][R6RS Implementations]]
