@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-23 23:39
-#+macro:version Version 0.0.77
+#+date:2020-11-25 10:41
+#+macro:version Version 0.0.78
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -245,6 +245,31 @@ shut (mostly) and watch helplessly as millions of tax dollars get wasted.
 
 - from /Lisping at JPL/
 - http://www.flownet.com/gat/jpl-lisp.html
+
+
+
+#+texinfo: @heading The Power of Macros
+
+#+attr_texinfo: :author Peter Seibel, author of /Practical Common Lisp/
+#+begin_quote
+Java added  a similar kind  of loop construct  [i.e., Common Lisp’s  ~DOLIST~ ]
+with the "enhanced"  for loop in Java  1.5, as part of JSR-201.   Notice what a
+difference macros  make.  A  Lisp programmer  who notices  a common  pattern in
+their code can  write a macro to give themselves  a source-level abstraction of
+that pattern.  A  Java programmer who notices the same  pattern has to convince
+Sun that this particular abstraction is  worth adding to the language. Then Sun
+has  to publish  a JSR  and  convene an  industry-wide "expert  group" to  hash
+everything  out.   That  process--according  to Sun--takes  an  average  of  18
+months. After that, the compiler writers all have to go upgrade their compilers
+to  support the  new  feature. And  even once  the  Java programmer's  favorite
+compiler supports  the new version of  Java, they probably still  can't use the
+new  feature until  they're allowed  to break  source compatibility  with older
+versions of Java. So an annoyance  that Common Lisp programmers can resolve for
+themselves within five minutes plagues Java programmers for years.
+
+- From /Practical  Common Lisp/,  Ch 7  “Macros: Standard  Control Constructs”,
+  footnote 5.
+#+end_quote
 
 
 * Introduction to Lisp
