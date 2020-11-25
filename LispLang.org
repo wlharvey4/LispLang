@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-25 13:30
-#+macro:version Version 0.0.79
+#+date:2020-11-25 14:49
+#+macro:version Version 0.0.80
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1750,6 +1750,9 @@ language.
 - [[http://ebixio.com/online_docs/SuccessfulLisp.pdf][Successful Lisp HTML]]
 
 ** Lisp Tutorials
+*** The Little Lisper
+- [[https://7chan.org/pr/src/__The_Little_LISPer___3rd_Edition.pdf][The Little Lisper (3rd Edition)]]
+  
 *** Iwanna Learn Lisp
  - https://wiki.c2.com/?IwannaLearnLisp
 
@@ -6880,6 +6883,8 @@ https://www.scheme.com/tspl4/
 Daniel P. Friedman and Matthias Felleisen. The Little Schemer, fourth
 edition. MIT Press, 1996.
 
+- [[https://pdfs.semanticscholar.org/35d0/d5275a8390c351ce98fbdc2ad37d210ba63b.pdf][The Little Schemer (4th Edition)]]
+
 *** Simply Scheme---Introducing Computer Science 2nd Ed
 - https://people.eecs.berkeley.edu/~bh/ss-toc2.html
 
@@ -6894,12 +6899,29 @@ visual interpreter for the Scheme functional programming languages.
 - http://community.schemewiki.org/?scheme-faq
 
 *** Structure and Interpretation of Computer Programs---SICP
-- https://mitpress.mit.edu/sites/default/files/sicp/index.html
+- [[https://sarabander.github.io/sicp/][SICP HTML Online Version]]
+- [[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book.html][SICP Online Textbook]]
+- [[https://mitpress.mit.edu/sites/default/files/sicp/code/index.html][SICP Code from the Book]]
+- [[https://mitpress.mit.edu/sites/default/files/sicp/index.html][SICP Companion Website]]
+- [[https://github.com/sarabander/sicp-pdf][SICP LaTeX and Texinfo Sources and PDF]]
+- [[https://github.com/sarabander/sicp][SICP in HTML and EPUB3 Formats]]
+- [[https://www.neilvandyke.org/sicp-texi/][SICP in Texinfo Format]]
+- [[https://github.com/sarabander/p2pu-sicp][SICP Solutions]]
+- [[http://zv.github.io/sicp-chapter-1][SICP Solutions from zv]]
+- [[https://github.com/ldct/isicp][Interactive SICP]]
+- [[http://www.xuanji.li/isicp/][Interactive HTML SICP]]
+- [[https://mitpress.mit.edu/sites/default/files/sicp/psets/index.html][SICP Sample Programming Assignments]]
+- [[https://github.com/zv/SICP-guile][SICP in Guile & Emacs Lisp]]
 
 *** 6.001 Structure and Interpretation of Computer Programs
+- [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video-lectures/][MIT with Abelson and Sussman]]
 - [[https://www.youtube.com/watch?v=-J_xL4IGhJA&list=PLE18841CABEA24090][YouTube with Abelson and Sussman]]
 - [[https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/][Spring 2005]]
 - [[https://dspace.mit.edu/bitstream/handle/1721.1/35852/6-001Fall-2002/OcwWeb/Electrical-Engineering-and-Computer-Science/6-001Structure-and-Interpretation-of-Computer-ProgramsFall2002/CourseHome/index.htm][Fall 2002]]
+- [[http://aduni.org/courses/sicp/][Ars Digita University Version]]
+- [[https://see.stanford.edu/Course/CS107][Stanford CS 107 Programming Paradigms Spring 2008 Main Entry]]
+- [[http://videolectures.net/stanfordcs107s08_programming_paradigms/][Stanford CS 107 Spring 2008 with Jerry Cain]]
+- [[https://www.youtube.com/watch?v=Ps8jOj7diA0][Stanford CS 107 Spring 2008 YouTube Lectures]]
 
 ** Scheme Implementations
 [[http://www.r6rs.org/implementations.html][R6RS Implementations]]
