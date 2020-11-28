@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-28 12:17
-#+macro:version Version 0.0.82
+#+date:2020-11-28 13:02
+#+macro:version Version 0.0.84
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6523,7 +6523,6 @@ started as quickly as possible.  After a brief Introduction,
 - Section of notes containing clarifications, references, additional code, and
   occasional heresies.
 
-
 ** On Lisp Companion Volume
 #+cindex:macros
 #+cindex:On Lisp
@@ -6708,6 +6707,161 @@ of editing, compiling and testing.
 mean better design. More powerful tools are taking the risk out of exploration.
 That's good  news for  programmers, because it  means that we  will be  able to
 undertake more ambitious projects.
+** Welcome to Lisp
+This chapter aims to get you programming as soon as possible.  By the end of it
+you will know enough Common Lisp to begin writing programs.
+*** Form
+#+cindex:topleval
+Any lisp system will include an  interactive front-end called a /toplevel/. You
+type Lisp expressions into the toplevel, and the system displays their values.
+
+Lisp usually displays  a prompt to tell  you that it's waiting for  you to type
+something. Many implementations of Common Lisp use =>= as the toplevel prompt.
+
+#+texinfo: @subheading Lisp Expressions
+
+One of the simplest kinds of /Lisp expression/ is the integer. If you enter =1=
+after the prompt,
+
+#+begin_example
+> 1
+1
+>
+#+end_example
+
+the system will print its value, followed by another prompt.
+
+In this case,  the value displayed is the  same as what we typed.  An number is
+said  to /evaluate  to  itself/. Things  get more  interesting  when you  enter
+expressions that  take some work  to evaluate. If you  want to add  two numbers
+together, you type something like:
+
+#+begin_example
+> (+ 2 3)
+5
+#+end_example
+
+#+cindex:operator
+#+cindex:arguments
+The =+= is  called the /operator/, and  the numbers =2= and =3=  are called the
+/arguments/.
+
+#+cindex:prefix notation
+This form is called /prefix/ notation, because the operator comes first.  The
+flexibility of prefix notation means that, in Lisp, =+= can take any number of
+arguments, including none:
+
+#+begin_example
+> (+)
+0
+> (+ 2)
+2
+> (+ 2 3)
+5
+> (+ 2 3 4)
+9
+> (+ 2 3 4 5)
+14
+#+end_example
+
+Because operators can take varying numbers of arguments, we need parentheses to
+show where an expression begins and ends.
+
+#+texinfo: @subsubheading Nested Expressions
+
+Expressions can be nested.  That is, the arguments in an expression may
+themselves be complex expressions:
+
+: > (/ (- 7 1) (- 4 2))
+: 3
+
+#+texinfo: @subheading Expressions and Code Consist of Atoms and Lists
+
+Another beauty of Lisp notation is: this is all there is.  All Lisp expressions
+are either:
+- atoms, like =1=, or
+- lists, which consist of zero or more expressions enclosed in parentheses.
+
+All Lisp code takes this form. A language like C has a more complicated syntax:
+arithmetic expressions use infix notation; function  calls use a sort of prefix
+notation, with the arguments delimited  by commas; expressions are delimited by
+commas; and blocks of  code are delimited by curly brackets. In  Lisp, we use a
+single notation to express all these ideas.
+
+*** Evaluation
+In this section we take a closer look at how expressions are evaluated.
+
+#+texinfo: @subheading Evaluation Rule
+
+When Lisp evaluates a function call, it does so in two steps:
+
+1. First the arguments are evaluated from left to right.
+
+2. The values of arguments are passed to the fucntion named by the operator.
+
+If  any of  the arguments  are themselves  function calls,  they are  evaluated
+according to the same rules.
+
+Not all the operators in Common Lisp  are functions, but most are. And function
+calls are always evaluated this way. The arguments are evaluated left-to-right,
+and their  values are passed  to the function, which  returns the value  of the
+expression as a whole. This is called the /evaluation rule/ for Common Lisp.
+
+#+texinfo: @subheading Special Operators
+
+One operator that  does not follow the Common Lisp  evaluation rule is ~quote~.
+The ~quote~  operator is a /special  operator/, meaning that it  has a distinct
+evaluation rule of its  own. And the rule is: do  nothing. The ~quote~ operator
+takes a single argument and just returns it verbatim.
+
+: > (quote (+ 3 5)
+: (+ 3 5)
+
+Common Lisp defines ='= as an abbreviation for ~quote~.  You can get the effect
+of calling ~quote~ by affixing a ='= to the front of any expression:
+
+: > '(+ 3 5)
+: (+ 3 5)
+
+Lisp provides the ~quote~ as a way of /protecting/ expressions from evaluation.
+
+*** Data
+Lisp offers  all the  data types  we find  in most  other language,  along with
+several  others that  we don't.  One  data type  we  have used  already is  the
+/integer/, which  is written as  a series of  digits: =256=. Another  data type
+Lisp  has  in common  with  most  other languages  is  the  /string/, which  is
+represented as  a series of  characters surrounded  by double quotes:  ="ora et
+labora"=.  Integers and strings both evaluate to themselves.
+
+Two Lisp data types that we don't  commonly find in other languages are symbols
+and lists.  /Symbols/ are words.  Ordinarily, they are converted  to uppercase,
+regardless of how you type them:
+
+: > 'Artichoke
+: ARTICHOKE
+
+Symbols do not (usually) evaluate to themselves, so if you want to refer to a
+symbol, you should quote it.
+
+/Lists/ are represeted as zero or more elements enclosed in parentheses.  The
+elements can be of any type, including lists.  You have to quote lists, or Lisp
+would take them for function calls:
+
+#+begin_example
+> '(my 3 "Sons")
+(MY 3 "Sons")
+> '(the list (a b c) has 3 elements)
+(THE LIST (A B C) HAS 3 ELEMENTS)
+#+end_example
+
+One quote protects a whole expression, including expressions within it.
+
+You  can  build lists  by  calling  ~list~. Since  ~list~  is  a function,  its
+arguments are evaluated. Here we call to =+= with a call to ~list~:
+
+: > (list 'my (+ 2 1) "Sons")
+: (MY 3 "Sons")
+
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
