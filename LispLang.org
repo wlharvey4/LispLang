@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-25 14:49
-#+macro:version Version 0.0.81
+#+date:2020-11-28 12:17
+#+macro:version Version 0.0.82
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6534,7 +6534,6 @@ language to provide  the abstractions that make it convenient.  I would like to
 invite  readers who  are interested  in learning  more about  macros and  other
 advanced techniques to read the companion volume, /On Lisp/.
 
-
 ** Features
 
 This book offers a broad description  of the CommonLisp language. There is some
@@ -6560,6 +6559,155 @@ overlap with  (but newer  than) the  author's earlier  and more  advanced book,
   languages.
 - An appendix on debugging, with examples of common errors.
 
+** Introduction
+Lisp  is  designed  to evolve.  You  can  define  new  Lisp operators.  As  new
+abstractions  become popular  (object-oriented  programming,  for example),  it
+always  turns out  to be  easy to  implement  them in  Lisp. Like  DNA, such  a
+language does not go out of style.
+
+*** New Tools
+Why learn Lisp? Because  it allows you to do things that you  can't do in other
+languages. Suppose you  want to write a  function that takes a  number ~n~, and
+returns a function that adds ~n~ to its argument:
+
+#+begin_src lisp
+  ; Lisp
+  (defun addn (n)
+    #'(lambda (x)
+	(+ x n)))
+#+end_src
+
+What does ~addn~ look like in C? You just can't write it. Programming languages
+teach you not to want what they cannot provide. You have to think in a language
+to write programs in it, and it's hard to want something you can't describe.
+
+Closures are  only one of  the abstractions we  don't find in  other languages.
+Another unique feature of Lisp is that Lisp programs are expressed as Lisp data
+structures. This  means that you can  write programs that write  programs. They
+are called macros.
+
+With  macros, closures,  and run-time  typing, Lisp  transcends object-oriented
+programming. The proof  of it is made  quite explicit, in code,  in Chapter 17.
+Chapters 2-13  will gradually introduce  all the  concepts that you'll  need in
+order to understand the code in Chapter 17.
+
+*** New Techniques
+Lisp gives you tools that other languages don't provide. Taken separately, the
+new things that come with Lisp---automatic memory management, manifest typing,
+closures, and so on---each make programming that much easier. Taken together,
+they form a critical mass that makes possible a new way of programming.
+
+#+texinfo: @subheading Extensible Software
+
+#+cindex:extensible software
+Lisp is designed to be /extensible/: it lets you define new operators yourself.
+This is possible  because the Lisp language  is made out of  the same functions
+and macros as your own programs. So  it's no more difficult to extend Lisp than
+to write a program in it.  In fact, is so easy (and so useful) that extending
+the language is standard practice.
+
+#+texinfo: @subsubheading Bottom-up Programming
+
+#+cindex:bottom-up programming
+As  you are  writing your  program /down/  toward the  language, you  build the
+language /up/ toward your program. You work /bottom-up/, as well as /top-down/.
+
+Almost any  program can benefit from  having the language tailored  to suit its
+needs,  but  the  more  complex  the program,  the  more  valuable  /bottom-up/
+programming  becomes.
+
+A /bottom-up/ program can be written as  a series of layers, each one acting as
+a sort of programming language for the one above. /TeX/ was one of the earliest
+programs  to be  written this  way.  You can  write programs  bottom-up in  any
+language, but Lisp is far the most natural vehicle for this style.
+
+#+cindex:extensible software
+/Bottom-up/ programming leads naturally to extensible software. If you take the
+principle of /bottom-up/  programming all the way to the  topmost layer of your
+program, then that  layer becomes a programming language for  the user. Because
+the  idea of  extensibility is  so deeply-rooted  in Lisp,  it makes  the ideal
+language of writing extensible software.  Three of the most successful programs
+of the  1980s provide Lisp  as an extension  language: Gnu Emacs,  Autocad, and
+Interleaf.
+
+#+texinfo: @subheading Reusable Software
+
+#+cindex:reusable software
+Working bottom-up is also the best  way to get /reusable/ software.
+
+,*The essence  of writing /reusable/ software  is to separate the  general from
+the specific, and bottom-up programming inherently creates such a separation.*
+
+Instead  of  devoting   all  your  effort  to  writing   a  single,  monolithic
+application, you devote part of your effort to building a language, and part to
+writing a (proportionately smaller) application on  top of it. What is specific
+to  this application  will be  concentrated in  the topmost  layer. The  layers
+beneath will from a language for  writing applications like this one---and what
+could be more reusable than a programming language?
+
+#+texinfo: @subheading Big Abstractions and a Dynamic Interactive Environment
+
+Lisp allows  you not just  to write more  sophisticated programs, but  to write
+themn faster.  Lisp programs tend to  be short---the language gives  you bigger
+concepts, so  you don't  have to  use as  many. The  time it  takes to  write a
+program  depends mostly  on its  length.  So this  fact alone  means that  Lisp
+programs take less time to write.
+
+The  effect   is  amplified  by   Lisp's  /dynamic  character/:  in   Lisp  the
+edit-compile-test cycle is so short that programming is real-time.
+
+/Bigger  abstractions/ and  an  /interactive environment/  can  change the  way
+organizations develop software. The phrase /rapid prototyping/ describes a kind
+of programming that began  with Lisp: in Lisp, you can  often write a prototype
+in less time that it would take to write the spec for one. Such a prototype can
+be so abstract  that it makes a  better spec than one written  in English. Lisp
+allows you to  make a smooth transition from prototype  to production software.
+When Copmmon  Lisp programs are  written with an eye  to speed and  compiled by
+modern  compilers,  they run  as  fast  as  programs  in any  other  high-level
+language.
+
+*** A New Approach
+#+texinfo: @heading The Lisp Style of Programming
+
+One of the aims of this book is  to explain not just the Lisp language, but the
+/new  approach  to  programming/  that  Lisp  makes  possible.  As  programming
+environments grow in power, and languages become more abstract, the /Lisp style
+of programming/ is gradually replacing the old plan-and-implement model.
+
+#+texinfo: @subheading Reduce the Cost of Mistakes---Increase Exploration
+
+It would be safer  to bet that specifications will be  misquided, and that code
+will  be full  of bugs.  This is  what the  new model  of programming  assumes.
+Instead of hoping that people won't make mistakes, it tries to make the cost of
+mistakes very low.  The cost of a  mistake is the time required  to correct it.
+With powerful  languages and  good programming environments,  this cost  can be
+greatly reduced. *Programming  style can then depend less on  planning and more
+on exploration*.
+
+Planning is a  necessary evil. It is  a respone to risk: the  more dangerous an
+undertaking, the  more important it is  to plan ahead. Powerful  tools decrease
+risk, and  so decrease the  need for planning. The  design of your  program can
+then  benefit from  what  is probably  the most  useful  source of  information
+available: the experience of implementing it.
+
+#+texinfo: @subheading Rapid Prototyping---Not Specifications
+
+/Lisp style/ has been evolving in this direction since the 1960s. You can write
+prototypes so  quickly in Lisp  that you can  go through several  iterations of
+design  and implementation  before  you  would, in  the  old  model, have  even
+finished writing out the specifications. You  don't have to worry so much about
+design flaws, because you discover them a  lot sooner. Nor do you have to worry
+so much about bugs. When you program  in a functional style, bugs can only have
+a  local effect.  When  you use  a  very abstract  language,  some bugs  (e.g.,
+dangling pointers)  are no longer possible,  and what remain are  easy to find,
+because your  programs are so  much shorter. And  when you have  an interactive
+environment, you can  correct bugs instantly, instead of enduring  a long cycle
+of editing, compiling and testing.
+
+/Lisp style/ has evolved this way  because it yields results. Less planning can
+mean better design. More powerful tools are taking the risk out of exploration.
+That's good  news for  programmers, because it  means that we  will be  able to
+undertake more ambitious projects.
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
