@@ -4,7 +4,7 @@
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
 #+date:2020-11-25 14:49
-#+macro:version Version 0.0.80
+#+macro:version Version 0.0.81
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6522,6 +6522,17 @@ started as quickly as possible.  After a brief Introduction,
   - a refernce describing every operatorin ANSI Common Lisp.
 - Section of notes containing clarifications, references, additional code, and
   occasional heresies.
+
+
+** On Lisp Companion Volume
+#+cindex:macros
+#+cindex:On Lisp
+Lisp has a  unique quality: macros.  Lisp programmers can,  and often do, write
+programs to write their  programs for them. Lisp is the  only major language in
+which  this is  a routinely  used  technique, because  Lisp is  the only  major
+language to provide  the abstractions that make it convenient.  I would like to
+invite  readers who  are interested  in learning  more about  macros and  other
+advanced techniques to read the companion volume, /On Lisp/.
 
 
 ** Features
