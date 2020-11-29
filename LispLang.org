@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-28 13:02
-#+macro:version Version 0.0.84
+#+date:2020-11-29 09:31
+#+macro:version Version 0.0.85
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6862,6 +6862,27 @@ arguments are evaluated. Here we call to =+= with a call to ~list~:
 : > (list 'my (+ 2 1) "Sons")
 : (MY 3 "Sons")
 
+We re now  in a position to  appreciate one of the most  remarkable features of
+Lisp:
+
+/Lisp programs are expressed as lists./
+
+It means  that Lisp  programs cna  generate Lisp  code. Lisp  programmers write
+programs to  write their programs for  them. It is important  to understand the
+relation between  expressions and lists.  This is why we  need the quote.  If a
+list is quoted,  evaluation returns the list  itself; if it is  not quoted, the
+list is treated as code, and evaluation returns its value:
+
+: > (list '(+ 2 1) (+ 2 1))
+: ((+ 2 1) 3)
+
+Here, the first argument  is quoted, and so yields a  list. The second argument
+is not quoted, and is treated as a function call, yielding a number.
+
+In Common  Lisp, there  are two ways  of representing the  empty list.  You can
+represent it as a pair of parentheses with nothing between them, or you can use
+the symbol  =nil=. It will be  displayed as =NIL=  no matter how you  write it.
+=NIL= evaluates to itself, and so does not need to be quoted.
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
