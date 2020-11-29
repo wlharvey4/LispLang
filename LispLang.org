@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-29 09:31
-#+macro:version Version 0.0.85
+#+date:2020-11-29 14:36
+#+macro:version Version 0.0.86
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -734,6 +734,9 @@ at age 16, and is able to write  a clear illuminating history of the world from
 the time of Mohammed from the point  of view of this world, and without special
 pleading.
 #+end_quote
+*** Multics
+- https://www.multicians.org/multics.html
+- https://www.multicians.org/mepap.html
 
 ** A Note on S-expressions--Forms--Types
 The development of  the package system is  related to the change  of focus from
@@ -2838,6 +2841,9 @@ any other systems that this system depends on.<
  given  system has  been  loaded, it  remains loaded  and  accessible until  the
  session is ended.
 
+** Roswell
+- https://github.com/roswell/roswell
+
 ** Lisp for the Web
 - [[https://www.adamtornhill.com/articles/lispweb.htm][LispWeb]]
 - [[https://leanpub.com/lispweb][On LeanPub]]
@@ -2988,6 +2994,55 @@ documentation and source codes, and this org file can interact well with SLIME.
 
 ** Common Lisp Libraries by Edi Weitz
 - https://github.com/edicl
+
+** >Common Lisp Repos
+- https://github.com/common-lisp-repos
+- [[https://github.com/takagi/lake][lake]] :: like ~make~
+- [[https://github.com/Rudolph-Miller/jonathan][jonathon]] :: High performance JSON encoder and decoder. Currently support:
+  SBCL, CCL.
+- [[https://github.com/fourier/awesome-lispworks][awesome-lispworks]] :: A curated list of awesome LispWorks extensions.
+- [[https://github.com/slburson/fset][fset]] :: FSet, the functional collections library for Common Lisp.
+- [[https://github.com/dlowe-net/local-time][local-time]] :: Time manipulation library for Common Lisp
+- [[https://github.com/dlowe-net/clock][clock]] :: A Common Lisp date/time library
+- [[https://github.com/dlowe-net/stencl][stencl]] :: A lightweight templating library for Common Lisp
+- [[https://github.com/dlowe-net/cl-sort][cl-sort]] :: A collection of sorting routines written in Common Lisp
+- [[https://github.com/dlowe-net/printf][printf]] :: A printf implementation in Common Lisp
+- [[https://github.com/tuscland/heroku-buildpack-cl][heroku-buildpack-cl]] :: A Buildpack that allows you to deploy Common Lisp
+  applications on the Heroku infrastructure.
+- [[https://github.com/adlai/event-emitter][event-emitter]] :: Event mechanism for Common Lisp objects.
+- [[https://github.com/coleslaw-org/coleslaw][coleslaw]] :: Flexible Lisp Blogware
+- [[https://github.com/kingcons/study-group/tree/master/sicp-july-2018][SICP Study Group]] :: SICP exercises (a few)
+- [[https://github.com/mbattyani/cl-pdf][cl-pdf]] :: CL-PDF is a cross-platform Common Lisp library for generating PDF
+  files.
+- [[https://github.com/mbattyani/cl-typesetting][cl-typesetting]] :: CL-TYPESETTING is  a cross-platform Common Lisp typesetting
+  library for all kind of typesetting applications.
+- [[https://github.com/fukamachi/fast-http][fast-http]] :: A fast HTTP request/response parser for Common Lisp.
+- [[https://github.com/hackinghat/cl-mysql][cl-mysql]] :: Common Lisp MySQL library
+- [[https://github.com/eudoxia0/docparser][docparser]] :: Extract documentation from Common Lisp systems
+- [[https://github.com/fukamachi/cl-dbi][cl-dbi]] :: Database independent interface for Common Lisp
+- [[https://github.com/snmsts][snmsts]] :: Lisp repositories
+- [[https://github.com/guicho271828/eazy-process][eazy-process]] :: Yet Another Portable Library for Process Handling / Subshell
+  Invokation
+- [[https://github.com/guicho271828/eazy-documentation][eazy-documentation]] :: One-shot solution to the CL library documentation
+  generator.
+- [[https://github.com/guicho271828/data-structures-in-common-lisp][data structures in common lisp]] :: A survey of data structure availability /
+  quality in common lisp
+- [[https://borretti.me/portfolio/][boretti cl]] ::
+- [[https://github.com/luismbo/cl-travis][cl-travis]] :: Travis-CI scripts for testing Common Lisp software
+- [[https://borretti.me/article/lisp-travis-coveralls][CL with Travis]] ::
+- [[https://borretti.me/article/common-lisp-sotu-2015][CL Ecosystem 2015]] ::
+- [[https://github.com/fukamachi/woo][Woo]] :: A fast non-blocking HTTP server on top of libev
+- [[https://github.com/fukamachi/clack][Clack]] :: Web server abstraction layer for Common Lisp
+- [[https://github.com/eudoxia0/clack-errors][clack-errors]] :: Error page middleware for Clack.
+- [[http://8arrow.org/caveman/][caveman]] :: Web Framework
+- [[https://github.com/fukamachi/datafly][datafly]] :: A lightweight database library for Common Lisp.
+- [[https://edicl.github.io/cl-who/][cl-who]] :: Yet another Lisp markup language
+- [[https://www.common-lisp.net/project/cl-emb/][cl-emb]] :: Embedded Common Lisp and template system
+- [[https://marijnhaverbeke.nl/postmodern/][postmodern]] :: Common Lisp library for interacting with PostgreSQL databases.
+- [[http://8arrow.org/ningle/][ningle]] :: A lightweight web application framework for Common Lisp
+- [[https://github.com/fukamachi/sxql][sxql]] :: An SQL generator for Common Lisp.
+- [[https://github.com/fukamachi/envy][envy]] :: Configuration switcher by an environment variable inspired by Perl's
+  Config::ENV.
 
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
@@ -4810,6 +4865,74 @@ ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
 
 - https://www.xach.com/lisp/zs3/
 - [[https://github.com/xach/zs3/][ZS3 on GitHub]]
+** Writing Modules
+- https://gist.github.com/substack/5075355
+
+My thoughts on writing tiny reusable modules that each do just one
+thing. These notes were adapted from an email I recently sent.
+
+-----
+
+If some component is reusable enough to  be a module then the maintenance gains
+are really worth the  overhead of making a new project  with separate tests and
+docs. Splitting out a  reusable component might take 5 or 10  minutes to set up
+all the package overhead but it's much easier to test and document a piece that
+is completely separate from a larger project. When something is easy, you do it
+more often.
+
+I've observed  the biggest gains  for splitting  something out into  a separate
+module when I'm completely stuck mucking around in a larger application. When I
+isolate the problem  down to the scope  of a small module, it's  much easier to
+see how that small piece fits in with the greater application objective.
+
+Another technique is to  pick tools and approaches that don't  involve a lot of
+boilerplate in the first place. My usual flow for writing a new module is:
+
+1. hack  up some tiny (<10  line) example file  that does just enough  to start
+   experimenting with the api
+
+2. start fleshing out an index.js file required by the example file
+
+3. make incremental changes to the index file to get the example further along,
+   updating the example as necessary to reflect changes
+
+4. once the example pretty much works, copy it into test/
+
+5. `npm install  tap` or `npm install tape`  for modules I want to  test in the
+   browser.  I like  simple,  imperative tests  that I  can  adapt from  simple
+   examples.
+
+6. add some assertions around the example code
+
+7. `pkginit`  (https://github.com/substack/pkginit) to generate  a package.json
+   (or you could just use `npm init`)
+
+8.  copy the  example file  into  a readme.markdown  since I  really like  when
+   packages have code in their readmes when I'm looking for modules to use
+
+9. add a blurb  at the top of the readme.markdown,  document the methods (there
+   are only a few to document usually), add a license and install instructions
+
+10. create a github repo
+
+11. add travis and/or testling-ci github hooks as appropriate
+
+12. `git push` and `npm publish`
+
+With practice, I run through all these steps very quickly now. Not all of these
+are strictly necessary  and sometimes I'll skip  a step but this  is mostly the
+procedure I use for new modules.
+
+As much  as possible, I  try to build large-scale  projects using lots  of tiny
+modules so I  just repeat this process whenever I  need some reusable component
+that doesn't yet  exist in quite the form  I need it to exist.  As more modules
+are published to npm  I expect I won't need to write so  many modules but there
+will always be room for new stuff.
+
+When applications are done well, they are just the really application-specific,
+brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
+reusable  components sublimate  away onto  github and  npm where  everybody can
+collaborate to advance the commons.
 * Common Lisp Databases
 - https://www.cliki.net/Database
 ** CLSQL
