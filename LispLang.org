@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-29 16:27
-#+macro:version Version 0.0.87
+#+date:2020-11-30 22:19
+#+macro:version Version 0.0.88
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6977,6 +6977,10 @@ of calling ~quote~ by affixing a ='= to the front of any expression:
 Lisp provides the ~quote~ as a way of /protecting/ expressions from evaluation.
 
 *** Data
+
+**** Integers---Strings
+#+cindex:integer
+#+cindex:string
 Lisp offers  all the  data types  we find  in most  other language,  along with
 several  others that  we don't.  One  data type  we  have used  already is  the
 /integer/, which  is written as  a series of  digits: =256=. Another  data type
@@ -6984,6 +6988,9 @@ Lisp  has  in common  with  most  other languages  is  the  /string/, which  is
 represented as  a series of  characters surrounded  by double quotes:  ="ora et
 labora"=.  Integers and strings both evaluate to themselves.
 
+**** Symbols---Lists
+#+cindex:symbol
+#+cindex:list
 Two Lisp data types that we don't  commonly find in other languages are symbols
 and lists.  /Symbols/ are words.  Ordinarily, they are converted  to uppercase,
 regardless of how you type them:
@@ -7005,6 +7012,7 @@ would take them for function calls:
 (THE LIST (A B C) HAS 3 ELEMENTS)
 #+end_example
 
+#+cindex:quote
 One quote protects a whole expression, including expressions within it.
 
 You  can  build lists  by  calling  ~list~. Since  ~list~  is  a function,  its
@@ -7013,12 +7021,13 @@ arguments are evaluated. Here we call to =+= with a call to ~list~:
 : > (list 'my (+ 2 1) "Sons")
 : (MY 3 "Sons")
 
+**** Lisp Programs as Data---Lists
 We re now  in a position to  appreciate one of the most  remarkable features of
 Lisp:
 
 /Lisp programs are expressed as lists./
 
-It means  that Lisp  programs cna  generate Lisp  code. Lisp  programmers write
+It means  that Lisp  programs can  generate Lisp  code. Lisp  programmers write
 programs to  write their programs for  them. It is important  to understand the
 relation between  expressions and lists.  This is why we  need the quote.  If a
 list is quoted,  evaluation returns the list  itself; if it is  not quoted, the
@@ -7030,10 +7039,605 @@ list is treated as code, and evaluation returns its value:
 Here, the first argument  is quoted, and so yields a  list. The second argument
 is not quoted, and is treated as a function call, yielding a number.
 
+**** The Empty List
+#+cindex:empty list
+#+cindex:nil
 In Common  Lisp, there  are two ways  of representing the  empty list.  You can
 represent it as a pair of parentheses with nothing between them, or you can use
 the symbol  =nil=. It will be  displayed as =NIL=  no matter how you  write it.
 =NIL= evaluates to itself, and so does not need to be quoted.
+
+*** List Operations
+
+#+texinfo:@heading Build Lists
+
+#+findex:cons
+The function ~cons~ builds lists.  If its second argument is a list, it returns
+a new list with the first argument added to the front.
+
+: > (cons ’a ’(b c d))
+: (A B C D)
+
+#+findex:list
+We can build up  lists by consing new elements onto an  empty list.  The ~list~
+function is just a more convenient way of consing several things onto ~nil~.
+
+#+begin_example
+> (cons ’a (cons ’b nil))
+(A B)
+> (list ’a ’b)
+(A B)
+#+end_example
+
+#+findex:car
+#+findex:cdr
+The primitive  functions for  extracting the  elemnets of  lists are  ~car~ and
+~cdr~.  The ~car~ of  a list is the first element, and  the ~cdr~ is everything
+after the first element.
+
+#+begin_example
+> (car ’(a b c))
+A
+> (cdr ’(a b c))
+(B C)
+#+end_example
+
+You can use combinations of ~car~ and ~cdr~ to reach any element of a list.  If
+you want to get the third element, you could say:
+
+: > (car (cdr (cdr ’(a b c d))))
+: C
+
+#+findex:third
+You can do the same thing by calling ~third~:
+
+: > (third ’(a b c d))
+: C
+
+*** Truth
+
+**** True and False
+#+cindex:t
+#+findex:listp
+In Common Lisp,  the symbol =t= is the default  representation for truth.  Like
+=nil=,  =t= evaluates  to itself.   The function  ~listp~ returns  true if  its
+argumentis a list:
+
+: > (listp ’(a b c))
+: T
+
+#+texinfo:@heading Predicate
+#+cindex:predicate
+A function whose return value is intended to be interpreted as truth or falsity
+is called a /predicate/.  Common Lisp predicates often have names that end with
+=p=.
+
+#+cindex:false
+#+cindex:nil
+Falsity in Common Lisp is represented by =NIL=, the empty list.  If we give
+~listp~ an argument that isn’t a list, it returns =NIL=:
+
+: > (listp 27)
+: NIL
+
+#+cindex:truth
+Although =t= is  the default representation for truth,  everything except =NIL=
+also counts as true in a logical context.
+
+**** Null and Not
+#+findex:null
+#+cindex:not
+Because =NIL= plays two roles in Common List, the function ~null~, which
+returns true of the empty list
+
+: > (null nil)
+: T
+
+and the function ~not~, which returns =true= if its argument is false,
+
+: > (not nil)
+: T
+
+do exactly the same thing.
+
+**** If Special Operator
+#+findex:if
+The simplest conditional in Common Lisp is ~if~.  It usually takes three
+arguments:
+- a /test/ expression,
+- a /then/ expression, and
+- an /else/ expression
+
+The /test/ expression is evaluated; if it returns =true=, the /then/ expression
+is evaluated  and its value is  returned; but if the  /test/ expression returns
+=false=, the /else/ expression is evaluated and its value is returned.
+
+Like ~quote~, ~if~ is a special operator.  It could not possibly be implemented
+as a function,  because the arguments in a function  call are always evaluated,
+and the  whole point  of ~if~ is  that only  one of the  last two  arguments is
+evaluated.
+
+The /else/ expression is optional, and will default to =NIL= if it is omitted.
+
+**** And---Or
+#+findex:and
+#+findex:or
+The  logical operators  ~and~ and  ~or~ resemble  conditionals.  Both  take any
+number of argument, but only evalue as many  as they need to in order to decide
+what to return.  If all its arguments are =true= (not =NIL=), then ~and~
+returns the value of the last one.
+
+But if one of the arguments turns out to be fale, none of the arguments after
+that get evaluated.  Similarly for ~or~ which stops as soon as it finds an
+argument that is true.
+
+These two operators are /macros/.  Like special operators, macros can cirumvent
+the usual evaluation rule.
+
+*** Functions
+#+findex:function
+You can define new functions with ~defun~.  It usually takes three or more
+arguments:
+- a name,
+- a list of parameters, and
+- one or more expressions that will make up the body of the function.
+
+#+cindex:symbol
+Symbols are variable names, existing as objects in their own right.  That’s why
+symbols,  like lists,  have to  be quoted.   A list  has to  be quoted  because
+otherwise  it will  be treated  as  code; a  symbol  has to  be quoted  because
+otherwise it will be treated as a variable.
+
+You can think of a function as a generalized version of a Lisp expression.  The
+following expression tests whether the sum of 1 and 4 is greater than 3:
+
+: > (> (+ 1 4) 3)
+: T
+
+By replacing these particular numbers with variables, we can write a function
+that will test whether the sum of any two numbers is greater than a third:
+
+: > (defun sum-greater (x y z)
+:     (> (+ x y) z)
+: SUM-GREATER
+: > (sum-greater 1 4 3)
+: T
+
+Lisp  makes no  distinction between  a program,  a procedure,  and a  function.
+Functions do for everything.   If you want to consider one  of the functions as
+the /main/  function, you  can, but  you will  ordinarily be  able to  call any
+function from  the toplevel.  Among other  things, this means that  you will be
+able to test your programs piece by piece as you write them.
+
+*** Recursion
+#+cindex:recursion
+A function  can call  any function,  including itself.   A function  that calls
+itself  is  /recursive/.   The  Common Lisp  function  ~member~  tests  whether
+something is an element  of a list.  Here is a simplified  version defined as a
+recursive function:
+
+#+begin_src lisp
+  (defun our-member (obj lst)
+    (if (null lst)
+        nil
+        (if (eql (car lst) obj)
+            (our-member obj (cdr lst)))))
+#+end_src
+
+The predicate ~eql~  tests whether its two arguments are  identical: aside from
+that, everything in this definition is something we have seen before.
+
+The definition of ~our-member~ corresponds to the following English
+description.  To test whether an object ~obj~ is a member of a list ~lst~, we:
+
+1. First check whether ~lst~ is empty.  If it is, then ~obj~ is clearly not a
+   member of it, and we’re done.
+2. Otherwise, if ~obj~ is the first element of ~lst~, it is a member.
+3. Otherwise, ~obj~ is only a member of ~lst~  if it is a member of the rest of
+   ~lst~.
+
+When you want to understand how a recursive function works, it can help to
+translate it into a description of this kind.
+
+*** Reading Lisp
+Lisp programmers read and write code  by indentation, not by parentheses.  When
+they are writing  code, they let the text editor  show which parentesis matches
+which.  With a good editor, matching parentheses ceases to be an issue when you
+are  writing  code.  And  because  there  are  universal conventions  for  Lisp
+indentation,  it’s not  an  issue  when you’re  reading  code either.   Because
+everyone uses the  same conventions, you can reaad code  by the indentation and
+ignore the parentheses.
+
+*** Input and Output
+#+cindex:I/O
+So far we have  done I/O implicitly, by taking advantage  of the toplevel.  For
+real interactive programs  this is not likely  to be enough.  We look  at a few
+functions for input and output.
+
+#+findex:format
+The most general output function in Common Lisp is ~format~.  It takes two or
+more argument:
+- the first indicates where the output is to be printed;
+- the second  is a  string template,  and
+- the remaining arguments are usually objects whose printed representations are
+  to be inserted into a template.
+
+The first argument to ~format~, =t=, indicates that the output is to be sent to
+the default place.  Ordinarily, this will be the toplevel.  The second argument
+is a  string that serves  as a template for  output.  Within this  string, each
+=~A= indicates a position to be filled,  and the =~%= indicates a newline.  The
+positions are filled by the values of the remaining arguments, in order.
+
+#+findex:read
+The standard function  for input is ~read~.  When given  no arguments, it reads
+from the default place, which is usually the toplevel.  ~read~ will sit waiting
+indefinitely until you type soemthing and hit return.
+
+#+cindex:parser, Lisp
+~read~ is a  complete Lisp parser.  It doesn’t just  read characters and return
+them as  a string.  It parses  what it reads  and returns the Lisp  object that
+results.
+
+The body of a  function can have any number of  expressions.  When the function
+is called, they  will be evaluated in  order, and the function  will return the
+value of the last one.
+
+#+cindex:side-effect
+A  side-effect is  some change  to the  state of  the world  that happens  as a
+consequence  of  evaluating  an  expression.   When we  evaluate  a  pure  Lisp
+expression like =(+ 1 2)=, there are  no side-effects; it just returns a value.
+But when we call  ~format~, as well as returning a  value, it prints something.
+That’s one kind of side-effect.
+
+When we  are writing code without  side-effects, there is no  point in defining
+functions  with bodies  of more  than one  expression.  The  value of  the last
+expression is  returned as  the value of  the function, but  the values  of any
+preceding  expressions  are  thrown  away.   If  such  expressions  don’t  have
+side-effects,  you would  have  no  way of  telling  whether  Lisp bothered  to
+evaluate them at all.
+
+*** Variables
+One of the most frequently used operators in Common Lisp is ~let~, which allows
+you to introduce new local variables:
+
+#+begin_example
+> (let ((x 1) (y 2))
+    (+ x y))
+3
+#+end_example
+
+A ~let~ expression has two parts:
+1. a list  of instructions for creating variables, each  of the form =(variable
+   expression)=.   Each variable  will initially  be set  to the  value of  the
+   corresponding /expression/.
+2. a body of expressions, which are evaluated in order.  The value of the last
+   expression is returned as the value of the ~let‘~.
+
+Here is an example of a more selective version of ~askem~ written using ~let~:
+
+#+begin_src lisp
+  (defun ask-number ()
+    (format t "Please enter a number. ")
+    (let ((val (read)))
+      (if (numberp val)
+          val
+          (ask-number))))
+#+end_src
+
+This function creates  a variable ~val~ to hold the  object returned by ~read~.
+Because it  has a  handle on  this object, the  function can  look at  what you
+entered before deciding whether or not  to return it.  ~numberp~ is a predicate
+that tests whether its argument is a number.
+
+If the value  entered by the user  is not a number,  ~ask-number~ calls itself.
+The result is a function that insists on getting a number.
+
+#+cindex:local variable
+#+cindex:global variable
+Variables like  those we have seen  so far are called  /local/ variables.  They
+are only  valid within a certain  context.  There is another  kind of variable,
+called  a  /global/ variable,  that  can  be visible  everywhere.[fn::The  real
+distinction here is between /lexical/ and /special/ variables.  More in Chapter
+6.]
+
+#+findex:defparameter
+You  can  create  a  global  variable  by  giving  a  symbol  and  a  value  to
+~defparameter~.
+
+: > (defparameter *glob* 99)
+: *GLOB*
+
+Such a variable will then be  accessible everywhere, except in expressions that
+create a new  local variable with the  same name.  To avoid  the possibility of
+this happening  by accident, it’s  conventional to give global  variables names
+that begin and  end with asterisks.  The  name of the variable  we just created
+would be pronounced “star-glob-star”.
+
+#+findex:defconstant
+You can also define global constants by calling ~defconstant~:
+
+: (defconstant limit (+ *glob* 1))
+
+#+findex:boundp
+There is no need  to give constants distinctive names because  it will cause an
+error  if anyone  uses the  same name  for a  variable.  If  you want  to check
+whether some symbol is the name of a global variable or constant, use ~boundp~:
+
+: > (boundp ’*glob*)
+: T
+
+*** Assignment
+#+findex:setf
+In Common Lisp, the most general assignment operator is ~setf~.  We can use it
+to do assigments to either kind of variable:
+
+: > (setf *glob* 98)
+: 98
+: > (let ((n 10))
+:     (setf n 2)
+:     n)
+: 2
+
+When the first argument to ~setf~ is a symbol tht is not the name of a local
+variable, it is taken to be a global variable:
+
+: > (setf x (list ’a ’b ’c))
+: (A B C)
+
+That is,  you can create  global variables  implicitly, just by  assigning them
+values.  In source files, it is better style to use explicit ~defparameters~.
+
+You can do  more than just assign  values to variables.  The  first argument to
+~setf~ can  be an expression as  well as a  variable name.  In such  cases, the
+value of  the second  argument is inserted  in the /place/  referred to  be the
+first:
+
+: > (setf (car x) ’n)
+: N
+: > x
+: (N B C)
+
+The first  argument to  ~setf~ can be  almost any expression  that refers  to a
+particular place.  All such operators are marked as “settable” in Appendix D.
+
+You can give any (even) number of arguments to ~setf~.  An expression of the
+form:
+
+#+begin_example
+(setf a b
+      c d
+      e f)
+#+end_example
+
+is equivalent to three separate calls to ~setf~ in sequence.
+
+*** Functional Programming
+/Functional programming/ means  writing programs that work  by returning values
+instead of  by modifying things.   It is the  dominant paradigm in  Lisp.  Most
+build-in Lisp functions are meant to be  called for the values they return, not
+for side-effects.
+
+The function ~remove~ takes an object and a list and returns a /new/ list
+containing everything but that object.
+
+#+begin_example
+> (setf lst ’(c a r a t))
+(C A R A T)
+> (remove ’a lst)
+(C R T)
+#+end_example
+
+The origin list is untouched afterwards:
+
+: > lst
+: (C A R A T)
+
+So what  if you really do  want to remove something  from a list? In  Lisp, you
+generally do such things  by passing the list as an  argument to some function,
+and using ~setf~ with  the return value.  To remove all the =a=  s from a list,
+we say:
+
+: (setf x (remove ’a x))
+
+Functional programming means avoiding ~setf~ and things like it.
+
+One  of the  most important  advantages of  functional programming  is that  it
+allows /interactive  testing/.  In  purely functional code,  you can  test each
+function as  you write it.   If it  returns the values  you expect, you  can be
+condfident  that it  is correct.   You have  instant turnaround  when you  make
+changes anywhere in a program.  And this instant turnaround enables a whole new
+style of programming.
+
+*** Iteration
+#+cindex:iteration
+When you want to  do something repeatedly, it is sometimes  more natural to use
+iteration than  recursion.  A typical  case for  iteration is to  generate some
+sort of table.  This function:
+
+#+begin_src lisp
+  (defun show-squares (start end)
+    (do ((i start (+ i 1)))
+        ((> i end) 'done)
+      (format t "~A ~A~%" i (* i i))))
+#+end_src
+
+prints out the squares of the integers from ~start~ to ~end~.
+
+**** do Macro
+
+#+findex:do macro
+The ~do~ macro is the fundamental iteration operator in Common Lisp.  Like
+~let~, ~do~ can create variables, and the first argument is a list of variable
+specifications.  Each element of this list can be of the form:
+
+: (variable initial update)
+
+where  /variable/ is  a symbol,  and  /initial/ and  /update/ are  expressions.
+Initially,  each /variable/  will  be set  to the  value  of the  corresponding
+/initial/; on each iteration  it will be set to the  value of the corresponding
+/update/.  The ~do~  in ~show-squares~ creates just one variable,  ~i~.  On the
+first iteration,  ~i~ will be  set to the value  of ~start~, and  on successive
+iterations its value will be incremented by one.
+
+The  second  argument  to  ~do~  should  be  a  list  containing  one  or  more
+expressions.  The  first expression  is used to  test whether  iteration should
+stop.  In  the cae above,  the test expression is  ~(> i end)~.   The remaining
+expressions in this  list will be evaluated in order  when iteration stops, and
+the value of the last will be returned as the value of the ~do~.
+
+The remaining arguments  to ~do~ comprise the  body of the loop.   They will be
+evaluated, in order,  on each iteration.  On each iteration,  the variables are
+updated, then the termination test is  evaluated, and then (if the test failed)
+the body is evaluated.
+
+For comparison, here is a recursive version of ~show-squares~:
+
+#+begin_src lisp
+  (defun show-squares (i end)
+    (if (> i end)
+        'done
+        (progn
+          (format t "~A ~A~%" i (( i i)))
+          (show-squares (+ i 1) end))))
+#+end_src
+
+The  only thing  new in  this  function is  ~progn~.   It takes  any number  of
+expressions, evaluates them in order, and returns the value of the last.
+
+#+findex:dolist macro
+Common Lisp has simpler iteration operators for special cases.  To iterate
+through the elements of a list, for example, you would use ~dolist~.  Here is a
+function that returns the length of list:
+
+#+begin_src lisp
+  (defun our-length (lst)
+    (let ((len 0))
+      (dolist (obj lst)
+        (setf len (+ len 1)))
+      len))
+#+end_src
+
+Here, ~dolist~ takes an argument of the form =(variable expression)=, followed
+by a body of expressions. The body will be evaluated with /variable/ bound to
+successive elements of the list returned by /expression/.  The obvious
+recursive version of this function would be:
+
+#+begin_src lisp
+  (defun our-length (lst)
+    (if (null lst)
+        0
+        (+ (our-length (cdr lst)) 1)))
+#+end_src
+
+If the list is empty, its length is zero; otherwise it is the length of the cdr
+plus  one.  This  version  of ~our-length~  is cleaner,  but  because it’s  not
+tail-recursive, it won’t be as efficient.
+
+*** Functions as Objects
+#+cindex:function object
+#+findex:function
+In Lisp, functions  are regular objects, like symbols or  strings or lists.  If
+we give  the name of  a function to ~function~,  it will return  the associated
+object.  Like  ~quote~, ~function~ is a  special operator, se we  don’t have to
+quote the argument:
+
+: > (function +)
+: #<Compiled-Function + 17BA4E>
+
+Until now we have only dealt with objects that look the same when Lisp displays
+them as when  we typed them in.   This convention does not  apply to functions.
+Internally, a built-in function  like =+= is likely to be  a segment of machine
+code.  A Common Lisp implementation may choose whatever external representation
+it likes.
+
+#+cindex:sharp-quote
+Just as we can use =’= as an abbreviation for ~quote~, we can use =#’= as an
+abbreviation for ~function~:
+
+: > #’+
+: #<Compiled-Function + 17BA4E>
+
+This abbreviation is known as /shart-quote/.
+
+#+findex:apply
+Like  any other  kind  of object,  we  can pass  functions  as arguments.   One
+function that takes a function as an  argument is ~apply~.  It takes a function
+and a list of arguments for it, and returns the result of applying the function
+to the arguments:
+
+: > (apply #’+ ’(1 2 3))
+: 6
+: > (+ 1 2 3)
+: 6
+
+It can be given any number of arguments, so long as the last is a list:
+
+: > (apply #’+ 1 2 ’(3 4 5))
+: 15
+
+#+findex:funcall
+The function ~funcall~ does  the same thing but does not  need the arguments to
+be packaged in a list:
+
+: > (funcall #’+ 1 2 3)
+: 6
+
+#+cindex:lambda expression
+The ~defun~ macro creates a function and  gives it a name.  But functions don’t
+have to have names, and we don’t need  ~defun~ to define them.  We can refer to
+functions literally.  To refer literally to  a function, we use what’s called a
+/lambda  expression/.  A  lambda expression  is  a list  containing the  symbol
+~lambda~, followed  by a list  of parameters, followed by  a /body/ of  zero or
+more expressions.
+
+Here is a lambda expression representing  a function that takes two numbers and
+returns their sum:
+
+#+begin_src lisp
+  (lambda (x y)
+    (+ x y))
+#+end_src
+
+Like an ordinary function name, a lambda expression can be the first element of
+a function call,
+
+: > ((lambda (x) (+ x 100)) 1)
+: 101
+
+and by affixing a sharp-quote to  a lambda expression, we get the corresponding
+function,
+
+: > (funcall #’(lambda (x) (+ x 100))
+:            1)
+: 101
+
+*** Types
+In many languages, variables are what have  types, and you can’t use a variable
+without specifying its type.  In Common Lisp, values have types, not variables.
+Every object has  a label attached to it, identifying  its type.  This approach
+is called /manifest typing/.  You don’t  have to declare the types of variables
+because any variable can hold objects of any type.
+
+Type declarations are possible, and discussed in Section 13.3.
+
+The built-in Common Lisp types form a hierarchy of subtypes and supertypes.  An
+object always has more than one type.  For example, the number 27 is of type:
+- fixnum
+- integer
+- rational
+- real
+- number
+- atom
+- t,
+
+in order of increasing generality.  The type =t= is the supertype of all types,
+so everything is of type =t=.
+
+The function ~typep~ takes an object and  a type specifier, and returns true if
+the object is of that type.
+
+: > (typep 27 ’integer)
+: T
 * Scheme
 - [[https://schemers.org][Schemers.org]]
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
