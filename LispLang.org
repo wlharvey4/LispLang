@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-11-30 22:19
-#+macro:version Version 0.0.88
+#+date:2020-12-01 00:10
+#+macro:version Version 0.0.89
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -279,6 +279,18 @@ themselves within five minutes plagues Java programmers for years.
 - From /Practical  Common Lisp/,  Ch 7  “Macros: Standard  Control Constructs”,
   footnote 5.
 #+end_quote
+
+#+texinfo:@heading Interactive Programming
+
+Interactive  programming boosts  your productivity  so much  that I  believe it
+should always  be part  of the  decision process  when it  comes to  choosing a
+language to  work with. Hopefully this  advance in the practice  of programming
+will be remembered when we design the language of the future.
+
+I believe that for this reason alone Common Lisp is worth learning (and using).
+
+- Modern, functional Common Lisp: Myths and tips
+- https://ambrevar.xyz/modern-common-lisp/#orgc7349fb
 
 
 * Introduction to Lisp
@@ -851,6 +863,26 @@ than typed expressions.
   Common Lisp is object-oriented in the sense that objects, rather than expres-
   sions, are evaluated,  and unlike many other  programming languages, objects,
   rather than expressions, have types.
+
+** A Road to Common Lisp
+"This is a road to Common Lisp, not the road to Common Lisp."
+
+- https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/
+
+** What the Hell is Symbolic Computation?
+"symbols" and  "quoting": for many  programmers coming from  non-Lisp languages
+these are new, foreign concepts that don't really map back to anything in their
+previous experience.
+
+This post is an  attempt to explain what symbols actually  are and what quoting
+does.
+
+- https://stevelosh.com/blog/2016/06/symbolic-computation/
+
+One book that  does spend more time on this  is the appropriately-named /Common
+Lisp: A Gentle  Introduction to Symbolic Computation/. If you're  looking for a
+good introductory Lisp book, that's the one I'd recommend.
+
 * Common Lisp Implementations
 - [[https://www.cliki.net/Common%20Lisp%20implementation][Cliki Comparison of Actively Developed Common Lisp Implementations]]
   - All the implementations provide an FFI and sockets interface
@@ -1560,6 +1592,10 @@ Lisp, and information about DFSG-compliant  free software implemented in Common
 Lisp.
 
 ** Common Lisp Books
+"Most of Lisp books in one place."
+
+- https://www.pinterest.com/vseloved/lisp-books/
+
 - https://wiki.c2.com/?DefinitiveCommonLispBooks
 
 - [[http://metamodular.com/Common-Lisp/bibliography.html][Bibliography of documents related to Common Lisp]]
@@ -3072,6 +3108,9 @@ documentation and source codes, and this org file can interact well with SLIME.
 - [[https://gitlab.common-lisp.net/quickref/quickref][quickref]] :: a global documentation project for Common Lisp
 - [[https://github.com/didierverna/milonga][milonga]] :: Tango-based customizable theme for Emacs
 
+** Lisp Resources on the Way Back Machine
+- https://web.archive.org/web/20070602152438/http://eksl-www.cs.umass.edu/lisp-resources/index.html
+
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
 This section  discusses the Common  Lisp interface  to file systems.  The model
@@ -3805,7 +3844,8 @@ each name.
 #+cindex:asdf
 "ASDF is the de facto standard build facility for Common Lisp."
 
-- https://common-lisp.net/project/asdf/
+- [[https://common-lisp.net/project/asdf/][ASDF Project Website]]
+- [[https://www.common-lisp.net/project/asdf/asdf/index.html][ASDF Manual]]
 
 : (require "asdf")
 
@@ -3874,6 +3914,18 @@ command-line. For that, you want:
 - [[https://cliki.net/cl-launch][~cl-launch~]],
 - [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
 - [[https://github.com/roswell/roswell][~roswell~]]
+*** Getting started with ASDF
+    :PROPERTIES:
+    :author:   Michael Anckaert
+    :date:     2020-07-29
+    :END:
+- [[https://sinax.be/blog/lisp/getting-started-with-asdf.html][Getting started with ASDF]]
+
+In this article  I will try and explain  what ASDF is from a  beginner point of
+view. As a new Lisp developer you're  bound to run into ASDF sooner than later.
+ASDF  is a  defacto standard  in the  Lisp world  so a  basic understanding  is
+essential to being productive.
+
 ** Common Lisp Package System
 *** The Reader and the Evaluator
  #+cindex:reader
@@ -5996,6 +6048,22 @@ the ground.
 - [[https://lifegoo.pluskid.org/upload/doc/object_models/CLOS.pdf][CLOS: The Common Lisp Object System A Overview]]
 
 - [[https://engineering.purdue.edu/RVL/Publications/Kersten93ATutorial2.pdf][A TUTORIAL ON LISP OBJECT-ORIENTED PROGRAMMING FOR BLACKBOARD COMPUTATION]]
+* Common Lisp Network Programming
+** Programming network sockets in Lisp
+In this article,  I'll show you how  you can program sockets in  Lisp using the
+SBCL implementation.
+
+- https://sinax.be/blog/lisp/programming-network-sockets-in-lisp.html
+
+** SBCL Networking
+- http://www.sbcl.org/manual/#Networking
+** USocket
+"Universal socket library for Common Lisp"
+
+- [[https://common-lisp.net/project/usocket/][USOCKET - Universal socket library for Common Lisp]]
+- [[https://common-lisp.net/project/usocket/api-docs.shtml][USOCKET API documentation]]
+- https://github.com/usocket/usocket
+- [[http://beej.us/guide/bgnet/html/][Beej's Guide to Network Programming]]
 * Common Lisp on Emacs
 ** Emacs Lisp
 *** Emacs Lisp vs Common Lisp
