@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-01 00:10
-#+macro:version Version 0.0.89
+#+date:2020-12-03 09:22
+#+macro:version Version 0.0.90
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3830,6 +3830,99 @@ These opertors require open streams:
 - write-string
 - y-or-n-p
 - yes-or-no-p
+
+* Formatting
+~format~ produces three kinds of formatting:
+
+1. printing tables of data as text
+   not used much anymore
+
+2. pretty-printing s-expressions
+
+   a customizable  system for printing  block-structured data such  as--but not
+   limited to--s-expressions  while varying indentation and  dynamically adding
+   line breaks as needed.
+
+3. generating human-readable messages with interpolated values
+
+** format Function
+#+attr_texinfo: :options format @var{destination} @var{control-string} &rest @var{format-args}
+#+begin_defun
+
+Takes two required arguments:
+
+1. @@texinfo:@var{@@destination@@texinfo:}@@ for output
+
+   - =t= : the =*standard-output*= stream;
+   - =nil= : ~format~ generates a string and returns it;
+   - a stream : output written to this stream;
+   - string with fill-pointer :  ougtput is added to the end  of the string and
+     the fill pointer is adjusted;
+
+2. @@texinfo:@var{@@control-string@@texinfo:}@@ that  contains literal text and
+   embedded directives;
+
+3. additional optional  @@texinfo:@var{@@format-args@@texinfo:}@@ provide  the
+  values used by the directives in  the control string that interpolate values
+  into the output.
+
+~format~  returns =nil=  except when  destination is  =nil=, in  which case  it
+returns the newly-generated string.
+
+#+end_defun
+
+** format Directives
+All directives start with a tilde (=~=) and end with a single character (upper-
+or  lowercase) that  identifies  the directive.
+
+: (format t "~A" pi) ==> 3.14
+
+#+texinfo: @heading Prefix Parameters
+
+Some  directives  take  /prefix  parameters/,  which  are  written  immediately
+following the  tilde, separated by commas,  and used to control  things such as
+how many digits to print after the decimal point when printing a floating-point
+number.
+
+: (format t "~$" pi)  ==> 3.14
+: (format t "~5$" pi) ==> 3.14159
+:             ^
+
+The  values of  prefix parameters  are either  decimal numbers,  or characters,
+written as a single quote followed by the desired character.  The value of a
+prefix parameter can also be derived from the format arguments in two ways:
+
+1. a prefix parameter of =v= causes ~format~ to consume one format argument and
+   use its value for the prefix parameter;
+2. a  prefix parameter  of =#=  will be  evaluated as  the number  of remaining
+   format arguments;
+
+: (format t "~v$" 3 pi) ==> 3.142
+: (format t "~#$" pi)   ==> 3.1
+:             ^
+
+You  can omit  prefix  arguments, but  if there  are  multiple possible  prefix
+arguments, then you must use a comma to skip ones that come before the ones you
+want to use.
+
+: (format t "~,5F" pi) ==> 3.14159
+:             ^
+
+#+texinfo: @heading Modifiers
+
+You can also  modify the behavior of  some directives with a  colon and at-sign
+/modifiers/,  which are  placed  after  any prefix  parameters  and before  the
+directive's identifying character.  These modifiers change the  behavior of the
+directive in small  ways. In some cases  you can combine the  colon and at-sign
+modifiers to get both modifications.
+
+: (format t "~D" 1000000)   ==> 1000000
+: (format t "~:D" 1000000)  ==> 1,000,000
+: (format t "~@D" 1000000)  ==> +1000000
+: (format t "~:@D" 1000000) ==> +1,000,000
+:             ^
+
+** Basic Formatting
 
 * Common Lisp Packages
 Avoiding name  conflicts between  independently developed  pieces of  code.  In
