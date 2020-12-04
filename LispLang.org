@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-03 09:22
-#+macro:version Version 0.0.90
+#+date:2020-12-03 21:11
+#+macro:version Version 0.0.91
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -632,6 +632,11 @@ and is a great instrument when played by someone who really masters it. Lisp is
 a great  programming language  when used by  someone who knows  how to  use it.
 Dumbing it down to attract mediocre performance-oriented programmers would be a
 grave mistake.
+*** Tutorial on Good Lisp Programming Style
+- https://www.iiia.csic.es/~puyol/TAPIA/transpas/Norvig-luv-slides.pdf
+
+  - By Peter Norvig and Kent Pitman
+  - August 10, 1993
 *** Lisp---Good News Bad News How to Win Big
     :PROPERTIES:
     :author:   Richard P. Gabriel
@@ -758,6 +763,8 @@ pleading.
 *** Multics
 - https://www.multicians.org/multics.html
 - https://www.multicians.org/mepap.html
+*** Lisp as an Alternative to Java
+- https://www.iiia.csic.es/~puyol/TAPIA/lisp-java.pdf
 
 ** A Note on S-expressions--Forms--Types
 The development of  the package system is  related to the change  of focus from
@@ -3111,6 +3118,9 @@ documentation and source codes, and this org file can interact well with SLIME.
 ** Lisp Resources on the Way Back Machine
 - https://web.archive.org/web/20070602152438/http://eksl-www.cs.umass.edu/lisp-resources/index.html
 
+** Programming in Lisp
+- https://www.iiia.csic.es/~puyol/TAPIA/
+
 * Common Lisp IO
 #+texinfo: @heading File System Concepts
 This section  discusses the Common  Lisp interface  to file systems.  The model
@@ -3831,7 +3841,7 @@ These opertors require open streams:
 - y-or-n-p
 - yes-or-no-p
 
-* Formatting
+* Common Lisp Formatting
 ~format~ produces three kinds of formatting:
 
 1. printing tables of data as text
@@ -3923,6 +3933,77 @@ modifiers to get both modifications.
 :             ^
 
 ** Basic Formatting
+
+*** General Directives
+- =~A= :: The most general-purpose directive is =~A=, which consumes one format
+  argument  of any  type and  outputs  it in  aesthetic (human-readable)  form:
+  strings are output without quotation  marks or escape characters, and numbers
+  are output in a natural way for the type of number.
+
+- =~S= :: =~S= tries  to generate output that can be read  back in with ~READ~.
+  Thus,  strings  will  be  enclosed   in  quotation  marks,  symbols  will  be
+  package-qualified when necessary, and so on.
+
+- =~:A=, =~:S= :: With a colon modifier, both the =~A= and =~S= directives emit
+  =NIL= as =()= rather than =NIL=.
+
+- Prefix Parameters  :: Both the =~A= and  =~S= directives also take up to four
+  prefix parameters,  which can  be used  to control  whether padding  is added
+  after (or before  with the at-sign modifier) the value,  but those parameters
+  are only really useful for generating tabular data.
+
+- =~%= :: emits a newline
+
+- =~&= ::   emits  a fresh line.  The  difference between the two  is that =~%=
+  always emits a newline, while =~&= emits  one only if it's not already at the
+  beginning  of a  line.
+
+- Prefix  Parameters ::  Both  of these  directives can  take  a single  prefix
+  parameter that specifies the number of newlines to emit.
+
+- =~~= :: causes FORMAT to emit a literal tilde.  Also takes a prefix parameter
+  to determine how many to print.
+
+*** Character and Integer Directives
+~FORMAT~  supports several  directives  that  can be  used  to  emit values  of
+specific types in particular ways.
+
+While you  can use the =~A=  and =~S= directives  to emit numbers, if  you want
+fine  control  over   how  they're  printed,  you  need  to   use  one  of  the
+number-specific directives.   The numeric  directives can  be divided  into two
+subcategories:  directives for  formatting  integer values  and directives  for
+formatting floating-point values.
+
+**** Character Directives
+
+- =~C= ::  used  to emit characters.  It  takes no prefix arguments  but can be
+  modified with the  colon and at-sign modifiers.  Unmodified,  its behavior is
+  no different from =~A= except that it works only with characters.
+
+- =~:C= ::  outputs  nonprinting characters such as space, tab,  and newline by
+  name.  This is  useful if you want to  emit a message to the  user about some
+  character.
+
+  : (format t "Syntax error. Unexpected character: ~:c" char)
+  : ==> Syntax error. Unexpected character: Space
+
+- =~:@C= ::  With both the colon  and at-sign modifiers, the =~C= directive can
+  print extra information  about how to enter the character  at the keyboard if
+  it requires special key combinations.
+
+**** Number Directives
+
+***** Integer Directives
+Five closely related directives format  integer values: =~D=, =~X=, =~O=, =~B=,
+and =~R=.
+
+- =~D= :: the ~D directive outputs integers in base 10.
+
+- =~:D= :: with a colon modifier it adds commas.
+
+- =~@D= :: And with an at-sign modifier, it always prints a sign.
+
+- =~:@D= :: the two modifiers can be combined.
 
 * Common Lisp Packages
 Avoiding name  conflicts between  independently developed  pieces of  code.  In
@@ -9214,6 +9295,19 @@ Hello world, the time is 02:07 PM
 
 *** API
  https://clojure.org/api/api
+* Bel
+
+** About Bel
+- http://www.paulgraham.com/bel.html
+
+** A Guide to the Bel Language
+- https://sep.yimg.com/ty/cdn/paulgraham/bellanguage.txt?t=1595850613&
+
+** Bel Source
+- https://sep.yimg.com/ty/cdn/paulgraham/bel.bel?t=1595850613&
+
+** Bel Examples for Lisp Programmers
+- https://sep.yimg.com/ty/cdn/paulgraham/belexamples.txt?t=1595850613&
 
 * Build Tools
 :PROPERTIES:
