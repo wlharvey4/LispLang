@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-09 07:52
-#+macro:version Version 0.0.94
+#+date:2020-12-09 07:58
+#+macro:version Version 0.0.95
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1562,6 +1562,127 @@ Lisp system unmatched on Windows platforms.
 
  How to write Common Lisp in 2018 - an initiation manual for the
  uninitiated.
+** Common Lisp Help System
+*** Apropos
+    #+findex:apropos
+ Common Lisp defines 978 symbols. There  are probably hundreds of others as well
+ for language extensions,  libraries, a graphical user interface,  etc. You will
+ not remember all  of the names, but  you will probably remember  parts of them.
+ Once you  have a good  guess at a  part of  the name, you  can find all  of the
+ matching names by using a tool called ~APROPOS~.
+
+ #+begin_src sh
+ $ sbcl
+ ,* (apropos "MAP" :cl)
+ MAP (fbound)
+ MAP-INTO (fbound)
+ MAPC (fbound)
+ MAPCAN (fbound)
+ MAPCAR (fbound)
+ MAPCON (fbound)
+ MAPHASH (fbound)
+ MAPL (fbound)
+ MAPLIST (fbound)
+ #+end_src
+
+ #+begin_src sh
+ $ clisp
+ [1]> (apropos "MAP" :cl)
+ MAP                                        function
+ MAP-DEPENDENTS                             function
+ MAP-INTO                                   function
+ MAPC                                       function
+ MAPCAN                                     function
+ MAPCAR                                     function
+ MAPCON                                     function
+ MAPHASH                                    function
+ MAPL                                       function
+ MAPLIST                                    function
+ #+end_src
+
+ APROPOS expects a string or a symbol --- this provides the fragment of the name
+ that you’d like to find. An  optional second argument designates a package; use
+ it if you’d like  to limit your search to the symbols  in a particular package.
+ The package designator can be a string  or symbol matching the name or nickname
+ of a package  or it can be the  package object itself. If you  omit the package
+ designator, then APROPOS will search for symbols in all packages.
+
+*** Describe
+    #+findex:describe
+ Once you know the name of a symbol, you can get additional information by using
+ the ~DESCRIBE~ function.
+
+ ~DESCRIBE~ =object=  =stream= sends information  about an =object= to  a stream
+ (=standard-output= by default). =object= can be a symbol, string, or function.
+
+ ~DESCRIBE~  prints,   to  the  stream  in   the  variable  =*standard-output*=,
+ information  about the  object. Sometimes  it will  describe something  that it
+ finds  inside   something  else;  such  recursive   descriptions  are  indented
+ appropriately. For instance,  ~DESCRIBE~ of a symbol will  exhibit the symbol's
+ value,  its   definition,  and  each   of  its  properties.  ~DESCRIBE~   of  a
+ floating-point number will exhibit its internal representation in a way that is
+ useful for tracking  down round-off errors and the like.  The nature and format
+ of the output is implementation-dependent.
+
+ The output  is sent  to the specified  stream, which defaults  to the  value of
+ =*standard-output*=; the stream may also be =nil= (meaning =*standard-output*=)
+ or  =t= (meaning  =*terminal-io*=). ~DESCRIBE~  is forbidden  to prompt  for or
+ require user input when given exactly one argument.
+
+ #+begin_src sh
+ $ sbcl
+
+ ,* (describe 'mapl)
+ COMMON-LISP:MAPL
+   [symbol]
+
+ MAPL names a compiled function:
+   Lambda-list: (FUNCTION LIST &REST SB-IMPL::MORE-LISTS)
+   Dynamic-extent arguments: positional=(0)
+   Declared type: (FUNCTION ((OR FUNCTION SYMBOL) LIST &REST LIST)
+                   (VALUES LIST &OPTIONAL))
+   Derived type: (FUNCTION (T T &REST T) (VALUES T &OPTIONAL))
+   Documentation:
+     Apply FUNCTION to successive tuples of CDRs of LIST and MORE-LISTS.
+     Return LIST.
+   Known attributes: call, foldable
+   Source file: SYS:SRC;CODE;LIST.LISP
+ #+end_src
+
+*** Documentation
+    #+findex:documentation
+ The  generic   function  ~DOCUMENTATION~   returns  the   documentation  string
+ associated  with the  given object  if it  is available;  otherwise it  returns
+ =nil=.  The  ~DOCUMENTATION~ function  gives  you  access to  the  programmer’s
+ innermost thoughts.
+
+ The ~DOCUMENTATION~ function expects two arguments.  The first is an object for
+ which you wish  to retrieve documentation, or a symbol  naming that object. The
+ second is  a symbol designating the  kind of documentation (there  are several)
+ you wish to retrieve.
+
+ - variable :: defvar, defparameter, defconstant
+ - function :: defun, defmacro, special forms
+ - structure :: defstruct
+ - type :: deftype
+ - setf :: defsetf
+ - compiler-macro :: define-compiler-macro
+ - method-combination :: define-method-combination
+
+*** Inspect
+    #+findex:inspect
+ ~INSPECT~  is  an  interactive  version   of  ~DESCRIBE~.  The  nature  of  the
+ interaction is  implementation-dependent, but  the purpose  of ~INSPECT~  is to
+ make it easy to wander through  a data structure, examining and modifying parts
+ of it.
+
+ ~INSPECT~  is like  ~DESCRIBE~,  but  instead of  printing  the information  it
+ presents the information in some  kind of interactive display; typically either
+ a  command loop  in the  current listener  or a  new window  with its  own user
+ interface.
+
+ Implementations are encouraged to respond to the  typing of =?= or a ``help key''
+ by providing help, including a list of commands.
 ** Lisp-Lang
 - [[https://lisp-lang.org][Home]]
 *** Recommended Libraries
@@ -2607,6 +2728,10 @@ Lisp code for the textbook "Paradigms of Artificial Intelligence Programming"
 
  "Planet SBCL is a meta blog that collects the contents of various
  SBCL-related blogs. It was inspired by Planet Lisp."
+** Common Lisp Blogs
+*** Lispology
+ "RANDOM THOUGHTS ABOUT COMMON LISP"
+ - http://www.lispology.com/
 ** Common Lisp Application Software
 https://github.com/azzamsa/awesome-cl-software
 
@@ -2623,278 +2748,300 @@ system.
 ** CMU Common Lisp Repository
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
 
-** QuickLisp Library Manager
-- [[https://www.quicklisp.org/beta/][QuickLisp Home]]
-- [[http://blog.quicklisp.org][Quicklisp News]]
-
-
-It works  with your existing  Common Lisp implementation to  download, install,
-and load any of over 1,500 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5] It works
-with:
-
-- ABCL,
-- Allegro CL,
-- Clasp,
-- Clozure CL,
-- CLISP,
-- CMUCL,
-- ECL,
-- LispWorks,
-- MKCL,
-- SBCL, and
-- Scieneer CL, on
-- Linux,
-- Mac OS X, and
-- Windows.
-
-
-QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
-other languages call a  library or module, i.e., a set of files,  and a list of
-any other systems that this system depends on.<
-
-*** QuickLisp Installation and Setup
- To get started with the Quicklisp beta, download and load:
- : https://beta.quicklisp.org/quicklisp.lisp
-
- Then, to install and configure SLIME for QuickLisp:
- : (ql:quickload "quicklisp-slime-helper")
-
- The  following shell  script will  install ~quicklisp~  for your  user account
- using Clozure Common Lisp (CCL), update its init file, and configure it to use
- SLIME[fn::Other  implementations  will  have  slightly  different  commandline
- requirements.]:
-
- #+caption: Shell Script to Install Quicklisp Using CCL
- #+name:ccl-quicklisp-install
- #+header: :dir ~
- #+begin_src sh :exports code :results verbatim output
-   [[ ! -d ".quicklisp" ]] && { \
-   echo "Installing quicklisp...";
-   mkdir -v ./.quicklisp;
-   curl -O https://beta.quicklisp.org/quicklisp.lisp;
-   # The installation script is expecting the user to hit the <RETURN> key;
-   # as well, the @@texinfo:@opt{@@--batch@@texinfo:}@@ expects an EOF marker.
-   # The use of ~echo~ seems to satisfy both requirements.
-   echo | \
-   ccl -Q --batch \
-          --load  quicklisp.lisp \
-          --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
-          --eval '(ql:add-to-init-file)' \
-          --eval '(ql:quickload "quicklisp-slime-helper")';
-   rm quicklisp.lisp;
-   echo "Done installing.";
-   } || { echo "Quicklisp is already installed."; }
- #+end_src
-
- #+RESULTS: ccl-quicklisp-install
- #+begin_example
- Installing quicklisp...
- mkdir: created directory './.quicklisp'
-
-   ==== quicklisp quickstart 2015-01-28 loaded ====
-
-     To continue with installation, evaluate: (quicklisp-quickstart:install)
-
-     For installation options, evaluate: (quicklisp-quickstart:help)
-
- ; Fetching #<URL "http://beta.quicklisp.org/client/quicklisp.sexp">
- ; 0.82KB
- ==================================================
- 838 bytes in 0.00 seconds (897.32KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/client/2020-01-04/quicklisp.tar">
- ; 250.00KB
- ==================================================
- 256,000 bytes in 0.04 seconds (5591.84KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/client/2015-09-24/setup.lisp">
- ; 4.94KB
- ==================================================
- 5,054 bytes in 0.00 seconds (6434.87KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/asdf/2.26/asdf.lisp">
- ; 194.07KB
- ==================================================
- 198,729 bytes in 0.05 seconds (4305.33KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp.txt">
- ; 0.40KB
- ==================================================
- 408 bytes in 0.00 seconds (543.57KB/sec)
- Installing dist "quicklisp" version "2020-10-16".
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/releases.txt">
- ; 468.69KB
- ==================================================
- 479,939 bytes in 0.07 seconds (6496.51KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/systems.txt">
- ; 341.59KB
- ==================================================
- 349,788 bytes in 0.05 seconds (6902.90KB/sec)
-
-   ==== quicklisp installed ====
-
-     To load a system, use: (ql:quickload "system-name")
-
-     To find systems, use: (ql:system-apropos "term")
-
-     To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
-
-     For more information, see http://www.quicklisp.org/beta/
-
- I will append the following lines to #P"/Users/minilolh/.ccl-init.lisp":
-
-   ;;; The following lines added by ql:add-to-init-file:
-   #-quicklisp
-   (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp" (user-homedir-pathname))))
-     (when (probe-file quicklisp-init)
-       (load quicklisp-init)))
-
- Press Enter to continue.
- To load "quicklisp-slime-helper":
-   Load 1 ASDF system:
-     asdf
-   Install 3 Quicklisp releases:
-     alexandria quicklisp-slime-helper slime
- ; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz">
- ; 802.88KB
- ==================================================
- 822,146 bytes in 0.11 seconds (7054.23KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz">
- ; 53.45KB
- ==================================================
- 54,730 bytes in 0.02 seconds (3438.89KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2015-07-09/quicklisp-slime-helper-20150709-git.tgz">
- ; 2.16KB
- ==================================================
- 2,211 bytes in 0.00 seconds (2898.23KB/sec)
- ; Loading "quicklisp-slime-helper"
- [package swank-loader]............................
- [package swank/backend]...........................
- [package swank/rpc]...............................
- [package swank/match].............................
- [package swank-mop]...............................
- [package swank]...................................
- [package swank-monitor]...........................
- [package swank/ccl]...............................
- [package cross-reference].........................
- [package swank/gray]..............................
- ...............................
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-util.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-repl.lisp"....................
- [package swank-repl]...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-c-p-c.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-arglists.lisp"............................
- ...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fuzzy.lisp".......
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fancy-inspector.lisp".................
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentations.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentation-streams.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-asdf.lisp".........
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-package-fu.lisp"...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-hyperdoc.lisp"....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-mrepl.lisp".....................
- [package swank-api]...............................
- [package swank-mrepl]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-trace-dialog.lisp"..............................
- [package swank-trace-dialog]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-macrostep.lisp".......................
- [package swank-macrostep]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-quicklisp.lisp"...
- .......................
- [package alexandria]..............................
- ..................................................
- ..................................................
- [package alexandria-2]............................
- [package quicklisp-slime-helper]
- slime-helper.el installed in "/Users/minilolh/.quicklisp/slime-helper.el"
-
- To use, add this to your ~/.emacs:
-
-   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-   ;; Replace "sbcl" with the path to your implementation
-   (setq inferior-lisp-program "sbcl")
-
-
- Done installing.
- #+end_example
-
-*** QuickLisp Load
-
- To load Quicklisp into your Common Lisp session after the initial installation,
- (unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
-
- : (load "~/quicklisp/setup.lisp")
-
- To load software, use:
-
- : (ql:quickload "system-name")
-
- Quicklisp will automatically download any  supporting software it needs to load
- the system.
-
- By default, ~ql:quickload~ hides most compilation and loading output, including
- warnings, and shows progess as a series  of dots. You can show full compilation
- and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
- output can be especially helpful when reporting and troubleshooting problems.
- There is also a =:silent t= mode.
-
- : (ql:quickload “system-name” :verbose t)
- : (ql:quickload "system-name" :silent t)
-
- #+texinfo: @heading ASDF Manifest File
-
- : (ql:write-asdf-manifest-file)
- now includes systems from the local-projects directories.
-
-*** Quicklisp Updates
- To get updated software, use:
-
- : (ql:update-dist "quicklisp")
-
- Be sure to first start ~slime~:
- #+begin_src lisp :results output
- (ql:update-dist "quicklisp")
- #+end_src
-
- #+RESULTS:
- : You already have the latest version of "quicklisp": 2020-10-16.
-
- To update the Quicklisp client use:
-
- : (ql:update-client)
-
- Be sure to first start ~slime~:
- #+begin_src lisp :results output
- (ql:update-client)
- #+end_src
-
- #+RESULTS:
- : The most up-to-date client, version 2020-01-04, is already installed.
-
-*** QuickLisp Libraries
- To find out what's available in Quicklisp, use:
-
- : (ql:system-apropos substring)
-
- To see what systems depend on a particular system, use:
-
- : (ql:who-depends-on system-name)
-
-*** QuickLisp Unload
- To remove software, use:
-
- : (ql:uninstall system-name)
-
- An uninstall does the following:
-
- - Deletes the system's tarball archive and unpacked source files
- - Deletes Quicklisp metadata files associated with the system
- - Clears ASDF's system cache via asdf:clear-system.
-
-
- Uninstalling does not alter  the current Lisp session in any  other way; if the
- given  system has  been  loaded, it  remains loaded  and  accessible until  the
- session is ended.
-
 ** Roswell
 - https://github.com/roswell/roswell
 
+** Common Lisp Databases
+ - https://www.cliki.net/Database
+*** CLSQL
+ CLSQL is  a Common  Lisp interface to  SQL databases. A  number of  Common Lisp
+ implementations and SQL databases are supported. The general structure of CLSQL
+ is based on the CommonSQL package by LispWorks Ltd.
+
+ CLSQL  is a  Database  interface that  can  access a  number  of different  SQL
+ database  engines. It  also includes  a  CLOS ORM.  It is  maintained by  Kevin
+ Rosenberg.  CLSQL now includes the CommonSQL API interface.
+
+ #+attr_texinfo: :author Bill Clementson
+ #+begin_quote
+ In summary, the CLSQL package is quite easy  to work with and allows you to use
+ a mixture of  functional and OO approaches in working  with relational data. It
+ provides high-performing native access to  the underlying databases (as well as
+ ODBC access as either an alternative or as a means to access databases that are
+ not supported with a native API).  Kevin Rosenberg (and contributors) are to be
+ commended for an excellent package!
+
+ - https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html
+ #+end_quote
+
+ #+attr_texinfo: :author Randall Squared
+ #+begin_quote
+ CLSQL is the gold  standard of SQL interface libraries on  Common Lisp, and is,
+ as you'd expect, large and complex, with various embedded languages. I'd rather
+ not carry around  all the extra code  this implies with my  system. Further, it
+ doesn't support CMUCL/PPC, because CMUCL on PPC doesn't have multiprocessing.
+
+ - https://web.archive.org/web/20060715192939/http://www.randallsquared.com/download/sqlite/cmucl-sqlite3/cs-docs.txt
+ #+end_quote
+
+ - [[https://www.cliki.net/CLSQL][CLSQL on CLiki]]
+ - [[http://clsql.kpe.io/documentation.html][CLSQL Documentation]]
+ - [[https://web.archive.org/web/20150509221006/http://clsql.b9.com/manual/index.html][CLSQL Users' Guide]]
+ - [[http://git.kpe.io/?p=clsql.git][CLSQL Source]]
+
+**** Bill Clementson has written two entries about CLSQL
+ - [[https://web.archive.org/web/20130719003355/http://bc.tech.coop/blog/040606.html][CLSQL - Part 1]]
+ - [[https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html][CLSQL - Part 2]]
+
+**** CommonSQL Tutorials
+ - https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
+
+ - [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
+ /Common SQL/ is  the name of LispWorks' interface to  relational databases. The
+ interface dates back to  the very early 1990's, when it  was written to support
+ Watson, Harlequin's emerging "intelligent  database application". The interface
+ ships as standard with LispWorks on the "commercial unix" platforms, and in the
+ "Enterprise" editions for Windows and Linux
+
+ The intended audience  for the tutorial is anybody with  a working knowledge of
+ lisp and at  least some knowledge of  SQL, who is interested in  seeing how the
+ two  can be  combined.  On the  other  hand  most of  this  material should  be
+ accessible to people with little or no SQL experience.
+
+ - [[http://clsql.kpe.io/manual/csql.html][CommonSQL Tutorial]]
+ "Based on the UncommonSQL Tutorial"
+
+ The goal  of this  tutorial is  to guide a  new developer  thru the  process of
+ creating  a set  of  CLSQL  classes providing  a  Object-Oriented interface  to
+ persistent data stored in an SQL database.
+
+**** History
+ The CLSQL  project was  started by Kevin  M. Rosenberg in  2001 to  support SQL
+ access  on multiple  Common Lisp  implementations using  the UFFI  library. The
+ initial  code was  based  substantially  on Pierre  R.  Mai's excellent  MaiSQL
+ package. In  late 2003,  the UncommonSQL  library was  orphaned by  its author,
+ onShore Development, Inc.  In April 2004, Marcus Pearce  ported the UncommonSQL
+ library to CLSQL.  The UncommonSQL library provides  a CommonSQL-compatible API
+ for CLSQL.
+
+**** iterate-clsql
+ This extensions adds ability to iterate over results of queries to databases via CLSQL.
+
+ - https://common-lisp.net/project/iterate-clsql/
+*** CL-DBI
+ "Database independent interface for Common Lisp"
+
+ [[https://8arrow.org/cl-dbi/][CL-DBI]] is intended to provide the same SQL interface for each database.
+
+ - SQLite3
+ - PostgreSQL
+ - MySQL
+
+
+ [[https://github.com/fukamachi/cl-dbi][CL-DBI on GitHub]]
+
+ This library is especially convenient when  you want to use different databases
+ in different  environments. For example,  you might  use MySQL as  a production
+ database,  but use  SQLite3  on  your development  system.  To switch  database
+ backends you need only change the arguments to dbi:connect.
+**** Installation
+
+ This library is available on Quicklisp.
+
+ : CL-USER> (ql:quickload :cl-dbi)
+
+**** Usage---DBI Connections
+
+***** SQLite connect
+ #+begin_src lisp
+ (defvar *connection*
+   (dbi:connect :sqlite3
+		:database-name "/home/gt/test.sqlite3"))
+ #+end_src
+
+***** MySQL connect
+ #+begin_src lisp
+ (defvar *connection*
+   (dbi:connect :mysql
+		:database-name "test"
+		:username "nobody"
+		:password "1234"))
+ #+end_src
+
+***** Usage---with-connection
+ #+begin_src lisp
+ (dbi:with-connection (conn :sqlite3 :database-name "/home/fukamachi/test.db")
+   (let* ((query (dbi:prepare conn "SELECT * FROM People"))
+          (query (dbi:execute query)))
+     (loop for row = (dbi:fetch query)
+           while row
+           do (format t "~A~%" row))))
+ #+end_src
+
+***** Executing a Query
+ #+begin_src lisp
+ (let* ((query (dbi:prepare *connection*
+                            "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?"))
+	(query (dbi:execute query (list 0 "2011-11-01"))))
+   (loop for row = (dbi:fetch query)
+         while row
+         ;; process "row".
+         ))
+
+ ;; Do it all at once
+ (dbi:fetch-all (dbi:execute (dbi:prepare *connection* "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?")
+                             (list 0 "2011-11-01")))
+ #+end_src
+
+ ~dbi:do-sql~ is another  option that prepares and executes  a single statement.
+ It returns  the number  of rows  affected. It's  typically used  for non-SELECT
+ statements.
+ #+begin_src lisp
+ (dbi:do-sql *connection*
+             "INSERT INTO somewhere (flag, updated_at) VALUES (?, NOW())"
+             (list 0))
+ ;=> 1
+ #+end_src
+
+**** API
+
+***** User-Level API
+ - connect [driver-name & params] => <dbi-connection>
+ - connect-cached [driver-name & params] => <dbi-connection>
+ - disconnect [<dbi-connection>] => T or NIL
+ - prepare [conn sql] => <dbi-query>
+ - execute [query &optional params] => something
+ - fetch [result] => a row data as plist
+ - fetch-all [result] => a list of all row data
+ - do-sql [conn sql &optional params]
+ - list-all-drivers [] => (<dbi-driver> ..)
+ - find-driver [driver-name] => <dbi-driver>
+ - with-transaction [conn]
+ - begin-transaction [conn]
+ - commit [conn]
+ - rollback [conn]
+ - ping [conn] => T or NIL
+ - row-count [conn] => a number of rows modified by the last executed
+   INSERT/UPDATE/DELETE
+ - with-connection [connection-variable-name &body body]
+
+***** Driver-Level API
+
+ - <dbi-driver>
+ - <dbi-connection>
+ - make-connection [driver params]
+ - disconnect [<dbi-connection>] => T or NIL
+ - prepare [conn sql] => <dbi-query>
+ - fetch-using-connection [conn result] => a row data as plist
+ - do-sql [conn sql &optional params]
+ - execute-using-connection => something
+ - escape-sql => string
+ - begin-transaction [conn]
+ - commit [conn]
+ - rollback [conn]
+ - ping [conn] => T or NIL
+ - row-count [conn] => a number of rows modified by the last executed INSERT/UPDATE/DELETE
+ - free-query-resources [query] free resources associated with a prepared query (this is required only for sqlite3 driver at the moment)
+
+***** Hook of SQL execution
+ CL-DBI  provides  ~dbi:*sql-execution-hooks*~,  a  hook to  run  for  each  SQL
+ execution, particularly used for logging.
+
+ The hook function takes these 4 values:
+
+ - SQL (string)
+ - placeholder parameters (list)
+ - Row count of the results (integer or null)
+ - Took time in miliseconds (integer or null)
+
+   The row  count and its execution  time can be  null, if those values  are not
+   available for the driver for some reason.
+
+ ~dbi:simple-sql-logger~ is also provided for  printing those values directly to
+ *standard-output*. It can be enabled as so:
+
+ : (push #'dbi:simple-sql-logger dbi:*sql-execution-hooks*)
+
+*** cl-sqlite
+ CL-SQLITE package is an interface to the SQLite embedded relational database
+ engine.
+
+ - https://common-lisp.net/project/cl-sqlite/
+ - https://github.com/TeMPOraL/cl-sqlite
+**** cl-sqlite Usage
+***** Connect
+  - connect :: connects to the database
+  - disconnect :: disconnects from the database
+  - with-open-database ::  macro that opens the  database and ensures that  it is
+    properly closed after the code is run
+***** Queries
+  - execute-non-query ::
+  - execute-single ::
+  - execute-one-row-m-v ::
+  - execute-to-list ::
+  - execute-to-list/named :: macro is used to execute code within transaction.
+  - Support for  ITERATE is  provided :: This  clause will bind  vars (a  list of
+    variables) to the values of the columns of query.
+    : (for (vars) in-sqlite-query sql on-database db &optional with-parameters (&rest parameters))
+
+
+  Positional and named parameters in queries are supported. Positional parameters
+  are denoted by question  mark in SQL code, and named  parameters are denoted by
+  prefixing color (:), at sign (@) or dollar sign ($) before parameter name.
+
+***** Prepared Statement API
+  Additionally, it  is possible  to use  the prepared  statements API  of sqlite.
+  Create  the prepared  statement with  ~prepare-statement~, bind  its parameters
+  with  ~bind-parameter~, step  through  it with  ~step-statement~, retrieve  the
+  results with  ~statement-column-value~, and finally  reset it to be  used again
+  with ~reset-statement~ or dispose of it with ~finalize-statement~.
+
+***** Supported Types
+  Following types are supported:
+
+  - Integer. Integers are stored as 64-bit integers.
+  - Float.  Stored as  double.  Single-float, double-float  and  rational may  be
+    passed as a parameter, and double-float will be returned.
+  - String. Stored as an UTF-8 string.
+  - Vector of bytes. Stored as a blob.
+  - Null. Passed as NIL to and from database.
+*** clisp-sqlite
+ clisp-sqlite is an interface to the sqlite SQL database by Scott Williams.
+
+ - https://github.com/juancolarte/colarte-dev/tree/master/lisp/clisp/sqlite
+
+*** SQLite Lisp Interface
+*** cl-mongo
+ "lisp interface to mongo db"
+
+ - [[https://github.com/fons/cl-mongo][cl-mongo on GitHub]]
+
+
+ ~cl-mongo~  provides  the  ability  to insert,  update  and  delete  documents,
+ indexing, searching using regexs etc. In addition it supports javascript in the
+ repl (using a commonly available lisp  to javascript compiler). This allows you
+ to do use mongodb's ~map-reduce~ from the lisp repl.
+
+ Install using QuickLisp:
+
+ : #<SYSTEM cl-mongo / cl-mongo-20160531-git / quicklisp 2020-10-16>
+
+ #+begin_quote
+ CL-USER> (ql:quickload "cl-mongo")
+ To load "cl-mongo":
+   Load 5 ASDF systems:
+     alexandria asdf babel lisp-unit split-sequence
+   Install 12 Quicklisp releases:
+     anaphora bordeaux-threads cl-mongo cl-ppcre cl-who
+     documentation-template ironclad named-readtables
+     parenscript trivial-utf-8 usocket uuid
+ #+end_quote
+
+ To run the quick test, do this:
+
+ : (use-package :cl-mongo-test) (quick-test) # did not work
+ : (ql:quickload "cl-mongo-test)(cl-mongo-test::quick-test) # worked
+*** berkeley-db
 ** Lisp for the Web
 - [[https://www.adamtornhill.com/articles/lispweb.htm][LispWeb]]
 - [[https://leanpub.com/lispweb][On LeanPub]]
@@ -4270,6 +4417,275 @@ sure the  reader uses the same  symbol to represent each  name.  Conversely, if
 you want two names  to be considered distinct, even if they  happen to have the
 same textual name, you need the reader to create different symbols to represent
 each name.
+
+** QuickLisp Library Manager
+- [[https://www.quicklisp.org/beta/][QuickLisp Home]]
+- [[http://blog.quicklisp.org][Quicklisp News]]
+
+
+It works  with your existing  Common Lisp implementation to  download, install,
+and load any of over 1,500 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5] It works
+with:
+
+- ABCL,
+- Allegro CL,
+- Clasp,
+- Clozure CL,
+- CLISP,
+- CMUCL,
+- ECL,
+- LispWorks,
+- MKCL,
+- SBCL, and
+- Scieneer CL, on
+- Linux,
+- Mac OS X, and
+- Windows.
+
+
+QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
+other languages call a  library or module, i.e., a set of files,  and a list of
+any other systems that this system depends on.<
+
+*** QuickLisp Installation and Setup
+ To get started with the Quicklisp beta, download and load:
+ : https://beta.quicklisp.org/quicklisp.lisp
+
+ Then, to install and configure SLIME for QuickLisp:
+ : (ql:quickload "quicklisp-slime-helper")
+
+ The  following shell  script will  install ~quicklisp~  for your  user account
+ using Clozure Common Lisp (CCL), update its init file, and configure it to use
+ SLIME[fn::Other  implementations  will  have  slightly  different  commandline
+ requirements.]:
+
+ #+caption: Shell Script to Install Quicklisp Using CCL
+ #+name:ccl-quicklisp-install
+ #+header: :dir ~
+ #+begin_src sh :exports code :results verbatim output
+   [[ ! -d ".quicklisp" ]] && { \
+   echo "Installing quicklisp...";
+   mkdir -v ./.quicklisp;
+   curl -O https://beta.quicklisp.org/quicklisp.lisp;
+   # The installation script is expecting the user to hit the <RETURN> key;
+   # as well, the @@texinfo:@opt{@@--batch@@texinfo:}@@ expects an EOF marker.
+   # The use of ~echo~ seems to satisfy both requirements.
+   echo | \
+   ccl -Q --batch \
+          --load  quicklisp.lisp \
+          --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
+          --eval '(ql:add-to-init-file)' \
+          --eval '(ql:quickload "quicklisp-slime-helper")';
+   rm quicklisp.lisp;
+   echo "Done installing.";
+   } || { echo "Quicklisp is already installed."; }
+ #+end_src
+
+ #+RESULTS: ccl-quicklisp-install
+ #+begin_example
+ Installing quicklisp...
+ mkdir: created directory './.quicklisp'
+
+   ==== quicklisp quickstart 2015-01-28 loaded ====
+
+     To continue with installation, evaluate: (quicklisp-quickstart:install)
+
+     For installation options, evaluate: (quicklisp-quickstart:help)
+
+ ; Fetching #<URL "http://beta.quicklisp.org/client/quicklisp.sexp">
+ ; 0.82KB
+ ==================================================
+ 838 bytes in 0.00 seconds (897.32KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2020-01-04/quicklisp.tar">
+ ; 250.00KB
+ ==================================================
+ 256,000 bytes in 0.04 seconds (5591.84KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2015-09-24/setup.lisp">
+ ; 4.94KB
+ ==================================================
+ 5,054 bytes in 0.00 seconds (6434.87KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/asdf/2.26/asdf.lisp">
+ ; 194.07KB
+ ==================================================
+ 198,729 bytes in 0.05 seconds (4305.33KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp.txt">
+ ; 0.40KB
+ ==================================================
+ 408 bytes in 0.00 seconds (543.57KB/sec)
+ Installing dist "quicklisp" version "2020-10-16".
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/releases.txt">
+ ; 468.69KB
+ ==================================================
+ 479,939 bytes in 0.07 seconds (6496.51KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/systems.txt">
+ ; 341.59KB
+ ==================================================
+ 349,788 bytes in 0.05 seconds (6902.90KB/sec)
+
+   ==== quicklisp installed ====
+
+     To load a system, use: (ql:quickload "system-name")
+
+     To find systems, use: (ql:system-apropos "term")
+
+     To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
+
+     For more information, see http://www.quicklisp.org/beta/
+
+ I will append the following lines to #P"/Users/minilolh/.ccl-init.lisp":
+
+   ;;; The following lines added by ql:add-to-init-file:
+   #-quicklisp
+   (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp" (user-homedir-pathname))))
+     (when (probe-file quicklisp-init)
+       (load quicklisp-init)))
+
+ Press Enter to continue.
+ To load "quicklisp-slime-helper":
+   Load 1 ASDF system:
+     asdf
+   Install 3 Quicklisp releases:
+     alexandria quicklisp-slime-helper slime
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz">
+ ; 802.88KB
+ ==================================================
+ 822,146 bytes in 0.11 seconds (7054.23KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz">
+ ; 53.45KB
+ ==================================================
+ 54,730 bytes in 0.02 seconds (3438.89KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2015-07-09/quicklisp-slime-helper-20150709-git.tgz">
+ ; 2.16KB
+ ==================================================
+ 2,211 bytes in 0.00 seconds (2898.23KB/sec)
+ ; Loading "quicklisp-slime-helper"
+ [package swank-loader]............................
+ [package swank/backend]...........................
+ [package swank/rpc]...............................
+ [package swank/match].............................
+ [package swank-mop]...............................
+ [package swank]...................................
+ [package swank-monitor]...........................
+ [package swank/ccl]...............................
+ [package cross-reference].........................
+ [package swank/gray]..............................
+ ...............................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-util.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-repl.lisp"....................
+ [package swank-repl]...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-c-p-c.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-arglists.lisp"............................
+ ...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fuzzy.lisp".......
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fancy-inspector.lisp".................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentations.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentation-streams.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-asdf.lisp".........
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-package-fu.lisp"...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-hyperdoc.lisp"....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-mrepl.lisp".....................
+ [package swank-api]...............................
+ [package swank-mrepl]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-trace-dialog.lisp"..............................
+ [package swank-trace-dialog]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-macrostep.lisp".......................
+ [package swank-macrostep]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-quicklisp.lisp"...
+ .......................
+ [package alexandria]..............................
+ ..................................................
+ ..................................................
+ [package alexandria-2]............................
+ [package quicklisp-slime-helper]
+ slime-helper.el installed in "/Users/minilolh/.quicklisp/slime-helper.el"
+
+ To use, add this to your ~/.emacs:
+
+   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+   ;; Replace "sbcl" with the path to your implementation
+   (setq inferior-lisp-program "sbcl")
+
+
+ Done installing.
+ #+end_example
+
+*** QuickLisp Load
+
+ To load Quicklisp into your Common Lisp session after the initial installation,
+ (unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
+
+ : (load "~/quicklisp/setup.lisp")
+
+ To load software, use:
+
+ : (ql:quickload "system-name")
+
+ Quicklisp will automatically download any  supporting software it needs to load
+ the system.
+
+ By default, ~ql:quickload~ hides most compilation and loading output, including
+ warnings, and shows progess as a series  of dots. You can show full compilation
+ and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
+ output can be especially helpful when reporting and troubleshooting problems.
+ There is also a =:silent t= mode.
+
+ : (ql:quickload “system-name” :verbose t)
+ : (ql:quickload "system-name" :silent t)
+
+ #+texinfo: @heading ASDF Manifest File
+
+ : (ql:write-asdf-manifest-file)
+ now includes systems from the local-projects directories.
+
+*** Quicklisp Updates
+ To get updated software, use:
+
+ : (ql:update-dist "quicklisp")
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-dist "quicklisp")
+ #+end_src
+
+ #+RESULTS:
+ : You already have the latest version of "quicklisp": 2020-10-16.
+
+ To update the Quicklisp client use:
+
+ : (ql:update-client)
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-client)
+ #+end_src
+
+ #+RESULTS:
+ : The most up-to-date client, version 2020-01-04, is already installed.
+
+*** QuickLisp Libraries
+ To find out what's available in Quicklisp, use:
+
+ : (ql:system-apropos substring)
+
+ To see what systems depend on a particular system, use:
+
+ : (ql:who-depends-on system-name)
+
+*** QuickLisp Unload
+ To remove software, use:
+
+ : (ql:uninstall system-name)
+
+ An uninstall does the following:
+
+ - Deletes the system's tarball archive and unpacked source files
+ - Deletes Quicklisp metadata files associated with the system
+ - Clears ASDF's system cache via asdf:clear-system.
+
+
+ Uninstalling does not alter  the current Lisp session in any  other way; if the
+ given  system has  been  loaded, it  remains loaded  and  accessible until  the
+ session is ended.
 ** Another System Definition Facility---ASDF
 #+cindex:asdf
 "ASDF is the de facto standard build facility for Common Lisp."
@@ -5443,420 +5859,6 @@ When applications are done well, they are just the really application-specific,
 brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
 reusable  components sublimate  away onto  github and  npm where  everybody can
 collaborate to advance the commons.
-* Common Lisp Databases
-- https://www.cliki.net/Database
-** CLSQL
-CLSQL is  a Common  Lisp interface to  SQL databases. A  number of  Common Lisp
-implementations and SQL databases are supported. The general structure of CLSQL
-is based on the CommonSQL package by LispWorks Ltd.
-
-CLSQL  is a  Database  interface that  can  access a  number  of different  SQL
-database  engines. It  also includes  a  CLOS ORM.  It is  maintained by  Kevin
-Rosenberg.  CLSQL now includes the CommonSQL API interface.
-
-#+attr_texinfo: :author Bill Clementson
-#+begin_quote
-In summary, the CLSQL package is quite easy  to work with and allows you to use
-a mixture of  functional and OO approaches in working  with relational data. It
-provides high-performing native access to  the underlying databases (as well as
-ODBC access as either an alternative or as a means to access databases that are
-not supported with a native API).  Kevin Rosenberg (and contributors) are to be
-commended for an excellent package!
-
-- https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html
-#+end_quote
-
-#+attr_texinfo: :author Randall Squared
-#+begin_quote
-CLSQL is the gold  standard of SQL interface libraries on  Common Lisp, and is,
-as you'd expect, large and complex, with various embedded languages. I'd rather
-not carry around  all the extra code  this implies with my  system. Further, it
-doesn't support CMUCL/PPC, because CMUCL on PPC doesn't have multiprocessing.
-
-- https://web.archive.org/web/20060715192939/http://www.randallsquared.com/download/sqlite/cmucl-sqlite3/cs-docs.txt
-#+end_quote
-
-- [[https://www.cliki.net/CLSQL][CLSQL on CLiki]]
-- [[http://clsql.kpe.io/documentation.html][CLSQL Documentation]]
-- [[https://web.archive.org/web/20150509221006/http://clsql.b9.com/manual/index.html][CLSQL Users' Guide]]
-- [[http://git.kpe.io/?p=clsql.git][CLSQL Source]]
-
-*** Bill Clementson has written two entries about CLSQL
-- [[https://web.archive.org/web/20130719003355/http://bc.tech.coop/blog/040606.html][CLSQL - Part 1]]
-- [[https://web.archive.org/web/20130601122551/http://bc.tech.coop/blog/040608.html][CLSQL - Part 2]]
-
-*** CommonSQL Tutorials
-- https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
-
-- [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
-/Common SQL/ is  the name of LispWorks' interface to  relational databases. The
-interface dates back to  the very early 1990's, when it  was written to support
-Watson, Harlequin's emerging "intelligent  database application". The interface
-ships as standard with LispWorks on the "commercial unix" platforms, and in the
-"Enterprise" editions for Windows and Linux
-
-The intended audience  for the tutorial is anybody with  a working knowledge of
-lisp and at  least some knowledge of  SQL, who is interested in  seeing how the
-two  can be  combined.  On the  other  hand  most of  this  material should  be
-accessible to people with little or no SQL experience.
-
-- [[http://clsql.kpe.io/manual/csql.html][CommonSQL Tutorial]]
-"Based on the UncommonSQL Tutorial"
-
-The goal  of this  tutorial is  to guide a  new developer  thru the  process of
-creating  a set  of  CLSQL  classes providing  a  Object-Oriented interface  to
-persistent data stored in an SQL database.
-
-*** History
-The CLSQL  project was  started by Kevin  M. Rosenberg in  2001 to  support SQL
-access  on multiple  Common Lisp  implementations using  the UFFI  library. The
-initial  code was  based  substantially  on Pierre  R.  Mai's excellent  MaiSQL
-package. In  late 2003,  the UncommonSQL  library was  orphaned by  its author,
-onShore Development, Inc.  In April 2004, Marcus Pearce  ported the UncommonSQL
-library to CLSQL.  The UncommonSQL library provides  a CommonSQL-compatible API
-for CLSQL.
-
-*** iterate-clsql
-This extensions adds ability to iterate over results of queries to databases via CLSQL.
-
-- https://common-lisp.net/project/iterate-clsql/
-** CL-DBI
-"Database independent interface for Common Lisp"
-
-[[https://8arrow.org/cl-dbi/][CL-DBI]] is intended to provide the same SQL interface for each database.
-
-- SQLite3
-- PostgreSQL
-- MySQL
-
-
-[[https://github.com/fukamachi/cl-dbi][CL-DBI on GitHub]]
-
-This library is especially convenient when  you want to use different databases
-in different  environments. For example,  you might  use MySQL as  a production
-database,  but use  SQLite3  on  your development  system.  To switch  database
-backends you need only change the arguments to dbi:connect.
-*** Installation
-
-This library is available on Quicklisp.
-
-: CL-USER> (ql:quickload :cl-dbi)
-
-*** Usage---DBI Connections
-
-**** SQLite connect
-#+begin_src lisp
-(defvar *connection*
-  (dbi:connect :sqlite3
-               :database-name "/home/gt/test.sqlite3"))
-#+end_src
-
-**** MySQL connect
-#+begin_src lisp
-(defvar *connection*
-  (dbi:connect :mysql
-               :database-name "test"
-               :username "nobody"
-               :password "1234"))
-#+end_src
-
-**** Usage---with-connection
-#+begin_src lisp
-(dbi:with-connection (conn :sqlite3 :database-name "/home/fukamachi/test.db")
-  (let* ((query (dbi:prepare conn "SELECT * FROM People"))
-         (query (dbi:execute query)))
-    (loop for row = (dbi:fetch query)
-          while row
-          do (format t "~A~%" row))))
-#+end_src
-
-**** Executing a Query
-#+begin_src lisp
-(let* ((query (dbi:prepare *connection*
-                           "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?"))
-       (query (dbi:execute query (list 0 "2011-11-01"))))
-  (loop for row = (dbi:fetch query)
-        while row
-        ;; process "row".
-        ))
-
-;; Do it all at once
-(dbi:fetch-all (dbi:execute (dbi:prepare *connection* "SELECT * FROM somewhere WHERE flag = ? OR updated_at > ?")
-                            (list 0 "2011-11-01")))
-#+end_src
-
-~dbi:do-sql~ is another  option that prepares and executes  a single statement.
-It returns  the number  of rows  affected. It's  typically used  for non-SELECT
-statements.
-#+begin_src lisp
-(dbi:do-sql *connection*
-            "INSERT INTO somewhere (flag, updated_at) VALUES (?, NOW())"
-            (list 0))
-;=> 1
-#+end_src
-
-*** API
-
-**** User-Level API
-- connect [driver-name & params] => <dbi-connection>
-- connect-cached [driver-name & params] => <dbi-connection>
-- disconnect [<dbi-connection>] => T or NIL
-- prepare [conn sql] => <dbi-query>
-- execute [query &optional params] => something
-- fetch [result] => a row data as plist
-- fetch-all [result] => a list of all row data
-- do-sql [conn sql &optional params]
-- list-all-drivers [] => (<dbi-driver> ..)
-- find-driver [driver-name] => <dbi-driver>
-- with-transaction [conn]
-- begin-transaction [conn]
-- commit [conn]
-- rollback [conn]
-- ping [conn] => T or NIL
-- row-count [conn] => a number of rows modified by the last executed
-  INSERT/UPDATE/DELETE
-- with-connection [connection-variable-name &body body]
-
-**** Driver-Level API
-
-- <dbi-driver>
-- <dbi-connection>
-- make-connection [driver params]
-- disconnect [<dbi-connection>] => T or NIL
-- prepare [conn sql] => <dbi-query>
-- fetch-using-connection [conn result] => a row data as plist
-- do-sql [conn sql &optional params]
-- execute-using-connection => something
-- escape-sql => string
-- begin-transaction [conn]
-- commit [conn]
-- rollback [conn]
-- ping [conn] => T or NIL
-- row-count [conn] => a number of rows modified by the last executed INSERT/UPDATE/DELETE
-- free-query-resources [query] free resources associated with a prepared query (this is required only for sqlite3 driver at the moment)
-
-**** Hook of SQL execution
-CL-DBI  provides  ~dbi:*sql-execution-hooks*~,  a  hook to  run  for  each  SQL
-execution, particularly used for logging.
-
-The hook function takes these 4 values:
-
-- SQL (string)
-- placeholder parameters (list)
-- Row count of the results (integer or null)
-- Took time in miliseconds (integer or null)
-
-  The row  count and its execution  time can be  null, if those values  are not
-  available for the driver for some reason.
-
-~dbi:simple-sql-logger~ is also provided for  printing those values directly to
-*standard-output*. It can be enabled as so:
-
-: (push #'dbi:simple-sql-logger dbi:*sql-execution-hooks*)
-
-** cl-sqlite
-CL-SQLITE package is an interface to the SQLite embedded relational database
-engine.
-
-- https://common-lisp.net/project/cl-sqlite/
-- https://github.com/TeMPOraL/cl-sqlite
-*** cl-sqlite Usage
-**** Connect
- - connect :: connects to the database
- - disconnect :: disconnects from the database
- - with-open-database ::  macro that opens the  database and ensures that  it is
-   properly closed after the code is run
-**** Queries
- - execute-non-query ::
- - execute-single ::
- - execute-one-row-m-v ::
- - execute-to-list ::
- - execute-to-list/named :: macro is used to execute code within transaction.
- - Support for  ITERATE is  provided :: This  clause will bind  vars (a  list of
-   variables) to the values of the columns of query.
-   : (for (vars) in-sqlite-query sql on-database db &optional with-parameters (&rest parameters))
-
-
- Positional and named parameters in queries are supported. Positional parameters
- are denoted by question  mark in SQL code, and named  parameters are denoted by
- prefixing color (:), at sign (@) or dollar sign ($) before parameter name.
-
-**** Prepared Statement API
- Additionally, it  is possible  to use  the prepared  statements API  of sqlite.
- Create  the prepared  statement with  ~prepare-statement~, bind  its parameters
- with  ~bind-parameter~, step  through  it with  ~step-statement~, retrieve  the
- results with  ~statement-column-value~, and finally  reset it to be  used again
- with ~reset-statement~ or dispose of it with ~finalize-statement~.
-
-**** Supported Types
- Following types are supported:
-
- - Integer. Integers are stored as 64-bit integers.
- - Float.  Stored as  double.  Single-float, double-float  and  rational may  be
-   passed as a parameter, and double-float will be returned.
- - String. Stored as an UTF-8 string.
- - Vector of bytes. Stored as a blob.
- - Null. Passed as NIL to and from database.
-** clisp-sqlite
-clisp-sqlite is an interface to the sqlite SQL database by Scott Williams.
-
-- https://github.com/juancolarte/colarte-dev/tree/master/lisp/clisp/sqlite
-
-** SQLite Lisp Interface
-** cl-mongo
-"lisp interface to mongo db"
-
-- [[https://github.com/fons/cl-mongo][cl-mongo on GitHub]]
-
-
-~cl-mongo~  provides  the  ability  to insert,  update  and  delete  documents,
-indexing, searching using regexs etc. In addition it supports javascript in the
-repl (using a commonly available lisp  to javascript compiler). This allows you
-to do use mongodb's ~map-reduce~ from the lisp repl.
-
-Install using QuickLisp:
-
-: #<SYSTEM cl-mongo / cl-mongo-20160531-git / quicklisp 2020-10-16>
-
-#+begin_quote
-CL-USER> (ql:quickload "cl-mongo")
-To load "cl-mongo":
-  Load 5 ASDF systems:
-    alexandria asdf babel lisp-unit split-sequence
-  Install 12 Quicklisp releases:
-    anaphora bordeaux-threads cl-mongo cl-ppcre cl-who
-    documentation-template ironclad named-readtables
-    parenscript trivial-utf-8 usocket uuid
-#+end_quote
-
-To run the quick test, do this:
-
-: (use-package :cl-mongo-test) (quick-test) # did not work
-: (ql:quickload "cl-mongo-test)(cl-mongo-test::quick-test) # worked
-** berkeley-db
-
-* Common Lisp Help System
-** Apropos
-   #+findex:apropos
-Common Lisp defines 978 symbols. There  are probably hundreds of others as well
-for language extensions,  libraries, a graphical user interface,  etc. You will
-not remember all  of the names, but  you will probably remember  parts of them.
-Once you  have a good  guess at a  part of  the name, you  can find all  of the
-matching names by using a tool called ~APROPOS~.
-
-#+begin_src sh
-$ sbcl
-,* (apropos "MAP" :cl)
-MAP (fbound)
-MAP-INTO (fbound)
-MAPC (fbound)
-MAPCAN (fbound)
-MAPCAR (fbound)
-MAPCON (fbound)
-MAPHASH (fbound)
-MAPL (fbound)
-MAPLIST (fbound)
-#+end_src
-
-#+begin_src sh
-$ clisp
-[1]> (apropos "MAP" :cl)
-MAP                                        function
-MAP-DEPENDENTS                             function
-MAP-INTO                                   function
-MAPC                                       function
-MAPCAN                                     function
-MAPCAR                                     function
-MAPCON                                     function
-MAPHASH                                    function
-MAPL                                       function
-MAPLIST                                    function
-#+end_src
-
-APROPOS expects a string or a symbol --- this provides the fragment of the name
-that you’d like to find. An  optional second argument designates a package; use
-it if you’d like  to limit your search to the symbols  in a particular package.
-The package designator can be a string  or symbol matching the name or nickname
-of a package  or it can be the  package object itself. If you  omit the package
-designator, then APROPOS will search for symbols in all packages.
-
-** Describe
-   #+findex:describe
-Once you know the name of a symbol, you can get additional information by using
-the ~DESCRIBE~ function.
-
-~DESCRIBE~ =object=  =stream= sends information  about an =object= to  a stream
-(=standard-output= by default). =object= can be a symbol, string, or function.
-
-~DESCRIBE~  prints,   to  the  stream  in   the  variable  =*standard-output*=,
-information  about the  object. Sometimes  it will  describe something  that it
-finds  inside   something  else;  such  recursive   descriptions  are  indented
-appropriately. For instance,  ~DESCRIBE~ of a symbol will  exhibit the symbol's
-value,  its   definition,  and  each   of  its  properties.  ~DESCRIBE~   of  a
-floating-point number will exhibit its internal representation in a way that is
-useful for tracking  down round-off errors and the like.  The nature and format
-of the output is implementation-dependent.
-
-The output  is sent  to the specified  stream, which defaults  to the  value of
-=*standard-output*=; the stream may also be =nil= (meaning =*standard-output*=)
-or  =t= (meaning  =*terminal-io*=). ~DESCRIBE~  is forbidden  to prompt  for or
-require user input when given exactly one argument.
-
-#+begin_src sh
-$ sbcl
-
-,* (describe 'mapl)
-COMMON-LISP:MAPL
-  [symbol]
-
-MAPL names a compiled function:
-  Lambda-list: (FUNCTION LIST &REST SB-IMPL::MORE-LISTS)
-  Dynamic-extent arguments: positional=(0)
-  Declared type: (FUNCTION ((OR FUNCTION SYMBOL) LIST &REST LIST)
-                  (VALUES LIST &OPTIONAL))
-  Derived type: (FUNCTION (T T &REST T) (VALUES T &OPTIONAL))
-  Documentation:
-    Apply FUNCTION to successive tuples of CDRs of LIST and MORE-LISTS.
-    Return LIST.
-  Known attributes: call, foldable
-  Source file: SYS:SRC;CODE;LIST.LISP
-#+end_src
-
-** Documentation
-   #+findex:documentation
-The  generic   function  ~DOCUMENTATION~   returns  the   documentation  string
-associated  with the  given object  if it  is available;  otherwise it  returns
-=nil=.  The  ~DOCUMENTATION~ function  gives  you  access to  the  programmer’s
-innermost thoughts.
-
-The ~DOCUMENTATION~ function expects two arguments.  The first is an object for
-which you wish  to retrieve documentation, or a symbol  naming that object. The
-second is  a symbol designating the  kind of documentation (there  are several)
-you wish to retrieve.
-
-- variable :: defvar, defparameter, defconstant
-- function :: defun, defmacro, special forms
-- structure :: defstruct
-- type :: deftype
-- setf :: defsetf
-- compiler-macro :: define-compiler-macro
-- method-combination :: define-method-combination
-
-** Inspect
-   #+findex:inspect
-~INSPECT~  is  an  interactive  version   of  ~DESCRIBE~.  The  nature  of  the
-interaction is  implementation-dependent, but  the purpose  of ~INSPECT~  is to
-make it easy to wander through  a data structure, examining and modifying parts
-of it.
-
-~INSPECT~  is like  ~DESCRIBE~,  but  instead of  printing  the information  it
-presents the information in some  kind of interactive display; typically either
-a  command loop  in the  current listener  or a  new window  with its  own user
-interface.
-
-Implementations are encouraged to respond to the  typing of =?= or a ``help key''
-by providing help, including a list of commands.
-
 * Common Lisp Testing
 ** FiveAM
 "Common Lisp regression testing framework"
@@ -7026,11 +7028,6 @@ as  a whole:  advanced argument  lists  for functions,  and the  ~cl-eval-when~
 construct.
 
 **** Argument Lists
-* Common Lisp Blogs
-** Lispology
-"RANDOM THOUGHTS ABOUT COMMON LISP"
-- http://www.lispology.com/
-
 * Common Lisp Learning
 ** Practical Common Lisp
 ** Common Lisp---An Interactive Approach
