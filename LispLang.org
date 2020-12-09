@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-09 07:58
-#+macro:version Version 0.0.95
+#+date:2020-12-09 08:09
+#+macro:version Version 0.0.96
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -4638,9 +4638,7 @@ any other systems that this system depends on.<
  now includes systems from the local-projects directories.
 
 *** Quicklisp Updates
- To get updated software, use:
-
- : (ql:update-dist "quicklisp")
+ To get updated software, use ~ql:update-dist~.
 
  Be sure to first start ~slime~:
  #+begin_src lisp :results output
@@ -4650,9 +4648,7 @@ any other systems that this system depends on.<
  #+RESULTS:
  : You already have the latest version of "quicklisp": 2020-10-16.
 
- To update the Quicklisp client use:
-
- : (ql:update-client)
+ To update the Quicklisp client use ~ql:update-client~.
 
  Be sure to first start ~slime~:
  #+begin_src lisp :results output
