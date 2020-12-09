@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-08 19:43
-#+macro:version Version 0.0.92
+#+date:2020-12-09 07:49
+#+macro:version Version 0.0.93
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -3121,7 +3121,7 @@ documentation and source codes, and this org file can interact well with SLIME.
 ** Programming in Lisp
 - https://www.iiia.csic.es/~puyol/TAPIA/
 
-* Common Lisp IO
+* Common Lisp IO and Formatting
 #+texinfo: @heading File System Concepts
 This section  discusses the Common  Lisp interface  to file systems.  The model
 used by this interface assumes that:
@@ -3841,324 +3841,427 @@ These opertors require open streams:
 - y-or-n-p
 - yes-or-no-p
 
-* Common Lisp Formatting
-~format~ produces three kinds of formatting:
+** Common Lisp Formatting
+ ~format~ produces three kinds of formatting:
 
-1. printing tables of data as text
-   not used much anymore
+ 1. printing tables of data as text
+    not used much anymore
 
-2. pretty-printing s-expressions
+ 2. pretty-printing s-expressions
 
-   a customizable  system for printing  block-structured data such  as--but not
-   limited to--s-expressions  while varying indentation and  dynamically adding
-   line breaks as needed.
+    a customizable  system for printing  block-structured data such  as--but not
+    limited to--s-expressions  while varying indentation and  dynamically adding
+    line breaks as needed.
 
-3. generating human-readable messages with interpolated values
+ 3. generating human-readable messages with interpolated values
 
-** format Function
-#+attr_texinfo: :options format @var{destination} @var{control-string} &rest @var{format-args}
-#+begin_defun
+*** format Function
+ #+attr_texinfo: :options format @var{destination} @var{control-string} &rest @var{format-args}
+ #+begin_defun
 
-Takes two required arguments:
+ Takes two required arguments:
 
-1. @@texinfo:@var{@@destination@@texinfo:}@@ for output
+ 1. @@texinfo:@var{@@destination@@texinfo:}@@ for output
 
-   - =t= : the =*standard-output*= stream;
-   - =nil= : ~format~ generates a string and returns it;
-   - a stream : output written to this stream;
-   - string with fill-pointer :  ougtput is added to the end  of the string and
-     the fill pointer is adjusted;
+    - =t= : the =*standard-output*= stream;
+    - =nil= : ~format~ generates a string and returns it;
+    - a stream : output written to this stream;
+    - string with fill-pointer :  ougtput is added to the end  of the string and
+      the fill pointer is adjusted;
 
-2. @@texinfo:@var{@@control-string@@texinfo:}@@ that  contains literal text and
-   embedded directives;
+ 2. @@texinfo:@var{@@control-string@@texinfo:}@@ that  contains literal text and
+    embedded directives;
 
-3. additional optional  @@texinfo:@var{@@format-args@@texinfo:}@@ provide  the
-  values used by the directives in  the control string that interpolate values
-  into the output.
+ 3. additional optional  @@texinfo:@var{@@format-args@@texinfo:}@@ provide  the
+   values used by the directives in  the control string that interpolate values
+   into the output.
 
-~format~  returns =nil=  except when  destination is  =nil=, in  which case  it
-returns the newly-generated string.
+ ~format~  returns =nil=  except when  destination is  =nil=, in  which case  it
+ returns the newly-generated string.
 
-#+end_defun
+ #+end_defun
 
-** format Directives
-All directives start with a tilde (=~=) and end with a single character (upper-
-or  lowercase) that  identifies  the directive.
+*** format Directives
+ All directives start with a tilde (=~=) and end with a single character (upper-
+ or  lowercase) that  identifies  the directive.
 
-: (format t "~A" pi) ==> 3.14
+ : (format t "~A" pi) ==> 3.14
 
-#+texinfo: @heading Prefix Parameters
+ #+texinfo: @heading Prefix Parameters
 
-Some  directives  take  /prefix  parameters/,  which  are  written  immediately
-following the  tilde, separated by commas,  and used to control  things such as
-how many digits to print after the decimal point when printing a floating-point
-number.
+ Some  directives  take  /prefix  parameters/,  which  are  written  immediately
+ following the  tilde, separated by commas,  and used to control  things such as
+ how many digits to print after the decimal point when printing a floating-point
+ number.
 
-: (format t "~$" pi)  ==> 3.14
-: (format t "~5$" pi) ==> 3.14159
-:             ^
+ : (format t "~$" pi)  ==> 3.14
+ : (format t "~5$" pi) ==> 3.14159
+ :             ^
 
-The  values of  prefix parameters  are either  decimal numbers,  or characters,
-written as a single quote followed by the desired character.  The value of a
-prefix parameter can also be derived from the format arguments in two ways:
+ The  values of  prefix parameters  are either  decimal numbers,  or characters,
+ written as a single quote followed by the desired character.  The value of a
+ prefix parameter can also be derived from the format arguments in two ways:
 
-1. a prefix parameter of =v= causes ~format~ to consume one format argument and
-   use its value for the prefix parameter;
-2. a  prefix parameter  of =#=  will be  evaluated as  the number  of remaining
-   format arguments;
+ 1. a prefix parameter of =v= causes ~format~ to consume one format argument and
+    use its value for the prefix parameter;
+ 2. a  prefix parameter  of =#=  will be  evaluated as  the number  of remaining
+    format arguments;
 
-: (format t "~v$" 3 pi) ==> 3.142
-: (format t "~#$" pi)   ==> 3.1
-:             ^
+ : (format t "~v$" 3 pi) ==> 3.142
+ : (format t "~#$" pi)   ==> 3.1
+ :             ^
 
-You  can omit  prefix  arguments, but  if there  are  multiple possible  prefix
-arguments, then you must use a comma to skip ones that come before the ones you
-want to use.
+ You  can omit  prefix  arguments, but  if there  are  multiple possible  prefix
+ arguments, then you must use a comma to skip ones that come before the ones you
+ want to use.
 
-: (format t "~,5F" pi) ==> 3.14159
-:             ^
+ : (format t "~,5F" pi) ==> 3.14159
+ :             ^
 
-#+texinfo: @heading Modifiers
+ #+texinfo: @heading Modifiers
 
-You can also  modify the behavior of  some directives with a  colon and at-sign
-/modifiers/,  which are  placed  after  any prefix  parameters  and before  the
-directive's identifying character.  These modifiers change the  behavior of the
-directive in small  ways. In some cases  you can combine the  colon and at-sign
-modifiers to get both modifications.
+ You can also  modify the behavior of  some directives with a  colon and at-sign
+ /modifiers/,  which are  placed  after  any prefix  parameters  and before  the
+ directive's identifying character.  These modifiers change the  behavior of the
+ directive in small  ways. In some cases  you can combine the  colon and at-sign
+ modifiers to get both modifications.
 
-: (format t "~D" 1000000)   ==> 1000000
-: (format t "~:D" 1000000)  ==> 1,000,000
-: (format t "~@D" 1000000)  ==> +1000000
-: (format t "~:@D" 1000000) ==> +1,000,000
-:             ^
+ : (format t "~D" 1000000)   ==> 1000000
+ : (format t "~:D" 1000000)  ==> 1,000,000
+ : (format t "~@D" 1000000)  ==> +1000000
+ : (format t "~:@D" 1000000) ==> +1,000,000
+ :             ^
 
-** Basic Formatting
-*** General Directives
-- =~A= :: The most general-purpose directive is =~A=, which consumes one format
-  argument  of any  type and  outputs  it in  aesthetic (human-readable)  form:
-  strings are output without quotation  marks or escape characters, and numbers
-  are output in a natural way for the type of number.
+*** Basic Formatting
+**** General Directives
+ - =~A= :: The most general-purpose directive is =~A=, which consumes one format
+   argument  of any  type and  outputs  it in  aesthetic (human-readable)  form:
+   strings are output without quotation  marks or escape characters, and numbers
+   are output in a natural way for the type of number.
 
-- =~S= :: =~S= tries  to generate output that can be read  back in with ~READ~.
-  Thus,  strings  will  be  enclosed   in  quotation  marks,  symbols  will  be
-  package-qualified when necessary, and so on.
+ - =~S= :: =~S= tries  to generate output that can be read  back in with ~READ~.
+   Thus,  strings  will  be  enclosed   in  quotation  marks,  symbols  will  be
+   package-qualified when necessary, and so on.
 
-- =~:A=, =~:S= :: With a colon modifier, both the =~A= and =~S= directives emit
-  =NIL= as =()= rather than =NIL=.
+ - =~:A=, =~:S= :: With a colon modifier, both the =~A= and =~S= directives emit
+   =NIL= as =()= rather than =NIL=.
 
-- Prefix Parameters  :: Both the =~A= and  =~S= directives also take up to four
-  prefix parameters,  which can  be used  to control  whether padding  is added
-  after (or before  with the at-sign modifier) the value,  but those parameters
-  are only really useful for generating tabular data.
+ - Prefix Parameters  :: Both the =~A= and  =~S= directives also take up to four
+   prefix parameters,  which can  be used  to control  whether padding  is added
+   after (or before  with the at-sign modifier) the value,  but those parameters
+   are only really useful for generating tabular data.
 
-- =~%= :: emits a newline
+ - =~%= :: emits a newline
 
-- =~&= ::   emits  a fresh line.  The  difference between the two  is that =~%=
-  always emits a newline, while =~&= emits  one only if it's not already at the
-  beginning  of a  line.
+ - =~&= ::   emits  a fresh line.  The  difference between the two  is that =~%=
+   always emits a newline, while =~&= emits  one only if it's not already at the
+   beginning  of a  line.
 
-- Prefix  Parameters ::  Both  of these  directives can  take  a single  prefix
-  parameter that specifies the number of newlines to emit.
+ - Prefix  Parameters ::  Both  of these  directives can  take  a single  prefix
+   parameter that specifies the number of newlines to emit.
 
-- =~~= :: causes FORMAT to emit a literal tilde.  Also takes a prefix parameter
-  to determine how many to print.
+ - =~~= :: causes FORMAT to emit a literal tilde.  Also takes a prefix parameter
+   to determine how many to print.
 
-*** Character and Integer Directives
-~FORMAT~  supports several  directives  that  can be  used  to  emit values  of
-specific types in particular ways.
+**** Character and Integer Directives
+ ~FORMAT~  supports several  directives  that  can be  used  to  emit values  of
+ specific types in particular ways.
 
-**** Character Directives
+***** Character Directives
 
-- =~C= ::  used  to emit characters.  It  takes no prefix arguments  but can be
-  modified with the  colon and at-sign modifiers.  Unmodified,  its behavior is
-  no different from =~A= except that it works only with characters.
+ - =~C= ::  used  to emit characters.  It  takes no prefix arguments  but can be
+   modified with the  colon and at-sign modifiers.  Unmodified,  its behavior is
+   no different from =~A= except that it works only with characters.
 
-- =~:C= ::  outputs  nonprinting characters such as space, tab,  and newline by
-  name.  This is  useful if you want to  emit a message to the  user about some
-  character.
+ - =~:C= ::  outputs  nonprinting characters such as space, tab,  and newline by
+   name.  This is  useful if you want to  emit a message to the  user about some
+   character.
 
-  : (format t "Syntax error. Unexpected character: ~:c" char)
-  : ==> Syntax error. Unexpected character: Space
+   : (format t "Syntax error. Unexpected character: ~:c" char)
+   : ==> Syntax error. Unexpected character: Space
 
-- =~:@C= ::  With both the colon  and at-sign modifiers, the =~C= directive can
-  print extra information  about how to enter the character  at the keyboard if
-  it requires special key combinations.
+ - =~:@C= ::  With both the colon  and at-sign modifiers, the =~C= directive can
+   print extra information  about how to enter the character  at the keyboard if
+   it requires special key combinations.
 
-**** Number Directives
-While you  can use the =~A=  and =~S= directives  to emit numbers, if  you want
-fine  control  over   how  they're  printed,  you  need  to   use  one  of  the
-number-specific directives.
+***** Number Directives
+ While you  can use the =~A=  and =~S= directives  to emit numbers, if  you want
+ fine  control  over   how  they're  printed,  you  need  to   use  one  of  the
+ number-specific directives.
 
-The numeric  directives can be  divided into two subcategories:  directives for
-formatting integer values and directives for formatting floating-point values.
+ The numeric  directives can be  divided into two subcategories:  directives for
+ formatting integer values and directives for formatting floating-point values.
 
-***** Integer Directives
-Five closely related directives format  integer values: =~D=, =~X=, =~O=, =~B=,
-and =~R=.
+****** Integer Directives
+ Five closely related directives format  integer values: =~D=, =~X=, =~O=, =~B=,
+ and =~R=.
 
-- =~D= :: the ~D directive outputs integers in base 10.
+ - =~D= :: the ~D directive outputs integers in base 10.
 
-- =~:D= :: with a colon modifier it adds commas.
+ - =~:D= :: with a colon modifier it adds commas.
 
-- =~@D= :: And with an at-sign modifier, it always prints a sign.
+ - =~@D= :: And with an at-sign modifier, it always prints a sign.
 
-- =~:@D= :: the two modifiers can be combined.
+ - =~:@D= :: the two modifiers can be combined.
 
-- =~#D=  :: The  first prefix  parameter can  specify a  minimum width  for the
-  output
+ - =~#D=  :: The  first prefix  parameter can  specify a  minimum width  for the
+   output
 
-- =~#,'#D= :: the second parameter can specify a padding character to use.
+ - =~#,'#D= :: the second parameter can specify a padding character to use.
 
-- =~,,'.D=  ::  the third  parameter  specifies  the  character  to use  as  the
-  separator between groups and digits (defaults to a comma)
+ - =~,,'.D=  ::  the third  parameter  specifies  the  character  to use  as  the
+   separator between groups and digits (defaults to a comma)
 
-- =~,,,4D= :: the fourth parameter specifies the number of digits per group (defaults
-  to 3)
+ - =~,,,4D= :: the fourth parameter specifies the number of digits per group (defaults
+   to 3)
 
-  Thus, you  can use  the directive  =~:D= without  parameters to  output large
-  integers in standard format for the United States but can change the comma to
-  a period and the grouping from 3 to 4 with =~,,'.,4D=.
+   Thus, you  can use  the directive  =~:D= without  parameters to  output large
+   integers in standard format for the United States but can change the comma to
+   a period and the grouping from 3 to 4 with =~,,'.,4D=.
 
-- =~X= =~O= =~B= :: work just like  the =~D= directive except they emit numbers
-  in hexadecimal (base 16), octal (base 8), and binary (base 2).
+ - =~X= =~O= =~B= :: work just like  the =~D= directive except they emit numbers
+   in hexadecimal (base 16), octal (base 8), and binary (base 2).
 
-  #+begin_example
-  (format nil "~x" 1000000) ==> "f4240"
-  (format nil "~o" 1000000) ==> "3641100"
-  (format nil "~b" 1000000) ==> "11110100001001000000"
-  #+end_example
+   #+begin_example
+   (format nil "~x" 1000000) ==> "f4240"
+   (format nil "~o" 1000000) ==> "3641100"
+   (format nil "~b" 1000000) ==> "11110100001001000000"
+   #+end_example
 
-- =~R=   :: the  general radix  directive.  It is  a  number between  2 and  36
-  (inclusive) that indicates what base to use. The remaining parameters are the
-  same as the  four parameters accepted by  the ~D, ~X, ~O,  and ~B directives,
-  and the colon and at-sign modifiers modify its behavior in the same way.
+ - =~R=   :: the  general radix  directive.  It is  a  number between  2 and  36
+   (inclusive) that indicates what base to use. The remaining parameters are the
+   same as the  four parameters accepted by  the ~D, ~X, ~O,  and ~B directives,
+   and the colon and at-sign modifiers modify its behavior in the same way.
 
-***** Floating-Point Directives
-Four directives format  floating-point values: =~F=, =~E=, =~G=,  and =~$=. You
-can  use the  =~F=, =~E=,  and  =~$= directives  to interpolate  floating-point
-values into text. The =~G=, or  general, floating-point directive, on the other
-hand, combines  aspects of  the =~F=  and =~E=  directives in  a way  that only
-really makes sense for generating tabular output.
+****** Floating-Point Directives
+ Four directives format  floating-point values: =~F=, =~E=, =~G=,  and =~$=. You
+ can  use the  =~F=, =~E=,  and  =~$= directives  to interpolate  floating-point
+ values into text. The =~G=, or  general, floating-point directive, on the other
+ hand, combines  aspects of  the =~F=  and =~E=  directives in  a way  that only
+ really makes sense for generating tabular output.
 
-- =~F= ::    emits  its argument, which should be a  number, in decimal format,
-  possibly controlling  the number  of digits  after the  decimal point.  It is
-  allowed to use computerized scientific notation if the number is sufficiently
-  large or small.  The second parameter controls the number  of digits to print
-  after the decimal point. Use the @-sign modifier to print a sign.
+ - =~F= ::    emits  its argument, which should be a  number, in decimal format,
+   possibly controlling  the number  of digits  after the  decimal point.  It is
+   allowed to use computerized scientific notation if the number is sufficiently
+   large or small.  The second parameter controls the number  of digits to print
+   after the decimal point. Use the @-sign modifier to print a sign.
 
-  : (format nil "~f" pi)   ==> "3.141592653589793d0"
-  : (format nil "~,4f" pi) ==> "3.1416"
+   : (format nil "~f" pi)   ==> "3.141592653589793d0"
+   : (format nil "~,4f" pi) ==> "3.1416"
 
-- =~E= ::  always emits  numbers in computerized  scientific notation.  Use the
-  @-sign modifier to print a sign.
+ - =~E= ::  always emits  numbers in computerized  scientific notation.  Use the
+   @-sign modifier to print a sign.
 
-  : (format nil "~e" pi)   ==> "3.141592653589793d+0"
-  : (format nil "~,4e" pi) ==> "3.1416d+0"
+   : (format nil "~e" pi)   ==> "3.141592653589793d+0"
+   : (format nil "~,4e" pi) ==> "3.1416d+0"
 
-- =~$=   ::  monetary,  directive is similar to =~F=. With  no parameters, it's
-  basically equivalent to =~,2F=. To modify  the number of digits printed after
-  the decimal  point, you use the  first parameter, while the  second parameter
-  controls the minimum number of digits  to print before the decimal point. Use
-  the @-sign modifier to print a sign.
+ - =~$=   ::  monetary,  directive is similar to =~F=. With  no parameters, it's
+   basically equivalent to =~,2F=. To modify  the number of digits printed after
+   the decimal  point, you use the  first parameter, while the  second parameter
+   controls the minimum number of digits  to print before the decimal point. Use
+   the @-sign modifier to print a sign.
 
-  : (format nil "~$" pi)    ==> "3.14"
-  : (format nil "~2,4$" pi) ==> "0003.14"
+   : (format nil "~$" pi)    ==> "3.14"
+   : (format nil "~2,4$" pi) ==> "0003.14"
 
-*** English Language Directives
-These directives  allow you to  emit numbers as  English words, to  emit plural
-markers based on the value of a  format argument, and to apply case conversions
-to sections of FORMAT's output.
+**** English Language Directives
+ These directives  allow you to  emit numbers as  English words, to  emit plural
+ markers based on the value of a  format argument, and to apply case conversions
+ to sections of FORMAT's output.
 
-- =~R= :: when used with no base  specified, prints numbers as English words or
-  Roman numerals
+ - =~R= :: when used with no base  specified, prints numbers as English words or
+   Roman numerals
 
-  When used with no  prefix parameter and no modifiers, it  emits the number in
-  words as a cardinal  number
+   When used with no  prefix parameter and no modifiers, it  emits the number in
+   words as a cardinal  number
 
-  With the  colon modifier,  it emits  the number  as an  ordinal
+   With the  colon modifier,  it emits  the number  as an  ordinal
 
-  And with an  at-sign modifier, it emits  the number as a  Roman numeral; with
-  both an  at-sign and a  colon, it emits  "old-style" Roman numerals  in which
-  fours and nines are written as IIII and VIIII instead of IV and IX.
+   And with an  at-sign modifier, it emits  the number as a  Roman numeral; with
+   both an  at-sign and a  colon, it emits  "old-style" Roman numerals  in which
+   fours and nines are written as IIII and VIIII instead of IV and IX.
 
-- =~P= :: simply emits an s  unless the corresponding argument is 1. Typically,
-  however, you'll use ~P with the  colon modifier, which causes it to reprocess
-  the previous format argument.
+ - =~P= :: simply emits an s  unless the corresponding argument is 1. Typically,
+   however, you'll use ~P with the  colon modifier, which causes it to reprocess
+   the previous format argument.
 
-  : (format nil "~r file~:p" 10) ==> "ten files"
+   : (format nil "~r file~:p" 10) ==> "ten files"
 
-  With the  at-sign modifier, which  can be  combined with the  colon modifier,
-  =~P= emits either =y= or =ies=.
+   With the  at-sign modifier, which  can be  combined with the  colon modifier,
+   =~P= emits either =y= or =ies=.
 
-  : (format nil "~r famil~:@p" 10) ==> "ten families"
+   : (format nil "~r famil~:@p" 10) ==> "ten families"
 
-- =~(= :: allows you to control the case  of text in the output. all the output
-  generated by the  portion of the control string between  the two markers will
-  be converted to all lowercase.
+ - =~(= :: allows you to control the case  of text in the output. all the output
+   generated by the  portion of the control string between  the two markers will
+   be converted to all lowercase.
 
-  You can modify ~(  with an at sign to make it capitalize  the first word in a
-  section of text
+   You can modify ~(  with an at sign to make it capitalize  the first word in a
+   section of text
 
-  with a colon to make it to capitalize all words,
+   with a colon to make it to capitalize all words,
 
-  with both modifiers to convert all text to uppercase.
+   with both modifiers to convert all text to uppercase.
 
-  #+begin_example
-  (format nil "~(~a~)" "tHe Quick BROWN foX")   ==> "the quick brown fox"
-  (format nil "~@(~a~)" "tHe Quick BROWN foX")  ==> "The quick brown fox"
-  (format nil "~:(~a~)" "tHe Quick BROWN foX")  ==> "The Quick Brown Fox"
-  (format nil "~:@(~a~)" "tHe Quick BROWN foX") ==> "THE QUICK BROWN FOX"
-  #+end_example
+   #+begin_example
+   (format nil "~(~a~)" "tHe Quick BROWN foX")   ==> "the quick brown fox"
+   (format nil "~@(~a~)" "tHe Quick BROWN foX")  ==> "The quick brown fox"
+   (format nil "~:(~a~)" "tHe Quick BROWN foX")  ==> "The Quick Brown Fox"
+   (format nil "~:@(~a~)" "tHe Quick BROWN foX") ==> "THE QUICK BROWN FOX"
+   #+end_example
 
-** Conditional Formatting
-FORMAT  provides several  directives that  implement simple  control constructs
-within the control string.
+*** Controlled Formatting
+ FORMAT  provides several  directives that  implement simple  control constructs
+ within the control string.
 
-*** Conditional Directive
+**** Conditional Directive
 
-- =~[= :: This directive is closed by  a corresponding =~]=, and in between are
-  a number of  clauses separated by =~;=.  The job of the =~[=  directive is to
-  pick  one of  the  clauses, which  is  then processed  by  ~FORMAT~
+ - =~[...~;...~:;...~]= ::  This directive is closed  by a corresponding =~]=,  and in
+   between  are a  number of  clauses separated  by =~;=.  The job  of the  =~[=
+   directive is to pick one of the clauses, which is then processed by ~FORMAT~
 
-  With no modifiers or parameters, the clause is selected by numeric index; the
-  =~[= directive  consumes a  format argument,  which should  be a  number, and
-  takes the nth  (zero-based) clause where N  is the value of  the argument. If
-  the value of the  argument is greater than the number  of clauses, nothing is
-  printed. However, if the last clause separator is =~:;= instead of =~;=, then
-  the last clause serves as a default clause.
+   With no modifiers or parameters, the clause is selected by numeric index; the
+   =~[= directive  consumes a  format argument,  which should  be a  number, and
+   takes the =nth=  (zero-based) clause where =N= is the  value of the argument.
+   If the value of  the argument is greater than the  number of clauses, nothing
+   is printed. However,  if the last clause separator is  =~:;= instead of =~;=,
+   then the last clause serves as a default clause.
 
-  #+begin_example
-  (format nil "~[cero~;uno~;dos~]" 0) ==> "cero"
-  (format nil "~[cero~;uno~;dos~]" 1) ==> "uno"
-  (format nil "~[cero~;uno~;dos~]" 2) ==> "dos"
-  (format nil "~[cero~;uno~;dos~]" 3) ==> ""
-  format nil "~[cero~;uno~;dos~:;mucho~]" 3)   ==> "mucho"
-  (format nil "~[cero~;uno~;dos~:;mucho~]" 100) ==> "mucho"
-  #+end_example
+   #+begin_example
+   (format nil "~[cero~;uno~;dos~]" 0) ==> "cero"
+   (format nil "~[cero~;uno~;dos~]" 1) ==> "uno"
+   (format nil "~[cero~;uno~;dos~]" 2) ==> "dos"
+   (format nil "~[cero~;uno~;dos~]" 3) ==> ""
+   (format nil "~[cero~;uno~;dos~:;mucho~]" 3)   ==> "mucho"
+   (format nil "~[cero~;uno~;dos~:;mucho~]" 100) ==> "mucho"
+   #+end_example
 
-- =~#[= ::   It's  also possible to specify  the clause to be  selected using a
-  prefix  parameter.  =#= used  as  a  prefix  parameter  means the  number  of
-  arguments remaining to be processed.
+ - =~#[...~;...~:;...~]= ::    It's also  possible to specify  the clause  to be
+   selected using a  prefix parameter. =#= used as a  prefix parameter means the
+   number of arguments remaining to be processed.
 
-  : (defparameter *list-etc*
-  :    "~#[NONE~;~a~;~a and ~a~:;~a, ~a~]~#[~; and ~a~:;, ~a, etc~].")
+   : (defparameter *list-etc*
+   :    "~#[NONE~;~a~;~a and ~a~:;~a, ~a~]~#[~; and ~a~:;, ~a, etc~].")
 
-  With a colon  modifier, the =~[= can contain only  two clauses; the directive
-  consumes a single argument and processes  the first clause if the argument is
-  NIL and the second clause is otherwise.
+ - =~:[...~]= :: With  a colon modifier, the =~[= can  contain only two clauses;
+   the directive  consumes a single argument  and processes the first  clause if
+   the argument is NIL and the second clause is otherwise.
 
-  Finally,  with an  at-sign modifier,  the =~[=  directive can  have only  one
-  clause. The directive  consumes one argument and, if  it's non-NIL, processes
-  the clause  after backing up  to make the  argument available to  be consumed
-  again.
+   : (format t "~:[FAIL~;pass~]" test-result)
 
-*** Iteration
+ - =~@[...~]= ::  Finally, with an at-sign modifier, the =~[= directive can have
+   only one  clause. The directive consumes  one argument and, if  it's non-NIL,
+   processes the  clause after backing up  to make the argument  available to be
+   consumed again.
 
-- =~{= :: This directive tells ~FORMAT~ to  iterate over the elements of a list
-  or over the implicit  list of the format arguments. The  text between the two
-  markers is processed as a control  string, which draws its arguments from the
-  list consumed  by the =~{=  directive. ~FORMAT~ will repeatedly  process this
-  control string for as long as the list being iterated over has elements left.
+   #+begin_example
+   (format nil "~@[x = ~a ~]~@[y = ~a~]" 10 20)   ==> "x = 10 y = 20"
+   (format nil "~@[x = ~a ~]~@[y = ~a~]" 10 nil)  ==> "x = 10 "
+   (format nil "~@[x = ~a ~]~@[y = ~a~]" nil 20)  ==> "y = 20"
+   (format nil "~@[x = ~a ~]~@[y = ~a~]" nil nil) ==> ""
+   #+end_example
+
+**** Iteration Directive
+
+ - =~{...~}= :: This directive tells ~FORMAT~  to iterate over the elements of a
+   list or over the implicit list of  the format arguments. The text between the
+   two markers is processed as a  control string, which draws its arguments from
+   the list  consumed by  the =~{= directive.  ~FORMAT~ will  repeatedly process
+   this control string for as long as  the list being iterated over has elements
+   left.
+
+ - =~{...~^...~}= ::  Within  the body of a =~{= directive,  the =~^= causes the
+   iteration to  stop immediately,  without processing the  rest of  the control
+   string, when  no elements  remain in  the list. Thus,  to avoid  printing the
+   comma and space after the last element of a list, you can precede them with a
+   =~^=.
+
+   : (format nil "~{~a~^, ~}" (list 1 2 3)) ==> "1, 2, 3"
+
+ - =~@{...~}= ::  With an at-sign modifier, =~@{= processes the remaining format
+   arguments as a list.
+
+   : (format nil "~@{~a~^, ~}" 1 2 3) ==> "1, 2, 3"
+
+ - =~{...~#[...~]...~}=  ::   Within the body of a =~{...~}=, the special prefix
+   parameter =#= refers to the number of  items remaining to be processed in the
+   list rather than the number of  remaining format arguments. You can use that,
+   along with the =~[= directive, to  print a comma-separated list with an "and"
+   before the last item like this:
+
+   : (format nil "~{~a~#[~;, and ~:;, ~]~}" (list 1 2 3)) ==> "1, 2, and 3"
+
+   However, that doesn't really work right if the list is two items long because
+   it adds an extra comma.
+
+ - =~{...~@{...~}...~}= ::   The following  takes advantage  of the  behavior of
+   =~@{= when  nested inside another  =~{= or =~@{= directive--it  iterates over
+   whatever items remain in the list being  iterated over by the outer =~{=. You
+   can combine that with a =~#[=  directive to make the following control string
+   for formatting lists according to English grammar:
+
+   : (defparameter *english-list*
+   :    "~{~#[~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~}")
+
+ - =<empty>= ::  If you wanted to print something special such as =<empty>= when
+   the list was empty,  you have a couple ways to do it.  Perhaps the easiest is
+   to put the  text you want into  the first (zeroth) clause of  the outer =~#[=
+   and then add a colon modifier to the closing =~}= of the outer iteration--the
+   colon forces  the iteration  to be  run at least  once, even  if the  list is
+   empty, at which point ~FORMAT~ processes the zeroth clause of the conditional
+   directive.
+
+   : (defparameter *english-list*
+   :    "~{~#[<empty>~;~a~;~a and ~a~:;~@{~a~#[~;, and ~:;, ~]~}~]~:}")
+
+ - Additional =~{=  ::   The =~{=  directive provides even more  variations with
+   different combinations  of prefix  parameters and modifiers.  You can  use an
+   integer prefix parameter to limit the  maximum number of iterations and that,
+   with a colon modifier, each element of the list (either an actual list or the
+   list constructed by the =~@{= directive) must itself be a list whose elements
+   will  then be  used as  arguments  to the  control string  in the  =~:{...~}=
+   directive.
+
+**** Jump Directive
+ - =~*= :: The =~*=  directive, allows you to jump around in  the list of format
+   arguments. In  its basic form,  without modifiers,  it simply skips  the next
+   argument, consuming it  without emitting anything.
+
+ - =~:*= :: More  often, however, it's used with a  colon modifier, which causes
+   it to move backward, allowing the same argument to be used a second time. You
+   can use =~:*= to print a numeric argument once as a word and once in numerals
+   like this:
+
+   : (format nil "~r ~:*(~d)" 1) ==> "one (1)"
+
+   Or you could  implement a directive similar to =~:P=  for an irregular plural
+   by combing =~:*= with =~[=.
+
+   #+begin_example
+   (format nil "I saw ~r el~:*~[ves~;f~:;ves~]." 0) ==> "I saw zero elves."
+   (format nil "I saw ~r el~:*~[ves~;f~:;ves~]." 1) ==> "I saw one elf."
+   (format nil "I saw ~r el~:*~[ves~;f~:;ves~]." 2) ==> "I saw two elves."
+   #+end_example
+
+ - =~{...~*...= ::   Within an =~{= directive,  =~*= skips or backs  up over the
+   items in  the list. For instance,  you could print  only the keys of  a plist
+   like this:
+
+   : (format nil "~{~s~*~^ ~}" '(:a 10 :b 20)) ==> ":A :B"
+
+ - =~<p>*= ::
+
+   The =~*= directive can also be given a prefix parameter.
+
+   With no  modifiers or with the  colon modifier, this parameter  specifies the
+   number of arguments to move forward or  backward and defaults to one
+
+ - =~<p>@*=  :: With  an at-sign  modifier,  the prefix  parameter specifies  an
+   absolute, zero-based  index of the argument  to jump to, defaulting  to zero.
+   The  at-sign variant  of =~*=  can be  useful if  you want  to use  different
+   control strings to generate different messages  for the same arguments and if
+   different messages need to use the arguments in different orders.
+
 * Common Lisp Packages
 Avoiding name  conflicts between  independently developed  pieces of  code.  In
 Common Lisp the  namespace problem boils down to a  question of controlling how
