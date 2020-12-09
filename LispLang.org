@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-09 08:09
-#+macro:version Version 0.0.96
+#+date:2020-12-09 08:59
+#+macro:version Version 0.0.97
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -5855,6 +5855,131 @@ When applications are done well, they are just the really application-specific,
 brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
 reusable  components sublimate  away onto  github and  npm where  everybody can
 collaborate to advance the commons.
+* Common Lisp Condition System
+
+#+cindex:condition system
+One of  Lisp's great features  is its /condition  system/. It serves  a similar
+purpose to the exception handling systems in  Java, Python, and C++ but is more
+flexible. Its  flexibility extends beyond error  handling---conditions are more
+general than exceptions in that a condition can represent any occurrence during
+a program's execution  that may be of  interest to code at  different levels on
+the call stack.
+
+The condition system is more flexible than exception systems because instead of
+providing a  two-part division between the  code that signals an  error and the
+code that  handles it,  the condition system  splits the  responsibilities into
+three parts:
+
+1. signaling a condition,
+2. handling it, and
+3. restarting.
+
+
+In this chapter, I'll describe how you could use conditions in part of a
+hypothetical application for analyzing log files. You'll see how you could use
+the condition system:U
+
+- to allow a  low-level function to detect  a problem while parsing  a log file
+  and signal an error,
+- to allow mid-level  code to provide several possible ways  of recovering from
+  such an error, and
+- to allow code at the highest level  of the application to define a policy for
+  choosing which recovery strategy to use.
+
+** Terminology
+- error :: not a  bug, but rather something occurring that may  stop a piece of
+  code from running: a  file is missing, a disk is full,  a server has crashed,
+  the network is down. However, if the  rest of the program is depending on the
+  actions that were  going to be taken,  then you'd better deal  with the error
+  somehow or you will have introduced a  bug. So, errors aren't caused by bugs,
+  but neglecting to handle an error is almost certainly a bug.
+
+- call stack :: In a well-written program,  each function is a black box hiding
+  its  inner workings.  Programs are  then built  out of  layers of  functions:
+  high-level functions  are built on top  of the lower-level functions,  and so
+  on. This hierarchy  of functionality manifests itself at runtime  in the form
+  of the call  stack: if high calls  medium, which calls low, when  the flow of
+  control is in low, it's also still in medium and high, that is, they're still
+  on the call stack.
+
+  Function boundaries are an excellent place to deal with errors. If any of the
+  functions  in the  call stack  can somehow  do their  job despite  underlying
+  errors,  then none  of the  functions  above it  needs  to know  there was  a
+  problem.
+
+- error handling ::  In most languages,  errors are handled by returning from a
+  failing function  and giving the  caller the  choice of either  recovering or
+  failing  itself. Some  languages use  the normal  function return  mechanism,
+  while languages with  /exceptions/ return control by  /throwing/ or /raising/
+  an exception.
+
+  Both schemes suffer  from a common flaw: while searching  for a function that
+  can recover, the stack unwinds, which means code that might recover has to do
+  so without the context of what the lower-level code was trying to do when the
+  error actually occurred.
+
+** Common Lisp Conditions
+Common Lisp's error  handling system gives you  a way out of  this conundrum by
+letting you  separate the code  that actually recovers  from an error  from the
+code that decides how to recover. Thus,  you can put recovery code in low-level
+functions  without  committing  to   actually  using  any  particular  recovery
+strategy, leaving that decision to code in high-level functions.
+
+*** An Example
+To get a sense  of how this works, let's suppose  you're writing an application
+that reads some sort of textual log file, such as a Web server's log. Somewhere
+in your application you'll have a function to parse the individual log entries.
+Let's assume you'll write a function,  ~parse-log-entry~, that will be passed a
+string containing the text of a single log entry and that is supposed to return
+a =log-entry= object representing the entry.  This function will be called from
+a function, ~parse-log-file~, that reads a complete log file and returns a list
+of objects representing all the entries in the file.
+
+To keep things  simple, the ~parse-log-entry~ function will not  be required to
+parse incorrectly formatted  entries. It will, however, be able  to detect when
+its input is malformed.  But what should it do when it detects  bad input? In C
+you'd return a special value to indicate there was a problem. In Java or Python
+you'd throw or raise an exception. In Common Lisp, you signal a condition.
+
+*** Condition Object
+A /condition/  is an  object whose  class indicates the  general nature  of the
+condition and whose instance data carries  information about the details of the
+particular circumstances  that lead  to the condition  being signaled.  In this
+hypothetical  log  analysis  program,  you  might  define  a  condition  class,
+=malformed-log-entry-error=, that  ~parse-log-entry~ will signal if  it's given
+data it can't parse.
+
+**** Condition Classes are defined with DEFINE-CONDITION Macro
+Condition classes  are defined with  the ~DEFINE-CONDITION~ macro,  which works
+essentially  the same  as  ~DEFCLASS~  except that  the  default superclass  of
+classes   defined   with   ~DEFINE-CONDITION~  is   =CONDITION=   rather   than
+=STANDARD-OBJECT=. Slots are  specified in the same way,  and condition classes
+can  singly  and  multiply  inherit   from  other  classes  that  descend  from
+=CONDITION=
+
+But for historical  reasons, condition classes aren't required  to be instances
+of  =STANDARD-OBJECT=, so  some of  the  functions you  use with  =DEFCLASS='ed
+classes aren't required  to work with conditions. In  particular, a condition's
+slots can't be accessed using ~SLOT-VALUE~; you must specify either a =:reader=
+option or  an =:accessor= option  for any slot whose  value you intend  to use.
+
+**** New Condition Objects are created with MAKE-CONDITION
+Likewise, new condition  objects are created with  ~MAKE-CONDITION~ rather than
+~MAKE-INSTANCE~. ~MAKE-CONDITION~  initializes the  slots of the  new condition
+based on the =:initargs= it's passed, but there's no way to further customize a
+condition's initialization, equivalent to ~INITIALIZE-INSTANCE~.
+
+**** Subclass of ERROR
+When using  the condition  system for  error handling,  you should  define your
+conditions as subclasses of =ERROR=, a subclass of =CONDITION=. Thus, you might
+define =malformed-log-entry-error=,  with a  slot to hold  the argument  that was
+passed to ~parse-log-entry~, like this:
+
+: (define-condition malformed-log-entry-error (error)
+:   ((text :initarg :text :reader text)))
+
+*** Condition Handler
+
 * Common Lisp Testing
 ** FiveAM
 "Common Lisp regression testing framework"
