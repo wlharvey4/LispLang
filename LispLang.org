@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-09 07:49
-#+macro:version Version 0.0.93
+#+date:2020-12-09 07:52
+#+macro:version Version 0.0.94
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1472,97 +1472,96 @@ API, and all the Windows API  functions are readily available from Lisp. Corman
 Lisp incorporates  state-of-the-art compiler technology  to bring you  a Common
 Lisp system unmatched on Windows platforms.
 
-* Common Lisp Documentation Resources
-** Common Lisp Specification
-"The ANSI Common  Lisp draft specification, parsed from  TeX sources, available
-as a Common Lisp library."
-
-- [[https://github.com/LispLang/ansi-spec][ANSI Common Lisp Specification]]
-
-** Common Lisp Hyper Spec
- - https://wiki.c2.com/?CommonLispHyperSpec
-
-
- The  CommonLisp Hyperspec  is  an HTMLified  version of  the  ANSI Common  Lisp
- language standard  (X3.226-1994). You can  view it  online or download  it from
- Xanalys (formerly Harlequin) at:
-
- - http://www.lispworks.com/reference/HyperSpec/
-** Common Lisp Cookbook
-- [[https://lispcookbook.github.io/cl-cookbook/][The Common Lisp Cookbook Home---GithubGroup Addendum]]
-- [[http://cl-cookbook.sourceforge.net/index.html][The Common Lisp Cookbook home---Sourceforge Version]]
-- [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
-- [[https://github.com/LispCookbook/cl-cookbook][On GitHub]]
-
-
-This is a  collaborative project that aims to provide  for Common Lisp
-something similar to the Perl Cookbook published by O'Reilly
-
-** Common Lisp The Language 2nd Edition
-- http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
-- https://wiki.c2.com/?CommonLispTheLanguage
-- [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, 2nd Edition from CMU]]
-- [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/cltl2/cltl2.html][Common Lisp the Language, 2nd Edition]]
-- Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
-
-** ANSI Common Lisp---Paul Graham
-- http://www.paulgraham.com/acl.html
-- Prentice Hall, 1995, 432 pages, paperback. ISBN 0133708756.
-- https://wiki.c2.com/?AnsiCommonLisp
-
-
-ANSI  Common  Lisp  combines  an   introduction  to  Lisp  programming,  and  a
-convenient, up-to-date  reference manual for  ANSI Common Lisp.  Beginners will
-find  that  its  careful  explanations   and  interesting  examples  make  Lisp
-programming  easy  to  learn.  Professional  programmers  will  appreciate  its
-thorough, practical approach.
-
-*** Features
-
-- An up-to-date reference manual for ANSI Common Lisp.
-- An in-depth look at object-oriented programming. Explains the Common Lisp
-  Object System (CLOS), and also shows how to write your own object-oriented
-  language.
-- Over 20 substantial examples, including programs for ray-tracing, text
-  generation, pattern-matching, logical inference, generating HTML, sorting and
-  searching, file I/O, compression, and date arithmetic.
-- Special attention to critical concepts, including prefix syntax, code
-  vs. data, recursion, functional programming, types, implicit pointers,
-  dynamic allocation, closures, macros, class precedence, and generic functions
-  vs. message-passing.
-- A complete guide to optimization.
-- The clearest and most thorough explanation of macros in any introductory
-  book.
-- Examples that illustrate Lisp programming styles, including rapid
-  prototyping, bottom-up programming, object-oriented programming, and embedded
-  languages.
-- An appendix on debugging, with examples of common errors.
-
-** Lisp Documentation Resources
- - Documentation :: https://common-lisp.net/documentation
-
- - QuickDocs :: http://quickdocs.org
-   Ready and Up-to-Date Documentation for All Common Lisp Projects.
-
- - QuickRef :: https://quickref.common-lisp.net/index-per-library.html
-   Reference manuals for Quicklisp libraries
-
- - Common Lisp in the Wild :: https://www.darkchestnut.com/book-common-lisp-application-deployment/
-
- - Books on CL :: https://cliki.net/Lisp+Books
-
- - The CL Cookbook :: https://lispcookbook.github.io/cl-cookbook/
-
- - The CL Ecosystem 2015 ::  https://borretti.me/article/common-lisp-sotu-2015
-
-** Articulate Common Lisp
-- http://articulate-lisp.com
-
-
-How to write Common Lisp in 2018 - an initiation manual for the
-uninitiated.
-
 * Common Lisp Resources
+** Common Lisp Documentation Resources
+*** Common Lisp Specification
+ "The ANSI Common  Lisp draft specification, parsed from  TeX sources, available
+ as a Common Lisp library."
+
+ - [[https://github.com/LispLang/ansi-spec][ANSI Common Lisp Specification]]
+
+*** Common Lisp Hyper Spec
+  - https://wiki.c2.com/?CommonLispHyperSpec
+
+
+  The  CommonLisp Hyperspec  is  an HTMLified  version of  the  ANSI Common  Lisp
+  language standard  (X3.226-1994). You can  view it  online or download  it from
+  Xanalys (formerly Harlequin) at:
+
+  - http://www.lispworks.com/reference/HyperSpec/
+*** Common Lisp Cookbook
+ - [[https://lispcookbook.github.io/cl-cookbook/][The Common Lisp Cookbook Home---GithubGroup Addendum]]
+ - [[http://cl-cookbook.sourceforge.net/index.html][The Common Lisp Cookbook home---Sourceforge Version]]
+ - [[https://lispcookbook.github.io/cl-cookbook/getting-started.html][The Common Lisp Cookbook – Getting started]]
+ - [[https://github.com/LispCookbook/cl-cookbook][On GitHub]]
+
+
+ This is a  collaborative project that aims to provide  for Common Lisp
+ something similar to the Perl Cookbook published by O'Reilly
+
+*** Common Lisp The Language 2nd Edition
+ - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/html/cltl/clm/clm.html
+ - https://wiki.c2.com/?CommonLispTheLanguage
+ - [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, 2nd Edition from CMU]]
+ - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/cltl2/cltl2.html][Common Lisp the Language, 2nd Edition]]
+ - Publisher: Digital Press; 2nd edition (June 15, 1990) ISBN 978-1555580414, ISBN 1555580416
+
+*** ANSI Common Lisp---Paul Graham
+ - http://www.paulgraham.com/acl.html
+ - Prentice Hall, 1995, 432 pages, paperback. ISBN 0133708756.
+ - https://wiki.c2.com/?AnsiCommonLisp
+
+
+ ANSI  Common  Lisp  combines  an   introduction  to  Lisp  programming,  and  a
+ convenient, up-to-date  reference manual for  ANSI Common Lisp.  Beginners will
+ find  that  its  careful  explanations   and  interesting  examples  make  Lisp
+ programming  easy  to  learn.  Professional  programmers  will  appreciate  its
+ thorough, practical approach.
+
+**** Features
+
+ - An up-to-date reference manual for ANSI Common Lisp.
+ - An in-depth look at object-oriented programming. Explains the Common Lisp
+   Object System (CLOS), and also shows how to write your own object-oriented
+   language.
+ - Over 20 substantial examples, including programs for ray-tracing, text
+   generation, pattern-matching, logical inference, generating HTML, sorting and
+   searching, file I/O, compression, and date arithmetic.
+ - Special attention to critical concepts, including prefix syntax, code
+   vs. data, recursion, functional programming, types, implicit pointers,
+   dynamic allocation, closures, macros, class precedence, and generic functions
+   vs. message-passing.
+ - A complete guide to optimization.
+ - The clearest and most thorough explanation of macros in any introductory
+   book.
+ - Examples that illustrate Lisp programming styles, including rapid
+   prototyping, bottom-up programming, object-oriented programming, and embedded
+   languages.
+ - An appendix on debugging, with examples of common errors.
+
+*** Lisp Documentation Resources
+  - Documentation :: https://common-lisp.net/documentation
+
+  - QuickDocs :: http://quickdocs.org
+    Ready and Up-to-Date Documentation for All Common Lisp Projects.
+
+  - QuickRef :: https://quickref.common-lisp.net/index-per-library.html
+    Reference manuals for Quicklisp libraries
+
+  - Common Lisp in the Wild :: https://www.darkchestnut.com/book-common-lisp-application-deployment/
+
+  - Books on CL :: https://cliki.net/Lisp+Books
+
+  - The CL Cookbook :: https://lispcookbook.github.io/cl-cookbook/
+
+  - The CL Ecosystem 2015 ::  https://borretti.me/article/common-lisp-sotu-2015
+
+*** Articulate Common Lisp
+ - http://articulate-lisp.com
+
+
+ How to write Common Lisp in 2018 - an initiation manual for the
+ uninitiated.
 ** Lisp-Lang
 - [[https://lisp-lang.org][Home]]
 *** Recommended Libraries
