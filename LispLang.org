@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-10 00:55
-#+macro:version Version 0.0.98
+#+date:2020-12-10 09:41
+#+macro:version Version 0.0.99
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -5918,6 +5918,108 @@ the condition system:U
   so without the context of what the lower-level code was trying to do when the
   error actually occurred.
 
+- signal  :: The primitive signaling function ~SIGNAL~ implements the mechanism
+  of searching  for an  applicable condition handler  and invoking  its handler
+  function.
+
+  The reason a handler can decline  to handle a condition by returning normally
+  is  because the  call to  the  handler function  is just  a regular  function
+  call--when the handler  returns, control passes back to  ~SIGNAL~, which then
+  looks for another, less recently bound handler that can handle the condition.
+  If ~SIGNAL~ runs  out of condition handlers before the  condition is handled,
+  it also returns normally.
+
+- =CONDITION=  class    :: A condition is  an object whose class  indicates the
+  general nature of  the condition and whose instance  data carries information
+  about the details of the particular  circumstances that lead to the condition
+  being   signaled.
+
+  A condition  is a  lot like  an exception in  Java or  Python except  not all
+  conditions represent an error or exceptional situation.
+
+- define-condition    macro   ::    Condition  classes  are  defined  with  the
+  ~DEFINE-CONDITION~  macro. The  default  superclass of  classes defined  with
+  ~DEFINE-CONDITION~ is =CONDITION= rather than =STANDARD-OBJECT=.
+
+- make-instance  :: New  condition  objects are  created with  ~MAKE-CONDITION~
+  rather than ~MAKE-INSTANCE~.
+
+- condition handler  ::  When a  condition is signaled, the signaling machinery
+  looks through  a list of active  /condition handlers/, looking for  a handler
+  that can handle the condition being  signaled based on the condition's class.
+  Each /condition handler/ consists of a *type specifier* indicating what types
+  of conditions  it can handle and  a *function* that takes  a single argument,
+  the  condition
+
+  At any given  moment there can be many active  condition handlers established
+  at  various levels  of the  call  stack. When  a condition  is signaled,  the
+  signaling machinery  finds the most  recently established handler  whose type
+  specifier  is compatible  with the  condition  being signaled  and calls  its
+  function, passing it the condition object.
+
+  The handler  function can then  choose whether  to handle the  condition.
+  - The  function can  decline to  handle the  condition by  simply returning
+    normally, in which  case control returns to the  ~SIGNAL~ function, which
+    will  search  for the  next  most  recently  established handler  with  a
+    compatible type specifier.
+  - To  handle the  condition,  the  function must  transfer  control out  of
+    ~SIGNAL~ via a nonlocal exit.
+
+- handler-case condition  handler ::   Many condition  handlers simply  want to
+  unwind the stack to  the place where they were established  and then run some
+  code. The macro ~HANDLER-CASE~ establishes this kind of condition handler.
+
+- =ERROR= class   :: When using  the condition  system for error  handling, you
+  should  define  your conditions  as  subclasses  of  =ERROR=, a  subclass  of
+  =CONDITION=.
+
+- ~error~ function  :: You signal errors with the function ~ERROR~, which calls
+  the  lower-level  function  ~SIGNAL~  and  drops into  the  debugger  if  the
+  condition isn't handled.
+
+  You  can call  ~ERROR~ two  ways:  you can  pass it  an already  instantiated
+  condition object, or you can pass it  the name of the condition class and any
+  initargs needed  to construct a  new condition,  and it will  instantiate the
+  condition for you.
+
+  if ~SIGNAL~  returns, ~ERROR~  invokes the debugger  by calling  the function
+  stored  in  ~*DEBUGGER-HOOK*~. Thus,  a  call  to  ~ERROR~ can  never  return
+  normally; the condition  must be handled either by a  condition handler or in
+  the debugger.
+
+- restart :: You place code that actually recovers from errors into /restarts/,
+  and condition handlers can then handle a condition by invoking an appropriate
+  restart. You  can place restart  code in  mid- or low-level  functions, while
+  moving the condition handlers into the upper levels of the application
+
+- restart-case  ::  To change  ~parse-log-file~  so  it establishes  a  restart
+  instead  of a  condition  handler, you  can change  the  ~HANDLER-CASE~ to  a
+  ~RESTART-CASE~.
+
+  The advantage of  establishing a restart rather  than having ~parse-log-file~
+  handle  the  error directly  is  it  makes  ~parse-log-file~ usable  in  more
+  situations.
+
+- warn :: Another condition signaling function,  an example of a different kind
+  of protocol built on the condition  system. ~WARN~ calls ~SIGNAL~ to signal a
+  condition. But  if ~SIGNAL~ returns,  ~WARN~ doesn't invoke  the debugger--it
+  prints  the condition  to =*ERROR-OUTPUT*=  and returns  =NIL=, allowing  its
+  caller to proceed.
+
+- muffle-warning :: ~WARN~ also establishes a restart, ~MUFFLE-WARNING~, around
+  the call to ~SIGNAL~  that can be used by a condition  handler to make ~WARN~
+  return without printing anything.
+
+- cerror  :: A  third error-signaling function, ~CERROR~,  provides yet another
+  protocol.  Like ~ERROR~,  ~CERROR~ will  drop you  into the  debugger if  the
+  condition it signals isn't handled. But like ~WARN~, it establishes a restart
+  before it signals the condition.  The restart, ~CONTINUE~, causes ~CERROR~ to
+  return normally--if  the restart is invoked  by a condition handler,  it will
+  keep you out  of the debugger altogether. Otherwise, you  can use the restart
+  once you're in  the debugger to resume the computation  immediately after the
+  call to  ~CERROR~. The function  ~CONTINUE~ finds and invokes  the ~CONTINUE~
+  restart if it's available and returns =NIL= otherwise.
+
 ** Common Lisp Conditions
 Common Lisp's error  handling system gives you  a way out of  this conundrum by
 letting you  separate the code  that actually recovers  from an error  from the
@@ -6254,7 +6356,7 @@ is ever signaled by code  called from ~log-analyzer~ without a ~skip-log-entry~
 having  been   established,  the  call   to  ~INVOKE-RESTART~  will   signal  a
 =CONTROL-ERROR= when it fails to find the ~skip-log-entry~ restart.
 
-If you  want to  allow for the  possibility that  a ~malformed-log-entry-error~
+If you  want to  allow for the  possibility that  a =malformed-log-entry-error=
 might  be signaled  from  code  that doesn't  have  a ~skip-log-entry~  restart
 established, you could change the ~skip-log-entry~ function to this:
 
@@ -6373,7 +6475,7 @@ could   be   slightly  malformed   but   still   parsable,  you   could   write
 signal a condition  with ~WARN~ when it did. Then  the larger application could
 choose to let the warning print, to muffle the warning, or to treat the warning
 like    an   error,    recovering   the    same   way    it   would    from   a
-~malformed-log-entry-error~.
+=malformed-log-entry-error=.
 
 A third error-signaling function, ~CERROR~, provides yet another protocol. Like
 ~ERROR~, ~CERROR~ will  drop you into the debugger if  the condition it signals
