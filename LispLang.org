@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2020-12-10 09:41
-#+macro:version Version 0.0.99
+#+date:2021-02-11 08:24
+#+macro:version Version 0.0.100
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -8774,6 +8774,8 @@ the object is of that type.
 - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/schintro/schintro_toc.html][An Introduction to Scheme and its Implementation]]
 
 - [[https://icem.folkwang-uni.de/~finnendahl/cm_kurse/doc/t-y-scheme/t-y-scheme.html][Teach Yourself Scheme in Fixnum Days]]
+
+- [[file:resources/src/TheSchemeProgrammingLanguage.txt][The Scheme Programming Language]]
 
 Scheme is a  member of the Lisp  family of languages. Scheme  was introduced in
 1975  by Gerald  J. Sussman  and Guy  L.  Steele Jr..  Scheme is  defined in  a
