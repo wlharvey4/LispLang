@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-02-11 09:10
-#+macro:version Version 0.0.101
+#+date:2021-02-11 09:17
+#+macro:version Version 0.0.102
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -9144,40 +9144,40 @@ Rubrics:
 
 There are seven kinds of expressions:
 
--  Constant:			'foo #\Z 3 "a string"
+-  Constant ::			'foo #\Z 3 "a string"
 
--  Variable reference:	foo joe a-long-name-for-an-identifier +
+-  Variable reference ::	foo joe a-long-name-for-an-identifier +
 
--  Procedure creation:	(lambda (z) (* z z z))
+-  Procedure creation ::	(lambda (z) (* z z z))
 
--  Procedure application:	(cube 37)
+-  Procedure application ::	(cube 37)
 
--  Conditional:			(if (< x 3) sqrt modulo)
+-  Conditional ::			(if (< x 3) sqrt modulo)
 
--  Assignment:			(set! x 5)
+-  Assignment ::			(set! x 5)
 
--  Sequence:			(begin (write x) (write y) (newline))
+-  Sequence ::			(begin (write x) (write y) (newline))
 
 
 Scheme has the usual assortment of data types:
 
--  Characters: #\a #\A #\b #\B #\space #\newline
+-  Characters :: =#\a #\A #\b #\B #\space #\newline=
 
--  Strings: "A little string"
+-  Strings :: "A little string"
 
--  Arrays (called vectors): #(1 2 "string" #\x 5)
+-  Arrays (called vectors) :: =#(1 2 "string" #\x 5)=
 
--  Lists: (a little (list of) (lists))
+-  Lists :: =(a little (list of) (lists))=
 
--  Numbers: 47 1/3 2.3 4.3e14 1+3i
+-  Numbers :: =47 1/3 2.3 4.3e14 1+3i=
 
--  Functions (also called procedures)
+-  Functions (also called procedures) ::
 
--  Booleans: #t #f
+-  Booleans :: =#t #f=
 
--  Ports (e.g. open files)
+-  Ports (e.g. open files) ::
 
--  Symbols: this-is-a-symbol foo a32 c$23*4&7+3-is-a-symbol-too!
+-  Symbols :: =this-is-a-symbol foo a32 c$23*4&7+3-is-a-symbol-too!=
 
 
 Rubrics:
@@ -9232,67 +9232,64 @@ worked up  over.  But  how many ways  can we implement  the trio:  pair, first,
 second?  There is a virtually endless variety.
 
 
-#+BEGIN_example
+#+begin_src lisp
+  ;; vector
 
-;; vector
+  (define (PAIR a b) (vector a b)) ;; or just: (define PAIR vector)
 
-(define (PAIR a b) (vector a b)) ;; or just: (define PAIR vector)
+  (define (FIRST  aPair) (vector-ref aPair 0))
 
-(define (FIRST  aPair) (vector-ref aPair 0))
+  (define (SECOND aPair) (vector-ref aPair 1))
 
-(define (SECOND aPair) (vector-ref aPair 1))
+  ------
 
-------
+  ;; selector function
 
-;; selector function
+  (define (PAIR a b) (lambda (bool) (if bool a b)))
 
-(define (PAIR a b) (lambda (bool) (if bool a b)))
+  (define (FIRST  aPair) (aPair #t))
 
-(define (FIRST  aPair) (aPair #t))
+  (define (SECOND aPair) (aPair #f))
 
-(define (SECOND aPair) (aPair #f))
+  ------
 
-------
+  ;; message passing
 
-;; message passing
+  (define (PAIR (a b)
 
-(define (PAIR (a b)
+    (lambda (msg)
 
-  (lambda (msg)
+       (case msg       ;; we'll implement CASE in the next article
 
-     (case msg       ;; we'll implement CASE in the next article
+	  ((first)  a) ;; when the message is the symbol first, return a
 
-        ((first)  a) ;; when the message is the symbol first, return a
+	  ((second) b)))))
 
-        ((second) b)
+  (define (FIRST  aPair) (aPair 'first))
 
-) )  )
+  (define (SECOND aPair) (aPair 'second))
 
-(define (FIRST  aPair) (aPair 'first))
+  ------
 
-(define (SECOND aPair) (aPair 'second))
+  ;; alias
 
-------
+  (define PAIR   cons)
 
-;; alias
+  (define FIRST  car)
 
-(define PAIR   cons)
+  (define SECOND cdr)
 
-(define FIRST  car)
+  ------
 
-(define SECOND cdr)
+  ;; pure functions
 
-------
+  (define (PAIR a b) (lambda (proc) (proc a b)))
 
-;; pure functions
+  (define (FIRST  aPair) (aPair (lambda (x y) x)))
 
-(define (PAIR a b) (lambda (proc) (proc a b)))
+  (define (SECOND aPair) (aPair (lambda (x y) y)))
+#+end_src
 
-(define (FIRST  aPair) (aPair (lambda (x y) x)))
-
-(define (SECOND aPair) (aPair (lambda (x y) y)))
-
-#+END_example
 
 The moral of  the above is not  to assume anything about  the implementation of
 interfaces--even simple ones.
@@ -9323,11 +9320,9 @@ transformation of the above code makes the stack visible.
   (define (identity value) value)
 
 
-
   ;; keep invocation of fact the same, but do something different
 
   (define (fact n) (cfact n identity))
-
 
 
   ;; the transformed recursive factorial
@@ -9337,7 +9332,6 @@ transformation of the above code makes the stack visible.
 	    (k 1)
 	    (cfact (sub1 n)
 		(lambda (result) (k (* n result))))))
-
 #+end_src
 
 
@@ -9351,7 +9345,7 @@ Let's look at what happens for (fact 3).
 =(fact 3)= is =(cfact 3 identity)=
 
 
-=(cfact 3 identity)= is 
+=(cfact 3 identity)= is
 
   #+begin_src lisp
     (cfact 2
