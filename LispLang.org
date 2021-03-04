@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-02-11 09:17
-#+macro:version Version 0.0.102
+#+date:2021-03-04 14:31
+#+macro:version Version 0.0.103
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -2728,7 +2728,13 @@ Lisp code for the textbook "Paradigms of Artificial Intelligence Programming"
 
  "Planet SBCL is a meta blog that collects the contents of various
  SBCL-related blogs. It was inspired by Planet Lisp."
-** Common Lisp Blogs
+** Lisp Blogs
+*** Sacha Chua
+- https://sachachua.com/blog/emacs/
+
+**** Emacs News
+- https://sachachua.com/blog/category/emacs-news/
+
 *** Lispology
  "RANDOM THOUGHTS ABOUT COMMON LISP"
  - http://www.lispology.com/
