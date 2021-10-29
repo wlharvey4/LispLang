@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-03-04 14:31
-#+macro:version Version 0.0.103
+#+date:2021-10-29 07:38
+#+macro:version Version 0.0.109
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1372,8 +1372,9 @@ MacTeX 2014 works.
 - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
 - [[https://github.com/roswell/clasp][CLASP on Roswell on GitHub]]
 
-
 "Bringing Common Lisp and C++ Together"
+
+NOTE: September 7, 2021 - This contains a pre-release of Clasp 1.0.
 
 Clasp is an implementation of  Common Lisp primarily designed for compatibility
 with C++-language programs and libraries.  Clasp conforms with the requirements
@@ -1472,7 +1473,1746 @@ API, and all the Windows API  functions are readily available from Lisp. Corman
 Lisp incorporates  state-of-the-art compiler technology  to bring you  a Common
 Lisp system unmatched on Windows platforms.
 
+* Common-Lisp Ecosystem Support
+
+** Roswell---Common Lisp environment setup Utility
+- [[https://github.com/roswell/roswell][Github Source]]
+- [[https://github.com/roswell/roswell/wiki][Wiki]]
+
+Roswell is a Lisp implementation installer/manager, launcher, and much more!
+
+Roswell started out as a command-line tool  with the aim to make installing and
+managing Common Lisp implementations really simple and easy.
+
+Roswell  has  now  evolved  into  a  full-stack  environment  for  Common  Lisp
+development,  and has  many features  that makes  it easy  to test,  share, and
+distribute your Lisp applications. With Roswell, we aim to push the Common Lisp
+community to a whole new level of productivity.
+
+** SLIME---Superior Lisp Interaction Mode for Emacs
+- [[https://common-lisp.net/project/slime/][SLIME Home]]
+- [[https://github.com/slime/slime][Github Source]]
+- [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual v2.24]]
+- [[https://www.youtube.com/watch?v=NUpAvqa5hQw][SLIME Tutorial from Marco Baringer 2005]]
+- [[https://www.youtube.com/watch?v=VnWVu8VVDbI][Baggers' Installing Common Lisp, Emacs, SLIME & Quicklisp. 2013]]
+- [[https://www.youtube.com/watch?v=sBcPNr1CKKw][Baggers' Emacs with SLIME — Really useful keyboard shortcuts. 2014]]
+
+SLIME  extends  Emacs  with  support  for  interactive  programming  in  Common
+Lisp. The  features are  centered around slime-mode,  an Emacs  minor-mode that
+complements  the  standard lisp-mode.  While  lisp-mode  supports editing  Lisp
+source files,  slime-mode adds  support for interacting  with a  running Common
+Lisp process for compilation, debugging, documentation lookup, and so on.
+
+*** SLIME Features
+
+- SLIME mode---An Emacs minor-mode to enhance lisp-mode with
+- SLDB---Common Lisp debugger with an Emacs-based user interface
+- REPL---The Read-Eval-Print Loop ("top-level")
+- Compilation notes
+- Inspector
+
+** ASDF3---Another System Definition Facility
+- [[https://common-lisp.net/project/asdf/][ASDF Home]]
+
+#+cindex:asdf
+"ASDF is the de facto standard build facility for Common Lisp."
+
+- [[https://common-lisp.net/project/asdf/][ASDF Project Website]]
+- [[https://www.common-lisp.net/project/asdf/asdf/index.html][ASDF Manual]]
+
+: (require "asdf")
+
+
+- +The latest release is 3.3.4, published on February 14th, 2019.+
+- The latest release is 3.3.5, published on July 2nd, 2021.
+
+*** What asdf Is
+ASDF is what Common Lisp hackers use to build and load software.
+
+ASDF 3 contains two parts: ~asdf/defsystem~ and ~uiop~.
+
+~asdf/defsystem~  is the  part that  people usually  refer to  as =ASDF=,  with
+~uiop~ being only  a supporting library, that happens to  be distributed at the
+same time, by necessity.
+
+**** asdf/defsystem
+#+cindex:asdf/defsystem
+is a tool to *describe* how Lisp source code is organized in /systems/, and how
+to *build* and *load* these systems. The  build happens based on a plan in term
+of /actions/  that depend on  previous actions; the  plan is computed  from the
+structure of the systems.
+
+Typical /actions/ consist of:
+- *compiling* a Lisp source file
+- *loading* the resulting compilation output
+
+
+You  must  typically compile  and  load  files  that define  packages,  macros,
+variables,  before  you  may  compile  and load  other  files  that  use  them.
+Importantly, ASDF builds all software in  the current Lisp image, as opposed to
+building software into separate processes.
+
+**** uiop
+
+#+cindex:uiop
+the  /Utilities for  Implementation- and  OS- Portability/,  formerly known  as
+~asdf/driver~, is a Common Lisp  portability library and runtime support system
+that helps you write Common Lisp software in a portable way.
+
+~uiop~ is distributed as part of =ASDF=:  its source code is transcluded in the
+single-file ~asdf.lisp~ being distributed and the precompiled fasls provided by
+Lisp implementations. =ASDF= relies heavily on it for its portability layer and
+runtime support, particularly so as  to handle pathnames and filesystem access.
+~uiop~  is  useful  on  its  own  and can  also  be  compiled  and  distributed
+separately.
+
+*** What asdf Is Not
+#+cindex:Quicklisp
+=ASDF= will  not download missing  software components  for you. For  that, you
+want  =Quicklisp=, that  builds  upon  =ASDF=, and  is  great  for pulling  and
+installing tarballs of packages you may depend upon.
+
+#+cindex:clbuild
+We also recommend [[https://common-lisp.net/project/clbuild/][~clbuild~]], that now  builds upon =Quicklisp=, as a great tool
+for  pulling from  version  control packages  you  need to  modify  or want  to
+contribute to.
+
+#+cindex:asdf-install
+We  recommend you  should not  use ~asdf-install~  anymore, as  it is  an older
+similar piece of software that is both unmaintained and obsolete.
+
+#+cindex:cl-launch
+#+cindex:buildapp
+#+cindex:roswell
+=ASDF= is also  not a tool to build  or run Common Lisp software  from the Unix
+command-line. For that, you want:
+- [[https://cliki.net/cl-launch][~cl-launch~]],
+- [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
+- [[https://github.com/roswell/roswell][~roswell~]]
+
+*** Getting started with ASDF
+    :PROPERTIES:
+    :author:   Michael Anckaert
+    :date:     2020-07-29
+    :END:
+- [[https://sinax.be/blog/lisp/getting-started-with-asdf.html][Getting started with ASDF]]
+
+In this article  I will try and explain  what ASDF is from a  beginner point of
+view. As a new Lisp developer you're  bound to run into ASDF sooner than later.
+ASDF  is a  defacto standard  in the  Lisp world  so a  basic understanding  is
+essential to being productive.
+
+** QuickLisp---Common-Lisp Library Manager
+- [[https://www.quicklisp.org/beta/][QuickLisp Home]]
+- [[http://blog.quicklisp.org][Quicklisp News]]
+
+
+It works  with your existing  Common Lisp implementation to  download, install,
+and load any of over 1,500 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5] It works
+with:
+
+- ABCL,
+- Allegro CL,
+- Clasp,
+- Clozure CL,
+- CLISP,
+- CMUCL,
+- ECL,
+- LispWorks,
+- MKCL,
+- SBCL, and
+- Scieneer CL, on
+- Linux,
+- Mac OS X, and
+- Windows.
+
+
+QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
+other languages call a  library or module, i.e., a set of files,  and a list of
+any other systems that this system depends on.<
+
+*** QuickLisp Installation and Setup
+ To get started with the Quicklisp beta, download and load:
+ : https://beta.quicklisp.org/quicklisp.lisp
+
+ Then, to install and configure SLIME for QuickLisp:
+ : (ql:quickload "quicklisp-slime-helper")
+
+ The  following shell  script will  install ~quicklisp~  for your  user account
+ using Clozure Common Lisp (CCL), update its init file, and configure it to use
+ SLIME[fn::Other  implementations  will  have  slightly  different  commandline
+ requirements.]:
+
+ #+caption: Shell Script to Install Quicklisp Using CCL
+ #+name:ccl-quicklisp-install
+ #+header: :dir ~
+ #+begin_src sh :exports code :results verbatim output
+   [[ ! -d ".quicklisp" ]] && { \
+   echo "Installing quicklisp...";
+   mkdir -v ./.quicklisp;
+   curl -O https://beta.quicklisp.org/quicklisp.lisp;
+   # The installation script is expecting the user to hit the <RETURN> key;
+   # as well, the @@texinfo:@opt{@@--batch@@texinfo:}@@ expects an EOF marker.
+   # The use of ~echo~ seems to satisfy both requirements.
+   echo | \
+   ccl -Q --batch \
+          --load  quicklisp.lisp \
+          --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
+          --eval '(ql:add-to-init-file)' \
+          --eval '(ql:quickload "quicklisp-slime-helper")';
+   rm quicklisp.lisp;
+   echo "Done installing.";
+   } || { echo "Quicklisp is already installed."; }
+ #+end_src
+
+ #+RESULTS: ccl-quicklisp-install
+ #+begin_example
+ Installing quicklisp...
+ mkdir: created directory './.quicklisp'
+
+   ==== quicklisp quickstart 2015-01-28 loaded ====
+
+     To continue with installation, evaluate: (quicklisp-quickstart:install)
+
+     For installation options, evaluate: (quicklisp-quickstart:help)
+
+ ; Fetching #<URL "http://beta.quicklisp.org/client/quicklisp.sexp">
+ ; 0.82KB
+ ==================================================
+ 838 bytes in 0.00 seconds (897.32KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2020-01-04/quicklisp.tar">
+ ; 250.00KB
+ ==================================================
+ 256,000 bytes in 0.04 seconds (5591.84KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/client/2015-09-24/setup.lisp">
+ ; 4.94KB
+ ==================================================
+ 5,054 bytes in 0.00 seconds (6434.87KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/asdf/2.26/asdf.lisp">
+ ; 194.07KB
+ ==================================================
+ 198,729 bytes in 0.05 seconds (4305.33KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp.txt">
+ ; 0.40KB
+ ==================================================
+ 408 bytes in 0.00 seconds (543.57KB/sec)
+ Installing dist "quicklisp" version "2020-10-16".
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/releases.txt">
+ ; 468.69KB
+ ==================================================
+ 479,939 bytes in 0.07 seconds (6496.51KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/systems.txt">
+ ; 341.59KB
+ ==================================================
+ 349,788 bytes in 0.05 seconds (6902.90KB/sec)
+
+   ==== quicklisp installed ====
+
+     To load a system, use: (ql:quickload "system-name")
+
+     To find systems, use: (ql:system-apropos "term")
+
+     To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
+
+     For more information, see http://www.quicklisp.org/beta/
+
+ I will append the following lines to #P"/Users/minilolh/.ccl-init.lisp":
+
+   ;;; The following lines added by ql:add-to-init-file:
+   #-quicklisp
+   (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp" (user-homedir-pathname))))
+     (when (probe-file quicklisp-init)
+       (load quicklisp-init)))
+
+ Press Enter to continue.
+ To load "quicklisp-slime-helper":
+   Load 1 ASDF system:
+     asdf
+   Install 3 Quicklisp releases:
+     alexandria quicklisp-slime-helper slime
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz">
+ ; 802.88KB
+ ==================================================
+ 822,146 bytes in 0.11 seconds (7054.23KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz">
+ ; 53.45KB
+ ==================================================
+ 54,730 bytes in 0.02 seconds (3438.89KB/sec)
+ ; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2015-07-09/quicklisp-slime-helper-20150709-git.tgz">
+ ; 2.16KB
+ ==================================================
+ 2,211 bytes in 0.00 seconds (2898.23KB/sec)
+ ; Loading "quicklisp-slime-helper"
+ [package swank-loader]............................
+ [package swank/backend]...........................
+ [package swank/rpc]...............................
+ [package swank/match].............................
+ [package swank-mop]...............................
+ [package swank]...................................
+ [package swank-monitor]...........................
+ [package swank/ccl]...............................
+ [package cross-reference].........................
+ [package swank/gray]..............................
+ ...............................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-util.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-repl.lisp"....................
+ [package swank-repl]...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-c-p-c.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-arglists.lisp"............................
+ ...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fuzzy.lisp".......
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fancy-inspector.lisp".................
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentations.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentation-streams.lisp".....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-asdf.lisp".........
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-package-fu.lisp"...
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-hyperdoc.lisp"....
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-mrepl.lisp".....................
+ [package swank-api]...............................
+ [package swank-mrepl]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-trace-dialog.lisp"..............................
+ [package swank-trace-dialog]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-macrostep.lisp".......................
+ [package swank-macrostep]..
+ ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-quicklisp.lisp"...
+ .......................
+ [package alexandria]..............................
+ ..................................................
+ ..................................................
+ [package alexandria-2]............................
+ [package quicklisp-slime-helper]
+ slime-helper.el installed in "/Users/minilolh/.quicklisp/slime-helper.el"
+
+ To use, add this to your ~/.emacs:
+
+   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+   ;; Replace "sbcl" with the path to your implementation
+   (setq inferior-lisp-program "sbcl")
+
+
+ Done installing.
+ #+end_example
+
+*** QuickLisp Load
+
+ To load Quicklisp into your Common Lisp session after the initial installation,
+ (unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
+
+ : (load "~/quicklisp/setup.lisp")
+
+ To load software, use:
+
+ : (ql:quickload "system-name")
+
+ Quicklisp will automatically download any  supporting software it needs to load
+ the system.
+
+ By default, ~ql:quickload~ hides most compilation and loading output, including
+ warnings, and shows progess as a series  of dots. You can show full compilation
+ and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
+ output can be especially helpful when reporting and troubleshooting problems.
+ There is also a =:silent t= mode.
+
+ : (ql:quickload “system-name” :verbose t)
+ : (ql:quickload "system-name" :silent t)
+
+ #+texinfo: @heading ASDF Manifest File
+
+ : (ql:write-asdf-manifest-file)
+ now includes systems from the local-projects directories.
+
+*** Quicklisp Updates
+ To get updated software, use ~ql:update-dist~.
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-dist "quicklisp")
+ #+end_src
+
+ #+RESULTS:
+ : You already have the latest version of "quicklisp": 2020-10-16.
+
+ To update the Quicklisp client use ~ql:update-client~.
+
+ Be sure to first start ~slime~:
+ #+begin_src lisp :results output
+ (ql:update-client)
+ #+end_src
+
+ #+RESULTS:
+ : The most up-to-date client, version 2020-01-04, is already installed.
+
+*** QuickLisp Libraries
+ To find out what's available in Quicklisp, use:
+
+ : (ql:system-apropos substring)
+
+ To see what systems depend on a particular system, use:
+
+ : (ql:who-depends-on system-name)
+
+*** QuickLisp Unload
+ To remove software, use:
+
+ : (ql:uninstall system-name)
+
+ An uninstall does the following:
+
+ - Deletes the system's tarball archive and unpacked source files
+ - Deletes Quicklisp metadata files associated with the system
+ - Clears ASDF's system cache via asdf:clear-system.
+
+
+ Uninstalling does not alter  the current Lisp session in any  other way; if the
+ given  system has  been  loaded, it  remains loaded  and  accessible until  the
+ session is ended.
+** Buildapp
+- [[https://www.xach.com/lisp/buildapp/][Home]]
+
+Buildapp  is an  application  for SBCL  or  CCL that  configures  and saves  an
+executable   Common   Lisp  image.    It   is   similar  to   ~cl-launch~   and
+~hu.dwim.build~.  Buildapp is  available under a BSD-style  license. The latest
+version is 1.5.6, released on November 7th, 2015.
+
+** clbuild
+- [[https://common-lisp.net/project/clbuild/][Home]]
+- [[https://github.com/bluelisp/clbuild2][clbuild2 Source]]
+- [[https://github.com/fukamachi/clbuild][Fukumachi Source]]
+
+A script to update/install the latest versions of all the most important Common
+Lisp packages.
+
+~clbuild~  is  a  shell  script  helping with  the  download,  compilation,  an
+invocation  of Common  Lisp applications.   It defaults  to SBCL  but otherwise
+tries to be somewhat independent of your local environment.
+
+~clbuild~  downloads  projects  from  version control,  without  going  through
+tarballs.   It also  serves  as a  wrapper around  ~quicklisp~.  It depends  on
+~quicklisp~ to install dependencies.
+
+** cl-launch
+- [[https://www.cliki.net/cl-launch][CLiki]]
+- [[https://gitlab.common-lisp.net/xcvb/cl-launch][GitLab Source]]
+
+~cl-launch~ is a unix utility to  make your Lisp software easily invokable from
+the shell command-line.
+
+~cl-launch~ will help you invoke your  Lisp software from the Unix command-line
+or as a  =#!= script.  We encourage  you to install ~cl-launch  4.1.2~ or later
+and  write scripts  using  ~#!/usr/bin/cl~.  A trivial  shim  written  in C  is
+required for it to work on BSD kernels.  It is a self-contained shell-script by
+Fare  Rideau  that will  abstract  away  the  details  of the  underlying  Lisp
+implementation  by  generating  the  proper Lisp  and  shell  code.   Extensive
+automated  testing  ensures  that  it  works in  thousands  of  valid  combined
+operation modes, Lisp and shell implementations.
+
+** CFFI---The Common Foreign Function Interface
+- [[https://common-lisp.net/project/cffi/][CFFI Home]]
+- [[https://github.com/cffi/cffi][Github Source]]
+- [[https://common-lisp.net/project/cffi/manual/index.html][User Manual]]
+- [[https://common-lisp.net/project/cffi/manual/html_node/Tutorial.html][Tutorial]]
+
+CFFI, the Common Foreign Function Interface, purports to be a portable foreign
+function interface for Common Lisp. The CFFI library is composed of a
+Lisp-implementation-specific backend in the CFFI-SYS package, and a portable
+frontend in the CFFI package.
+
+The CFFI-SYS  backend package defines a  low-level interface to the  native FFI
+support  in the  Lisp implementation.  It offers  operators for  allocating and
+dereferencing  foreign memory,  calling foreign  functions, and  loading shared
+libraries.
+
+The  CFFI  frontend  provides  a declarative  interface  for  defining  foreign
+functions, structures,  typedefs, enumerated types,  etc. It is  implemented in
+portable ANSI CL making use of the low-level operators exported by CFFI-SYS.
+
+** Bordeaux-Threads
+
+** Unicode
+
+* Common-Lisp Package System
+Avoiding name  conflicts between  independently developed  pieces of  code.  In
+Common Lisp the  namespace problem boils down to a  question of controlling how
+the reader translates  textual names into symbols: if you  want two occurrences
+of the same name  to be considered the same by the evaluator,  you need to make
+sure the  reader uses the same  symbol to represent each  name.  Conversely, if
+you want two names  to be considered distinct, even if they  happen to have the
+same textual name, you need the reader to create different symbols to represent
+each name.
+
+** Common Lisp Package System
+*** The Reader and the Evaluator
+ #+cindex:reader
+ #+cindex:evaluator
+ Common Lisp defines two "black boxes", one that translates text into Lisp
+ objects and another that implements the semantics of the language in terms of
+ those objects.  The first box is called the "reader", and the second is call
+ the "evaluator".
+
+*** Syntax of Names
+
+ #+cindex:package
+ #+cindex:symbol
+ #+cindex:name, package
+ #+findex:find-packagea
+ A /package/ is  like a table that  maps strings to symbols. Each  package has a
+ /name/, which can be used to find the package using the function:
+ - ~find-package.~ ::
+
+ #+cindex:name-to-symbol mapping
+ #+findex:find-symbol
+ #+findex:intern
+ The two key functions that the reader uses to access the name-to-symbol
+ mappings in a package are:
+
+ #+cindex:accessible symbol
+ - ~find-symbol~ :: looks in the package for  a symbol with the given string for
+   a name and returns it, or =nil= if  no symbol is found. All the symbols found
+   in a  given package using ~find-symbol~  are said to be  /accessible/ in that
+   package. In other words, the /accessible/ symbols in a package are those that
+   can be referred to with unqualified names when the package is current.
+
+   #+cindex:present symbol
+   #+cindex:inherited symbol
+   #+cindex:using a package
+   #+cindex:external symbol
+   #+cindex:export
+   A symbol  can be  accessible in two  ways. The *first*  is for  the package's
+   name-to-symbol table  to contain an entry  for the symbol, in  which case the
+   symbol  is  /present/ in  the  package.  The *second*  way  a  symbol can  be
+   accessible in a  package is if the package /inherits/  it. A package inherits
+   symbols from  other packages by  /using/ the other packages.  Only /external/
+   symbols in the  used packages are inherited.  A symbol is made  external in a
+   package by /exporting/ it. An exported symbol  can be referred to by use of a
+   single colon qualified name.
+
+ - ~intern~ :: will return an existing symbol; otherwise it creates a new symbol
+   with the string as its name and adds it to the package.
+
+   #+cindex:home package
+   When the  reader interns  a new  symbol in the  package, it  is added  to the
+   package's  name-to-symbol table.  The  package  in which  a  symbol is  first
+   interned is called the symbol's /home package/.
+
+ Both of these functions take a string and, optionally, a package. The =package=
+ argument defaults to the value of  the global variable =*PACKAGE*=, also called
+ the /current package/.
+
+ #+cindex:names
+ #+cindex:unqualified name
+ #+cindex:package-qualified name
+ #+cindex:symbol object
+ #+cindex:reader
+ #+cindex:evaluator
+ - unqualified names ::  Most names you  use are /unqualified/, that is, contain
+   no colons. When the reader reads such a name, it translates it to a symbol by
+   converting  any unescaped  letters  to uppercase  and  passing the  resulting
+   string to  ~intern~. Thus, each  time the reader reads  the same name  in the
+   same package,  it will  get the  same symbol object.  The evaluator  uses the
+   object  identity of  symbols to  determine which  function, variable,  or the
+   program element a given symbol refers to.
+
+ - package-qualified  names ::  A name  containing either  a single  colon or  a
+   double  colon  is  a  /package-qualified  name/.  When  the  reader  reads  a
+   package-qualified name, it  splits the name on the colons  and uses the first
+   part as the  name of a package and  the second part as the name  of a symbol.
+   The reader  looks up  the appropriate  package and uses  it to  translate the
+   symbol name to a symbol object.
+
+   #+cindex:external symbol
+   #+cindex:export
+ - external symbol  :: A name  containing only a single  colon must refer  to an
+   /external symbol/---one that the package /exports/ for public use.
+
+ - symbol :: A double-colon name can refer to any symbol from the named package.
+
+   #+cindex:keyword symbol
+   #+cindex:package =KEYWORD=
+   #+cindex:=KEYWORD= package
+ - keyword symbol :: written with names  starting with a colon. Such symbols are
+   interned in the package named  =KEYWORD= and automatically exported. When the
+   reader interns a symbol in the =KEYWORD=, it also defines a constant variable
+   with the symbol as both its name and  value. This is why you can use keywords
+   in argument lists without quoting them--when they appear in a value position,
+   they evaluate to themselves. The names  of keyword symbols, like all symbols,
+   are converted  to all uppercase by  the reader before they  are interned. The
+   name does not include the leading colon.
+
+   #+cindex:uninterned symbol
+ - uninterned symbol :: are written with  a leading =#:=. These names (minus the
+   =#:=) are converted to uppercase as  normal and then translated into symbols,
+   but the symbols are not interned in any package; each time the reader reads a
+   =#:= name,  it creates  a new symbol.  You will rarely,  if ever,  write this
+   syntax yourself, but you will sometimes see it when you print an s-expression
+   containing symbols returned by the function =GENSYM=.
+
+   : (gensym) ==> #:G3128
+
+   #+cindex:shadowing symbol
+ - shadowing  symbol   ::   To   keep  the  mappings   from  names   to  symbols
+   deterministic, the package system allows only  one symbol to be accessible in
+   a given  package for  each name.  That is,  a package  cannot have  a present
+   symbol and  an inherited symbol with  the same name or  inherit two different
+   symbols,  from different  packages,  with  the same  name.  However, you  can
+   resolve  conflicts by  making one  of  the accessible  symbols a  /shadowing/
+   symbol, which  makes the other  symbols of  the same name  inaccessible. Each
+   package maintains a list of shadowing symbols.
+
+   #+cindex:imported symbol
+ - imported symbol :: An existing symbol  can be /imported/ into another package
+   by adding it to the package's name-to-symbol table. Thus, the same symbol can
+   be present in multiple packages.
+
+   #+cindex:uninterened symbol
+ - uninterned symbol   :: A present symbol  can be /uninterned/ from  a package,
+   which causes it to be removed from  the name-to-symbol table, and, if it is a
+   shadowing symbol, from the shadowing list. A symbol that isn't present in any
+   package is called an uninterned symbol, can  no longer be read by the reader,
+   will be printed using the =#:= syntax.
+
+*** The Three Standard Packages
+ When  you  first  start  Lisp,  the  value  of  =*PACKAGE*=  is  typically  the
+ =COMMON-LISP-USER= package, also known as =CL-USER=. =CL=USER= uses the package
+ =COMMON-LISP=, which exports all the names defined by the language standard.
+
+ When you type an expression at the =REPL=, all the names of standard functions,
+ macros, variables,  and so on will  be translated to the  symbols exported from
+ =COMMON-LISP=, and all  other names will be interned  in the =COMMON-LISP-USER=
+ package.
+
+ The  =REPL= cannot  start  in the  =COMMON-LISP= package  because  you are  not
+ allowed to intern  new symbols in it; =COMMON-LISP-USER= serves  as a "scratch"
+ package where you can  create your own names while still  having easy access to
+ all the symbols in =COMMON-LISP=.
+
+ The  third standard  package is  the =KEYWORD=  package, the  package the  Lisp
+ reader uses to intern names starting with a colon.
+
+*** Defining Your Own Packages
+#+cindex:package
+Packages provide  basic control over  namespaces by controlling how  the reader
+translates textual  names into symbol  objects. It is  not until later,  in the
+evaluator, that the symbol is interpreted as the name of a function or variable
+or whatever. It does not make sense  to talk about "exporting a function" or "a
+variable" from a  package. You can export symbols to  make certain names easier
+to refer to,  but the package system  does not allow you to  restrict how those
+names are used.
+
+#+findex:DEFPACKAGE
+You define  new packages with the  macro =DEFPACKAGE=, which allows  you to not
+only create the package  but to specify what packages it  uses, what symbols it
+exports,  and what  symbols  it  imports from  other  packages  and to  resolve
+conflicts by creating shadowing symbols.
+
+You can define a simple package like this:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp))
+#+end_src
+
+This defines  a package name  =COM.GIGAMONKEYS.EMAIL-DB= that inherits  all the
+symbols exported by the =COMMON-LISP= package.
+
+#+cindex:string designator
+Packages and symbols  are named with strings. However, in  a ~DEFPACKAGE~ form,
+you can specify the names of  packages and symbols with /string designators/. A
+string designator is  either a string, which desigates itself;  a symbol, which
+designates its  name; or a  character, which designates a  one-character string
+containing just  the character. Using  keyword symbols  is a common  style that
+allows you to write the names  in lowercase---the reader will convert the names
+to uppercase for  you. You could also write the  =DEFPACKAGE= with strings, but
+then you  have to write them  in all uppercase  because the true names  of most
+symbols and packages are uppercase because  of the case conversion performed by
+the reader.
+
+To read code in this package, you need  to make it the current package with the
+~IN-PACKAGE~ macro:
+
+#+begin_src lisp
+  (in-package :com.gigamonkeys.email-db)
+#+end_src
+
+If  you type  this  expression at  the  =REPL=,  it will  change  the value  of
+=*PACKAGE*=,  affecting how  the =REPL=  reads subsequent  expressions. If  you
+include an ~IN-PACKAGE~ in  a file that is loaded with  ~LOAD~ or compiled with
+~COMPILE-FILE~,  it  will change  the  package,  affecting the  way  subsequent
+expressions in the file are read.  ~IN-PACKAGE~ expands into code that will run
+when the file is compiled by ~COMPILE-FILE~ as well as when the file is loaded,
+changing the way the reader reads the rest of the file during compilation.
+
+With the current package set to the =COM.GIGAMONKEYS.EMAIL-DB= package, other
+than names inherited from the =COMMON-LISP= package, you can use any names you
+want for whatever purpose you want.
+*** Packaging Reusable Libraries
+Define a new package, but export certain  names to make them available to other
+packages.
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp)
+    (:export :open-db
+	     :save
+	     :store))
+#+end_src
+
+The   =:export=   clause   specifies   names   that   will   be   external   in
+=COM.GIGMONKEYS.TEXT-DB= and thus accessible in packages that =:use= it.  After
+you have defined this package, you can change the definition of the main
+application package to the following:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp :com.gigamonkeys.text-db))
+#+end_src
+
+Now  case written  in =COM.GIGMONKEYS.EMAIL-DB=  can use  unqualified names  to
+refer    to    the   exported    symbols    from    both   =COMMON-LISP=    and
+=COM-GIGAMONKEYS.TEXT-DB=.  All  other  names  will  continue  to  be  interned
+directly in the =COM.GIGAMONKEYS.EMAIL-DB= package.
+
+*** Importing Individual Names
+You  can import  an  individual symbol  with an  =:import-from=  clause in  the
+=DEFPACKAGE=.  For example:
+
+#+begin_src lisp
+  (defpackage :com.gigamonkeys.email-db
+    (:use :common-lisp :com.gigamonkeys.text-db)
+    (:import-from :com.acme.email :parse-email-address))
+#+end_src
+
+Now  anywhere   the  name   ~parse-email-address~  appears   in  code   in  the
+=COM.GIGAMONKEYS.EMAIL-DB=  package,  it  will  be  read  as  the  symbol  from
+=COM.ACME.EMAIL=. If  you need  to import  more than one  symbol from  a single
+package, you  can include  multiple names  after the package  name in  a single
+=:import-from= clause. A =DEFPACKAGE=  can also include multiple =:import-from=
+clauses in order to import symbols from different packages.
+
+*** Shadowing Individual Names
+
+*** Quickproject
+- [[https://www.xach.com/lisp/quickproject/][Quickproject Home]]
+- [[https://github.com/xach/quickproject][Github Source]]
+
+Quickproject is  a library for creating  a Common Lisp project  skeleton. It is
+available under  a BSD-style license;  see LICENSE.txt for details.  The latest
+version is 1.4.1, released on December 26th, 2019.
+
+Quickproject provides a quick way to make a Common Lisp project. After creating
+a  project, it  extends the  ASDF registry  so the  project may  be immediately
+loaded.
+
+*** Buildapp
+- [[https://www.xach.com/lisp/buildapp/][Buildapp Home]]
+- [[https://github.com/xach/buildapp][Githup Source]]
+
+Buildapp  is an  application  for SBCL  or  CCL that  configures  and saves  an
+executable Common Lisp image. It is similar to ~cl-launch~ and ~hu.dwim.build~.
+
+** Common Lisp Packages for JSON
+*** FranzInc st-json
+- https://github.com/franzinc/st-json
+
+** Common Lisp Packages for CSV
+*** cl-csv
+ "A common lisp library providing easy csv reading and writing"
+
+ - https://github.com/AccelerationNet/cl-csv
+
+
+ This library aims to simplify working with csvs to the bare minimum of tedium
+
+ - reads/writes csvs from/to strings, streams and files
+ - support  streaming  reads  (allowing  processing  very  large  csvs,  through
+   read-csv's row-fn paramter)
+ - supports custom data formating
+ - settable quote, separator and quote-escapes
+ - supports multiline quoted data
+ - A test suite
+ - Detailed state about  the process on error (line number,  column number, char
+   index), current collection state
+*** csv-parser
+"Some hacks on top of Alain Picard's CSV parser"
+
+- https://github.com/sharplispers/csv-parser
+- [[https://quickref.common-lisp.net/csv-parser.html][The csv-parser Reference Manual]]
+
+**** Alain Picard's CSV Parser Code
+     :PROPERTIES:
+     :cite:     http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/csv-parser.lisp
+     :END:
+#+name:csv-parser.lisp
+#+begin_src lisp
+;;                      -*- mode: lisp -*-
+;;
+;; CSV parsing/writing utilities, a la Microsoft Excel.
+;;
+;; Author: Alain Picard <apicard@optushome.com.au>
+;;         (also alain.picard@memetrics.com)
+;;
+;; Version: 0.2
+;; File: $Id: csv-parser.lisp,v 1.2 2003/12/09 03:52:09 ap Exp $
+;;
+;; License:
+;; This code is placed under the Lesser GNU Public License (LGPL)
+;; (see http://www.fsf.org/licenses/lgpl.html) as
+;; clarified for Lisp by Franz when they released AllegroServe (see
+;; http://allegroserve.sourceforge.net/license-allogroserve.txt)
+;;
+;; What this clarification basically means is that compiling this
+;; file and loading it into your lisp image, either at time of
+;; delivery or runtime, does not make your program a derivative of
+;; this one.  YOU ARE EXPRESSLY PERMITTED TO LOAD THIS FILE INTO
+;; YOUR LISP IMAGE, AT ANY TIME, FOR ANY AND ALL (INCLUDING COMMERCIAL)
+;; PURPOSES.  In particular, clause 5 of the LGPL is NOT invoked
+;; by you embedding or loading this code, interpeted or compiled,
+;; into your application.
+;;
+;; Of course, if you make modifications to this file, then the terms
+;; of the LGPL hold, and you must redistribute the sources of this
+;; file and your modifications with your application.
+;;
+;; Lastly, if you DO make useful changes to this code, I would
+;; appreciate receiving the changes (though this NOT a requirement
+;; of the license of this code.)
+;;
+;;
+;; This software is "as is", and has no warranty of any kind.  The
+;; author assumes no responsibility for the consequences of any use
+;; of this software.
+;;
+;;
+;; Notes
+;; -----
+;;  Differences from Faré's CSV reader:
+;;
+;;  * this one can import DOS formatted files into a unix image,
+;;    and not have the redundant ^M splattered at the end of the fields.
+;;    This is important when processing a file on a Unix server which
+;;    is being uploaded via HTTP by some poor schmuck on a windoze box.
+;;
+;;  * Handles empty trailing fields properly
+;;
+;;  * comes with test suite, to see the semantics I've chosen to implement
+;;
+;;  * I've included a couple of high-level goodies, like
+;;    do-csv-file and map-csv-file, as well as the ability
+;;    to control the range of line-numbers on which to apply
+;;    your code.  Pretty simple stuff, but useful.
+;;
+;;  * You get a CSV-file writer, for free!  :-)
+;;
+;;  Questions:
+;;    Can someone tell me why this is more than 10X faster
+;;    under CMULisp 18e than under Lispworks 4.2 ? Sheeesh.
+;;;;
+
+
+(in-package :common-lisp-user)
+
+(defpackage :csv-parser
+  (:use :common-lisp)
+  (:export  #:*field-separator*
+	    #:*quote-character*
+	    #:read-csv-line
+	    #:do-csv-file
+	    #:map-csv-file
+	    #:write-csv-line))
+
+(in-package :csv-parser)
+
+(defparameter *field-separator* #\,
+  "The character used to indicate the end of a field
+   in a CSV file.")
+
+(defparameter *quote-character* #\"
+  "The character used to protect embedded field separators
+   (usually commas) and whitespace within a field.
+
+   To import the *quote-character* itself, you must have
+   it printed twice in the input stream.")
+
+(defvar *state* nil
+  "Holds a function which knows how to handle chars based
+   on what we've seen so far.")
+
+(defvar *spaces-gobbled* nil
+  "Keeps track of how many blanks have been skipped.  When emitting
+   a field, we can trim extra right spaces, if appropriate, using this.")
+
+(defvar *current-field* nil
+  "Holds the field we are currently working on.")
+
+(defvar *fields* nil
+  "Holds the fields we have collected/parsed so far.")
+
+(defvar *num-fields*
+  "Holds the number of fields we have collected/parsed so far.")
+
+
+;; Public
+(defun read-csv-line (stream)
+  "Read one line form a stream containing CSV data.
+   Returns two values; a list of strings parsed, and
+   the number of parsed values."
+  (let ((*state* #'skip-white-space)
+	(*spaces-gobbled* 0)
+	(*fields* ())
+	(*num-fields*  0)
+	(*current-field* (make-empty-field)))
+    (catch 'end-of-line
+      (loop
+       (funcall *state* (read-char stream nil :eof))))
+    (values (nreverse *fields*)
+	    *num-fields*)))
+
+;; Public
+(defun map-csv-file (file fn &key limit (skip-lines 0))
+  "Call FN (up to LIMIT times, if specified) with
+   a list containing the fields parsed from the CSV
+   file FILE.
+
+   SKIP-LINES, if provided, is the number of lines to skip
+   before starting to call FN.
+
+   *FIELD-SEPARATOR* and *QUOTE-CHARACTER* can be bound to
+   modify what separates fields and delimits fields."
+  (with-open-file (stream file :direction :input)
+    (loop repeat skip-lines
+	  do (read-csv-line stream))
+    (if limit
+	(loop as line = (read-csv-line stream)
+	      while line
+	      repeat limit
+	      do (funcall fn line))
+	(loop as line = (read-csv-line stream)
+	      while line
+	      do (funcall fn line)))))
+
+
+;; Public
+(defmacro do-csv-file (((fields num-fields) file &key limit (skip-lines 0))
+                       &body body)
+  "Repeatedly call BODY on CSV file FILE, binding
+   FIELDS and NUM-FIELDS to a list containing the parsed fields,
+   and the number of fields.
+   Code runs inside a block with tagname NIL, so you
+   may call (RETURN).
+
+   *FIELD-SEPARATOR* and *QUOTE-CHARACTER* can be bound to
+   modify what separates fields and delimits fields."
+  (let ((stream (gensym "STREAM"))
+	(count  (gensym "COUNT"))
+	(glimit (gensym "LIMIT")))
+    `(with-open-file (,stream ,file :direction :input)
+      (loop repeat ,skip-lines
+            do     (read-csv-line ,stream))
+      (loop for ,count upfrom 0
+            with ,glimit = ,limit
+            do
+            (multiple-value-bind (,fields ,num-fields) (read-csv-line ,stream)
+	      (when (or (null ,fields)
+			(and ,glimit
+			     (>= ,count ,glimit)))
+		(return))
+	      ,@body)))))
+
+
+;;;; Utilities
+
+(defun change-state (state)
+  (setf *state*
+	(ecase state
+	  (:skip         #'skip-white-space)
+	  (:first-quote  #'got-first-quote)
+	  (:second-quote #'got-second-quote)
+	  (:regular      #'regular-field))))
+
+(declaim (inline add-char))
+(defun add-char (char)
+  (declare  (type base-char char))
+  (vector-push-extend char *current-field*))
+
+(defun make-empty-field ()
+  (make-array 0
+	      :fill-pointer 0
+	      :adjustable   t
+	      :element-type 'base-char))
+
+(defun remove-last-n-chars (n)
+  (setf (fill-pointer *current-field*)
+	(- (length *current-field*)
+	   n)))
+
+(declaim (inline quote-char-p end-of-line-char-p end-of-field-char-p
+		 white-space-char-p))
+(defun quote-char-p (char)
+  (char= char *quote-character*))
+
+(defun end-of-line-char-p (char)
+  (char= char #\Newline))
+
+(defun end-of-field-char-p (char)
+  (char= char *field-separator*))
+
+(defun white-space-char-p (char)
+  (or (char= char #\Space)
+      (char= char #\Tab)
+      (char= char #\Return))) ; For DOS style line termination
+
+
+;;  States:
+;;    * skip-white-space (initial state).
+;;    * regular-field    handle things like ` foo bar '
+;;    * got-first-quote  handle things like ` " foo X'
+;;    * got-second-quote handle things like ` " foo  "X '
+;;
+
+(defun skip-white-space (char)
+  (cond
+    ((or (eq char :eof)
+	 (end-of-line-char-p char))
+     (when *fields*
+       ;; If no fields are present, this was a completeley
+       ;; blank line.  Otherwise, collect the last null field.
+       (emit-field))
+     (throw 'end-of-line nil))
+
+    ((white-space-char-p char)
+     ; skip
+     nil)
+
+    ((end-of-field-char-p char)
+     (emit-field))
+
+    ((quote-char-p char)
+     (change-state :first-quote))
+
+    (t
+     (change-state :regular)
+     (add-char char))))
+
+(defun regular-field (char)
+  (cond
+    ((or (eq char :eof)
+	 (end-of-line-char-p char))
+     (emit-field)
+     (throw 'end-of-line nil))
+
+    ((end-of-field-char-p char)
+     (emit-field))
+
+    ((white-space-char-p char)
+     (add-char char)
+     (incf *spaces-gobbled*))
+
+    ((quote-char-p char)
+     (error "Got a quote after regular characters; ~
+             incorrectly formatted CSV file."))
+
+
+    (t
+     (setf *spaces-gobbled* 0)
+     (add-char char))))
+
+(defun got-first-quote (char)
+  (cond
+    ((eq char :eof)
+     (error "Ran out of characters before finishing quoted field."))
+
+    ((quote-char-p char)
+     (change-state :second-quote))
+
+    (t ; collect anything else
+     (add-char char))))
+
+(defun got-second-quote (char)
+  (cond
+    ((or (eq char :eof)
+	 (end-of-line-char-p char))
+     (emit-field)
+     (throw 'end-of-line nil))
+
+    ((quote-char-p char)
+     ;; This is the weird embedded "" scenario
+     (add-char char)
+     (change-state :first-quote))
+
+    ((end-of-field-char-p char)
+     (emit-field))
+
+    ((white-space-char-p char)
+     (incf *spaces-gobbled*))
+
+    (t
+     (error "Got unexpected non-blank char after end of a quoted field"))))
+
+(defun emit-field ()
+  (cond
+    ((eq *state* #'skip-white-space)
+     (push nil *fields*))
+
+    ((eq *state* #'got-second-quote)
+     (push *current-field* *fields*))
+
+    ((eq *state* #'regular-field)
+     (remove-last-n-chars *spaces-gobbled*)
+     (push *current-field* *fields*))
+
+    (t
+     (assert nil nil "Bug!")))
+
+  (incf *num-fields*)
+  (setf *spaces-gobbled* 0
+	*state*          #'skip-white-space
+	*current-field*  (make-empty-field)))
+
+
+
+;;;; test harness
+#+(or)
+(trace skip-white-space got-first-quote got-second-quote regular-field
+       emit-field add-char change-state remove-last-n-chars)
+
+#+(or)(csv-tests)
+
+;;  Call this; if nothing asserts, you win.
+;;  (csv-tests)
+
+(defun csv-tests ()
+  (csv-test-blank)
+  (csv-test-blanks)
+  (csv-test-empty)
+  (csv-test-simple)
+  (csv-test-quoted)
+  (csv-test-space-handling)
+  (csv-test-other-delimiters)
+  (csv-test-embedded-lines)
+  (csv-test-embedded-commas))
+
+(defun csv-test-blank ()
+  (with-input-from-string (s "")
+    (assert (eq nil (read-csv-line s)))
+    (assert (eq nil (read-csv-line s)))))
+
+(defun csv-test-blanks ()
+  (with-input-from-string (s "  ")
+    (assert (eq nil (read-csv-line s)))
+    (assert (eq nil (read-csv-line s)))))
+
+(defun csv-test-empty ()
+  (with-input-from-string (s " ,,   , ")
+    (assert (equal (list nil nil nil nil) (read-csv-line s)))
+    (assert (eq nil (read-csv-line s)))))
+
+(defun csv-test-simple ()
+  (with-input-from-string (s "foo,bar,baz")
+    (assert (equal (list "foo" "bar" "baz")
+		   (read-csv-line s)))))
+
+(defun csv-test-quoted ()
+  (with-input-from-string (s "\"foo\",\"bar\",\"baz\"")
+    (assert (equal (list "foo" "bar" "baz")
+		   (read-csv-line s)))))
+
+(defun csv-test-space-handling ()
+  ;; leading/trailing blanks (but not intra word blanks)
+  ;; are stripped unless the whole thing is quoted
+  (with-input-from-string (s "\"  foo  bar  \",  foo bar  ")
+    (assert (equal (list "  foo  bar  " "foo bar")
+		   (read-csv-line s)))))
+
+(defun csv-test-other-delimiters ()
+  (let ((*field-separator* #\|)
+	(*quote-character* #\'))
+    (with-input-from-string (s "'foo'|'bar'|'baz'")
+      (assert (equal (list "foo" "bar" "baz")
+		     (read-csv-line s))))))
+
+(defun csv-test-double-quotes ()
+  (with-input-from-string (s "\"foo \"\" bar\",2,3,\"\", \" \"")
+    (assert (equal (list "foo \" bar" "2" "3" "" " ")
+		   (read-csv-line s)))))
+
+(defun csv-test-embedded-lines ()
+  (with-input-from-string (s "\"foo
+ and bar\",\" 2 \",3")
+    (assert (equal (list "foo
+ and bar" " 2 " "3")
+		   (read-csv-line s)))))
+
+(defun csv-test-embedded-commas ()
+  (with-input-from-string (s "\"foo , bar\",2,3")
+    (assert (equal (list "foo , bar" "2" "3")
+		   (read-csv-line s)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+;;;; Writing utilities
+
+(defun write-csv-line (stream fields)
+  "Write one CSV line to STREAM, containing fields.
+   FIELDS is any (1d) sequence containing strings, symbols or numbers.
+
+   Try to write it as esthetically pleasing as possible,
+   i.e. don't output the *quote-character* unless necessary
+   to protect the integrity of the data."
+
+  (etypecase fields
+    (cons   (write-csv-line-on-cons stream fields))
+    (array  (write-csv-line-on-array stream fields))))
+
+(defun write-csv-line-on-cons (stream fields)
+  (loop for rest on fields
+	while rest
+	do
+	(write-csv-field stream (first rest))
+	(when (cdr rest)
+	  (write-char *field-separator* stream)))
+  (terpri stream))
+
+(defun write-csv-line-on-array (stream fields)
+  (loop for field across fields
+	repeat (1- (length fields))
+	do
+	(write-csv-field stream field)
+	(write-char *field-separator* stream)
+
+	finally
+	(write-csv-field stream (aref fields (1- (length fields))))
+	(terpri stream)))
+
+(defun write-csv-field (stream field)
+  (etypecase field
+    (null t)
+    (number (princ field stream))
+    (string (write-csv-string-safely stream field))
+    (symbol (write-csv-string-safely stream (symbol-name field)))))
+
+(defun special-char-p (char)
+  (or (char= char *field-separator*)
+      (char= char *quote-character*)
+      (white-space-char-p char)))
+
+(defun write-csv-string-safely (stream string)
+  (if (find-if #'special-char-p string)
+      (write-protected-copy stream string)
+      (princ string stream)))
+
+(defun write-protected-copy (stream field)
+  (write-char *quote-character* stream)
+  (loop for c across field
+	do
+	(write-char c stream)
+	(when (char= c *quote-character*)
+	  ;; Double it
+	  (write-char c stream)))
+  (write-char *quote-character* stream))
+
+;;; END OF FILE
+#+end_src
+** Common Lisp Packages for MongoDB
+*** cl-mongo
+- [[https://www.mongodb.com][MongoDB]]
+- [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
+- [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
+- [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
+** Common Lisp Packages for SQLite
+*** Alain Picard's cl-sqlite
+- http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/index.html
+
+** Common Lisp Regular Expressions
+#+cindex:regular expressions
+The  ANSI  Common  Lisp  standard  does  not  include  facilities  for  regular
+expressions,  but a  couple of  libraries exist  for this  task, for  instance:
+~cl-ppcre~.
+
+- [[https://www.cliki.net/Regular%20Expression][CLiki Regular Expressions page]]
+
+*** CL-Portable Perl-compatible Regular Expressions---CL-PPCRE
+"Portable Perl-compatible regular expressions for Common Lisp"
+
+- [[https://edicl.github.io/cl-ppcre/][CL-PPCRE Home]]
+- [[https://github.com/edicl/cl-ppcre][CL-PPCRE on GitHub]]
+
+CL-PPCRE is a portable regular expression library for Common Lisp which has the
+following features:
+
+- It  is  compatible  with  Perl  (especially when  used  in  conjunction  with
+  cl-interpol, to allow compatible parsing of regexp strings).
+- It is pretty fast.
+- It is portable between ANSI-compliant Common Lisp implementations.
+- It is thread-safe.
+- In addition to specifying regular expressions as strings like in Perl you can
+  also use S-expressions.
+- It comes with  a BSD-style license so  you can basically do  with it whatever
+  you want.
+
+To use it, load it through ~quicklisp~:
+
+: (ql:quickload :cl-ppcre)
+
+**** CL-PPCRE Basic Operations
+***** Scan Functions---Looking for matching patterns
+     #+cindex:scan function
+- ~scan~ :: The ~scan~ function tries to match the given pattern and on success
+  returns four multiple-values values:
+
+  1. the start of the match
+  2. the end of the match
+  3. array denoting the beginnings of register matches
+  4. array denoting the endings of register matches
+
+  Returns =NIL= on failure.
+
+  #+cindex:create-scanner function
+  #+cindex:scanner
+- ~create-scanner~ ::   A regular expression  pattern can be compiled  with the
+  ~create-scanner~ function call. A “scanner” will  be created that can be used
+  by other functions.
+
+  #+begin_src lisp
+    (let ((ptrn (ppcre:create-scanner "(a)*b")))
+      (ppcre:scan ptrn "xaaabd"))
+  #+end_src
+
+  will yield the same results as:
+
+  #+begin_src lisp
+    (ppcre:scan "(a)*b" "xaaabd")
+  #+end_src
+
+  but  will  require  less  time  for repeated  ~scan~  calls  as  parsing  the
+  expression and compiling it is done only once.
+
+***** Extracting information
+
+- ~scan-to-strings~  :: The ~scan-to-strings~ function is similar to ~scan~ but
+  returns /substrings/  of =target-string= instead of  positions. This function
+  returns two values on  success: the whole match as a string  plus an array of
+  substrings (or =NIL=s) corresponding to the matched registers.
+
+- ~register-groups-bind~ ::  The ~register-groups-bind~ function tries to match
+  the given pattern against the target string and binds matching fragments with
+  the given variables.
+
+  #+begin_src lisp
+    (ppcre:register-groups-bind (first second third fourth)
+	  ("((a)|(b)|(c))+" "abababc" :sharedp t)
+	(list first second third fourth))
+  #+end_src
+
+  #+begin_example
+  ;; => ("c" "a" "b" "c")
+  #+end_example
+
+  CL-PPCRE also provides a shortcut for calling a function before assigning the
+  matching fragment to the variable:
+
+  #+begin_src lisp
+    (ppcre:register-groups-bind (fname lname (#'parse-integer date month year))
+	  ("(\\w+)\\s+(\\w+)\\s+(\\d{1,2})\\.(\\d{1,2})\\.(\\d{4})" "Frank Zappa 21.12.1940")
+	(list fname lname (encode-universal-time 0 0 0 date month year 0)))
+  #+end_src
+
+  #+begin_example
+  ;; => ("Frank" "Zappa" 1292889600)
+  #+end_example
+
+**** Scanning
+
+#+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
+#+begin_defun
+The function accepts most of the regex  syntax of Perl 5.8 as described in ~man
+perlre~ including  extended features like non-greedy  repetitions, positive and
+negative  look-ahead and  look-behind assertions,  "standalone" subexpressions,
+and conditional subpatterns.
+
+The following Perl features /are/ currently supported:
+
+- =\t=, =\n=, =\r=, =\f=, =\a=, =\e=,
+- =\033= (octal character codes),
+- =\x1B= (hexadecimal character codes),
+- =\c[= (control characters),
+- =\w=, =\W=, =\s=, =\S=, =\d=, =\D=, =\b=, =\B=, =\A=, =\Z=, and =\z=
+- =\Q= and =\E=
+- =\p=  and =\P=  (named properties)  but  only the  long form  with braces  is
+  supported, i.e. =\p{Letter}= and =\p{L}= will work while =\pL= won't.
+
+
+The following Perl features are (currently) /not/ supported:
+
+- ~(?{ code })~ and  ~(??{ code })~ because they obviously  don't make sense in
+  Lisp.
+- =\N{name}= (named characters),
+- =\x{263a}= (wide hex characters),
+- =\l=, =\u=, =\L=, and =\U= because  they're actually not part of Perl's regex
+  syntax
+- =\X= (extended Unicode), and
+- =\C= (single character).
+- Posix  /character  classes/  like   =[[:alpha]]=.  Use  /Unicode  properties/
+  instead.
+- =\G= for Perl's ~pos()~ because we don't have it.
+
+
+- return        values         ::        @@texinfo:@var{@@scanner@@texinfo:}@@,
+  @@texinfo:@var{@@register-names@@texinfo:}@@
+
+- re-string ::  Accepts a string which  is a regular expression  in Perl syntax
+  and returns a closure which will scan strings for this regular expression.
+
+- =*ALLOW-NAMED-REGISTERS*=   ::  The   second  value   is  only   returned  if
+  =*ALLOW-NAMED-REGISTERS*= is =true=.
+
+- REGISTER-NAMES   ::   (return  value) represents  a list  of strings  mapping
+  registers  to their  respective names;  the  first element  stands for  first
+  register, the second element for second register, etc. You have to store this
+  value if  you want to map  a register number  to its name later  as ~scanner~
+  doesn't capture  any information  about register names.  If a  register isn't
+  named, it has =NIL= as its name.
+
+- MODEs :: The =mode= keyword arguments  are equivalent to the =imsx= modifiers
+  in Perl. The =destructive= keyword will be ignored.
+
+#+end_defun
+
+#+texinfo: @heading Parse Tree
+
+#+attr_texinfo: :options create-scanner (parse-tree t) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
+#+begin_defun
+This  is similar  to ~CREATE-SCANNER~  for regex  strings above  but accepts  a
+/parse tree/ as its first argument.  A parse tree is an S-expression conforming
+to the following syntax:...
+
+- return values :: scanner, register-names
+
+#+end_defun
+
+#+texinfo: @heading Scan
+
+#+attr_texinfo: :options scan regex target-string &key start end
+#+begin_defun
+Searches the string ~target-string~ from ~start~ (which defaults to 0) to ~end~
+(which defaults to  the length of ~target-string~) and tries  to match ~regex~.
+On success returns four values:
+- the start of the match,
+- the end of the match
+- array denoting the beginnings of register matches
+- array denoting the endings of register matches
+
+On failure returns =NIL=.
+
+- return-values ::
+  - match-start,
+  - match-end,
+  - reg-starts,
+  - reg-ends
+#+end_defun
+
+#+texinfo: @heading ~scan-to-strings~
+
+#+attr_texinfo: :options scan-to-strings regex target-string &key start end sharedp
+#+begin_defun
+- return values :: match, regs
+
+Like ~SCAN~  but returns  substrings of  ~target-string~ instead  of positions,
+i.e. this function returns  two values on success:
+- the whole match as a string
+- plus  an  array  of  substrings  (or =NIL=s)  corresponding  to  the  matched
+  registers.  If ~sharedp~  is true,  the substrings  may share  structure with
+  ~target-string~.
+#+end_defun
+
+**** Splitting and Replacing
+
+**** Modifying scanner behaviour
+
+**** Miscellaneous
+
+**** Conditions
+
+**** Unicode Properties
+
+**** Filters
+
+**** Compatibility with Perl
+
+**** Bugs and Problems
+
+**** Hints---Comments---Performance
+
+** Alexandria
+- [[https://common-lisp.net/project/alexandria/][Home]]
+- [[https://common-lisp.net/project/alexandria/draft/alexandria.html][Documenttion]]
+- [[https://gitlab.common-lisp.net/alexandria/alexandria][Gitlab Source]]
+
+Alexandria is a project and a library.
+
+As a project  Alexandria's goal is to reduce duplication  of effort and improve
+portability of Common  Lisp code according to its own  idiosyncratic and rather
+conservative aesthetic.  What this actually means  is open to debate,  but each
+project  member  has  a  veto  on  all  project  activities,  so  a  degree  of
+conservativism is inevitable.
+
+As a library  Alexandria is one of  the means by which the  project strives for
+its goals. Alexandria is a collection  of portable public domain utilities that
+meet the following constraints:
+
+** Iterate
+- [[https://common-lisp.net/project/iterate/][Iterate]]
+- [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
+- [[https://gitlab.common-lisp.net/iterate/iterate][Iterate on GitLab]]
+
+~iterate~  is an  iteration construct  for Common  Lisp. It  is similar  to the
+=CL:LOOP= macro, with these distinguishing marks:
+
+- it is extensible,
+- it helps editors  like Emacs indent iterate forms by  having a more lisp-like
+  syntax, and
+- it isn't part of the ANSI standard  for Common Lisp (which is sometimes a bad
+  thing and sometimes good).
+
+
+It is available from QuickLisp.
+
+: #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
+
+** Series
+- [[http://series.sourceforge.net][Series]]
+- [[https://sourceforge.net/projects/series/files/][Download Series v2.2.1.1.tar]]
+- [[#CLTL2-SERIES][See Documentation in Appendix A of CCTL2]]
+
+A  series is  a data  structure much  like a  sequence, with  similar kinds  of
+operations.  The  difference is that  in many situations, operations  on series
+may be composed  functionally and yet execute iteratively, without  the need to
+construct  intermediate  series  values  explicitly.  In  this  manner,  series
+provide both the  clarity of a functional programming style  and the efficiency
+of an iterative programming style.
+
+Series is  the culmination of  many years of design  and use of  this approach,
+during which some 100,000 lines of application code have been written (by about
+half a dozen people  over the course of seven years)  using the series facility
+in nearly all  iteration situations.  This includes one  large system (KBEmacs)
+of over 40,000 lines of code.
+
+** ZIP library
+- [[https://common-lisp.net/project/zip/][Home]]
+- [[https://github.com/bluelisp/zip][Github Source]]
+
+A library for .zip-file reading and writing, written in Common Lisp.
+
+** Flexi-Streams
+- [[https://edicl.github.io/flexi-streams/][Home]]
+
+Flexible bivalent streams for Common Lisp
+
+FLEXI-STREAMS implements  "virtual" bivalent streams  that can be  layered atop
+real  binary or  bivalent  streams and  that  can  be used  to  read and  write
+character data in various single- or multi-octet encodings which can be changed
+on the  fly. It  also supplies  in-memory binary streams  which are  similar to
+string streams.
+
+** CL+SSL---Trivial Gray Streams
+- [[https://common-lisp.net/project/cl-plus-ssl/#trivial-gray-streams][Home]]
+- [[https://github.com/cl-plus-ssl/cl-plus-ssl][Github Source]]
+
+A Common Lisp interface to OpenSSL.
+
+This library  is a fork  of SSL-CMUCL. The  original SSL-CMUCL source  code was
+written   by    Eric   Marsden    and   includes   contributions    by   Jochen
+Schmidt.  Development  into  CL+SSL  was done  by  David  Lichteblau.  License:
+MIT-style.
+
+Distinguishing  features:  CL+SSL is  portable  code  based  on CFFI  and  gray
+streams. It defines its  own libssl BIO method, so that SSL  I/O can be written
+over portable  Lisp streams instead of  bypassing the streams and  sending data
+over Unix  file descriptors  directly. (But the  traditional approach  is still
+used if possible.)
+
+** closure-html
+- [[https://github.com/bluelisp/closure-html][Github Source]]
+
+An HTML parser written in Common Lisp.
+
+Closure  HTML  was written  by  Gilbert  Baumann as  part  of  the Closure  web
+browser.  It was  first  converted  into a  stand-alone  installation by  Ignas
+Mikalajunas,  and  finally  reassembled  and documented  for  integration  with
+Closure XML  and use  with the  Closure browser by  David Lichteblau  under its
+current name.
+
+** zs3
+- [[https://github.com/xach/zs3][Github Source]]
+- [[https://www.xach.com/lisp/zs3/][Documentation]]
+
+This is  ZS3, a library for  working with Amazon's Simple  Storage Service (S3)
+and CloudFront service from Common Lisp.
+
+The latest version is 1.3.3, released on September 29th, 2019.  [2021-10-26 Tue]
+
+** trivial-file-size
+- [[https://github.com/ruricolist/trivial-file-size][Github source]]
+
+This library exports a single  function, ~file-size-in-octets~.  It returns the
+size of a file in bytes, using system calls when possible.
+
+** SharpListers
+A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
+quasi-abandoned Common Lisp software packages.
+
+- https://github.com/sharplispers
+** ZS3---Amazon S3 and CloudFront from Common Lisp
+#+cindex:ZS3
+#+cindex:Amazon S3
+#+cindex:S3, Amazon
+#+cindex:Amazon CloudFront
+#+cindex:CloudFront, Amazon
+ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
+(S3) and CloudFront content delivery service.
+
+- https://www.xach.com/lisp/zs3/
+- [[https://github.com/xach/zs3/][ZS3 on GitHub]]
+** Writing Modules
+- https://gist.github.com/substack/5075355
+
+My thoughts on writing tiny reusable modules that each do just one
+thing. These notes were adapted from an email I recently sent.
+
+-----
+
+If some component is reusable enough to  be a module then the maintenance gains
+are really worth the  overhead of making a new project  with separate tests and
+docs. Splitting out a  reusable component might take 5 or 10  minutes to set up
+all the package overhead but it's much easier to test and document a piece that
+is completely separate from a larger project. When something is easy, you do it
+more often.
+
+I've observed  the biggest gains  for splitting  something out into  a separate
+module when I'm completely stuck mucking around in a larger application. When I
+isolate the problem  down to the scope  of a small module, it's  much easier to
+see how that small piece fits in with the greater application objective.
+
+Another technique is to  pick tools and approaches that don't  involve a lot of
+boilerplate in the first place. My usual flow for writing a new module is:
+
+1. hack  up some tiny (<10  line) example file  that does just enough  to start
+   experimenting with the api
+
+2. start fleshing out an index.js file required by the example file
+
+3. make incremental changes to the index file to get the example further along,
+   updating the example as necessary to reflect changes
+
+4. once the example pretty much works, copy it into test/
+
+5. `npm install  tap` or `npm install tape`  for modules I want to  test in the
+   browser.  I like  simple,  imperative tests  that I  can  adapt from  simple
+   examples.
+
+6. add some assertions around the example code
+
+7. `pkginit`  (https://github.com/substack/pkginit) to generate  a package.json
+   (or you could just use `npm init`)
+
+8.  copy the  example file  into  a readme.markdown  since I  really like  when
+   packages have code in their readmes when I'm looking for modules to use
+
+9. add a blurb  at the top of the readme.markdown,  document the methods (there
+   are only a few to document usually), add a license and install instructions
+
+10. create a github repo
+
+11. add travis and/or testling-ci github hooks as appropriate
+
+12. `git push` and `npm publish`
+
+With practice, I run through all these steps very quickly now. Not all of these
+are strictly necessary  and sometimes I'll skip  a step but this  is mostly the
+procedure I use for new modules.
+
+As much  as possible, I  try to build large-scale  projects using lots  of tiny
+modules so I  just repeat this process whenever I  need some reusable component
+that doesn't yet  exist in quite the form  I need it to exist.  As more modules
+are published to npm  I expect I won't need to write so  many modules but there
+will always be room for new stuff.
+
+When applications are done well, they are just the really application-specific,
+brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
+reusable  components sublimate  away onto  github and  npm where  everybody can
+collaborate to advance the commons.
+** Common Lisp Open Code Collection (CCLOS)
+- [[http://clocc.sourceforge.net][CCLOS HOME]]
+- [[https://sourceforge.net/projects/clocc/][CCLOS Download]]
+- [[https://sourceforge.net/p/clocc/bugs/57/][Problems Installing?]]
+
+Our aim is to create a collection of useful and free Common Lisp - Applications
+that are easily portable among the various CL - Implementations.
+
+It contains Lisp code for various applications which is:
+
+- Common Lisp
+- Free Software
+- Portable
+- Self-contained
+- Ready to use
+*** Port
+- [[http://clocc.sourceforge.net/dist/port.html][Port Home]]
+
+This  package provides  a  platform-independent interface  to various  features
+absent from the ANSI Common Lisp standard, such as sockets, shell, Gray streams
+etc.  The  implementation-specific things,  like loads  of =#+/#-=,  are hidden
+from the user.
+
+PORT is now  a part of CLOCC  (in ~src/port~), and, as such,  is accessible via
+anonymous  CVS  and  FTP,  as  explained on  the  CLOCC  homepage.   PORT  uses
+~mk:defsystem~, which is a part of CLOCC too.
+*** CLLIB
+- [[http://clocc.sourceforge.net/dist/cllib.html][CLLIP Home]]
+
+This is a library of various tools, written in Common Lisp.
+
+CLLIB is now a part of CLOCC  (in ~src/cllib~), and, as such, is accessible via
+anonymous  CVS and  FTP, as  explained  on the  CLOCC homepage.   CLLIB can  be
+compiled  using ~mk:defsystem~,  which is  a part  of CLOCC,  and it  relies on
+~src/port~, which was actually a part of CLLIB before.
+** serapeum
+- [[https://github.com/ruricolist/serapeum][Github Source]]
+
+Serapeum  is  a  conservative  library  of  Common  Lisp  utilities.  It  is  a
+supplement, not a competitor, to Alexandria.
 * Common Lisp Resources
+** CLiki
+- https://cliki.net
+
+CLiki  is a  Common  Lisp wiki  hosted  by The  Common  Lisp Foundation.  CLiki
+contains resources for learning about and using the programming language Common
+Lisp, and information about DFSG-compliant  free software implemented in Common
+Lisp.
+
+** Planet Lisp
+- http://planet.lisp.org
+
+Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
+blogs.
+
+** Common-Lisp dot Net
+ - https://common-lisp.net
+
+This site is one among many gateways to Common Lisp. Its goal is to
+provide the Common Lisp community with development resources and to
+work as a starting point for new programmers.
+
+*** Getting Started in Common Lisp
+ - https://common-lisp.net/downloads
+
+*** Common Lisp Documentation
+ - https://common-lisp.net/documentation
+** Planet SBCL
+ http://planet.sbcl.org
+
+ "Planet SBCL is a meta blog that collects the contents of various
+ SBCL-related blogs. It was inspired by Planet Lisp."
 ** Common Lisp Documentation Resources
 *** Common Lisp Specification
  "The ANSI Common  Lisp draft specification, parsed from  TeX sources, available
@@ -1562,6 +3302,35 @@ Lisp system unmatched on Windows platforms.
 
  How to write Common Lisp in 2018 - an initiation manual for the
  uninitiated.
+*** L1sp.org
+- [[http://l1sp.org/html/][L1sp.org Home]]
+
+L1sp.org is a redirect service for Common Lisp documentation
+
+Symbol redirects are available for 
+- alexandria,
+- asdf,
+- ccl,
+- cffi,
+- cl,
+- cl-fad,
+- cl-gd,
+- clim,
+- clisp,
+- cl-ppcre,
+- cl-unicode,
+- cl-webdav,
+- cl-who,
+- clx,
+- documentation-template,
+- drakma,
+- flexi-streams,
+- hunchentoot,
+- lisp,
+- mop,
+- pcl, and
+- sbcl
+
 ** Common Lisp Help System
 *** Apropos
     #+findex:apropos
@@ -1683,40 +3452,24 @@ Lisp system unmatched on Windows platforms.
 
  Implementations are encouraged to respond to the  typing of =?= or a ``help key''
  by providing help, including a list of commands.
-** Lisp-Lang
-- [[https://lisp-lang.org][Home]]
-*** Recommended Libraries
-- https://lisp-lang.org/wiki/article/recommended-libraries
-
-** Common-Lisp dot Net
- - https://common-lisp.net
+** Zach Beane's Lisp Resources
+- [[https://www.xach.com/lisp/][Home]]
+- [[https://lispblog.xach.com][Blog]]
+- [[https://xach.livejournal.com][Livejournal (Defunct)]]
 
 
-This site is one among many gateways to Common Lisp. Its goal is to
-provide the Common Lisp community with development resources and to
-work as a starting point for new programmers.
+- Software
 
-*** Getting Started in Common Lisp
- - https://common-lisp.net/downloads
+- Other Stuff
 
-*** Common Lisp Documentation
- - https://common-lisp.net/documentation
+- Articles
+  - Making a small Lisp project with quickproject and Quicklisp
+    - [[http://xach.livejournal.com/278047.html][Link]]
 
-** Planet Lisp
-- http://planet.lisp.org
+  - Practical Lisp 2008
+    - [[http://xach.livejournal.com/162386.html][Link]]
 
-
-Planet Lisp is  a meta blog that collects the  contents of various Lisp-related
-blogs.
-
-** CLiki
-- https://cliki.net
-
-
-CLiki  is a  Common  Lisp wiki  hosted  by The  Common  Lisp Foundation.  CLiki
-contains resources for learning about and using the programming language Common
-Lisp, and information about DFSG-compliant  free software implemented in Common
-Lisp.
+- Resources
 
 ** Common Lisp Books
 "Most of Lisp books in one place."
@@ -1766,6 +3519,16 @@ Lisp.
     using a technique called embedded  languages. This entire book is available
     as a free download.
 
+    - [[https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/bookcode/graham/0.html][Code from Book]]
+
+    The book  emphasizes a  bottom-up style of  writing programs,  which Graham
+    claims is  natural in Lisp and  has advantages over the  traditional way of
+    writing programs in C and Pascal.
+
+    Of special  note are  the in-depth  sections on  writing macros.  There are
+    several very  nice examples. It  also includes an implementation  of Prolog
+    and an ATN compiler.
+
   - Sonya E. Keene, Object-Oriented Programming  in Common Lisp, Addison Wesley ::
 
     The Common  Lisp object system (CLOS) is quite  different from, and more
@@ -1787,6 +3550,36 @@ Lisp.
 
     - [[http://norvig.com/Lisp-retro.html][A Retrospective on Paradigms of AI Programming]]
 
+    - [[https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/bookcode/norvig/0.html][Code from Book]]
+
+    Norvig's book  provides an in-depth  exposition of advanced  AI programming
+    techniques and includes large-scale detailed examples. The book is the most
+    advanced AI/Common-Lisp programming text and reference currently available,
+    and hence  is not for the  complete novice.  It focuses  on the programming
+    techniques   necessary   for   building   large   AI   systems,   including
+    object-oriented programming, and has a strong performance orientation.
+
+    The  text is  marked by  its use  of "non-toy"  examples to  illustrate the
+    techniques. All of  the examples are written in Common  Lisp, and copies of
+    the source  code are available in  this directory.  Some of  the techniques
+    described  include rule-based  pattern matching  (GPS, Eliza,  a subset  of
+    Macsyma,  the  Emycin  expert  system shell),  constraint  propagation  and
+    backtracking  (Waltz line-labeling),  alpha-beta search  (Othello), natural
+    language    processing   (top-down,    bottom-up   and    chart   parsing),
+    logic-programming (unification and Prolog),  interpreters and compilers for
+    Scheme, and object-oriented programming (CLOS).
+
+    The  examples  are also  used  to  illustrate  good programming  style  and
+    efficiency.  There  is  a  guide to  trouble-shooting  and  debugging  Lisp
+    programs, a style guide, and a discussion of portability problems.  Some of
+    the  efficiency techniques  described include  memoization, data  indexing,
+    compilation,  delaying computation,  proper use  of declarations,  avoiding
+    garbage collection, and choosing and using the correct data structure.
+
+    The  book also  serves as  an advanced  introduction to  Common Lisp,  with
+    sections on the Loop macro, CLOS  and sequences, and some coverage of error
+    handling, series, and the package facility.
+
   - Gregor  Kiczales, Jim  des  Rivières,  Daniel G.  Bobrow,  The  Art of  the Metaobject Protocol ::
 
     In this book, the authors show how the Common Lisp Object System (CLOS) can
@@ -1804,6 +3597,25 @@ Lisp.
     The 1990 edition  of this book is available as download  for free. For a
     long time  it was out  of print, but  now it is  back in print  "with minor
     revisions".
+
+    - [[https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/bookcode/dst/0.html][Code from Book]]
+
+    Touretzky's book is perhaps the best tutorial introduction to the language.
+    It  has clear  and correct  explanations, and  covers some  fairly advanced
+    topics. The  book is  an updated  Common Lisp version  of the  1984 edition
+    published by Harper and Row Publishers.
+
+    Three  free  Lisp  educational  tools  which  were  used  in  the  book  --
+    =Evaltrace=,  =DTRACE= and  =SDRAW= ---  are available  in the  ~lisp/~ and
+    ~evaltrace/~  subdirectories.   =Evaltrace=  is a  graphical  notation  for
+    explaining how evaluation works and is described in "Visualizing Evaluation
+    in Applicative Languages" by David S.  Touretzky and Peter Lee, CACM 45-59,
+    October  1992.   =DTRACE=  is  a   "detailed  trace"  which  provides  more
+    information  than  the  tracing  tools   provided  with  most  Common  Lisp
+    implementations.   =SDRAW= is  a  read-eval-draw loop  that evaluates  Lisp
+    expressions and draws the  result as a cons cell diagram  (for both X11 and
+    ascii  terminals). Also  available is  =PPMX=, a  tool for  pretty printing
+    macro expansions.
 
   - Guy L. Steele, [[https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html][Common Lisp the Language, second Edition]] ::
 
@@ -1924,10 +3736,26 @@ language.
     :END:
 - [[http://ebixio.com/online_docs/SuccessfulLisp.pdf][Successful Lisp HTML]]
 
+*** Lisp 3rd Edition by Patrick Henry Wilson
+[[https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/bookcode/winston/0.html][Source Code]]
+
+Winston's book covers the basic concepts of  the language, but also gives a lot
+of  detail about  programming  AI  topics such  as  rule-based expert  systems,
+forward chaining,  interpreting transition  trees, compiling  transition trees,
+object  oriented   programming,  and  finding   patterns  in  images.    Not  a
+tutorial. Has many good examples. Source  code for the examples is available in
+this directory.
+
 ** Lisp Tutorials
+
+*** Lisp-Lang
+- [[https://lisp-lang.org][Home]]
+
+**** Recommended Libraries
+- https://lisp-lang.org/wiki/article/recommended-libraries
 *** The Little Lisper
 - [[https://7chan.org/pr/src/__The_Little_LISPer___3rd_Edition.pdf][The Little Lisper (3rd Edition)]]
-  
+
 *** Iwanna Learn Lisp
  - https://wiki.c2.com/?IwannaLearnLisp
 
@@ -2723,11 +4551,6 @@ Lisp code for the textbook "Paradigms of Artificial Intelligence Programming"
 
 - [[https://github.com/norvig/paip-lisp][Code and Text on GitHub]]
 
-** Planet SBCL
- http://planet.sbcl.org
-
- "Planet SBCL is a meta blog that collects the contents of various
- SBCL-related blogs. It was inspired by Planet Lisp."
 ** Lisp Blogs
 *** Sacha Chua
 - https://sachachua.com/blog/emacs/
@@ -2753,9 +4576,6 @@ system.
 
 ** CMU Common Lisp Repository
 - http://www.cs.cmu.edu/afs/cs.cmu.edu/project/ai-repository/ai/lang/lisp/0.html
-
-** Roswell
-- https://github.com/roswell/roswell
 
 ** Common Lisp Databases
  - https://www.cliki.net/Database
@@ -3070,7 +4890,6 @@ widespread, or not considered as stable.  For example, we prefer Spinneret over
 Cl-Who.
 ** Acceleration
 - https://github.com/AccelerationNet
-
 
 101 repositories
 
@@ -4414,1453 +6233,6 @@ These opertors require open streams:
    control strings to generate different messages  for the same arguments and if
    different messages need to use the arguments in different orders.
 
-* Common Lisp Packages
-Avoiding name  conflicts between  independently developed  pieces of  code.  In
-Common Lisp the  namespace problem boils down to a  question of controlling how
-the reader translates  textual names into symbols: if you  want two occurrences
-of the same name  to be considered the same by the evaluator,  you need to make
-sure the  reader uses the same  symbol to represent each  name.  Conversely, if
-you want two names  to be considered distinct, even if they  happen to have the
-same textual name, you need the reader to create different symbols to represent
-each name.
-
-** QuickLisp Library Manager
-- [[https://www.quicklisp.org/beta/][QuickLisp Home]]
-- [[http://blog.quicklisp.org][Quicklisp News]]
-
-
-It works  with your existing  Common Lisp implementation to  download, install,
-and load any of over 1,500 [[https://www.quicklisp.org/beta/releases.html][libraries]] with a few simple commands.[fn:5] It works
-with:
-
-- ABCL,
-- Allegro CL,
-- Clasp,
-- Clozure CL,
-- CLISP,
-- CMUCL,
-- ECL,
-- LispWorks,
-- MKCL,
-- SBCL, and
-- Scieneer CL, on
-- Linux,
-- Mac OS X, and
-- Windows.
-
-
-QuickLisp depends on ASDF files to define Lisp "systems." A Lisp system is what
-other languages call a  library or module, i.e., a set of files,  and a list of
-any other systems that this system depends on.<
-
-*** QuickLisp Installation and Setup
- To get started with the Quicklisp beta, download and load:
- : https://beta.quicklisp.org/quicklisp.lisp
-
- Then, to install and configure SLIME for QuickLisp:
- : (ql:quickload "quicklisp-slime-helper")
-
- The  following shell  script will  install ~quicklisp~  for your  user account
- using Clozure Common Lisp (CCL), update its init file, and configure it to use
- SLIME[fn::Other  implementations  will  have  slightly  different  commandline
- requirements.]:
-
- #+caption: Shell Script to Install Quicklisp Using CCL
- #+name:ccl-quicklisp-install
- #+header: :dir ~
- #+begin_src sh :exports code :results verbatim output
-   [[ ! -d ".quicklisp" ]] && { \
-   echo "Installing quicklisp...";
-   mkdir -v ./.quicklisp;
-   curl -O https://beta.quicklisp.org/quicklisp.lisp;
-   # The installation script is expecting the user to hit the <RETURN> key;
-   # as well, the @@texinfo:@opt{@@--batch@@texinfo:}@@ expects an EOF marker.
-   # The use of ~echo~ seems to satisfy both requirements.
-   echo | \
-   ccl -Q --batch \
-          --load  quicklisp.lisp \
-          --eval '(quicklisp-quickstart:install :path "./.quicklisp")' \
-          --eval '(ql:add-to-init-file)' \
-          --eval '(ql:quickload "quicklisp-slime-helper")';
-   rm quicklisp.lisp;
-   echo "Done installing.";
-   } || { echo "Quicklisp is already installed."; }
- #+end_src
-
- #+RESULTS: ccl-quicklisp-install
- #+begin_example
- Installing quicklisp...
- mkdir: created directory './.quicklisp'
-
-   ==== quicklisp quickstart 2015-01-28 loaded ====
-
-     To continue with installation, evaluate: (quicklisp-quickstart:install)
-
-     For installation options, evaluate: (quicklisp-quickstart:help)
-
- ; Fetching #<URL "http://beta.quicklisp.org/client/quicklisp.sexp">
- ; 0.82KB
- ==================================================
- 838 bytes in 0.00 seconds (897.32KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/client/2020-01-04/quicklisp.tar">
- ; 250.00KB
- ==================================================
- 256,000 bytes in 0.04 seconds (5591.84KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/client/2015-09-24/setup.lisp">
- ; 4.94KB
- ==================================================
- 5,054 bytes in 0.00 seconds (6434.87KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/asdf/2.26/asdf.lisp">
- ; 194.07KB
- ==================================================
- 198,729 bytes in 0.05 seconds (4305.33KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp.txt">
- ; 0.40KB
- ==================================================
- 408 bytes in 0.00 seconds (543.57KB/sec)
- Installing dist "quicklisp" version "2020-10-16".
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/releases.txt">
- ; 468.69KB
- ==================================================
- 479,939 bytes in 0.07 seconds (6496.51KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/dist/quicklisp/2020-10-16/systems.txt">
- ; 341.59KB
- ==================================================
- 349,788 bytes in 0.05 seconds (6902.90KB/sec)
-
-   ==== quicklisp installed ====
-
-     To load a system, use: (ql:quickload "system-name")
-
-     To find systems, use: (ql:system-apropos "term")
-
-     To load Quicklisp every time you start Lisp, use: (ql:add-to-init-file)
-
-     For more information, see http://www.quicklisp.org/beta/
-
- I will append the following lines to #P"/Users/minilolh/.ccl-init.lisp":
-
-   ;;; The following lines added by ql:add-to-init-file:
-   #-quicklisp
-   (let ((quicklisp-init (merge-pathnames ".quicklisp/setup.lisp" (user-homedir-pathname))))
-     (when (probe-file quicklisp-init)
-       (load quicklisp-init)))
-
- Press Enter to continue.
- To load "quicklisp-slime-helper":
-   Load 1 ASDF system:
-     asdf
-   Install 3 Quicklisp releases:
-     alexandria quicklisp-slime-helper slime
- ; Fetching #<URL "http://beta.quicklisp.org/archive/slime/2020-09-25/slime-v2.26.tgz">
- ; 802.88KB
- ==================================================
- 822,146 bytes in 0.11 seconds (7054.23KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/archive/alexandria/2020-09-25/alexandria-20200925-git.tgz">
- ; 53.45KB
- ==================================================
- 54,730 bytes in 0.02 seconds (3438.89KB/sec)
- ; Fetching #<URL "http://beta.quicklisp.org/archive/quicklisp-slime-helper/2015-07-09/quicklisp-slime-helper-20150709-git.tgz">
- ; 2.16KB
- ==================================================
- 2,211 bytes in 0.00 seconds (2898.23KB/sec)
- ; Loading "quicklisp-slime-helper"
- [package swank-loader]............................
- [package swank/backend]...........................
- [package swank/rpc]...............................
- [package swank/match].............................
- [package swank-mop]...............................
- [package swank]...................................
- [package swank-monitor]...........................
- [package swank/ccl]...............................
- [package cross-reference].........................
- [package swank/gray]..............................
- ...............................
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-util.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-repl.lisp"....................
- [package swank-repl]...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-c-p-c.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-arglists.lisp"............................
- ...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fuzzy.lisp".......
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-fancy-inspector.lisp".................
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentations.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-presentation-streams.lisp".....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-asdf.lisp".........
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-package-fu.lisp"...
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-hyperdoc.lisp"....
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-mrepl.lisp".....................
- [package swank-api]...............................
- [package swank-mrepl]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-trace-dialog.lisp"..............................
- [package swank-trace-dialog]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-macrostep.lisp".......................
- [package swank-macrostep]..
- ;Compiling "/Users/minilolh/.quicklisp/dists/quicklisp/software/slime-v2.26/contrib/swank-quicklisp.lisp"...
- .......................
- [package alexandria]..............................
- ..................................................
- ..................................................
- [package alexandria-2]............................
- [package quicklisp-slime-helper]
- slime-helper.el installed in "/Users/minilolh/.quicklisp/slime-helper.el"
-
- To use, add this to your ~/.emacs:
-
-   (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-   ;; Replace "sbcl" with the path to your implementation
-   (setq inferior-lisp-program "sbcl")
-
-
- Done installing.
- #+end_example
-
-*** QuickLisp Load
-
- To load Quicklisp into your Common Lisp session after the initial installation,
- (unless ~add-to-init-file~ has been run) load the file ~setup.lisp~:
-
- : (load "~/quicklisp/setup.lisp")
-
- To load software, use:
-
- : (ql:quickload "system-name")
-
- Quicklisp will automatically download any  supporting software it needs to load
- the system.
-
- By default, ~ql:quickload~ hides most compilation and loading output, including
- warnings, and shows progess as a series  of dots. You can show full compilation
- and loading output by passing =:verbose t= as arguments to ~ql:quickload~. This
- output can be especially helpful when reporting and troubleshooting problems.
- There is also a =:silent t= mode.
-
- : (ql:quickload “system-name” :verbose t)
- : (ql:quickload "system-name" :silent t)
-
- #+texinfo: @heading ASDF Manifest File
-
- : (ql:write-asdf-manifest-file)
- now includes systems from the local-projects directories.
-
-*** Quicklisp Updates
- To get updated software, use ~ql:update-dist~.
-
- Be sure to first start ~slime~:
- #+begin_src lisp :results output
- (ql:update-dist "quicklisp")
- #+end_src
-
- #+RESULTS:
- : You already have the latest version of "quicklisp": 2020-10-16.
-
- To update the Quicklisp client use ~ql:update-client~.
-
- Be sure to first start ~slime~:
- #+begin_src lisp :results output
- (ql:update-client)
- #+end_src
-
- #+RESULTS:
- : The most up-to-date client, version 2020-01-04, is already installed.
-
-*** QuickLisp Libraries
- To find out what's available in Quicklisp, use:
-
- : (ql:system-apropos substring)
-
- To see what systems depend on a particular system, use:
-
- : (ql:who-depends-on system-name)
-
-*** QuickLisp Unload
- To remove software, use:
-
- : (ql:uninstall system-name)
-
- An uninstall does the following:
-
- - Deletes the system's tarball archive and unpacked source files
- - Deletes Quicklisp metadata files associated with the system
- - Clears ASDF's system cache via asdf:clear-system.
-
-
- Uninstalling does not alter  the current Lisp session in any  other way; if the
- given  system has  been  loaded, it  remains loaded  and  accessible until  the
- session is ended.
-** Another System Definition Facility---ASDF
-#+cindex:asdf
-"ASDF is the de facto standard build facility for Common Lisp."
-
-- [[https://common-lisp.net/project/asdf/][ASDF Project Website]]
-- [[https://www.common-lisp.net/project/asdf/asdf/index.html][ASDF Manual]]
-
-: (require "asdf")
-
-
-The latest release is 3.3.4, published on February 14th, 2019.
-*** What asdf Is
-ASDF is what Common Lisp hackers use to build and load software.
-
-ASDF 3 contains two parts: ~asdf/defsystem~ and ~uiop~.
-
-~asdf/defsystem~  is the  part that  people usually  refer to  as =ASDF=,  with
-~uiop~ being only  a supporting library, that happens to  be distributed at the
-same time, by necessity.
-
-**** asdf/defsystem
-#+cindex:asdf/defsystem
-is a tool to *describe* how Lisp source code is organized in /systems/, and how
-to *build* and *load* these systems. The  build happens based on a plan in term
-of /actions/  that depend on  previous actions; the  plan is computed  from the
-structure of the systems.
-
-Typical /actions/ consist of:
-- *compiling* a Lisp source file
-- *loading* the resulting compilation output
-
-
-You  must  typically compile  and  load  files  that define  packages,  macros,
-variables,  before  you  may  compile  and load  other  files  that  use  them.
-Importantly, ASDF builds all software in  the current Lisp image, as opposed to
-building software into separate processes.
-
-**** uiop
-
-#+cindex:uiop
-the  /Utilities for  Implementation- and  OS- Portability/,  formerly known  as
-~asdf/driver~, is a Common Lisp  portability library and runtime support system
-that helps you write Common Lisp software in a portable way.
-
-~uiop~ is distributed as part of =ASDF=:  its source code is transcluded in the
-single-file ~asdf.lisp~ being distributed and the precompiled fasls provided by
-Lisp implementations. =ASDF= relies heavily on it for its portability layer and
-runtime support, particularly so as  to handle pathnames and filesystem access.
-~uiop~  is  useful  on  its  own  and can  also  be  compiled  and  distributed
-separately.
-
-*** What asdf Is Not
-#+cindex:Quicklisp
-=ASDF= will  not download missing  software components  for you. For  that, you
-want  =Quicklisp=, that  builds  upon  =ASDF=, and  is  great  for pulling  and
-installing tarballs of packages you may depend upon.
-
-#+cindex:clbuild
-We also recommend [[https://common-lisp.net/project/clbuild/][~clbuild~]], that now  builds upon =Quicklisp=, as a great tool
-for  pulling from  version  control packages  you  need to  modify  or want  to
-contribute to.
-
-#+cindex:asdf-install
-We  recommend you  should not  use ~asdf-install~  anymore, as  it is  an older
-similar piece of software that is both unmaintained and obsolete.
-
-#+cindex:cl-launch
-#+cindex:buildapp
-#+cindex:roswell
-=ASDF= is also  not a tool to build  or run Common Lisp software  from the Unix
-command-line. For that, you want:
-- [[https://cliki.net/cl-launch][~cl-launch~]],
-- [[https://www.xach.com/lisp/buildapp/][~buildapp~]], or
-- [[https://github.com/roswell/roswell][~roswell~]]
-*** Getting started with ASDF
-    :PROPERTIES:
-    :author:   Michael Anckaert
-    :date:     2020-07-29
-    :END:
-- [[https://sinax.be/blog/lisp/getting-started-with-asdf.html][Getting started with ASDF]]
-
-In this article  I will try and explain  what ASDF is from a  beginner point of
-view. As a new Lisp developer you're  bound to run into ASDF sooner than later.
-ASDF  is a  defacto standard  in the  Lisp world  so a  basic understanding  is
-essential to being productive.
-
-** Common Lisp Package System
-*** The Reader and the Evaluator
- #+cindex:reader
- #+cindex:evaluator
- Common Lisp defines two "black boxes", one that translates text into Lisp
- objects and another that implements the semantics of the language in terms of
- those objects.  The first box is called the "reader", and the second is call
- the "evaluator".
-
-*** Syntax of Names
-
- #+cindex:package
- #+cindex:symbol
- #+cindex:name, package
- #+findex:find-packagea
- A /package/ is  like a table that  maps strings to symbols. Each  package has a
- /name/, which can be used to find the package using the function:
- - ~find-package.~ ::
-
- #+cindex:name-to-symbol mapping
- #+findex:find-symbol
- #+findex:intern
- The two key functions that the reader uses to access the name-to-symbol
- mappings in a package are:
-
- #+cindex:accessible symbol
- - ~find-symbol~ :: looks in the package for  a symbol with the given string for
-   a name and returns it, or =nil= if  no symbol is found. All the symbols found
-   in a  given package using ~find-symbol~  are said to be  /accessible/ in that
-   package. In other words, the /accessible/ symbols in a package are those that
-   can be referred to with unqualified names when the package is current.
-
-   #+cindex:present symbol
-   #+cindex:inherited symbol
-   #+cindex:using a package
-   #+cindex:external symbol
-   #+cindex:export
-   A symbol  can be  accessible in two  ways. The *first*  is for  the package's
-   name-to-symbol table  to contain an entry  for the symbol, in  which case the
-   symbol  is  /present/ in  the  package.  The *second*  way  a  symbol can  be
-   accessible in a  package is if the package /inherits/  it. A package inherits
-   symbols from  other packages by  /using/ the other packages.  Only /external/
-   symbols in the  used packages are inherited.  A symbol is made  external in a
-   package by /exporting/ it. An exported symbol  can be referred to by use of a
-   single colon qualified name.
-
- - ~intern~ :: will return an existing symbol; otherwise it creates a new symbol
-   with the string as its name and adds it to the package.
-
-   #+cindex:home package
-   When the  reader interns  a new  symbol in the  package, it  is added  to the
-   package's  name-to-symbol table.  The  package  in which  a  symbol is  first
-   interned is called the symbol's /home package/.
-
- Both of these functions take a string and, optionally, a package. The =package=
- argument defaults to the value of  the global variable =*PACKAGE*=, also called
- the /current package/.
-
- #+cindex:names
- #+cindex:unqualified name
- #+cindex:package-qualified name
- #+cindex:symbol object
- #+cindex:reader
- #+cindex:evaluator
- - unqualified names ::  Most names you  use are /unqualified/, that is, contain
-   no colons. When the reader reads such a name, it translates it to a symbol by
-   converting  any unescaped  letters  to uppercase  and  passing the  resulting
-   string to  ~intern~. Thus, each  time the reader reads  the same name  in the
-   same package,  it will  get the  same symbol object.  The evaluator  uses the
-   object  identity of  symbols to  determine which  function, variable,  or the
-   program element a given symbol refers to.
-
- - package-qualified  names ::  A name  containing either  a single  colon or  a
-   double  colon  is  a  /package-qualified  name/.  When  the  reader  reads  a
-   package-qualified name, it  splits the name on the colons  and uses the first
-   part as the  name of a package and  the second part as the name  of a symbol.
-   The reader  looks up  the appropriate  package and uses  it to  translate the
-   symbol name to a symbol object.
-
-   #+cindex:external symbol
-   #+cindex:export
- - external symbol  :: A name  containing only a single  colon must refer  to an
-   /external symbol/---one that the package /exports/ for public use.
-
- - symbol :: A double-colon name can refer to any symbol from the named package.
-
-   #+cindex:keyword symbol
-   #+cindex:package =KEYWORD=
-   #+cindex:=KEYWORD= package
- - keyword symbol :: written with names  starting with a colon. Such symbols are
-   interned in the package named  =KEYWORD= and automatically exported. When the
-   reader interns a symbol in the =KEYWORD=, it also defines a constant variable
-   with the symbol as both its name and  value. This is why you can use keywords
-   in argument lists without quoting them--when they appear in a value position,
-   they evaluate to themselves. The names  of keyword symbols, like all symbols,
-   are converted  to all uppercase by  the reader before they  are interned. The
-   name does not include the leading colon.
-
-   #+cindex:uninterned symbol
- - uninterned symbol :: are written with  a leading =#:=. These names (minus the
-   =#:=) are converted to uppercase as  normal and then translated into symbols,
-   but the symbols are not interned in any package; each time the reader reads a
-   =#:= name,  it creates  a new symbol.  You will rarely,  if ever,  write this
-   syntax yourself, but you will sometimes see it when you print an s-expression
-   containing symbols returned by the function =GENSYM=.
-
-   : (gensym) ==> #:G3128
-
-   #+cindex:shadowing symbol
- - shadowing  symbol   ::   To   keep  the  mappings   from  names   to  symbols
-   deterministic, the package system allows only  one symbol to be accessible in
-   a given  package for  each name.  That is,  a package  cannot have  a present
-   symbol and  an inherited symbol with  the same name or  inherit two different
-   symbols,  from different  packages,  with  the same  name.  However, you  can
-   resolve  conflicts by  making one  of  the accessible  symbols a  /shadowing/
-   symbol, which  makes the other  symbols of  the same name  inaccessible. Each
-   package maintains a list of shadowing symbols.
-
-   #+cindex:imported symbol
- - imported symbol :: An existing symbol  can be /imported/ into another package
-   by adding it to the package's name-to-symbol table. Thus, the same symbol can
-   be present in multiple packages.
-
-   #+cindex:uninterened symbol
- - uninterned symbol   :: A present symbol  can be /uninterned/ from  a package,
-   which causes it to be removed from  the name-to-symbol table, and, if it is a
-   shadowing symbol, from the shadowing list. A symbol that isn't present in any
-   package is called an uninterned symbol, can  no longer be read by the reader,
-   will be printed using the =#:= syntax.
-
-*** The Three Standard Packages
- When  you  first  start  Lisp,  the  value  of  =*PACKAGE*=  is  typically  the
- =COMMON-LISP-USER= package, also known as =CL-USER=. =CL=USER= uses the package
- =COMMON-LISP=, which exports all the names defined by the language standard.
-
- When you type an expression at the =REPL=, all the names of standard functions,
- macros, variables,  and so on will  be translated to the  symbols exported from
- =COMMON-LISP=, and all  other names will be interned  in the =COMMON-LISP-USER=
- package.
-
- The  =REPL= cannot  start  in the  =COMMON-LISP= package  because  you are  not
- allowed to intern  new symbols in it; =COMMON-LISP-USER= serves  as a "scratch"
- package where you can  create your own names while still  having easy access to
- all the symbols in =COMMON-LISP=.
-
- The  third standard  package is  the =KEYWORD=  package, the  package the  Lisp
- reader uses to intern names starting with a colon.
-
-*** Defining Your Own Packages
-#+cindex:package
-Packages provide  basic control over  namespaces by controlling how  the reader
-translates textual  names into symbol  objects. It is  not until later,  in the
-evaluator, that the symbol is interpreted as the name of a function or variable
-or whatever. It does not make sense  to talk about "exporting a function" or "a
-variable" from a  package. You can export symbols to  make certain names easier
-to refer to,  but the package system  does not allow you to  restrict how those
-names are used.
-
-#+findex:DEFPACKAGE
-You define  new packages with the  macro =DEFPACKAGE=, which allows  you to not
-only create the package  but to specify what packages it  uses, what symbols it
-exports,  and what  symbols  it  imports from  other  packages  and to  resolve
-conflicts by creating shadowing symbols.
-
-You can define a simple package like this:
-
-#+begin_src lisp
-  (defpackage :com.gigamonkeys.email-db
-    (:use :common-lisp))
-#+end_src
-
-This defines  a package name  =COM.GIGAMONKEYS.EMAIL-DB= that inherits  all the
-symbols exported by the =COMMON-LISP= package.
-
-#+cindex:string designator
-Packages and symbols  are named with strings. However, in  a ~DEFPACKAGE~ form,
-you can specify the names of  packages and symbols with /string designators/. A
-string designator is  either a string, which desigates itself;  a symbol, which
-designates its  name; or a  character, which designates a  one-character string
-containing just  the character. Using  keyword symbols  is a common  style that
-allows you to write the names  in lowercase---the reader will convert the names
-to uppercase for  you. You could also write the  =DEFPACKAGE= with strings, but
-then you  have to write them  in all uppercase  because the true names  of most
-symbols and packages are uppercase because  of the case conversion performed by
-the reader.
-
-To read code in this package, you need  to make it the current package with the
-~IN-PACKAGE~ macro:
-
-#+begin_src lisp
-  (in-package :com.gigamonkeys.email-db)
-#+end_src
-
-If  you type  this  expression at  the  =REPL=,  it will  change  the value  of
-=*PACKAGE*=,  affecting how  the =REPL=  reads subsequent  expressions. If  you
-include an ~IN-PACKAGE~ in  a file that is loaded with  ~LOAD~ or compiled with
-~COMPILE-FILE~,  it  will change  the  package,  affecting the  way  subsequent
-expressions in the file are read.  ~IN-PACKAGE~ expands into code that will run
-when the file is compiled by ~COMPILE-FILE~ as well as when the file is loaded,
-changing the way the reader reads the rest of the file during compilation.
-
-With the current package set to the =COM.GIGAMONKEYS.EMAIL-DB= package, other
-than names inherited from the =COMMON-LISP= package, you can use any names you
-want for whatever purpose you want.
-*** Packaging Reusable Libraries
-Define a new package, but export certain  names to make them available to other
-packages.
-
-#+begin_src lisp
-  (defpackage :com.gigamonkeys.email-db
-    (:use :common-lisp)
-    (:export :open-db
-	     :save
-	     :store))
-#+end_src
-
-The   =:export=   clause   specifies   names   that   will   be   external   in
-=COM.GIGMONKEYS.TEXT-DB= and thus accessible in packages that =:use= it.  After
-you have defined this package, you can change the definition of the main
-application package to the following:
-
-#+begin_src lisp
-  (defpackage :com.gigamonkeys.email-db
-    (:use :common-lisp :com.gigamonkeys.text-db))
-#+end_src
-
-Now  case written  in =COM.GIGMONKEYS.EMAIL-DB=  can use  unqualified names  to
-refer    to    the   exported    symbols    from    both   =COMMON-LISP=    and
-=COM-GIGAMONKEYS.TEXT-DB=.  All  other  names  will  continue  to  be  interned
-directly in the =COM.GIGAMONKEYS.EMAIL-DB= package.
-
-*** Importing Individual Names
-You  can import  an  individual symbol  with an  =:import-from=  clause in  the
-=DEFPACKAGE=.  For example:
-
-#+begin_src lisp
-  (defpackage :com.gigamonkeys.email-db
-    (:use :common-lisp :com.gigamonkeys.text-db)
-    (:import-from :com.acme.email :parse-email-address))
-#+end_src
-
-Now  anywhere   the  name   ~parse-email-address~  appears   in  code   in  the
-=COM.GIGAMONKEYS.EMAIL-DB=  package,  it  will  be  read  as  the  symbol  from
-=COM.ACME.EMAIL=. If  you need  to import  more than one  symbol from  a single
-package, you  can include  multiple names  after the package  name in  a single
-=:import-from= clause. A =DEFPACKAGE=  can also include multiple =:import-from=
-clauses in order to import symbols from different packages.
-
-*** Shadowing Individual Names
-
-** Common Lisp Packages for JSON
-*** FranzInc st-json
-- https://github.com/franzinc/st-json
-
-** Common Lisp Packages for CSV
-*** cl-csv
- "A common lisp library providing easy csv reading and writing"
-
- - https://github.com/AccelerationNet/cl-csv
-
-
- This library aims to simplify working with csvs to the bare minimum of tedium
-
- - reads/writes csvs from/to strings, streams and files
- - support  streaming  reads  (allowing  processing  very  large  csvs,  through
-   read-csv's row-fn paramter)
- - supports custom data formating
- - settable quote, separator and quote-escapes
- - supports multiline quoted data
- - A test suite
- - Detailed state about  the process on error (line number,  column number, char
-   index), current collection state
-*** csv-parser
-"Some hacks on top of Alain Picard's CSV parser"
-
-- https://github.com/sharplispers/csv-parser
-- [[https://quickref.common-lisp.net/csv-parser.html][The csv-parser Reference Manual]]
-
-**** Alain Picard's CSV Parser Code
-     :PROPERTIES:
-     :cite:     http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/csv-parser.lisp
-     :END:
-#+name:csv-parser.lisp
-#+begin_src lisp
-;;                      -*- mode: lisp -*-
-;;
-;; CSV parsing/writing utilities, a la Microsoft Excel.
-;;
-;; Author: Alain Picard <apicard@optushome.com.au>
-;;         (also alain.picard@memetrics.com)
-;;
-;; Version: 0.2
-;; File: $Id: csv-parser.lisp,v 1.2 2003/12/09 03:52:09 ap Exp $
-;;
-;; License:
-;; This code is placed under the Lesser GNU Public License (LGPL)
-;; (see http://www.fsf.org/licenses/lgpl.html) as
-;; clarified for Lisp by Franz when they released AllegroServe (see
-;; http://allegroserve.sourceforge.net/license-allogroserve.txt)
-;;
-;; What this clarification basically means is that compiling this
-;; file and loading it into your lisp image, either at time of
-;; delivery or runtime, does not make your program a derivative of
-;; this one.  YOU ARE EXPRESSLY PERMITTED TO LOAD THIS FILE INTO
-;; YOUR LISP IMAGE, AT ANY TIME, FOR ANY AND ALL (INCLUDING COMMERCIAL)
-;; PURPOSES.  In particular, clause 5 of the LGPL is NOT invoked
-;; by you embedding or loading this code, interpeted or compiled,
-;; into your application.
-;;
-;; Of course, if you make modifications to this file, then the terms
-;; of the LGPL hold, and you must redistribute the sources of this
-;; file and your modifications with your application.
-;;
-;; Lastly, if you DO make useful changes to this code, I would
-;; appreciate receiving the changes (though this NOT a requirement
-;; of the license of this code.)
-;;
-;;
-;; This software is "as is", and has no warranty of any kind.  The
-;; author assumes no responsibility for the consequences of any use
-;; of this software.
-;;
-;;
-;; Notes
-;; -----
-;;  Differences from Faré's CSV reader:
-;;
-;;  * this one can import DOS formatted files into a unix image,
-;;    and not have the redundant ^M splattered at the end of the fields.
-;;    This is important when processing a file on a Unix server which
-;;    is being uploaded via HTTP by some poor schmuck on a windoze box.
-;;
-;;  * Handles empty trailing fields properly
-;;
-;;  * comes with test suite, to see the semantics I've chosen to implement
-;;
-;;  * I've included a couple of high-level goodies, like
-;;    do-csv-file and map-csv-file, as well as the ability
-;;    to control the range of line-numbers on which to apply
-;;    your code.  Pretty simple stuff, but useful.
-;;
-;;  * You get a CSV-file writer, for free!  :-)
-;;
-;;  Questions:
-;;    Can someone tell me why this is more than 10X faster
-;;    under CMULisp 18e than under Lispworks 4.2 ? Sheeesh.
-;;;;
-
-
-(in-package :common-lisp-user)
-
-(defpackage :csv-parser
-  (:use :common-lisp)
-  (:export  #:*field-separator*
-	    #:*quote-character*
-	    #:read-csv-line
-	    #:do-csv-file
-	    #:map-csv-file
-	    #:write-csv-line))
-
-(in-package :csv-parser)
-
-(defparameter *field-separator* #\,
-  "The character used to indicate the end of a field
-   in a CSV file.")
-
-(defparameter *quote-character* #\"
-  "The character used to protect embedded field separators
-   (usually commas) and whitespace within a field.
-
-   To import the *quote-character* itself, you must have
-   it printed twice in the input stream.")
-
-(defvar *state* nil
-  "Holds a function which knows how to handle chars based
-   on what we've seen so far.")
-
-(defvar *spaces-gobbled* nil
-  "Keeps track of how many blanks have been skipped.  When emitting
-   a field, we can trim extra right spaces, if appropriate, using this.")
-
-(defvar *current-field* nil
-  "Holds the field we are currently working on.")
-
-(defvar *fields* nil
-  "Holds the fields we have collected/parsed so far.")
-
-(defvar *num-fields*
-  "Holds the number of fields we have collected/parsed so far.")
-
-
-;; Public
-(defun read-csv-line (stream)
-  "Read one line form a stream containing CSV data.
-   Returns two values; a list of strings parsed, and
-   the number of parsed values."
-  (let ((*state* #'skip-white-space)
-	(*spaces-gobbled* 0)
-	(*fields* ())
-	(*num-fields*  0)
-	(*current-field* (make-empty-field)))
-    (catch 'end-of-line
-      (loop
-       (funcall *state* (read-char stream nil :eof))))
-    (values (nreverse *fields*)
-	    *num-fields*)))
-
-;; Public
-(defun map-csv-file (file fn &key limit (skip-lines 0))
-  "Call FN (up to LIMIT times, if specified) with
-   a list containing the fields parsed from the CSV
-   file FILE.
-
-   SKIP-LINES, if provided, is the number of lines to skip
-   before starting to call FN.
-
-   *FIELD-SEPARATOR* and *QUOTE-CHARACTER* can be bound to
-   modify what separates fields and delimits fields."
-  (with-open-file (stream file :direction :input)
-    (loop repeat skip-lines
-	  do (read-csv-line stream))
-    (if limit
-	(loop as line = (read-csv-line stream)
-	      while line
-	      repeat limit
-	      do (funcall fn line))
-	(loop as line = (read-csv-line stream)
-	      while line
-	      do (funcall fn line)))))
-
-
-;; Public
-(defmacro do-csv-file (((fields num-fields) file &key limit (skip-lines 0))
-                       &body body)
-  "Repeatedly call BODY on CSV file FILE, binding
-   FIELDS and NUM-FIELDS to a list containing the parsed fields,
-   and the number of fields.
-   Code runs inside a block with tagname NIL, so you
-   may call (RETURN).
-
-   *FIELD-SEPARATOR* and *QUOTE-CHARACTER* can be bound to
-   modify what separates fields and delimits fields."
-  (let ((stream (gensym "STREAM"))
-	(count  (gensym "COUNT"))
-	(glimit (gensym "LIMIT")))
-    `(with-open-file (,stream ,file :direction :input)
-      (loop repeat ,skip-lines
-            do     (read-csv-line ,stream))
-      (loop for ,count upfrom 0
-            with ,glimit = ,limit
-            do
-            (multiple-value-bind (,fields ,num-fields) (read-csv-line ,stream)
-	      (when (or (null ,fields)
-			(and ,glimit
-			     (>= ,count ,glimit)))
-		(return))
-	      ,@body)))))
-
-
-;;;; Utilities
-
-(defun change-state (state)
-  (setf *state*
-	(ecase state
-	  (:skip         #'skip-white-space)
-	  (:first-quote  #'got-first-quote)
-	  (:second-quote #'got-second-quote)
-	  (:regular      #'regular-field))))
-
-(declaim (inline add-char))
-(defun add-char (char)
-  (declare  (type base-char char))
-  (vector-push-extend char *current-field*))
-
-(defun make-empty-field ()
-  (make-array 0
-	      :fill-pointer 0
-	      :adjustable   t
-	      :element-type 'base-char))
-
-(defun remove-last-n-chars (n)
-  (setf (fill-pointer *current-field*)
-	(- (length *current-field*)
-	   n)))
-
-(declaim (inline quote-char-p end-of-line-char-p end-of-field-char-p
-		 white-space-char-p))
-(defun quote-char-p (char)
-  (char= char *quote-character*))
-
-(defun end-of-line-char-p (char)
-  (char= char #\Newline))
-
-(defun end-of-field-char-p (char)
-  (char= char *field-separator*))
-
-(defun white-space-char-p (char)
-  (or (char= char #\Space)
-      (char= char #\Tab)
-      (char= char #\Return))) ; For DOS style line termination
-
-
-;;  States:
-;;    * skip-white-space (initial state).
-;;    * regular-field    handle things like ` foo bar '
-;;    * got-first-quote  handle things like ` " foo X'
-;;    * got-second-quote handle things like ` " foo  "X '
-;;
-
-(defun skip-white-space (char)
-  (cond
-    ((or (eq char :eof)
-	 (end-of-line-char-p char))
-     (when *fields*
-       ;; If no fields are present, this was a completeley
-       ;; blank line.  Otherwise, collect the last null field.
-       (emit-field))
-     (throw 'end-of-line nil))
-
-    ((white-space-char-p char)
-     ; skip
-     nil)
-
-    ((end-of-field-char-p char)
-     (emit-field))
-
-    ((quote-char-p char)
-     (change-state :first-quote))
-
-    (t
-     (change-state :regular)
-     (add-char char))))
-
-(defun regular-field (char)
-  (cond
-    ((or (eq char :eof)
-	 (end-of-line-char-p char))
-     (emit-field)
-     (throw 'end-of-line nil))
-
-    ((end-of-field-char-p char)
-     (emit-field))
-
-    ((white-space-char-p char)
-     (add-char char)
-     (incf *spaces-gobbled*))
-
-    ((quote-char-p char)
-     (error "Got a quote after regular characters; ~
-             incorrectly formatted CSV file."))
-
-
-    (t
-     (setf *spaces-gobbled* 0)
-     (add-char char))))
-
-(defun got-first-quote (char)
-  (cond
-    ((eq char :eof)
-     (error "Ran out of characters before finishing quoted field."))
-
-    ((quote-char-p char)
-     (change-state :second-quote))
-
-    (t ; collect anything else
-     (add-char char))))
-
-(defun got-second-quote (char)
-  (cond
-    ((or (eq char :eof)
-	 (end-of-line-char-p char))
-     (emit-field)
-     (throw 'end-of-line nil))
-
-    ((quote-char-p char)
-     ;; This is the weird embedded "" scenario
-     (add-char char)
-     (change-state :first-quote))
-
-    ((end-of-field-char-p char)
-     (emit-field))
-
-    ((white-space-char-p char)
-     (incf *spaces-gobbled*))
-
-    (t
-     (error "Got unexpected non-blank char after end of a quoted field"))))
-
-(defun emit-field ()
-  (cond
-    ((eq *state* #'skip-white-space)
-     (push nil *fields*))
-
-    ((eq *state* #'got-second-quote)
-     (push *current-field* *fields*))
-
-    ((eq *state* #'regular-field)
-     (remove-last-n-chars *spaces-gobbled*)
-     (push *current-field* *fields*))
-
-    (t
-     (assert nil nil "Bug!")))
-
-  (incf *num-fields*)
-  (setf *spaces-gobbled* 0
-	*state*          #'skip-white-space
-	*current-field*  (make-empty-field)))
-
-
-
-;;;; test harness
-#+(or)
-(trace skip-white-space got-first-quote got-second-quote regular-field
-       emit-field add-char change-state remove-last-n-chars)
-
-#+(or)(csv-tests)
-
-;;  Call this; if nothing asserts, you win.
-;;  (csv-tests)
-
-(defun csv-tests ()
-  (csv-test-blank)
-  (csv-test-blanks)
-  (csv-test-empty)
-  (csv-test-simple)
-  (csv-test-quoted)
-  (csv-test-space-handling)
-  (csv-test-other-delimiters)
-  (csv-test-embedded-lines)
-  (csv-test-embedded-commas))
-
-(defun csv-test-blank ()
-  (with-input-from-string (s "")
-    (assert (eq nil (read-csv-line s)))
-    (assert (eq nil (read-csv-line s)))))
-
-(defun csv-test-blanks ()
-  (with-input-from-string (s "  ")
-    (assert (eq nil (read-csv-line s)))
-    (assert (eq nil (read-csv-line s)))))
-
-(defun csv-test-empty ()
-  (with-input-from-string (s " ,,   , ")
-    (assert (equal (list nil nil nil nil) (read-csv-line s)))
-    (assert (eq nil (read-csv-line s)))))
-
-(defun csv-test-simple ()
-  (with-input-from-string (s "foo,bar,baz")
-    (assert (equal (list "foo" "bar" "baz")
-		   (read-csv-line s)))))
-
-(defun csv-test-quoted ()
-  (with-input-from-string (s "\"foo\",\"bar\",\"baz\"")
-    (assert (equal (list "foo" "bar" "baz")
-		   (read-csv-line s)))))
-
-(defun csv-test-space-handling ()
-  ;; leading/trailing blanks (but not intra word blanks)
-  ;; are stripped unless the whole thing is quoted
-  (with-input-from-string (s "\"  foo  bar  \",  foo bar  ")
-    (assert (equal (list "  foo  bar  " "foo bar")
-		   (read-csv-line s)))))
-
-(defun csv-test-other-delimiters ()
-  (let ((*field-separator* #\|)
-	(*quote-character* #\'))
-    (with-input-from-string (s "'foo'|'bar'|'baz'")
-      (assert (equal (list "foo" "bar" "baz")
-		     (read-csv-line s))))))
-
-(defun csv-test-double-quotes ()
-  (with-input-from-string (s "\"foo \"\" bar\",2,3,\"\", \" \"")
-    (assert (equal (list "foo \" bar" "2" "3" "" " ")
-		   (read-csv-line s)))))
-
-(defun csv-test-embedded-lines ()
-  (with-input-from-string (s "\"foo
- and bar\",\" 2 \",3")
-    (assert (equal (list "foo
- and bar" " 2 " "3")
-		   (read-csv-line s)))))
-
-(defun csv-test-embedded-commas ()
-  (with-input-from-string (s "\"foo , bar\",2,3")
-    (assert (equal (list "foo , bar" "2" "3")
-		   (read-csv-line s)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-;;;; Writing utilities
-
-(defun write-csv-line (stream fields)
-  "Write one CSV line to STREAM, containing fields.
-   FIELDS is any (1d) sequence containing strings, symbols or numbers.
-
-   Try to write it as esthetically pleasing as possible,
-   i.e. don't output the *quote-character* unless necessary
-   to protect the integrity of the data."
-
-  (etypecase fields
-    (cons   (write-csv-line-on-cons stream fields))
-    (array  (write-csv-line-on-array stream fields))))
-
-(defun write-csv-line-on-cons (stream fields)
-  (loop for rest on fields
-	while rest
-	do
-	(write-csv-field stream (first rest))
-	(when (cdr rest)
-	  (write-char *field-separator* stream)))
-  (terpri stream))
-
-(defun write-csv-line-on-array (stream fields)
-  (loop for field across fields
-	repeat (1- (length fields))
-	do
-	(write-csv-field stream field)
-	(write-char *field-separator* stream)
-
-	finally
-	(write-csv-field stream (aref fields (1- (length fields))))
-	(terpri stream)))
-
-(defun write-csv-field (stream field)
-  (etypecase field
-    (null t)
-    (number (princ field stream))
-    (string (write-csv-string-safely stream field))
-    (symbol (write-csv-string-safely stream (symbol-name field)))))
-
-(defun special-char-p (char)
-  (or (char= char *field-separator*)
-      (char= char *quote-character*)
-      (white-space-char-p char)))
-
-(defun write-csv-string-safely (stream string)
-  (if (find-if #'special-char-p string)
-      (write-protected-copy stream string)
-      (princ string stream)))
-
-(defun write-protected-copy (stream field)
-  (write-char *quote-character* stream)
-  (loop for c across field
-	do
-	(write-char c stream)
-	(when (char= c *quote-character*)
-	  ;; Double it
-	  (write-char c stream)))
-  (write-char *quote-character* stream))
-
-;;; END OF FILE
-#+end_src
-** Common Lisp Packages for MongoDB
-*** cl-mongo
-- [[https://www.mongodb.com][MongoDB]]
-- [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
-- [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
-- [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
-** Common Lisp Packages for SQLite
-*** Alain Picard's cl-sqlite
-- http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/index.html
-
-** Common Lisp Regular Expressions
-#+cindex:regular expressions
-The  ANSI  Common  Lisp  standard  does  not  include  facilities  for  regular
-expressions,  but a  couple of  libraries exist  for this  task, for  instance:
-~cl-ppcre~.
-
-- [[https://www.cliki.net/Regular%20Expression][CLiki Regular Expressions page]]
-
-*** CL-Portable Perl-compatible Regular Expressions---CL-PPCRE
-"Portable Perl-compatible regular expressions for Common Lisp"
-
-- [[https://edicl.github.io/cl-ppcre/][CL-PPCRE Home]]
-- [[https://github.com/edicl/cl-ppcre][CL-PPCRE on GitHub]]
-
-CL-PPCRE is a portable regular expression library for Common Lisp which has the
-following features:
-
-- It  is  compatible  with  Perl  (especially when  used  in  conjunction  with
-  cl-interpol, to allow compatible parsing of regexp strings).
-- It is pretty fast.
-- It is portable between ANSI-compliant Common Lisp implementations.
-- It is thread-safe.
-- In addition to specifying regular expressions as strings like in Perl you can
-  also use S-expressions.
-- It comes with  a BSD-style license so  you can basically do  with it whatever
-  you want.
-
-To use it, load it through ~quicklisp~:
-
-: (ql:quickload :cl-ppcre)
-
-**** CL-PPCRE Basic Operations
-***** Scan Functions---Looking for matching patterns
-     #+cindex:scan function
-- ~scan~ :: The ~scan~ function tries to match the given pattern and on success
-  returns four multiple-values values:
-
-  1. the start of the match
-  2. the end of the match
-  3. array denoting the beginnings of register matches
-  4. array denoting the endings of register matches
-
-  Returns =NIL= on failure.
-
-  #+cindex:create-scanner function
-  #+cindex:scanner
-- ~create-scanner~ ::   A regular expression  pattern can be compiled  with the
-  ~create-scanner~ function call. A “scanner” will  be created that can be used
-  by other functions.
-
-  #+begin_src lisp
-    (let ((ptrn (ppcre:create-scanner "(a)*b")))
-      (ppcre:scan ptrn "xaaabd"))
-  #+end_src
-
-  will yield the same results as:
-
-  #+begin_src lisp
-    (ppcre:scan "(a)*b" "xaaabd")
-  #+end_src
-
-  but  will  require  less  time  for repeated  ~scan~  calls  as  parsing  the
-  expression and compiling it is done only once.
-
-***** Extracting information
-
-- ~scan-to-strings~  :: The ~scan-to-strings~ function is similar to ~scan~ but
-  returns /substrings/  of =target-string= instead of  positions. This function
-  returns two values on  success: the whole match as a string  plus an array of
-  substrings (or =NIL=s) corresponding to the matched registers.
-
-- ~register-groups-bind~ ::  The ~register-groups-bind~ function tries to match
-  the given pattern against the target string and binds matching fragments with
-  the given variables.
-
-  #+begin_src lisp
-    (ppcre:register-groups-bind (first second third fourth)
-	  ("((a)|(b)|(c))+" "abababc" :sharedp t)
-	(list first second third fourth))
-  #+end_src
-
-  #+begin_example
-  ;; => ("c" "a" "b" "c")
-  #+end_example
-
-  CL-PPCRE also provides a shortcut for calling a function before assigning the
-  matching fragment to the variable:
-
-  #+begin_src lisp
-    (ppcre:register-groups-bind (fname lname (#'parse-integer date month year))
-	  ("(\\w+)\\s+(\\w+)\\s+(\\d{1,2})\\.(\\d{1,2})\\.(\\d{4})" "Frank Zappa 21.12.1940")
-	(list fname lname (encode-universal-time 0 0 0 date month year 0)))
-  #+end_src
-
-  #+begin_example
-  ;; => ("Frank" "Zappa" 1292889600)
-  #+end_example
-
-**** Scanning
-
-#+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
-#+begin_defun
-The function accepts most of the regex  syntax of Perl 5.8 as described in ~man
-perlre~ including  extended features like non-greedy  repetitions, positive and
-negative  look-ahead and  look-behind assertions,  "standalone" subexpressions,
-and conditional subpatterns.
-
-The following Perl features /are/ currently supported:
-
-- =\t=, =\n=, =\r=, =\f=, =\a=, =\e=,
-- =\033= (octal character codes),
-- =\x1B= (hexadecimal character codes),
-- =\c[= (control characters),
-- =\w=, =\W=, =\s=, =\S=, =\d=, =\D=, =\b=, =\B=, =\A=, =\Z=, and =\z=
-- =\Q= and =\E=
-- =\p=  and =\P=  (named properties)  but  only the  long form  with braces  is
-  supported, i.e. =\p{Letter}= and =\p{L}= will work while =\pL= won't.
-
-
-The following Perl features are (currently) /not/ supported:
-
-- ~(?{ code })~ and  ~(??{ code })~ because they obviously  don't make sense in
-  Lisp.
-- =\N{name}= (named characters),
-- =\x{263a}= (wide hex characters),
-- =\l=, =\u=, =\L=, and =\U= because  they're actually not part of Perl's regex
-  syntax
-- =\X= (extended Unicode), and
-- =\C= (single character).
-- Posix  /character  classes/  like   =[[:alpha]]=.  Use  /Unicode  properties/
-  instead.
-- =\G= for Perl's ~pos()~ because we don't have it.
-
-
-- return        values         ::        @@texinfo:@var{@@scanner@@texinfo:}@@,
-  @@texinfo:@var{@@register-names@@texinfo:}@@
-
-- re-string ::  Accepts a string which  is a regular expression  in Perl syntax
-  and returns a closure which will scan strings for this regular expression.
-
-- =*ALLOW-NAMED-REGISTERS*=   ::  The   second  value   is  only   returned  if
-  =*ALLOW-NAMED-REGISTERS*= is =true=.
-
-- REGISTER-NAMES   ::   (return  value) represents  a list  of strings  mapping
-  registers  to their  respective names;  the  first element  stands for  first
-  register, the second element for second register, etc. You have to store this
-  value if  you want to map  a register number  to its name later  as ~scanner~
-  doesn't capture  any information  about register names.  If a  register isn't
-  named, it has =NIL= as its name.
-
-- MODEs :: The =mode= keyword arguments  are equivalent to the =imsx= modifiers
-  in Perl. The =destructive= keyword will be ignored.
-
-#+end_defun
-
-#+texinfo: @heading Parse Tree
-
-#+attr_texinfo: :options create-scanner (parse-tree t) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
-#+begin_defun
-This  is similar  to ~CREATE-SCANNER~  for regex  strings above  but accepts  a
-/parse tree/ as its first argument.  A parse tree is an S-expression conforming
-to the following syntax:...
-
-- return values :: scanner, register-names
-
-#+end_defun
-
-#+texinfo: @heading Scan
-
-#+attr_texinfo: :options scan regex target-string &key start end
-#+begin_defun
-Searches the string ~target-string~ from ~start~ (which defaults to 0) to ~end~
-(which defaults to  the length of ~target-string~) and tries  to match ~regex~.
-On success returns four values:
-- the start of the match,
-- the end of the match
-- array denoting the beginnings of register matches
-- array denoting the endings of register matches
-
-On failure returns =NIL=.
-
-- return-values ::
-  - match-start,
-  - match-end,
-  - reg-starts,
-  - reg-ends
-#+end_defun
-
-#+texinfo: @heading ~scan-to-strings~ 
-
-#+attr_texinfo: :options scan-to-strings regex target-string &key start end sharedp
-#+begin_defun
-- return values :: match, regs
-
-Like ~SCAN~  but returns  substrings of  ~target-string~ instead  of positions,
-i.e. this function returns  two values on success:
-- the whole match as a string
-- plus  an  array  of  substrings  (or =NIL=s)  corresponding  to  the  matched
-  registers.  If ~sharedp~  is true,  the substrings  may share  structure with
-  ~target-string~.
-#+end_defun
-
-**** Splitting and Replacing
-
-**** Modifying scanner behaviour
-
-**** Miscellaneous
-
-**** Conditions
-
-**** Unicode Properties
-
-**** Filters
-
-**** Compatibility with Perl
-
-**** Bugs and Problems
-
-**** Hints---Comments---Performance
-
-** Iterate
-- [[https://common-lisp.net/project/iterate/][Iterate]]
-- [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
-- [[https://gitlab.common-lisp.net/iterate/iterate][Iterate on GitLab]]
-
-~iterate~  is an  iteration construct  for Common  Lisp. It  is similar  to the
-=CL:LOOP= macro, with these distinguishing marks:
-
-- it is extensible,
-- it helps editors  like Emacs indent iterate forms by  having a more lisp-like
-  syntax, and
-- it isn't part of the ANSI standard  for Common Lisp (which is sometimes a bad
-  thing and sometimes good).
-
-
-It is available from QuickLisp.
-
-: #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
-
-** SharpListers
-A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
-quasi-abandoned Common Lisp software packages.
-
-- https://github.com/sharplispers
-** ZS3---Amazon S3 and CloudFront from Common Lisp
-#+cindex:ZS3
-#+cindex:Amazon S3
-#+cindex:S3, Amazon
-#+cindex:Amazon CloudFront
-#+cindex:CloudFront, Amazon
-ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
-(S3) and CloudFront content delivery service.
-
-- https://www.xach.com/lisp/zs3/
-- [[https://github.com/xach/zs3/][ZS3 on GitHub]]
-** Writing Modules
-- https://gist.github.com/substack/5075355
-
-My thoughts on writing tiny reusable modules that each do just one
-thing. These notes were adapted from an email I recently sent.
-
------
-
-If some component is reusable enough to  be a module then the maintenance gains
-are really worth the  overhead of making a new project  with separate tests and
-docs. Splitting out a  reusable component might take 5 or 10  minutes to set up
-all the package overhead but it's much easier to test and document a piece that
-is completely separate from a larger project. When something is easy, you do it
-more often.
-
-I've observed  the biggest gains  for splitting  something out into  a separate
-module when I'm completely stuck mucking around in a larger application. When I
-isolate the problem  down to the scope  of a small module, it's  much easier to
-see how that small piece fits in with the greater application objective.
-
-Another technique is to  pick tools and approaches that don't  involve a lot of
-boilerplate in the first place. My usual flow for writing a new module is:
-
-1. hack  up some tiny (<10  line) example file  that does just enough  to start
-   experimenting with the api
-
-2. start fleshing out an index.js file required by the example file
-
-3. make incremental changes to the index file to get the example further along,
-   updating the example as necessary to reflect changes
-
-4. once the example pretty much works, copy it into test/
-
-5. `npm install  tap` or `npm install tape`  for modules I want to  test in the
-   browser.  I like  simple,  imperative tests  that I  can  adapt from  simple
-   examples.
-
-6. add some assertions around the example code
-
-7. `pkginit`  (https://github.com/substack/pkginit) to generate  a package.json
-   (or you could just use `npm init`)
-
-8.  copy the  example file  into  a readme.markdown  since I  really like  when
-   packages have code in their readmes when I'm looking for modules to use
-
-9. add a blurb  at the top of the readme.markdown,  document the methods (there
-   are only a few to document usually), add a license and install instructions
-
-10. create a github repo
-
-11. add travis and/or testling-ci github hooks as appropriate
-
-12. `git push` and `npm publish`
-
-With practice, I run through all these steps very quickly now. Not all of these
-are strictly necessary  and sometimes I'll skip  a step but this  is mostly the
-procedure I use for new modules.
-
-As much  as possible, I  try to build large-scale  projects using lots  of tiny
-modules so I  just repeat this process whenever I  need some reusable component
-that doesn't yet  exist in quite the form  I need it to exist.  As more modules
-are published to npm  I expect I won't need to write so  many modules but there
-will always be room for new stuff.
-
-When applications are done well, they are just the really application-specific,
-brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
-reusable  components sublimate  away onto  github and  npm where  everybody can
-collaborate to advance the commons.
 * Common Lisp Condition System
 
 #+cindex:condition system
@@ -6933,7 +7305,6 @@ the customer in the customers terminology without techno-syntax.
 My main  goal for ~lisp-unit~  was to make it  simple to use,  particularly for
 beginning Lisp programmers.
 
-
 ** Lisp Unit2
 "A  Test  Framework  for Common  Lisp  in  the  style  of JUnit,  designed  and
 implemented with simplicity of use in mind."
@@ -7667,6 +8038,488 @@ construct.
 
 **** Argument Lists
 * Common Lisp Learning
+** Common Lisp the Language, 2nd Ed.
+- by Guy L. Steele
+- [[https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/clm.html][Title Page]]
+
+*** Preface SECOND EDITION
+Common Lisp has succeeded.
+
+Common Lisp has proved to be a useful and stable platform for rapid prototyping
+and systems delivery in artificial intelligence and other areas.
+
+One  of  the  important  characteristics  of  Lisp  is  its  good  support  for
+experimental extension of  the language; while Common Lisp has  been stable, it
+has not stagnated.
+
+The 1984 definition of Common Lisp was imperfect and incomplete.
+
+1984 Common Lisp had  plenty of ways to signal errors but no  way for a program
+to trap or process them.
+
+This  realization  led to  the  formation  of  X3J13,  a subcommittee  of  ANSI
+committee X3, to produce a formal American National Standard for Common Lisp.
+
+The purpose  of this  second edition  is to  bridge the  gap between  the first
+edition and  the forthcoming  ANSI standard  for Common  Lisp.  Because  of the
+requirement for formal public review, it will  be some time yet before the ANSI
+standard  is final.  This book  in no  way resembles  the forthcoming  standard
+(which is  being written  independently by Kathy  Chapman of  Digital Equipment
+Corporation with assistance from the X3J13 Drafting Subcommittee).
+
+I have incorporated into this second edition  a great deal of material based on
+the votes of X3J13, in order to give the reader a picture of where the language
+is heading. My purpose here is not simply to quote the X3J13 documents verbatim
+but to paraphrase them and relate them to the structure of the first edition.
+
+I wish to be very clear: this book is not an official document of X3J13, though
+it is based  on publicly available material  produced by X3J13. In  no way does
+this book constitute a definitive description of the forthcoming ANSI standard.
+
+Until the day when an official ANSI  Common Lisp standard emerges, it is likely
+that the 1984 definition  of Common Lisp will continue to  be used widely. This
+book has been  designed to be used  as a reference both to  the 1984 definition
+and to the language as modified by the actions of X3J13.
+
+It contains the entire text of the  first edition of Common Lisp: The Language,
+with corrections  and minor editorial changes;  however, more than half  of the
+material in this edition is new. All  new material is identified by solid lines
+in the left margin. Dotted lines in  the left margin indicate material from the
+first edition that applies to the 1984 definition but that has been modified by
+a vote  of X3J13.  Modifications to  these outmoded  passages are  explained by
+preceding or following text (which will have a solid line in the margin).
+
+- To use the 1984  language definition, read all material that  does not have a
+  solid line in the margin.
+
+- To  use the  updated language  definition, read  everything, but  be wary  of
+  material with a dotted line in the margin.
+
+The chapter  and section numbering  of this edition  matches that of  the first
+edition, with the exception that a  new section 7.9 has been interpolated. Four
+new  chapters  (26-29)  describe  substantial changes  approved  by  X3J13:
+- an extended loop macro,
+- a pretty printer interface,
+- the Common Lisp Object System, and
+- the Common Lisp Condition System.
+
+X3J13,  in the  course of  its  work, formed  a subcommittee  to study  whether
+additional means  of iteration should be  standardized for use in  Common Lisp,
+for a  great deal of  existing practice  in this area  was not included  in the
+first  edition because  of  lack  of agreement  in  1984.  The X3J13  Iteration
+Subcommittee  produced reports  on three  possible facilities.  One (loop)  was
+approved for  inclusion in the forthcoming  draft standard and is  described in
+chapter 26.
+
+X3J13 expressed interest  in the other two approaches  (series and generators),
+but the consensus as  of January 1989 was that these  other approaches were not
+yet sufficiently mature or in  sufficiently widespread use to warrant inclusion
+in the draft  Common Lisp standard at that time.  However, the subcommittee was
+directed  to  continue work  on  these  approaches and  X3J13  is  open to  the
+possibility of standardizing  them at a later  date. Please note that  I do not
+wish the prejudge  the question of whether  X3J13 will ever choose  to make the
+other two proposals the subject of standardization. Nevertheless, I have chosen
+to   include    them   in   the    second   edition,   in    cooperation   with
+Dr. Richard  C. Waters, as  appendices A  and B, in  order to make  these ideas
+available to  the Lisp community.  In my  judgement these proposals  address an
+area of language design not otherwise covered  by Common Lisp and are likely to
+have  practical value  even if  they  are never  adopted  as part  of a  formal
+standard.
+
+*** Introduction
+
+**** Purpose
+Common Lisp is intended to meet these goals:
+
+- Commonality ::
+
+  Common  Lisp  originated  in  an  attempt   to  focus  the  work  of  several
+  implementation   groups,   each   of   which   was   constructing   successor
+  implementations of MacLisp for different  computers.  Common Lisp serves as a
+  common dialect to which each implementation makes any necessary extensions.
+
+- Portability ::
+
+  Common Lisp intentionally excludes features that cannot be implemented easily
+  on a  broad class of machines.   Common Lisp is  designed to make it  easy to
+  write  programs  that  depend  as  little  as  possible  on  machine-specific
+  characteristics,  such  as  word  length,  while  allowing  some  variety  of
+  implementation techniques.
+
+- Consistency ::
+
+  The definition of  Common Lisp avoids such anomalies  by explicitly requiring
+  the  interpreter  and  compiler  to impose  identical  semantics  on  correct
+  programs so far as possible.
+
+- Expressiveness ::
+
+  Common  Lisp culls  what  experience has  shown  to be  the  most useful  and
+  understandable constructs  from not  only MacLisp  but also  Interlisp, other
+  Lisp dialects, and other programming languages.
+
+- Compatibility ::
+
+  Common Lisp  strives to be  compatible with  Lisp Machine Lisp,  MacLisp, and
+  Interlisp, roughly in that order.
+
+- Efficienty ::
+
+  Common Lisp has a number of features designed to facilitate the production of
+  high-quality compiled code in those  implementations whose developers care to
+  invest effort in an optimizing compiler.
+
+- Power ::
+
+  Common  Lisp is  a  descendant  of MacLisp,  which  has traditionally  placed
+  emphasis on  providing system-building tools.   It is expected  such packages
+  will be built on top of the Common Lisp core.
+
+- Stability ::
+
+  It  is  intended that  Common  Lisp  will change  only  slowly  and with  due
+  deliberation.
+
+Common  Lisp  differs  from  Standard  Lisp  primarily  in  incorporating  more
+features, including  a richer and more  complicated set of data  types and more
+complex control structures.
+
+This  book  is  intended  to  be   a  language  specification  rather  than  an
+implementation specification.  It  defines a set of  standard language concepts
+and  constructs that  may  be used  for communication  of  data structures  and
+algorithms in the  Common Lisp dialect. This set of  concepts and constructs is
+sometimes referred to as the ``core  Common Lisp language'' because it contains
+conceptually necessary or important features.
+
+For the most part, this book  defines a programming language, not a programming
+environment.
+
+**** Notational Conventions
+A number  of special notational conventions  are used throughout this  book for
+the sake of conciseness.
+
+***** Decimal Numbers
+All numbers in  this book are in  decimal notation unless there  is an explicit
+indication to the contrary.
+
+***** Nil - False - Empty List
+- ~false~ ::
+
+  In  Common Lisp,  as in  most  Lisp dialects,  the  symbol ~nil~  is used  to
+  represent both the empty list and  the ``false'' value for Boolean tests.  An
+  empty list  may, of course, also  be written ~()~; this  normally denotes the
+  same object as ~nil~.  These two notations may be used interchangeably as far
+  as the Lisp system is concerned.
+
+  However, as a  matter of style, this  book uses the notation ~()~  when it is
+  desirable to emphasize the use of an  empty list, and uses the notation ~nil~
+  when it  is desirable  to emphasize  the use of  the Boolean  ``false''.  The
+  notation ~'nil~ (note  the explicit quotation mark) is used  to emphasize the
+  use of a symbol.
+
+  When  a function  is said  to ``return  false'' or  to ``be  false'' in  some
+  circumstance, this means that it returns ~nil~.
+
+- ~true~ ::
+
+  Any data object other than nil is construed to be Boolean ``not false'', that
+  is, ``true''.
+
+  The symbol ~t~ is conventionally used to mean ``true'' when no other value is
+  more appropriate.
+
+  When  a function  is  said to  ``return  true''  or to  ``be  true'' in  some
+  circumstance, this means that it returns some value other than ~nil~, but not
+  necessarily ~t~.
+
+***** Evaluation - Expansion - and Equivalence
+- Evaluation ::
+
+  Execution of code in Lisp is called /evaluation/ because executing a piece of
+  code normally  results in a  data object called  the /value/ produced  by the
+  code.
+
+  The symbol ~=>~ is used in examples to indicate /evaluation/.
+
+  : (+ 4 5) => 9
+
+  means ``the result of  evaluating the code (+ 4 5) is (or  would be, or would
+  have been) 9.''
+
+- Expansion ::
+
+  The symbol ~->~ is used in examples to indicate /macro expansion/.
+
+  : (push x v) -> (setf v (cons x v))
+
+  means ``the  result of expanding  the macro-call form (push  x v) is  (setf v
+  (cons x v)).''  This  implies that the two pieces of code  do the same thing;
+  the second piece of code is the definition of what the first does.
+
+- Equivalence ::
+
+  The symbol ~==~ is used in examples to indicate code equivalence.
+
+  : (gcd x (gcd y z)) == (gcd (gcd x y) z)
+
+  means ``the value  and effects of evaluating  the form (gcd x (gcd  y z)) are
+  always the same as the value and effects  of (gcd (gcd x y) z) for any values
+  of the variables x,  y, and z.'' This implies that the two  pieces of code do
+  the same thing; however, neither directly  defines the other in the way macro
+  expansion does.
+
+***** Errors
+- Error ::
+
+  When this book specifies that it ``is an error'' for some situation to occur,
+  this means that:
+
+  - No valid Common Lisp program should cause this situation to occur.
+
+  - If this situation occurs, the  effects and results are completely undefined
+    as far as adherence to the Common Lisp specification is concerned.
+
+  - No Common Lisp implementation is required to detect such an error.
+
+  In places where it is stated that so-and-so ``must'' or ``must not'' or ``may
+  not'' be the case,  then it ``is an error'' if the  stated requirement is not
+  met.  For example,
+
+  - if an argument ``must be a symbol,'' then
+  - it ``is an error'' if the argument is not a symbol.
+
+- Error Signal ::
+
+   If  it is  specified in  this  book that  in  some situation  ``an error  is
+  signaled,'' this means that:
+
+  - If this situation occurs, an error will be /signaled/;
+
+    - see ~error~ and
+    - ~cerror~
+
+  - Valid Common  Lisp programs  may rely  on the  fact that  an error  will be
+    signaled.
+
+  - Every Common Lisp implementation is required to detect such an error.
+
+  In all  cases where an  error is to be  /signaled/, the word  ``signaled'' is
+  always used explicitly in this book.
+
+- X3J13 ::
+
+  X3J13 has adopted a more elaborate  terminology for errors, and has made some
+  effort  to specify  the type  of  error to  be signaled  in situations  where
+  signaling is appropriate. This effort was  not complete as of September 1989,
+  and I  have made little attempt  to incorporate the new  error terminology or
+  error type specifications in this book.
+
+***** Descriptions of Functions and Other Entities
+- Functions,
+- variables,
+- named constants,
+- special forms, and
+- macros
+
+are described using a distinctive typographical format.
+
+****** Functions
+Table 1-1 illustrates the manner in which Common Lisp functions are documented.
+The first  line specifies  the name  of the  function, the  manner in  which it
+accepts arguments, and  the fact that it  is a function. If  the function takes
+many arguments, then the  names of the arguments may spill  across two or three
+lines. The paragraphs following this standard header explain the definition and
+uses of the function and often present examples or related functions.
+
+#+caption:Sample Function Description
+#+name:Sample Function Description
+#+begin_example
+----------------------------------------------------------------
+Table 1-1: Sample Function Description
+
+[Function]
+sample-function arg1 arg2 &optional arg3 arg4
+
+The function sample-function adds together arg1 and arg2,
+and then multiplies the result by arg3. If arg3 is not
+provided or is nil, the multiplication isn't done.
+sample-function then returns a list whose first element is
+this result and whose section element is arg4 (which
+defaults to the symbol foo). For example:
+
+(sample-function 3 4) => (7 foo)
+(sample-function 1 2 2 'bar) => (6 bar)
+
+In general, (sample-function x y) == (list (+ x y) 'foo).
+
+----------------------------------------------------------------
+#+end_example
+
+****** Global Variables
+*Table   1-2*  illustrates   the  manner   in  which   a  global   variable  is
+documented. The first line specifies the name of the variable and the fact that
+it is a variable.  Purely as a matter of convention,  all global variables used
+by Common Lisp have names beginning and ending with an asterisk.
+
+#+caption:Sample Variable Description
+#+name:Sample Variable Description
+#+begin_example
+----------------------------------------------------------------
+Table 1-2: Sample Variable Description
+
+[Variable]
+*sample-variable*
+
+The variable *sample-variable* specifies how many times the
+special form sample-special-form should iterate. The value
+should always be a non-negative integer or nil (which means
+iterate indefinitely many times).  The initial value is 0
+(meaning no iterations).
+
+----------------------------------------------------------------
+#+end_example
+
+****** Constants
+*Table 1-3* illustrates the manner in which a named constant is documented. The
+first  line specifies  the name  of the  constant  and the  fact that  it is  a
+constant. (A  constant is  just like a  global variable, except  that it  is an
+error ever to alter its value or to bind it to a new value.)
+
+#+caption:Sample Constant Description
+#+name:Sample Constant Description
+#+begin_example
+----------------------------------------------------------------
+Table 1-3: Sample Constant Description
+
+[Constant]
+sample-constant
+
+The named constant sample-constant has as its value the
+height of the terminal screen in furlongs times the base-2
+logarithm of the implementation's total disk capacity in
+bytes, as a floating-point number.
+
+----------------------------------------------------------------
+#+end_example
+
+****** Special Forms and Macros
+Tables 1-4  and 1-5 illustrate the  documentation of special forms  and macros,
+which  are  closely   related  in  purpose.  These  are   very  different  from
+functions. Functions  are called  according to  a single,  specific, consistent
+syntax; the  &optional/&rest/&key syntax  specifies how  the function  uses its
+arguments internally  but does not  affect the syntax  of a call.  In contrast,
+each special  form or  macro can have  its own idiosyncratic  syntax. It  is by
+special  forms  and macros  that  the  syntax of  Common  Lisp  is defined  and
+extended.
+
+#+caption:Sample Special Form Description
+#+name:Sample Special Form Description
+#+begin_example
+----------------------------------------------------------------
+Table 1-4: Sample Special Form Description
+
+[Special Form]
+sample-special-form [name] ({var}*) {form}+
+
+This evaluates each form in sequence as an implicit progn,
+and does this as many times as specified by the global
+variable *sample-variable*. Each variable var is
+bound and initialized to 43 before the first iteration, and
+unbound after the last iteration. The name name, if
+supplied, may be used in a return-from form to exit from the
+loop prematurely. If the loop ends normally,
+sample-special-form returns nil. For example:
+
+(setq *sample-variable* 3)
+(sample-special-form () form1 form2)
+
+This evaluates form1, form2, form1, form2, form1, form2,
+in that order.
+
+----------------------------------------------------------------
+#+end_example
+
+#+caption:Sample Macro Description
+#+name:Sample Macro Description
+#+begin_example
+----------------------------------------------------------------
+Table 1-5: Sample Macro Description
+
+[Macro]
+sample-macro var [[ declaration* | doc-string ]] {tag | statement}*
+
+This evaluates the statements as a prog body, with the
+variable var bound to 43.
+
+(sample-macro x (return (+ x x))) => 86
+(sample-macro var . body) -> (prog ((var 43)) . body)
+----------------------------------------------------------------
+#+end_example
+
+****** Style Guide for Special Forms and Macros
+In the  description of  a special  form or  macro,
+- an italicized  word names a corresponding  part of the form  that invokes the
+  special form or macro.
+- Parentheses stand for themselves and should  be written as such when invoking
+  the special form or macro.
+- Brackets,  braces, stars,  plus signs,  and vertical  bars are  metasyntactic
+  marks.
+  - Brackets, [ and ], indicate that  what they enclose is optional (may appear
+    zero times or  one time in that  place); the square brackets  should not be
+    written in code.
+  - Braces, { and }, simply parenthesize  what they enclose but may be followed
+    by a star, *, or a plus sign, +;
+    - a star  indicates that  what the  braces enclose may  appear any  number of
+      times (including zero, that is, not  at all),
+    - whereas a plus sign indicates that what the braces enclose may appear any
+      non-zero number  of times (that is,  must appear at least  once).
+    - Within  braces  or  brackets,  a  vertical  bar,  |,  separates  mutually
+      exclusive choices.
+    - Double  brackets  (=[[=  and  =]]=)  indicate  that  any  number  of  the
+      alternatives enclosed may be used, and those used may occur in any order,
+      but each alternative may be used at most once unless followed by a star.
+
+    In summary,  the notation  {x}* means  zero or more  occurrences of  x, the
+    notation {x}+  means one  or more  occurrences of x,  and the  notation [x]
+    means  zero or  one occurrence  of x.   These notations  are also  used for
+    syntactic descriptions expressed as BNF-like productions, as in table 22-2.
+
+*** Data Types
+*** Scope and Extent
+*** Type Specifiers
+*** Program Structure
+*** Predicates
+*** Control Structure
+*** Macros
+*** Declarations
+*** Symbols
+*** Packages
+*** Numbers
+*** Characters
+*** Sequences
+*** Lists
+*** Hash Tables
+*** Arrays
+*** Strings
+*** Structures
+*** The Evaluator
+*** Streams
+*** Input-Output
+*** File System Interface
+*** Errors
+*** Miscellaneous Features
+*** Loop
+*** Pretty Printing
+*** Common Lisp Object System
+*** Conditions
+*** Series
+:PROPERTIES:
+:CUSTOM_ID: CLTL2-SERIES
+:END:
+*** Generators and Gatherers
+*** Backquote
+*** Reference
+
 ** Practical Common Lisp
 ** Common Lisp---An Interactive Approach
 :PROPERTIES:
