@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-10-29 07:38
-#+macro:version Version 0.0.109
+#+date:2021-11-17 09:36
+#+macro:version Version 0.0.110
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -6869,6 +6869,7 @@ You  can also  build your  own protocols  on ~SIGNAL~--whenever  low-level code
 needs to communicate  information back up the call stack  to higher-level code,
 the  condition  mechanism is  a  reasonable  mechanism  to  use. But  for  most
 purposes, one of the standard error or warning protocols should suffice.
+* Common Lisp Loop Facility
 * Common Lisp Testing
 ** FiveAM
 "Common Lisp regression testing framework"
@@ -8600,6 +8601,333 @@ In the  description of  a special  form or  macro,
   An  even more  up-to-date, faster  introduction  to Common  Lisp, written  in
   Summer   2004  and   somewhat   biased  toward   Allegro   Common  Lisp,   is
   Stuart C. Shapiro & David R. Pierce, A Short Course in Common Lisp.
+
+* Common Lisp the Language 2nd
+:PROPERTIES:
+:author:   Guy L. Steele, Jr.
+:date:     1990
+:ISBN:     1-55558-041-6
+:url:      https://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html
+:END:
+In this greatly expanded edition of the /de facto/ standard, you'll learn about
+the nearly 200 changes already made since original publication --- and find out
+about gray areas  likely to be revised later.  Written  by the Vice-Chairman of
+X3J13 (the ANSI  committee responsible for the standardization  of Common Lisp)
+and co-developer  of the language itself,  the new edition contains  the entire
+text of the first edition plus six completely new chapters. They cover:
+
+- *CLOS*,  the  *Common Lisp  Object  System*,  with  new features  to  support
+  function overloading and object-oriented programming, plus complete technical
+  specifications
+- *Loops*, a powerful control structure for multiple variables
+- *Conditions*, a generalization of the error signaling mechanism
+- *Series* and *generators*
+- Plus  other subjects  not  part of  the  ANSI standards  but  of interest  to
+  professional programmers.
+
+** Preface
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+Common Lisp has succeeded.
+
+The 1984 definition of Common Lisp  was imperfect and incomplete.  ... In other
+cases the informal committee that was  defining Common Lisp could not settle on
+a solution, and therefore agreed to leave some important aspect of the language
+unspecified rather than choose a less than satisfactory definition.  An example
+is *error handling*; 1984  Common Lisp had plenty of ways  to signal errors but
+no way for a program to trap or process them.
+
+In December 1985,  a group of implementors  and users met in  Boston to discuss
+the state of Common  Lisp.  ... It became clear to everyone  that there was now
+enough interest  in Common Lisp, and  dependence on its stability,  that a more
+formal mechanism was needed for managing changes to the language.
+
+This  realization  led to  the  formation  of  X3J13,  a subcommittee  of  ANSI
+committee  X3,  to produce  a  formal  American  National Standard  for  Common
+Lisp. ... X3J13 has completed the bulk  of its technical work in rectifying the
+1984 definition and codifying extensions  to that definition that have received
+widespread use  and approval. A draft  standard is now being  prepared; it will
+probably be available in 1990.
+
+Fortunately, X3J13  has done an outstanding  job of documenting its  work.
+
+- For every  change that came  to a formal vote,  a document was  prepared that
+  described  the problem  to be  solved and  one or  more solutions.
+- For each solution there is
+  - a detailed proposal for changing the language;
+  - a rationale;
+  - test  cases that distinguish  the proposal  from  the status  quo or  from
+    other proposals  for solving that  problem;
+  - discussions of
+    - current practice,
+    - cost  to implementors,
+    - cost  to users,
+    - cost  of  not adopting  the  proposal,
+    - benefits of  adoption,
+    - aesthetic criteria; and
+- any  relevant informal  discussion that  may  have preceded  creation of  the
+  formal proposal.
+
+The *purpose  of this second  edition* is to bridge  the gap between  the first
+edition and the forthcoming ANSI standard for Common Lisp.
+
+I have incorporated into this second edition  a great deal of material based on
+the votes of X3J13, in order to give the reader a picture of where the language
+is  heading.  My  purpose  here is  not  simply to  quote  the X3J13  documents
+verbatim but to paraphrase  them and relate them to the  structure of the first
+edition.
+
+I wish to be very clear: this book is not an official document of X3J13, though
+it is based  on publicly available material  produced by X3J13. In  no way does
+this  book  constitute  a  definitive   description  of  the  forthcoming  ANSI
+standard. ... Nevertheless,  it is quite probable that the  draft standard will
+be substantively revised  in response to editorial review or  public comment. I
+have therefore reported  here on the actions  of X3J13 not to  inscribe them in
+stone, but  to make clear how  the language of  the first edition is  likely to
+change.
+
+Until the day when an official ANSI  Common Lisp standard emerges, it is likely
+that the 1984 definition  of Common Lisp will continue to  be used widely. This
+book has been  designed to be used  as a reference both to  the 1984 definition
+and to the language as modified by the actions of X3J13.
+
+It  contains  the  entire text  of  the  first  edition  of /Common  Lisp:  The
+Language/, with  corrections and  minor editorial  changes; however,  more than
+half of the material in this edition is new.  All new material is identified by
+solid  lines in  the left  margin.  Dotted  lines in  the left  margin indicate
+material from  the first edition that  applies to the 1984  definition but that
+has been modified by a vote of X3J13.  Modifications to these outmoded passages
+are explained by preceding  or following text (which will have  a solid line in
+the margin). In summary:
+
+- To use the 1984  language definition, read all material that  does not have a
+  solid line in the margin.
+
+- To  use the  updated language  definition, read  everything, but  be wary  of
+  material with a dotted line in the margin.
+
+At  the end  of  the book  is  an index  of  the X3J13  votes,  ordered by  the
+committee's internal code names (included  to ease cross-reference to the X3J13
+documents, which may be useful during the public review periods). References to
+this list of votes appear as numbers in angle brackets; thus ``<14>'' refers to
+the vote  on issue number  14, whereas ``[14]'' refers  to reference 14  in the
+bibliography.
+
+The chapter  and section numbering  of this edition  matches that of  the first
+edition, with the exception that a new section 7.9 has been interpolated.  Four
+new  chapters  (26-29)  describe  substantial changes  approved  by  X3J13:
+- an extended loop macro,
+- a pretty printer interface,
+- the Common Lisp Object System, and
+- the Common Lisp Condition System.
+
+X3J13,  in the  course of  its  work, formed  a subcommittee  to study  whether
+additional means of *iteration* should be  standardized for use in Common Lisp,
+for a  great deal of  existing practice  in this area  was not included  in the
+first  edition because  of  lack of  agreement in  1984.   The X3J13  Iteration
+Subcommittee produced  reports on  three possible  facilities.  One  (loop) was
+approved for  inclusion in the forthcoming  draft standard and is  described in
+chapter 26.
+
+X3J13  expressed   interest  in   the  other   two  approaches   (*series*  and
+*generators*),  but the  consensus  as of  January 1989  was  that these  other
+approaches were not  yet sufficiently mature or in  sufficiently widespread use
+to   warrant  inclusion   in   the   draft  Common   Lisp   standard  at   that
+time. ... Nevertheless, I have chosen to include them in the second edition, in
+cooperation with Dr. Richard C. Waters, as appendices A and B, in order to make
+these ideas available  to the Lisp community.  In my  judgement these proposals
+address an area of language design not otherwise covered by Common Lisp and are
+likely to  have practical value  even if  they are never  adopted as part  of a
+formal standard.
+
+Some new  material in this book  has nothing to do  with the work of  X3J13. In
+many places I have added  explanations, clarifications, new examples, warnings,
+and tips on writing portable code. Appendix C contains a piece of code that may
+help in understanding the *backquote* syntax.
+
+** Introduction
+Common  Lisp  is  a new  dialect  of  Lisp,  a  successor to  MacLisp  [33,37],
+influenced strongly by  Zetalisp [55,34] and to some extent  by Scheme [46] and
+Interlisp [50].
+
+*** Purpose
+Common Lisp is intended to meet these goals:
+
+- Commonality
+- Portability
+- Consistency
+- Expressiveness
+- Compatibility
+- Efficiency
+- Power
+- Stability
+
+The goals of Common Lisp are thus very close to those of Standard Lisp [31] and
+Portable Standard Lisp  [51]. Common Lisp differs from  Standard Lisp primarily
+in incorporating more features, including a  richer and more complicated set of
+data types and more complex control structures.
+
+This  book  is  intended  to  be   a  language  specification  rather  than  an
+implementation  specification.  ...   It  defines a  set  of standard  language
+concepts and constructs  that may be used for communication  of data structures
+and algorithms in the Common Lisp dialect.  This set of concepts and constructs
+is sometimes  referred to  as the  ``*core Common  Lisp language*''  because it
+contains conceptually necessary or important  features. ... While many features
+could be  defined in terms of  others by writing  Lisp code, and indeed  may be
+implemented that  way, it was felt  that these features should  be conceptually
+primitive so that there might be agreement among all users as to their usage.
+
+For  the  most  part,  this  book  defines  a  *programming  language*,  not  a
+programming  environment.   A few  interfaces  are  defined for  invoking  such
+standard programming tools as
+- a compiler,
+- an editor,
+- a program trace facility, and
+- a debugger,
+
+but very little  is said about their  nature or operation. It  is expected that
+one or more extensive programming environments  will be built using Common Lisp
+as a foundation, and will be documented separately.
+
+#+begin_cartouche
+...all  the  goals stated  above  have  been  achieved,  most notably  that  of
+portability. Moving large  bodies of Lisp code from one  computer to another is
+now routine.
+#+end_cartouche
+
+*** Notational Conventions
+A number  of special notational conventions  are used throughout this  book for
+the sake of conciseness.
+
+**** Decimal Numbers
+All numbers in  this book are in  decimal notation unless there  is an explicit
+indication to the contrary. (Decimal notation is normally taken for granted, of
+course.  Unfortunately,  for  certain  other   dialects  of  Lisp,  MacLisp  in
+particular, the  default notation  for numbers  is octal  (base 8)  rather than
+decimal, and  so the  use of  decimal notation for  describing Common  Lisp is,
+taken in its historical context, a bit unusual!)
+
+**** Nil --- False --- Empty List
+In Common Lisp the symbol ~nil~ is used to represent both
+1. the empty list and
+2. the ``false'' value for Boolean tests.
+
+An empty list may  also be written =()=; this normally  denotes the same object
+as ~nil~.
+
+These two notations  may be used interchangeably  as far as the  Lisp system is
+concerned.
+
+However, as  a matter of  style, this  book uses the  notation
+- =()= (empty list)   :: when it is  desirable to emphasize the use of an empty
+  list,
+
+- ~nil~ :: when it is desirable to emphasize the use of the Boolean ``false''.
+
+- ~'nil~ ::  (note the explicit quotation mark) is used to emphasize the use of
+  a symbol.
+
+#+texinfo:@heading Examples
+#+html:<h3>Examples</h3>
+
+#+begin_example
+(defun three () 3)      ;Emphasize empty parameter list
+
+(append '() '()) => ()  ;Emphasize use of empty lists
+
+(not nil) => t          ;Emphasize use as Boolean ``false''
+
+(get 'nil 'color)       ;Emphasize use as a symbol
+#+end_example
+
+- ``not false'' or ``true'' ::
+
+  Any data  object other than ~nil~  is construed to be  Boolean ``not false'',
+  that is, ``true''.
+
+- symbol ~t~ ::  is conventionally used to mean ``true'' when no other value is
+  more appropriate.
+
+- ``false'' return :: When a  function is said to ``return false''  or to ``be false''
+  in some circumstance, this means that it returns ~nil~.
+
+- ``true'' return :: However, when a function  is said to ``return true'' or to
+  ``be true'' in some circumstance, this means that it returns some value other
+  than ~nil~, but not necessarily ~t~.
+
+*** Evaluation---Expansion---Equivalence
+#+cindex:evaluation
+#+texinfo:@heading Evaluation
+#+html:<h3>Evaluation</h3>
+
+Execution of code in Lisp is called *evaluation* because executing a piece of
+code normally results  in a *data object* called /the  value/ produced by the
+code.
+
+The symbol ``=>'' is used in examples to indicate *evaluation*.
+
+: (+ 4 5) => 9
+
+means ``the result of  evaluating the code ~(+ 4 5)~ is (or  would be, or would
+have been) ~9~.''
+
+#+cindex:expansion
+#+texinfo:@heading Macro Expansion
+#+html:<h3>Macro Expansion</h3>
+
+The symbol ``->'' is used in examples to indicate *macro expansion*.
+
+: (push x v) -> (setf v (cons x v))
+
+means ``the result of expanding the macro-call  form ~(push x v)~ is ~(setf v
+(cons  x v))~.''   *This implies  that the  two pieces  of code  do the  same
+thing;* the second piece of code is the definition of what the first does.
+
+#+cindex:equivalence
+#+texinfo:@heading Code Equivalence
+#+html:<h3>Code Equivalence</h3>
+
+The symbol ``=='' is used in examples to indicate *code equivalence*. For
+example,
+
+: (gcd x (gcd y z)) == (gcd (gcd x y) z)
+
+means ``the value and effects of evaluating  the form ~(gcd x (gcd y z))~ are
+always the  same as  the value and  effects of  ~(gcd (gcd x  y) z)~  for any
+values of the variables  x, y, and z.''  This implies that  the two pieces of
+code do  the same thing; however,  neither directly defines the  other in the
+way macro expansion does.
+
+** Data Types
+** Scope and Extent
+** Type Specifiers
+** Program Structure
+** Predicates
+** Control Structure
+** Macros
+** Declarations
+** Symbols
+** Packages
+** Numbers
+** Characters
+** Sequences
+** Lists
+** Hash Tables
+** Arrays
+** Strings
+** Structures
+** Evaluator
+** Streams
+** Input-Output
+** File System Interface
+** Miscellaneous Features
+** Loop
+** Pretty Printing
+** Common Lisp Object System
+** Conditions
+** Metaobject Protocol
+
 * ANSI Common Lisp
   :PROPERTIES:
   :author:   Paul Graham
