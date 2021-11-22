@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-17 09:36
-#+macro:version Version 0.0.110
+#+date:2021-11-22 06:49
+#+macro:version Version 0.0.111
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -8753,6 +8753,7 @@ Interlisp [50].
 
 *** Purpose
 Common Lisp is intended to meet these goals:
+#+cindex:goals of book
 
 - Commonality
 - Portability
@@ -8899,6 +8900,352 @@ values of the variables  x, y, and z.''  This implies that  the two pieces of
 code do  the same thing; however,  neither directly defines the  other in the
 way macro expansion does.
 
+*** Errors
+#+cindex:errors
+#+texinfo:@heading It is an Error for...
+When this book specifies  that it ``is an error'' for  some situation to occur,
+this means that:
+
+- No valid Common Lisp program should cause this situation to occur.
+- If this situation occurs, the effects and results are completely undefined as
+  far as adherence to the Common Lisp specification is concerned.
+- No Common Lisp implementation is required to detect such an error. Of course,
+  implementors are encouraged to provide  for detection of such errors wherever
+  reasonable.
+- This is not  to say that some particular implementation  might not define the
+  effects  and results  for such  a  situation; the  point is  that no  program
+  conforming  to the  Common Lisp  specification may  correctly depend  on such
+  effects or results.
+
+#+texinfo:@heading An Error is Signaled...
+#+cindex:signal, error
+If  it  is  specified in  this  book  that  in  some situation  ``an  error  is
+signaled,'' this means that:
+
+- If  this  situation occurs,  an  error  will  be  signaled (see  ~error~  and
+  ~cerror~).
+- Valid  Common Lisp  programs may  rely  on the  fact  that an  error will  be
+  signaled.
+- Every Common Lisp implementation is required to detect such an error.
+
+#+texinfo:@heading Must---Must Not---May Not
+In places where it  is stated that so-and-so ``must'' or  ``must not'' or ``may
+not'' be  the case, then it  ``is an error''  if the stated requirement  is not
+met.
+
+- For example, if an argument ``must be  a symbol,'' then it ``is an error'' if
+  the argument is not a symbol.
+
+#+texinfo:@heading Signaling an Error
+In all cases where an error is  to be signaled, the word ``signaled'' is always
+used explicitly in this book.
+
+#+begin_example
+X3J13 has adopted a more elaborate terminology for errors, and has made some
+effort to specify the type of error to be signaled in situations where signaling
+is appropriate. This effort was not complete as of September 1989, and I have
+made little attempt to incorporate the new error terminology or error type
+specifications in this book. However, the new terminology is described and used
+in the specification of the Common Lisp Object System appearing in chapter 28;
+this gives the flavor of how erroneous situations will be described, and
+appropriate actions prescribed, in the forthcoming ANSI Common Lisp standard.
+#+end_example
+
+*** Descriptions of Functions and Other Entities
+- Functions,
+- variables,
+- named constants,
+- special forms, and
+- macros
+
+are described using a distinctive typographical format.
+
+#+texinfo:@heading Functions
+The first line specifies the name of the function, the manner in which it
+accepts arguments, and the fact that it is a function. If the function takes
+many arguments, then the names of the arguments may spill across two or three
+lines. The paragraphs following this standard header explain the definition and
+uses of the function and often present examples or related functions.
+
+#+begin_example
+----------------------------------------------------------------
+Table 1-1: Sample Function Description
+
+[Function]
+sample-function arg1 arg2 &optional arg3 arg4
+
+The function sample-function adds together arg1 and arg2, 
+and then multiplies the result by arg3. If arg3 is not 
+provided or is nil, the multiplication isn't done. 
+sample-function then returns a list whose first element is
+this result and whose section element is arg4 (which 
+defaults to the symbol foo). For example: 
+
+(sample-function 3 4) => (7 foo)
+(sample-function 1 2 2 'bar) => (6 bar)
+
+In general, (sample-function x y) == (list (+ x y) 'foo).
+
+----------------------------------------------------------------
+#+end_example
+
+#+texinfo:@heading Global Variables
+
+The first  line specifies the name  of the variable and  the fact that it  is a
+variable. Purely as a matter of convention, all global variables used by Common
+Lisp have names beginning and ending with an asterisk.
+
+#+begin_example
+----------------------------------------------------------------
+Table 1-2: Sample Variable Description
+
+[Variable]
+*sample-variable*
+
+The variable *sample-variable* specifies how many times the
+special form sample-special-form should iterate. The value
+should always be a non-negative integer or nil (which means
+iterate indefinitely many times).  The initial value is 0
+(meaning no iterations).
+
+----------------------------------------------------------------
+#+end_example
+
+#+texinfo:@heading Named Constants
+
+The first  line specifies the name  of the constant and  the fact that it  is a
+constant. (A  constant is  just like a  global variable, except  that it  is an
+error ever to alter its value or to bind it to a new value.)
+
+#+begin_example
+----------------------------------------------------------------
+Table 1-3: Sample Constant Description
+
+[Constant]
+sample-constant
+
+The named constant sample-constant has as its value the
+height of the terminal screen in furlongs times the base-2
+logarithm of the implementation's total disk capacity in
+bytes, as a floating-point number.
+
+----------------------------------------------------------------
+#+end_example
+
+#+texinfo:@heading Special Forms and Macros
+
+These are  very different from functions.  Functions are called according  to a
+single, specific, consistent syntax;  the &optional/&rest/&key syntax specifies
+how the function  uses its arguments internally but does  not affect the syntax
+of  a  call.  In  contrast,  each  special form  or  macro  can  have  its  own
+idiosyncratic syntax.  It is  by special  forms and macros  that the  syntax of
+Common Lisp is defined and extended.
+
+In the  description of  a *special  form* or  *macro*,
+- an /italicized word/ names a corresponding  part of the form that invokes the
+  special form or macro.
+- /Parentheses/  stand  for themselves  and  should  be  written as  such  when
+  invoking the special form or macro.
+- /Brackets/,  /braces/,  /stars/,  /plus   signs/,  and  /vertical  bars/  are
+  metasyntactic marks.
+  - Brackets, =[=  and =]=, indicate  that what  they enclose is  optional (may
+    appear zero  times or one time  in that place); the  square brackets should
+    not be written in code.
+  - Braces,  ={= and  =}=, simply  parenthesize what  they enclose  but may  be
+    followed by a star, =*=, or a plus sign, =+=;
+    - a /star/  indicates that what the  braces enclose may appear  any number of
+      times (including zero, that is, not at all),
+    - whereas a /plus  sign/ indicates that what the braces  enclose may appear
+      any non-zero number of times (that is, must appear at least once).
+    - Within  braces or  brackets, a  /vertical bar/,  =|=, separates  mutually
+      exclusive choices.
+  - In summary,
+    - the notation  ={x}*= means zero  or more  occurrences of x,
+    - the notation ={x}+= means one or  more occurrences of x, and
+    - the notation =[x]= means zero or one occurrence of x.
+    - These notations  are also  used for  syntactic descriptions  expressed as
+      BNF-like productions, as in table 22-2.
+- Double brackets, =[[= and =]]=, indicate  that any number of the alternatives
+  enclosed  may be  used,
+  - and those used may occur in any  order,
+  - but  each  alternative may  be  used  at most  once  unless  followed by  a
+    star.
+  - For example,
+    : p [[x | {y}* | z]] q
+    means that at most  one x, any number of y's, and at  most one z may appear
+    between the mandatory occurrences of p and  q, and those that appear may be
+    in any order.
+  - A downward arrow,  ?, indicates a form of syntactic  indirection that helps
+    to make =[ [= =] ]= notation more readable.
+  - If X  is some non-terminal symbol  occurring on the left-hand  side of some
+    BNF  production, then  the  right-hand side  of that  production  is to  be
+    textually substituted for any occurrence of ?X. Thus the two fragments
+    : p [[?xyz-mixture]] q
+    : xyz-mixture ::= x | {y}* | z
+    are together equivalent to the previous example. 
+
+#+begin_example
+----------------------------------------------------------------
+Table 1-4: Sample Special Form Description
+
+[Special Form]
+sample-special-form [name] ({var}*) {form}+
+
+This evaluates each form in sequence as an implicit progn,
+and does this as many times as specified by the global
+variable *sample-variable*. Each variable var is
+bound and initialized to 43 before the first iteration, and
+unbound after the last iteration. The name name, if
+supplied, may be used in a return-from form to exit from the
+loop prematurely. If the loop ends normally,
+sample-special-form returns nil. For example:
+
+(setq *sample-variable* 3)
+(sample-special-form () form1 form2)
+
+This evaluates form1, form2, form1, form2, form1, form2,
+in that order.
+
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+Table 1-5: Sample Macro Description
+
+[Macro]
+sample-macro var [[ declaration* | doc-string ]] {tag | statement}*
+
+This evaluates the statements as a prog body, with the
+variable var bound to 43.
+
+(sample-macro x (return (+ x x))) => 86
+(sample-macro var . body) -> (prog ((var 43)) . body)
+----------------------------------------------------------------
+#+end_example
+
+In the  last example in  table 1-5,  notice the use  of dot notation.   The dot
+appearing in  the expression ~(sample-macro var  .  body)~ means that  the name
+~body~ stands  for a list  of forms, not  just a single form,  at the end  of a
+list. This notation is often used in examples.
+
+In the  heading line in table  1-5, notice the use  of =[ [= =] ]= notation to
+indicate  that  any  number  of  declarations   may  appear  but  at  most  one
+documentation  string (which  may appear  before,  after, or  somewhere in  the
+middle of any declarations).
+
+*** The Lisp Reader
+#+cindex:Lisp reader
+The term  ``Lisp reader'' refers specifically  to a Lisp procedure,  namely the
+function ~read~,  which reads  characters from an  input stream  and interprets
+them by parsing as representations of Lisp objects.
+
+*** Overview of Syntax
+#+cindex:syntax
+Certain characters are used  in special ways in the syntax  of Common Lisp. The
+complete syntax is explained in detail in  chapter 22, but a quick summary here
+may be useful:
+
+- left parenthesis =(= ::
+
+  begins a list of  items. The list may contain any  number of items, including
+  zero. Lists may be  nested.
+
+  - For example, ~(cons (car x) (cdr y))~  is a list of three things, of which
+   the last two are themselves lists.
+
+- right parenthesis =)= ::
+
+  ends a list of items.
+
+- acute accent ='= ::
+
+  (also called single quote or apostrophe) followed by an expression form is an
+  abbreviation for ~(quote form)~.  Thus ~'foo~ means ~(quote foo)~ and ~'(cons
+  'a 'b)~ means ~(quote (cons (quote a) (quote b)))~.
+
+- semicolon =;= ::
+
+  the comment character.  It and all characters  up to the end of  the line are
+  discarded.
+
+- double quote ="= ::
+
+  surround character strings:
+  : "This is a thirty-nine-character string."
+
+- Backslash =\= ::
+
+  is an  escape character.   It causes the  next character to  be treated  as a
+  letter rather than for its usual syntactic purpose.
+
+- Vertical bars =|= ::
+
+  are used in pairs to surround the name (or part of the name) of a symbol that
+  has many  special characters  in it.  It is roughly  equivalent to  putting a
+  backslash in front of every character so surrounded.
+
+- Number sign =#= ::
+
+  signals  the  beginning  of  a  complicated  syntactic  structure.  The  next
+  character designates the precise syntax to follow.
+
+- Grave accent (``backquote'') =`= ::
+
+  signals that the  next expression is a template that  may contain commas. The
+  backquote syntax  represents a program  that will construct a  data structure
+  according to the template.
+
+- Commas =,= ::
+
+  are used within the backquote syntax.
+
+- Colon =:= ::
+
+  is  used  to indicate  which  package  a  symbol  belongs to.   For  example,
+  ~network:reset~  denotes  the  symbol  named ~reset~  in  the  package  named
+  ~network~.
+
+  -  A leading colon =:= indicates a  /keyword/, a symbol that always evaluates
+    to itself. The  colon character is not  actually part of the  print name of
+    the symbol.  A symbol notated with a  leading colon is in effect a constant
+    that evaluates to itself.
+
+Brackets, braces, question mark, and exclamation point (that is, =[=, =]=, ={=,
+=}=,  =?=, and  =!=) are  not  used for  any  purpose in  standard Common  Lisp
+syntax. These characters are explicitly reserved to the user, primarily for use
+as /macro characters/ for user-defined lexical syntax extensions.
+
+#+texinfo:@heading Case
+#+texinfo:@subheading Lowercase
+#+cindex:case
+#+cindex:lowercase
+#+cindex:uppercase
+All  code in  this book  is  written using  lowercase letters.  Common Lisp  is
+generally insensitive to  the case in which code is  written.
+
+#+texinfo:@subheading Uppercase
+Internally,  names  of  symbols  are  ordinarily converted  to  and  stored  in
+uppercase form.
+
+#+texinfo:@subheading Case Conversion---@command{*print-case*}
+#+cindex:case conversion
+#+pindex:*print-case*
+There  are   ways  to  force  case   conversion  on  output  if   desired;  see
+~*print-case*~.
+
+#+texinfo:@subheading Case In This Book
+In this  book, wherever  an interactive  exchange between a  user and  the Lisp
+system is shown,  the input is exhibited with lowercase  letters and the output
+with uppercase letters.
+
+#+texinfo:@subheading @command{readtable-case}
+#+pindex:readtable-case
+X3J13    voted   in    June   1989    (READ-CASE-SENSITIVITY)   to    introduce
+readtable-case.   Certain  settings   allow  the   names  of   symbols  to   be
+case-sensitive. The default behavior, however,  is as described in the previous
+paragraph. In  any event, only uppercase  letters appear in the  internal print
+names of symbols  naming the standard Common Lisp facilities  described in this
+book.
+
 ** Data Types
 ** Scope and Extent
 ** Type Specifiers
@@ -8923,6 +9270,119 @@ way macro expansion does.
 ** File System Interface
 ** Miscellaneous Features
 ** Loop
+X3J13 voted in January 1989 (LOOP-FACILITY)  to adopt an extended definition of
+the loop macro as  a part of the forthcoming draft  Common Lisp standard.  This
+chapter presents the bulk of the Common Lisp Loop Facility proposal, written by
+Jon L White.
+*** Introduction
+#+cindex:Loop Facility
+A *loop*  is a series  of expressions  that are executed  one or more  times, a
+process known as /iteration/.  The *Loop  Facility* defines a variety of useful
+methods, indicated by  loop keywords, to iterate and to  accumulate values in a
+loop.
+
+#+texinfo:@heading Loop Keywords
+*Loop keywords*  are not true Common  Lisp keywords; they are  symbols that are
+recognized  by  the  Loop  Facility  and  that  provide  such  capabilities  as
+
+- controlling the direction of iteration,
+- accumulating values inside the body of a loop, and
+- evaluating expressions that precede or follow the loop body.
+
+If you do not use any loop keywords, the Loop Facility simply executes the loop
+body repeatedly.
+
+*** How the Loop Facility Works
+#+cindex:Loop Facility
+#+cindex:loop macro
+#+texinfo:@heading Loop Macro
+The  driving  element  of the  Loop  Facility  is  the  *loop macro*.
+
+#+cindex:loop clause
+When Lisp encounters a *loop macro call form*, it invokes the Loop Facility and
+passes to it the  /loop clauses/ as a list of /unevaluated  forms/, as with any
+macro.
+
+#+texinfo:@subheading Loop Clauses
+#+cindex:loop keyword
+The *loop  clauses* contain Common  Lisp forms  and /loop keywords/.   The loop
+keywords are recognized  by their symbol name, regardless of  the packages that
+contain them.  The  loop macro translates the given form  into Common Lisp code
+and returns the /expanded form/.
+
+#+texinfo:@subheading Expanded Loop Form
+#+cindex:expanded loop form
+#+cindex:loop form, expanded
+The  *expanded loop  form*  is
+- one or more *lambda-expressions* for the local binding of loop variables and
+- a *block*  and
+- a *tagbody* that express a /looping control structure/.
+
+#+texinfo:@subsubheading Variables
+The variables established in the loop construct  are bound as if by using ~let~
+or ~lambda~.  Implementations can interleave the setting of initial values with
+the  bindings.   However,  the  assignment  of the  initial  values  is  always
+calculated in  the order specified by  the user.  A variable  is thus sometimes
+bound to  a harmless  value of  the correct data  type, and  then later  in the
+prologue it is set to the true initial value by using ~setq~.
+
+#+texinfo:@subheading Parts of the Expanded Form
+#+texinfo:@subheading Expanded Form
+The expanded form consists of three basic parts in the =tagbody=:
+#+cindex:loop prologue
+#+cindex:loop body
+#+cindex:loop epilogue
+
+- Loop Prologue  ::  contains forms that are executed  before iteration begins,
+  such  as  initial  settings  of   loop  variables  and  possibly  an  initial
+  termination test.
+
+- Loop  Body  :: contains  those  forms  that  are executed  during  iteration,
+  including application-specific calculations,  termination tests, and variable
+  stepping. Stepping is the process of assigning  a variable the next item in a
+  series of items.
+
+- Loop Epilogue :: contains forms that are executed after iteration terminates,
+  such as code to return values from the loop.
+
+#+cindex:@code{nil} Block---@code{return}---@code{return-from}
+Expansion of the /loop macro/ produces an *implicit block* (named =nil=). Thus,
+the Common Lisp  macro ~return~ and the special form  ~return-from~ can be used
+to return values from a loop or to exit a loop.
+
+Within the  executable parts of loop  clauses and around the  entire loop form,
+you can still bind variables by using the Common Lisp special form ~let~.
+
+*** Parsing Loop Clauses
+
+**** Order of Execution
+
+**** Kinds of Loop
+
+**** Loop Syntax
+
+*** User Extensibility
+
+*** Loop Constructs
+
+*** Iteration Control
+
+*** End-Test Control
+
+*** Value Accumulation
+
+*** Variable Initializations
+
+*** Conditional Execution
+
+*** Unconditional Execution
+
+*** Miscellaneous Features
+
+**** Data Types
+
+**** Destructuring
+
 ** Pretty Printing
 ** Common Lisp Object System
 ** Conditions
