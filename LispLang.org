@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 08:11
-#+macro:version Version 0.0.117
+#+date:2021-11-23 08:28
+#+macro:version Version 0.0.118
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10004,25 +10004,25 @@ introduce iterations that depend on a previous iteration specification.[fn:10]
 
 #+texinfo:@heading Examples
 
-#+begin_src lisp
+#+begin_src lisp :results output
 ;;; Print some numbers.
 
 (loop as i from 1 to 5
-      do (print i)) `;Prints 5 lines
+      do (print i)) ;Prints 5 lines
 #+end_src
 
-#+begin_src lisp
+#+begin_src lisp :results output
 ;;; Print every third number.
 
 (loop for i from 10 downto 1 by 3
-      do (print i)) `;Prints 4 lines
+      do (print i)) ;Prints 4 lines
 #+end_src
 
-#+begin_src lisp
+#+begin_src lisp :results output
 ;;; Step incrementally from the default starting value.
 
 (loop as i below 5
-      do (print i)) `;Prints 5 lines
+      do (print i)) ;Prints 5 lines
 #+end_src
 
 *** End-Test Control
