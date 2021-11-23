@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 11:09
-#+macro:version Version 0.0.120
+#+date:2021-11-23 13:53
+#+macro:version Version 0.0.121
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10347,6 +10347,236 @@ but, in some implementations, the =repeat= construct might be more efficient.
 #+end_src
 
 *** End-Test Control
+#+texinfo:@heading Loop Termination Constructs
+
+The loop keywords
+- =always=,
+- =never=,
+- =thereis=,
+- =until=, and
+- =while=
+
+designate constructs  that use a single  test condition to determine  when loop
+iteration should *terminate*.
+
+#+texinfo:@subheading Specific Values to Return
+
+The  constructs
+- =always=
+- =never=,  and
+- =thereis=
+
+provide specific  values to be  returned when  a loop terminates.   Using these
+with value-returning accumulation clauses can produce unpredictable results.
+
+#+texinfo:@subheading No Specific Values to Return
+
+In all other respects these constructs behave like the
+- =while= and
+- =until=
+
+constructs.
+
+The macro  ~loop-finish~ can be used  at any time to  cause normal termination.
+In normal termination, =finally= clauses are executed and default return values
+are returned.
+
+=End-test= control constructs  can be used anywhere within the  loop body.  The
+termination conditions are tested in the order in which they appear.
+
+**** while-until
+
+#+begin_example
+while expr 
+until expr
+#+end_example
+
+- =while= ::
+
+  allows iteration to continue until  the specified expression ~expr~ evaluates
+  to ~nil~.   The expression  is re-evaluated  at the  location of  the =while=
+  clause.
+
+- =until= ::
+
+  is  equivalent  to =while=  ~(not  expr)~.  If  the  value of  the  specified
+  expression is non-nil, iteration terminates.
+
+You can  use =while=  and =until=  at any  point in  a loop.   If a  =while= or
+=until= clause  causes termination, any clauses  that precede it in  the source
+are still evaluated.
+
+If the  =while= or =until= construct  causes termination, control is  passed to
+the loop =epilogue=, where any =finally= clauses will be executed.
+
+#+begin_src lisp
+;;; A classic "while-loop". 
+(loop while (hungry-p) do (eat)) 
+#+end_src
+
+#+begin_src lisp
+;;; UNTIL NOT is equivalent to WHILE. 
+(loop until (not (hungry-p)) do (eat)) 
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; Collect the length and the items of STACK.
+(let ((stack '(a b c d e f)))
+  (loop while stack
+        for item = (length stack) then (pop stack)
+        collect item))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; Use WHILE to terminate a loop that otherwise wouldn't
+;;; terminate.  Note that WHILE occurs after the WHEN.
+(loop for i fixnum from 3
+      when (oddp i) collect i
+      while (< i 5))
+#+end_src
+
+**** always-never-thereis
+
+#+begin_example
+always expr 
+never expr 
+thereis expr
+#+end_example
+
+- =always= ::
+
+  takes one form and  terminates the loop if the form  ever evaluates to ~nil~;
+  in this  case, it  returns ~nil~.   Otherwise, it  provides a  default return
+  value of =t=.
+
+- =never= ::
+
+  takes one form and terminates the loop if the form ever evaluates to non-nil;
+  in this  case, it  returns ~nil~.   Otherwise, it  provides a  default return
+  value of =t=.
+
+- =thereis= ::
+
+  takes one form and terminates the loop if the form ever evaluates to non-nil;
+  in this case, it returns that value.
+
+Since =always=,  =never=, and =thereis= use  the Common Lisp macro  ~return~ to
+terminate iteration, any =finally= clause that is specified is not evaluated.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp :results value :exports both
+;;; Make sure I is always less than 11 (two ways).
+;;; The FOR construct terminates these loops.
+(loop for i from 0 to 10
+      always (< i 11))
+#+end_src
+
+#+begin_src lisp :results value :exports both
+(loop for i from 0 to 10
+      never (> i 11))
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;;; If I exceeds 10, return I; otherwise, return NIL.
+;;; The THEREIS construct terminates this loop.
+(loop for i from 0
+      thereis (when (> i 10) i) )
+#+end_src
+
+#+begin_src lisp :result value :exports both
+;;; The FINALLY clause is not evaluated in these examples.
+(loop for i from 0 to 10
+      always (< i 9)
+      finally (print "you won't see this"))
+#+end_src
+
+#+begin_src lisp :results value :exports both
+(loop never t
+      finally (print "you won't see this"))
+#+end_src
+
+#+begin_src lisp :results value :exports both
+(loop thereis "Here is my value"
+      finally (print "you won't see this"))
+#+end_src
+
+#+begin_src lisp :results output :exports both
+;;; The FOR construct terminates this loop,
+;;; so the FINALLY clause is evaluated.
+(loop for i from 1 to 10
+      thereis (> i 11)
+      finally (print i)) ;Prints 1 line
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+(defstruct mountain height difficulty (why "because it is there"))
+(setq everest (make-mountain :height '(2.86e-13 parsecs)))
+(setq chocorua (make-mountain :height '(1059180001 microns)))
+(defstruct desert area (humidity 0))
+(setq sahara (make-desert :area '(212480000 square furlongs)))
+;First there is a mountain, then there is no mountain, then there is ...
+(loop for x in (list everest sahara chocorua) ; -GLS
+      thereis (and (mountain-p x) (mountain-height x)))
+#+end_src
+
+#+begin_src lisp
+;;; If you could use this code to find a counterexample to
+;;; Fermat's last theorem, it would still not return the value
+;;; of the counterexample because all of the THEREIS clauses
+;;; in this example return only T.   Of course, this code has
+;;; never been observed to terminate.
+
+(loop for z upfrom 2
+      thereis
+        (loop for n upfrom 3 below (log z 2)
+              thereis
+                (loop for x below z
+                      thereis
+                        (loop for y below z
+                              thereis (= (+ (expt x n)
+                                            (expt y n))
+                                         (expt z n))))))
+#+end_src
+
+**** loop-finish Macro
+The  macro   ~loop-finish~  terminates  iteration  normally   and  returns  any
+accumulated result.  If specified, a =finally= clause is evaluated.
+
+In  most cases  it is  not necessary  to use  ~loop-finish~ because  other loop
+control clauses terminate the loop.  Use ~loop-finish~ to provide a normal exit
+from a nested condition inside a loop.
+
+You can use ~loop-finish~ inside nested Lisp code to provide a normal exit from
+a loop.   Since ~loop-finish~ transfers  control to the loop  =epilogue=, using
+~loop-finish~ within a =finally= expression can cause infinite looping.
+
+Implementations are allowed to provide this construct as a local macro by using
+~macrolet~.
+
+#+begin_src lisp
+;;; Print a date in February, but exclude leap day.
+;;; LOOP-FINISH exits from the nested condition.
+(loop for date in date-list
+      do (case date
+           (29 (when (eq month 'february)
+                     (loop-finish))
+             (format t "~:@(~A~) ~A" month date))))
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;;; Terminate the loop, but return the accumulated count.
+(loop for i in '(1 2 3 stop-here 4 5 6)
+      when (symbolp i) do (loop-finish)
+      count i)
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;;; This loop works just as well as the previous example.
+(loop for i in '(1 2 3 stop-here 4 5 6)
+      until (symbolp i)
+      count i)
+#+end_src
 
 *** Value Accumulation
 
