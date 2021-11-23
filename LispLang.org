@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 08:28
-#+macro:version Version 0.0.118
+#+date:2021-11-23 09:12
+#+macro:version Version 0.0.119
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10004,21 +10004,21 @@ introduce iterations that depend on a previous iteration specification.[fn:10]
 
 #+texinfo:@heading Examples
 
-#+begin_src lisp :results output
+#+begin_src lisp :results output :exports both
 ;;; Print some numbers.
 
 (loop as i from 1 to 5
       do (print i)) ;Prints 5 lines
 #+end_src
 
-#+begin_src lisp :results output
+#+begin_src lisp :results output :exports both
 ;;; Print every third number.
 
 (loop for i from 10 downto 1 by 3
       do (print i)) ;Prints 4 lines
 #+end_src
 
-#+begin_src lisp :results output
+#+begin_src lisp :results output :exports both
 ;;; Step incrementally from the default starting value.
 
 (loop as i below 5
@@ -14543,7 +14543,7 @@ nil
 :copying:  t
 :END:
 
-Copyright \copy 2020 by {{{author}}}
+Copyright \copy 2021 by {{{author}}}
 
 
 * Concept Index
@@ -14570,7 +14570,7 @@ Copyright \copy 2020 by {{{author}}}
 * Configuration							   :noexport:
 #+todo: SOMEDAY(s@) TODO(t@) INPROGRESS(i@) WAIT(w@) | CANCEL(c@) DONE(d!)
 
-#+options: H:4
+#+options: H:4 toc:2
 
 #+texinfo_class: info
 #+texinfo_header:
