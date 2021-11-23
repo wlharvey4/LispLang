@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 07:06
-#+macro:version Version 0.0.115
+#+date:2021-11-23 07:39
+#+macro:version Version 0.0.116
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -9706,8 +9706,8 @@ operation.
 
 #+cindex:iteration control, loop
 #+cindex:loop iteration control construct
-- [[*Iteration Control][iteration control]] :: describes iteration  control clauses that allow directed
-  loop iteration.
+- [[*Iteration  Control][iteration  control]]  ::  describes *iteration  control  clauses*  that  allow
+  directed loop iteration.
 
   #+cindex:end-test control, loop
   #+cindex:loop end-test control construct
@@ -9763,97 +9763,118 @@ The loop keywords:
 - ~for~
 - ~repeat~
 
-designate iteration control clauses.  They  must precede any other loop clauses
-except  ~initially~,  ~with~,  and   ~named~,  since  they  establish  variable
-bindings.
+designate  *iteration  control clauses*.   They  must  precede any  other  loop
+clauses except
+- ~initially~,
+- ~with~, and
+- ~named~
 
-/Iteration control clauses/ differ with respect to the specification of
+since they establish variable bindings.
+
+*Iteration control clauses* differ with respect to the specification of
 
 - termination conditions and
 - the initialization and
 - stepping
 
-of  loop  variables.  When  iteration  control  clauses  are  used in  a  loop,
+of  loop variables.   When  *iteration control  clauses* are  used  in a  loop,
 /termination tests/ in  the loop body are evaluated before  any other loop body
 code is executed.
 
 #+texinfo:@heading Iteration Control Clause Summary
-The ~for~ and  ~as~ clauses iterate by  using one or more  local loop variables
-that are initialized  to some value and  that can be modified  or stepped after
-each iteration.
+The ~for~ and ~as~ keywords are synonyms, and the clauses iterate by
+- using one or more  *local loop variables*
+
+- that are *initialized*  to some value (*Destructuring* can be  used to assign
+  /initial values/ to variables during iteration); and
+
+- that can be modified or *stepped* each iteration.
 
 - For these clauses, iteration *terminates*  when a local variable reaches some
-  specified value or when some other loop clause terminates iteration.
+  specified value /or/ when some other loop clause *terminates* iteration.
 
 - At each iteration, variables can be  *stepped* by an increment or a decrement
-  or can be assigned a new value by the evaluation of an expression.
+  or can be *assigned* a new value by the evaluation of an expression.
 
-- *Destructuring*  can be  used to  assign initial  values to  variables during
-  iteration.
 
-The ~for~ and ~as~ keywords are synonyms and may be used interchangeably.
+#+texinfo:@subheading 7 Syntactic Representations
+There are *seven syntactic representations* for these constructs.
 
-- There are seven syntactic representations for these constructs.
+1. arithmetic
+2. in list
+3. on list
+4. equals then
+5. across
+6. hash
+7. package
+
+
+#+texinfo:@subheading Data Types
+#+cindex:destructuring list
 
 - In each syntactic  description, the *data type* of ~var~  can be specified by
   the optional ~type-spec~ argument.
 
+- The variable  argument in iteration  control clauses can be  a *destructuring
+  list*.  A destructuring list is a  tree whose non-null atoms are symbols that
+  can be assigned a value.
+
 - If  ~var~  is  a  *destructuring  list*,  the  data  type  specified  by  the
   ~type-spec~ argument must appropriately match the elements of the list.
 
-#+texinfo:@heading Variables and Return Values
-Iteration  clauses by  themselves  do not  cause the  Loop  Facility to  return
-values, but they  can be used in conjunction  with *value-accumulation clauses*
-to return values.
-
+#+texinfo:@heading Initialization and Return Values
 All  variables are  *initialized*  in the  /loop prologue/.
 
+Iteration  clauses by  themselves do  not cause  the Loop  Facility to  *return
+values*, but they can be  used in conjunction with *value-accumulation clauses*
+to return values.
+
+#+texinfo:@subheading Scope of the Variable Binding is Lexical by Default
+#+cindex:scope, loop
 The  *scope* of  the  variable binding  is /lexical/  unless  it is  proclaimed
 /special/; thus,  the variable  can be  accessed only  by expressions  that lie
 textually within  the loop.   Stepping assignments  are made  in the  loop body
 before any other expressions are evaluated in the body.
 
-#+texinfo:@subheading Destructuring List
-#+cindex:destructuring list
-The  variable argument  in iteration  control  clauses can  be a  *destructuring
-list*.  A destructuring list is a tree  whose non-null atoms are symbols that can
-be assigned a value.
-
 #+texinfo:@heading Multiple Iteration Clauses and @command{and} Construct
+#+texinfo:@subheading Sequential Binding by Default
 If  you  use   multiple  iteration  clauses  to   control  iteration,
 - variable initialization and
 - stepping
 
 occur /sequentially/ by default.
 
+#+texinfo:@subheading Parallel Binding using @command{and}
 You can use the  ~and~ construct to connect two or  more iteration clauses when
 sequential binding and  stepping are not necessary.  The  iteration behavior of
 clauses joined by ~and~  is analogous to the behavior of  the Common Lisp macro
 ~do~ relative to ~do*~.
 
+#+texinfo:@heading Syntax of Iteration Control Clauses
+#+cindex:iteration control clause syntax
+#+cindex:syntax of iteration control clauses
+#+caption: Syntax of Iteration Control Clauses
+#+name: Iteration Control Clause Syntax
 #+begin_example
   for-as ::= {for | as} for-as-subclause {and for-as-subclause}*
   for-as-subclause ::= for-as-arithmetic
-                            | for-as-in-list
-                            | for-as-on-list
-                            | for-as-equals-then
-                            | for-as-across
-                            | for-as-hash
-                            | for-as-package
+                     | for-as-in-list
+                     | for-as-on-list
+                     | for-as-equals-then
+                     | for-as-across
+                     | for-as-hash
+                     | for-as-package
 
   for-as-arithmetic ::= var [type-spec]
-                            [{from | downfrom | upfrom} expr1 ]
-                            [{to | downto | upto | below | above} expr2]
-                            [by expr3]
+                       [{from | downfrom | upfrom} expr1 ]
+                       [{to | downto | upto | below | above} expr2]
+                       [by expr3]
 
-  for-as-in-list ::= var [type-spec] in expr1
-                                    [by step-fun]
+  for-as-in-list ::= var [type-spec] in expr1 [by step-fun]
 
-  for-as-on-list ::= var [type-spec] on expr1
-                                    [by step-fun]
+  for-as-on-list ::= var [type-spec] on expr1 [by step-fun]
 
-  for-as-equals-then ::= var [type-spec] = expr1
-                                          [then step-fun]
+  for-as-equals-then ::= var [type-spec] = expr1 [then step-fun]
 
   for-as-across ::= var [type-spec] across vector
 
@@ -9864,8 +9885,8 @@ clauses joined by ~and~  is analogous to the behavior of  the Common Lisp macro
                         [using ({hash-value | hash-key} other-var)]
 
   for-as-package ::= var [type-spec]
-                          being {each | the}
-                          for-as-package-keyword {in | of} package
+                     being {each | the}
+                     for-as-package-keyword {in | of} package
 
   for-as-package-keyword ::= symbol
                            | present-symbol
@@ -9876,8 +9897,8 @@ clauses joined by ~and~  is analogous to the behavior of  the Common Lisp macro
 #+end_example
 
 **** Examples of @command{for-as} Construct
-In the  following example, the variable  ~x~ is stepped before  ~y~ is stepped;
-thus, the value of ~y~ reflects the updated value of ~x~:
+In the  following example, the  variable ~x~ is  stepped before ~y~  is stepped
+(~and~ is not used); thus, the value of ~y~ reflects the updated value of ~x~:
 
 #+begin_src lisp
   (loop for x from 1 to 9
@@ -9887,7 +9908,7 @@ thus, the value of ~y~ reflects the updated value of ~x~:
   ;;; => ((1 NIL) (2 2) (3 3) (4 4) (5 5) (6 6) (7 7) (8 8) (9 9))
 #+end_src
 
-In the following example, ~x~ and ~y~ are stepped in parallel:
+In the following example, ~x~ and ~y~ are stepped in parallel (~and~ is used):
 
 #+begin_src lisp
   (loop for x from 1 to 9
@@ -9900,12 +9921,13 @@ In the following example, ~x~ and ~y~ are stepped in parallel:
 This is the first of seven for/as syntaxes.
 
 #+begin_example
-for var [type-spec] [{from | downfrom | upfrom} expr1]
-    [{to | downto | upto | below | above} expr2]
-    [by expr3]
-as var [type-spec] [{from | downfrom | upfrom} expr1]
-    [{to | downto | upto | below | above} expr2]
-    [by expr3]
+for var [type-spec]
+        [{from | downfrom | upfrom} expr1]
+        [{to | downto | upto | below | above} expr2]
+        [by expr3]
+ as var [type-spec] [{from | downfrom | upfrom} expr1]
+        [{to | downto | upto | below | above} expr2]
+        [by expr3]
 #+end_example
 
 The ~for~ or ~as~ construct iterates from the value specified by =expr1= to the
