@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 09:12
-#+macro:version Version 0.0.119
+#+date:2021-11-23 10:56
+#+macro:version Version 0.0.120
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10023,6 +10023,329 @@ introduce iterations that depend on a previous iteration specification.[fn:10]
 
 (loop as i below 5
       do (print i)) ;Prints 5 lines
+#+end_src
+
+**** for-as-in-list
+
+This is the second of seven =for/as= syntaxes.
+
+#+begin_example
+for var [type-spec] in expr1 [by step-fun]
+ as var [type-spec] in expr1 [by step-fun]
+#+end_example
+
+#+texinfo:@heading List Iteration
+This construct iterates over the contents of  a list.
+
+- It  checks for  the end  of the  list as  if using  the Common  Lisp function
+  ~endp~.
+
+- The variable  ~var~ is bound to  the successive elements of  the list ~expr1~
+  before each iteration.
+
+- At the end of each iteration, the function ~step-fun~ is called on the list
+  and is expected to produce  a successor list; the default value  for
+  ~step-fun~ is the ~cdr~ function.
+
+- The =for= or  =as= construct causes termination  when the end of  the list is
+  reached.  The loop keywords =in= and =by= serve as valid prepositions in this
+  syntax.
+
+#+begin_src lisp :results output :exports both
+;;; Print every item in a list.
+
+(loop for item in '(1 2 3 4 5) do (print item)) ;Prints 5 lines
+#+end_src
+
+#+begin_src lisp :results output :exports both
+;;; Print every other item in a list.
+
+(loop for item in '(1 2 3 4 5) by #'cddr
+      do (print item))  ;Prints 3 lines
+#+end_src
+
+#+begin_src lisp :result output :exports both
+;;; Destructure items of a list, and sum the x values
+;;; using fixnum arithmetic.
+(loop for (item . x) (t . fixnum)
+          in '((A . 1) (B . 2) (C . 3))
+      unless (eq item 'B) sum x)
+#+end_src
+
+**** for-as-on-list
+
+This is the third of seven =for/as= syntaxes
+
+#+begin_example
+for var [type-spec] on expr1 [by step-fun]
+ as var [type-spec] on expr1 [by step-fun]
+#+end_example
+
+This construct iterates over the contents of a list (using the successive tails
+of the list each iteration).
+
+- It  checks for  the end  of the  list as  if using  the Common  Lisp function
+  ~endp.~
+
+- The variable ~var~ is bound to the *successive tails* of the list ~expr1~.
+
+- At the end of  each iteration, the function ~step-fun~ is  called on the list
+  and is expected to produce a successor list; the default value for ~step-fun~
+  is the ~cdr~ function.
+
+- The  loop  keywords  =on=  and  =by= serve  as  valid  prepositions  in  this
+  syntax.
+
+- The =for= or  =as= construct causes termination  when the end of  the list is
+  reached.
+
+#+begin_src lisp :result output :exports both
+;;; Collect successive tails of a list.
+(loop for sublist on '(a b c d)
+      collect sublist)
+#+end_src
+
+#+begin_src lisp :results output :exports both
+;;; Print a list by using destructuring with the loop keyword ON.
+(loop for (item) on '(1 2 3)
+      do (print item))  ;Prints 3 lines
+#+end_src
+
+#+begin_src lisp :results output :exports results
+;;; Print items in a list without using destructuring.
+(loop for item in '(1 2 3)
+      do (print item))  ;Prints 3 lines
+#+end_src
+
+**** for-as-equals-then
+
+This is the fourth of seven for/as syntaxes.
+
+#+begin_example
+for var [type-spec] = expr1 [then expr2] 
+ as var [type-spec] = expr1 [then expr2]
+#+end_example
+
+This construct
+- *initializes* the  variable ~var~ by setting  it to the result  of evaluating
+  ~expr1~ on the first iteration,
+
+- then  setting it  to  the result  of  evaluating ~expr2~  on  the second  and
+  *subsequent iterations*.
+
+- If  ~expr2~  is  omitted,  the  construct uses  ~expr1~  on  the  second  and
+  subsequent iterations.  When ~expr2~ is  omitted, the expanded code shows the
+  following optimization:
+
+#+begin_example
+;;; Sample original code:
+(loop for x = expr1 then expr2 do (print x))
+
+;;; The usual expansion:
+(tagbody
+      (setq x expr1)
+  tag (print x)
+      (setq x expr2)
+      (go tag))
+
+;;; The optimized expansion:
+(tagbody
+  tag (setq x expr1)
+      (print x)
+      (go tag))
+#+end_example
+
+- The loop keywords ='='= and =then= serve as valid prepositions in this syntax.
+
+- This construct does not provide any termination conditions.
+
+#+begin_src lisp :results :output :exports both
+;;; Collect some numbers.
+(loop for item = 1 then (+ item 10)
+      repeat 5
+      collect item)
+#+end_src
+
+**** for-as-across
+
+This is the fifth of seven =for/as= syntaxes.
+
+#+begin_example
+for var [type-spec] across vector
+ as var [type-spec] across vector
+#+end_example
+
+- This construct binds the  variable ~var~ to the value of  each element in the
+  array ~vector~.
+
+- The loop  keyword =across= marks  the array ~vector~;  =across= is used  as a
+  preposition in this syntax.  Iteration stops  when there are no more elements
+  in the specified array that can be referenced.
+
+- Some implementations  might use a  [user-supplied-GLS] ~the~ special  form in
+  the ~vector~ form to produce more efficient code.
+
+#+begin_src lisp
+(loop for char across (the simple-string (find-message port))
+      do (write-char char stream))
+#+end_src
+
+**** for-as-hash
+
+This is the sixth of seven for/as syntaxes.
+
+#+begin_example
+for var [type-spec] being {each | the}
+    {hash-key | hash-keys | hash-value | hash-values}
+    {in | of} hash-table [using ({hash-value | hash-key} other-var)]
+as var [type-spec] being {each | the}
+    {hash-key | hash-keys | hash-value | hash-values}
+    {in | of} hash-table [using ({hash-value | hash-key} other-var)]
+#+end_example
+
+This construct  iterates over the elements,  keys, and values of  a hash table.
+Iteration  stops  when there  are  no  more hash  keys  or  hash values  to  be
+referenced in the specified hash table.
+
+- The variable ~var~ takes  on the value of each hash key or  hash value in the
+  specified hash table.
+
+- The following loop keywords serve as valid prepositions within this syntax.
+
+  - =being= ::
+
+     marks the *loop method* to be used, either =hash-key= or =hash-value=.
+
+  - =each=, =the= ::
+
+    For purposes of readability, the loop keyword =each= should follow the loop
+    keyword =being= when =hash-key= or  =hash-value= is used.
+
+    The loop keyword =the= is used with =hash-keys= and =hash-values=.
+
+  - =hash-key=, =hash-keys= ::
+
+    These loop keywords access  each key entry of the hash  table.  If the name
+    =hash-value= is  specified in a  =using= construct  with one of  these loop
+    methods, the iteration can optionally access the keyed value.  The order in
+    which the keys are accessed is undefined; empty slots in the hash table are
+    ignored.
+
+  - =hash-value=, =hash-values= ::
+
+    These loop keywords  access each value entry  of a hash table.  If the name
+    =hash-key=  is specified  in  a  using construct  with  one  of these  loop
+    methods, the  iteration can optionally  access the key that  corresponds to
+    the value.  The order in  which the keys  are accessed is  undefined; empty
+    slots in the hash table are ignored.
+
+  - =using= ::
+
+    The loop keyword  =using= marks the optional  key or the keyed  value to be
+    accessed.  It allows you to access the  hash key if iterating over the hash
+    values, and the hash value if iterating over the hash keys.
+
+  - =in=, =of= ::
+
+    These loop prepositions mark the hash table ~hash-table~.
+
+**** for-as-package
+
+This is the last of seven =for/as= syntaxes.
+
+#+begin_example
+for var [type-spec] being {each | the}
+    {symbol | present-symbol | external-symbol |
+     symbols | present-symbols | external-symbols}
+    {in | of} package
+as var [type-spec] being {each | the}
+    {symbol | present-symbol | external-symbol |
+     symbols | present-symbols | external-symbols}
+    {in | of} package
+#+end_example
+
+This construct  iterates over  the symbols  in a  package.  The  variable ~var~
+takes on  the value of each  symbol in the specified  package.  Iteration stops
+when there are no more symbols to be referenced in the specified package.
+
+The following loop keywords serve as valid prepositions within this syntax.
+
+- =being= ::
+
+  marks the loop method to be used:
+  - =symbol=,
+
+  - =present-symbol=, or
+
+  - =external-symbol=.
+
+- =each=, =the= ::
+
+  For purposes of  readability, the loop keyword =each= should  follow the loop
+  keyword =being=  when =symbol=, =present-symbol=,  or =external-symbol= is
+  used.
+
+  The  loop  keyword  =the=  is used  with  =symbols=,  =present-symbols=,  and
+  =external-symbols=.
+
+- =present-symbol=, =present-symbols= ::
+
+  These loop methods iterate over the symbols that are present but not external
+  in a package.  The  package to be iterated over is specified  in the same way
+  that  package  arguments  to  the Common  Lisp  function  ~find-package~  are
+  specified.  If you do not specify  the package for the iteration, the current
+  package is used.  If  you specify a package that does not  exist, an error is
+  signaled.
+
+- =symbol=, =symbols= ::
+
+  These loop  methods iterate  over symbols  that are  accessible from  a given
+  package.  The package to  be iterated over is specified in  the same way that
+  package arguments to  the Common Lisp function  ~find-package~ are specified.
+  If you do not  specify the package for the iteration,  the current package is
+  used.  If you specify a package that does not exist, an error is signaled.
+
+- =external-symbol=, =external-symbol= ::
+
+  These  loop methods  iterate over  the external  symbols of  a package.   The
+  package  to be  iterated  over is  specified  in the  same  way that  package
+  arguments to the  Common Lisp function ~find-package~ are  specified.  If you
+  do not  specify the package for  the iteration, the current  package is used.
+  If you specify a package that does not exist, an error is signaled.
+
+- =in=, =of= ::
+
+  These loop prepositions mark the package ~package~.
+
+#+begin_src lisp :results output :exports both
+(loop for x being each present-symbol of "COMMON-LISP-USER"
+      do (print x)) ;Prints 7 lines in this example
+#+end_src
+
+**** repeat
+
+: repeat expr
+
+The =repeat= construct  causes iteration to terminate after  a specified number
+of times.   The loop body is  executed ~n~ times, where  n is the value  of the
+expression  ~expr~.  The  ~expr~ argument  is evaluated  one time  in the  loop
+prologue.  If  the expression evaluates  to zero or  to a negative  number, the
+loop body is not evaluated.
+
+The clause =repeat= ~n~ is roughly equivalent to a clause such as
+
+: for internal-variable downfrom (- n 1) to 0
+
+but, in some implementations, the =repeat= construct might be more efficient.
+
+#+begin_src lisp :results output :exports both
+(loop repeat 3 ;Prints 3 lines
+      do (format t "What I say three times is true~%"))
+#+end_src
+
+#+begin_src lisp :results output :exports both
+(loop repeat -15 ;Prints nothing
+      do (format t "What you see is what you expect~%"))
 #+end_src
 
 *** End-Test Control
