@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 07:39
-#+macro:version Version 0.0.116
+#+date:2021-11-23 08:11
+#+macro:version Version 0.0.117
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -9896,7 +9896,7 @@ clauses joined by ~and~  is analogous to the behavior of  the Common Lisp macro
                            | external-symbols
 #+end_example
 
-**** Examples of @command{for-as} Construct
+**** Examples of 'for-as' Construct
 In the  following example, the  variable ~x~ is  stepped before ~y~  is stepped
 (~and~ is not used); thus, the value of ~y~ reflects the updated value of ~x~:
 
@@ -9917,8 +9917,8 @@ In the following example, ~x~ and ~y~ are stepped in parallel (~and~ is used):
   ;;;   => ((1 NIL) (2 1) (3 2) (4 3) (5 4) (6 5) (7 6) (8 7) (9 8))
 #+end_src
 
-**** @code{for-as-arithmetic}
-This is the first of seven for/as syntaxes.
+**** 'for-as-arithmetic'
+This is the first of seven =for/as= syntaxes.
 
 #+begin_example
 for var [type-spec]
@@ -9933,6 +9933,97 @@ for var [type-spec]
 The ~for~ or ~as~ construct iterates from the value specified by =expr1= to the
 value  specified by  =expr2= in  increments or  decrements denoted  by =expr3=.
 Each expression is evaluated only once and must evaluate to a number.
+
+The variable ~var~ is bound to the  value of ~expr1~ in the first iteration and
+is stepped  by the value of  ~expr3~ in each  succeeding iteration, or by  1 if
+~expr3~ is not provided.
+
+#+texinfo:@subheading Prepositions
+The following loop  keywords serve as valid *prepositions*  within this syntax.
+At least one of these prepositions must be used with this syntax.
+
+- from ::
+
+  The  loop keyword  =from=  marks the  value from  which  stepping begins,  as
+  specified by ~expr1~.   Stepping is incremental by  default.  For decremental
+  stepping, use  =above= or =downto=  with ~expr2~.  For  incremental stepping,
+  the default =from= value is 0.
+
+- downfrom, upfrom ::
+
+  The loop keyword =downfrom= indicates that the variable ~var~ is decreased in
+  decrements specified  by ~expr3~;  the loop  keyword =upfrom=  indicates that
+  ~var~ is increased in increments specified by ~expr3~.
+
+- to ::
+
+  The loop keyword =to= marks the  end value for stepping specified in ~expr2~.
+  Stepping is incremental by default.   For decremental stepping, use =downto=,
+  =downfrom=, or =above= with ~expr2~.
+
+- downto, upto ::
+
+  The loop keyword =downto= allows iteration to proceed from a larger number to
+  a smaller  number by the decrement  ~expr3~.  The loop keyword  =upto= allows
+  iteration  to  proceed from  a  smaller  number to  a  larger  number by  the
+  increment  ~expr3~.  Since  there is  no default  for ~expr1~  in decremental
+  stepping, you must supply a value with =downto=.
+
+- below, above ::
+
+  The loop keywords  =below= and =above= are analogous to  =upto= and =downto=,
+  respectively.  These  keywords stop  iteration just before  the value  of the
+  variable  ~var~ reaches  the value  specified by  ~expr2~; the  end value  of
+  ~expr2~  is  not  included.   Since  there  is  no  default  for  ~expr1~  in
+  decremental stepping, you must supply a value with =above=.
+
+- by ::
+
+  The loop keyword =by= marks the  increment or decrement specified by ~expr3~.
+  The value of ~expr3~ can be any positive number. The default value is 1.
+
+
+In  an  *iteration  control  clause*,   the  =for=  or  =as=  construct  causes
+termination when the specified limit  is reached.  That is, iteration continues
+until the value ~var~ is stepped  to the exclusive or inclusive limit specified
+by ~expr2~.
+
+- *exclusive range* :: The range is exclusive if ~expr3~ increases or decreases
+  ~var~ to the value of ~expr2~  without reaching that value;
+
+  the loop keywords =below= and =above= provide exclusive limits.
+
+- *inclusive range*  :: An inclusive limit  allows ~var~ to attain the value of
+  ~expr2~;
+
+  =to=, =downto=, and =upto= provide inclusive limits.
+
+
+A common  convention is to  use =for= to introduce  new iterations and  =as= to
+introduce iterations that depend on a previous iteration specification.[fn:10]
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp
+;;; Print some numbers.
+
+(loop as i from 1 to 5
+      do (print i)) `;Prints 5 lines
+#+end_src
+
+#+begin_src lisp
+;;; Print every third number.
+
+(loop for i from 10 downto 1 by 3
+      do (print i)) `;Prints 4 lines
+#+end_src
+
+#+begin_src lisp
+;;; Step incrementally from the default starting value.
+
+(loop as i below 5
+      do (print i)) `;Prints 5 lines
+#+end_src
 
 *** End-Test Control
 
@@ -11057,7 +11148,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:10] does emphasize a  side-effect-free, applicative approach to
+book[fn:11] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -14528,9 +14619,13 @@ expected effect.
 [fn:9]Detailed syntax descriptions of  individual clauses appear in sections
 26.6 through 26.12.
 
-[fn:10]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:10]However, loop does not enforce this convention, and some of the examples
+below violate it. De gustibus non disputandum est.-GLS
 
-[fn:11]Markdown requires the standard Perl library module Digest::MD5.
+
+[fn:11]In the browser, add =index.text= to the end of the URL to see the source.
+
+[fn:12]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
