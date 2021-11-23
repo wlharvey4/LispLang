@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-22 06:49
-#+macro:version Version 0.0.111
+#+date:2021-11-23 07:06
+#+macro:version Version 0.0.115
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -4622,7 +4622,7 @@ system.
 **** CommonSQL Tutorials
  - https://web.archive.org/web/20130730032324/http://clsql.b9.com/manual/csql.html
 
- - [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:10]
+ - [[https://web.archive.org/web/20130512060807/http://www.ravenbrook.com/doc/2002/09/13/common-sql/][Common SQL]][fn:6]
  /Common SQL/ is  the name of LispWorks' interface to  relational databases. The
  interface dates back to  the very early 1990's, when it  was written to support
  Watson, Harlequin's emerging "intelligent  database application". The interface
@@ -5103,7 +5103,7 @@ used by this interface assumes that:
   filename it represents ([[a-stream][stream)]].
 
 
-Pathnames and  namestrings[fn:6] are two  kinds of objects that  substitute for
+Pathnames and  namestrings[fn:7] are two  kinds of objects that  substitute for
 filenames in Common Lisp ([[pathname--class][pathname class]])
 
 ** Files and Filenames
@@ -5217,7 +5217,7 @@ Returns the @@texinfo:@var{pathname}@@ denoted by @@texinfo:@var{pathspec}@@.
 A designator for a pathname; that is, an object that denotes a pathname and
 that is one of:
 
-- pathname namestring[fn:6] (denoting the corresponding pathname)
+- pathname namestring[fn:7] (denoting the corresponding pathname)
 - a stream associated with a file (denoting the pathname used to open the file)
 - pathname (denoting itself)
 #+end_deftp
@@ -5623,7 +5623,7 @@ the stream.
 
 #+attr_texinfo: :options interactive-stream-p stream => boolean
 #+begin_defun
-Returns =true= if stream is an interactive stream[fn:7]; otherwise, returns
+Returns =true= if stream is an interactive stream[fn:8]; otherwise, returns
 =false=.
 #+end_defun
 
@@ -9276,10 +9276,11 @@ chapter presents the bulk of the Common Lisp Loop Facility proposal, written by
 Jon L White.
 *** Introduction
 #+cindex:Loop Facility
+#+cindex:loop keywords, first
 A *loop*  is a series  of expressions  that are executed  one or more  times, a
 process known as /iteration/.  The *Loop  Facility* defines a variety of useful
-methods, indicated by  loop keywords, to iterate and to  accumulate values in a
-loop.
+methods  (``constructs''), indicated  by  /loop keywords/,  to  iterate and  to
+accumulate values in a loop.
 
 #+texinfo:@heading Loop Keywords
 *Loop keywords*  are not true Common  Lisp keywords; they are  symbols that are
@@ -9295,77 +9296,621 @@ body repeatedly.
 *** How the Loop Facility Works
 #+cindex:Loop Facility
 #+cindex:loop macro
+
 #+texinfo:@heading Loop Macro
 The  driving  element  of the  Loop  Facility  is  the  *loop macro*.
 
 #+cindex:loop clause
-When Lisp encounters a *loop macro call form*, it invokes the Loop Facility and
-passes to it the  /loop clauses/ as a list of /unevaluated  forms/, as with any
-macro.
+#+cindex:loop macro call form
+When Lisp encounters a *loop macro call form*, it
+
+- invokes the *Loop Facility* and
+
+- passes to it the *loop clauses*
+
+- as a list of /unevaluated forms/, as with any macro.
 
 #+texinfo:@subheading Loop Clauses
 #+cindex:loop keyword
-The *loop  clauses* contain Common  Lisp forms  and /loop keywords/.   The loop
-keywords are recognized  by their symbol name, regardless of  the packages that
-contain them.  The  loop macro translates the given form  into Common Lisp code
-and returns the /expanded form/.
+#+cindex:loop clause
+The *loop  clauses* contain
+
+- Common  Lisp forms  and
+
+- *loop keywords*.
+
+  The *loop  keywords* are recognized by  their symbol name, regardless  of the
+  packages that  contain them.  The loop  macro translates the given  form into
+  Common Lisp code and returns the *expanded form*.
 
 #+texinfo:@subheading Expanded Loop Form
 #+cindex:expanded loop form
 #+cindex:loop form, expanded
-The  *expanded loop  form*  is
-- one or more *lambda-expressions* for the local binding of loop variables and
+The *expanded loop form* is
+
+- one or more lambda-expressions for the *local binding of loop variables* and
+
 - a *block*  and
+
 - a *tagbody* that express a /looping control structure/.
 
 #+texinfo:@subsubheading Variables
-The variables established in the loop construct  are bound as if by using ~let~
-or ~lambda~.  Implementations can interleave the setting of initial values with
-the  bindings.   However,  the  assignment  of the  initial  values  is  always
-calculated in  the order specified by  the user.  A variable  is thus sometimes
-bound to  a harmless  value of  the correct data  type, and  then later  in the
-prologue it is set to the true initial value by using ~setq~.
+The *variables*  established in  the loop  construct are bound  as if  by using
+~let~  or ~lambda~.   Implementations  can interleave  the  setting of  initial
+values with  the bindings.  However,  the assignment  of the initial  values is
+always  calculated in  the order  specified by  the user.   A variable  is thus
+sometimes bound to a harmless value of the correct data type, and then later in
+the prologue it is set to the true initial value by using ~setq~.
 
 #+texinfo:@subheading Parts of the Expanded Form
-#+texinfo:@subheading Expanded Form
-The expanded form consists of three basic parts in the =tagbody=:
+The *expanded form* consists of /three basic parts/ in the *tagbody*:
 #+cindex:loop prologue
 #+cindex:loop body
 #+cindex:loop epilogue
 
-- Loop Prologue  ::  contains forms that are executed  before iteration begins,
-  such  as  initial  settings  of   loop  variables  and  possibly  an  initial
+- *Loop  Prologue*   ::  contains  forms  that  are executed  before  iteration
+  begins, such  as initial settings of  loop variables and possibly  an initial
   termination test.
 
-- Loop  Body  :: contains  those  forms  that  are executed  during  iteration,
+- *Loop  Body*   :: contains  those forms that  are executed  during iteration,
   including application-specific calculations,  termination tests, and variable
   stepping. Stepping is the process of assigning  a variable the next item in a
   series of items.
 
-- Loop Epilogue :: contains forms that are executed after iteration terminates,
-  such as code to return values from the loop.
+- *Loop  Epilogue*  ::  contains  forms   that  are  executed  after  iteration
+  terminates, such as code to return values from the loop.
 
-#+cindex:@code{nil} Block---@code{return}---@code{return-from}
-Expansion of the /loop macro/ produces an *implicit block* (named =nil=). Thus,
-the Common Lisp  macro ~return~ and the special form  ~return-from~ can be used
-to return values from a loop or to exit a loop.
+#+texinfo:@subsubheading @code{nil} Block---@code{return}---@code{return-from}
+#+cindex:implicit block, loop
+*Expansion*  of   the  /loop  macro/   produces  an  *implicit   block*  (named
+=nil=). Thus, the Common Lisp macro ~return~ and the special form ~return-from~
+can be used to return values from a loop or to exit a loop.
 
 Within the  executable parts of loop  clauses and around the  entire loop form,
 you can still bind variables by using the Common Lisp special form ~let~.
 
 *** Parsing Loop Clauses
+#+texinfo:@heading Clauses
+#+cindex:loop clause
+#+cindex:clause, loop
+#+cindex:scope, of loop clause
+#+cindex:loop construct
+#+cindex:construct, loop
+The syntactic parts of a *loop  construct* are called *clauses*; the /scope/ of
+each clause is determined by the top-level parsing of that clause's keyword.
+
+  - The following example shows a loop construct with six clauses:
+
+#+begin_src lisp
+  (loop for i from 1 to (compute-top-value)         ;First clause
+        while (not (unacceptable i))                ;Second clause
+        collect (square i)                          ;Third clause
+        do (format t "Working on ~D now" i)         ;Fourth clause
+        when (evenp i)                              ;Fifth clause
+          do (format t "~D is a non-odd number" i)
+        finally (format t "About to exit!"))        ;Sixth clause
+#+end_src
+
+Each *loop keyword*  introduces either
+
+- a *compound loop clause*  or
+
+- a *simple loop clause* that can consist  of
+  - a *loop keyword* followed by
+  - a single *Lisp form*.
+
+The number  of /forms/  in a clause  is determined by  the /loop  keyword/ that
+begins the clause and by the /auxiliary keywords/ in the clause.
+
+The keywords
+- ~do~,
+- ~initially~, and
+- ~finally~
+
+are the  only loop keywords that  can take any  number of Lisp forms  and group
+them as if in a single ~progn~ form.
+
+#+cindex:auxiliary keyword, loop clause
+#+cindex:preposition
+Loop  clauses can  contain  *auxiliary keywords*,  which  are sometimes  called
+*prepositions*.
+
+  - For  example,  the  first  clause   in  the  preceding  code  includes  the
+    prepositions  ~from~ and  ~to~, which  mark the  value from  which stepping
+    begins and the value at which stepping ends.
 
 **** Order of Execution
+With the  exceptions listed below, *clauses*  are executed in the  loop body in
+the order in  which they appear in  the source.  Execution is  repeated until a
+clause terminates  the loop or until  a Common Lisp ~return~,  ~go~, or ~throw~
+form is encountered.
+
+The following actions are exceptions to the linear order of execution:
+
+- All variables ::  are initialized first, regardless of where the establishing
+  clauses appear in  the source. The order of initialization  follows the order
+  of these clauses.
+
+- The code  for  any ~initially~ clauses  ::  is collected into  one ~progn~ in
+  the order in which  the clauses appear in the source.   The collected code is
+  executed   once  in   the   loop  prologue   after   any  implicit   variable
+  initializations.
+
+- The code  for any  ~finally~ clauses ::  is collected into one ~progn~ in the
+  order  in which  the clauses  appear in  the source.   The collected  code is
+  executed once  in the  /loop epilogue/  before any  implicit values  from the
+  accumulation  clauses are  returned.   Explicit ~return~  s  anywhere in  the
+  source, however, will exit the loop without executing the epilogue code.
+
+- A  with clause  ::  introduces a  variable binding  and  an optional  initial
+  value.  The initial  values are  calculated in  the order  in which  the with
+  clauses occur.
+
+- Iteration control clauses :: implicitly perform the following actions:
+
+  - initializing variables
+
+  - stepping variables, generally between each execution of the loop body
+
+  - performing termination  tests, generally just  before the execution  of the
+    loop body
 
 **** Kinds of Loop
+Loop clauses fall into one of the following categories:
+#+cindex:loop clauses, categories
+
+- variable initialization and stepping
+  #+cindex:variable initalization, stepping
+  #+cindex:for, loop keyword
+  #+cindex:as, loop keyword
+
+  - ~for~ and ~as~ ::
+
+    provide  iteration  control  clauses  that   establish  a  variable  to  be
+    initialized.
+
+    You can combine ~for~  and ~as~ clauses with the loop  keyword ~and~ to get
+    parallel initialization and stepping.
+
+  - ~with~ constuct ::
+
+    is similar to a single ~let~ clause.
+
+    You can combine ~with~ clauses using ~and~ to get parallel initialization.
+
+  - ~repeat~ construct ::
+
+    causes iteration to terminate after a specified number of times.
+
+    It uses an internal variable to keep track of the number of iterations.
+
+  - data type ::
+
+    You can specify  *data types* for loop variables (see  section 26.12.1). It
+    is an error to bind the  same variable twice in any variable-binding clause
+    of  a  single loop  expression.  Such  variables include  local  variables,
+    iteration control variables, and variables found by destructuring.
+
+- value accumulation
+
+  - ~collect~ construct ::
+
+    takes one form in its clause and adds  the value of that form to the end of
+    a list of values.
+
+    By default, the list of values is returned when the loop finishes.
+
+  - ~append~ construct ::
+
+    takes one form in its clause and appends  the value of that form to the end
+    of a list  of values.
+
+    By default, the list of values is returned when the loop finishes.
+
+  - ~nconc~ construct ::
+
+    is similar to ~append~,  but its list values are concatenated  as if by the
+    Common Lisp function ~nconc~.
+
+    By default, the list of values is returned when the loop finishes.
+
+  - ~sum~ construct ::
+
+    takes one form in  its clause that must evaluate to a  number and adds that
+    number into  a running total.
+
+    By default, the cumulative sum is returned when the loop finishes.
+
+  - ~count~ construct ::
+
+    takes one form in  its clause and counts the number of  times that the form
+    evaluates to  a non-nil value.
+
+    By default, the count is returned when the loop finishes.
+
+  - ~minimize~ construct ::
+
+    takes one form  in its clause and determines the  minimum value obtained by
+    evaluating that form.
+
+    By default, the minimum value is returned when the loop finishes.
+
+  - ~maximize~ construct ::
+
+    takes one form  in its clause and determines the  maximum value obtained by
+    evaluating that form.
+
+    By default, the maximum value is returned when the loop finishes.
+
+- termination conditions
+
+  - ~loop-finish~ Lisp macro ::
+
+    terminates iteration and returns any  accumulated result. If specified, any
+    ~finally~ clauses are evaluated.
+
+  - ~for~ and ~as~ constructs ::
+
+    provide  a termination  test that  is determined  by the  iteration control
+    clause.
+
+  - ~repeat~ construct ::
+
+    causes termination after a specified number of iterations.
+
+  - ~while~ construct ::
+
+    akes one form,  a condition, and terminates the iteration  if the condition
+    evaluates to ~nil~.
+
+    A  ~while~ clause  is equivalent  to  the expression
+
+    : (if (not  condition) (loop-finish))
+
+  - ~until~ construct ::
+
+    is the ~inverse~  of ~while~; it terminates the iteration  if the condition
+    evaluates to any non-~nil~ value.
+
+    An ~until~ clause is equivalent to the expression
+
+    : (if condition (loop-finish))
+
+  - ~always~ construct ::
+
+    takes one form and terminates the loop if the form ever evaluates to ~nil~;
+    in this  case, it returns ~nil~.   Otherwise, it provides a  default return
+    value of ~t~.
+
+  - ~never~ construct ::
+
+    takes  one form  and terminates  the  loop if  the form  ever evaluates  to
+    non-~nil~;  in this  case,  it  returns ~nil~.   Otherwise,  it provides  a
+    default return value of ~t~.
+
+  - ~thereis~ construct ::
+
+    The ~thereis~ construct takes one form  and terminates the loop if the form
+    ever evaluates to non-~nil~; in this case, it returns that value.
+
+- unconditional execution ::
+
+  - ~do~ construct ::
+
+    simply evaluates all forms in its clause.
+
+  - ~return~ construct ::
+
+    takes one form and returns its value.
+
+    It is equivalent to the clause
+
+    : do (return value)
+
+- conditional execution
+
+  - ~if~ construct ::
+
+    takes
+    - one form  as a  predicate and
+    - a clause that is executed when the predicate is ~true~.
+
+    The clause can be a
+    - value accumulation,
+    - unconditional, or
+    - another conditional clause;
+
+    it can also be
+    - any combination of such clauses
+    - connected by the loop keyword ~and~.
+
+  - ~when~ construct :: is a synonym for ~if~.
+
+  - ~unless~ construct ::
+
+    is similar to ~when~ except that  it complements the predicate; it executes
+    the following clause if the predicate is ~false~.
+
+  - ~else~ construct ::
+
+    provides an optional  component of ~if~, ~when~, and  ~unless~ clauses that
+    is executed  when the predicate  is ~false~.  The  component is one  of the
+    clauses described under ~if~.
+
+  - ~end~ construct ::
+
+    provides an optional component to mark the end of a conditional clause.
+
+- miscellaneous operations
+
+  - ~named~ construct ::
+
+    assigns a name to a loop construct.
+
+  - ~initially~ construct ::
+
+    causes its forms to be evaluated in the *loop prologue*, which precedes all
+    loop code except  for initial settings specified by  the constructs ~with~,
+    ~for~, or ~as~.
+
+  - ~finally~ construct ::
+
+    causes  its forms  to  be evaluated  in the  *loop  epilogue* after  normal
+    iteration terminates.   An unconditional  clause can  also follow  the loop
+    keyword ~finally~.
 
 **** Loop Syntax
+The following  syntax description provides an  overview of the syntax  for loop
+clauses.[fn:9]
+
+A loop consists of the following types of clauses:
+
+#+begin_example
+initial-final ::= initially | finally
+variables ::= with | initial-final | for-as | repeat
+main ::= unconditional | accumulation | conditional | termination | initial-final
+loop ::= (loop [named name] {variables}* {main}*)
+#+end_example
+
+Note  that  a  loop must  have  at  least  one  clause; however,  for  backward
+compatibility, the following format is also supported:
+
+: (loop {tag | expr}*)
+
+where =expr= is any Common Lisp expression  that can be evaluated, and =tag= is
+any  symbol not  identifiable as  a  loop keyword.   Such a  format is  roughly
+equivalent to the following one:
+
+: (loop do {tag | expr}*)
+
+A *loop prologue* consists of any automatic variable initializations prescribed
+by the /variable clauses/, along with any ~initially~ clauses in the order they
+appear in the source.
+
+A  *loop epilogue*  consists  of  ~finally~ clauses,  if  any,  along with  any
+implicit return value from an /accumulation clause/ or an /end-test/ clause.
 
 *** User Extensibility
+There is currently no specified portable  method for users to add extensions to
+the  Loop Facility.   The names  ~defloop~ and  ~define-loop-method~ have  been
+suggested as candidates for such a method.
 
 *** Loop Constructs
+#+cindex:loop constructs list
+#+cindex:constructs, loop, list of
+The remaining sections of this chapter  describe the *constructs* that the Loop
+Facility   provides.   The   descriptions  are   organized  according   to  the
+functionality of the constructs.  Each section begins with a general discussion
+of a  particular operation; it  then presents  the constructs that  perform the
+operation.
+
+#+cindex:iteration control, loop
+#+cindex:loop iteration control construct
+- [[*Iteration Control][iteration control]] :: describes iteration  control clauses that allow directed
+  loop iteration.
+
+  #+cindex:end-test control, loop
+  #+cindex:loop end-test control construct
+- [[*End-Test Control][end-test  control]] ::  describes clauses  that stop  iteration by  providing a
+  conditional expression  that can be tested  after each execution of  the loop
+  body.
+
+  #+cindex:value accumulation, loop
+  #+cindex:loop value accumulation contstruct
+- [[*Value Accumulation][value  accumulation]] ::  describes  constructs that  accumulate values  during
+  iteration and  return them from a  loop. This section also  discusses ways in
+  which accumulation clauses can be combined within the Loop Facility.
+
+  #+cindex:variable initialization, loop
+  #+cindex:loop variable initialization contruct
+- [[*Variable  Initializations][variable initializations]]   :: describes  the ~with~ construct, which provides
+  local  variables for  use within  the loop  body, and  other constructs  that
+  provide local variables.
+
+  #+cindex:condtional execution, loop
+  #+cindex:loop conditional execution construct
+- [[*Conditional Execution][conditional execution]] :: describes how to execute loop clauses conditionally.
+
+  #+cindex:unconditional execution, loop
+  #+cindex:loop unconditional execution construct
+- [[*Unconditional Execution][unconditional execution]]  ::  describes the  ~do~ and ~return~ constructs.  It
+  also describes  constructs that  are used  in the  *loop prologue*  and *loop
+  epilogue*.
+
+  #+cindex:miscellaneous exeuction, loop
+  #+cindex:loop miscellanious execution constracts
+  #+cindex:loop data types
+  #+cindex:loop destructuring
+  #+cindex:loop naming
+  #+cindex:initial actions, loop
+  #+cindex:final actions, loop
+- [[*Miscellaneous Features][miscellaneous features]]   :: discusses loop data types  and destructuring.  It
+  also presents  constructs for naming  a loop  and for specifying  initial and
+  final actions.
 
 *** Iteration Control
+#+cindex:iteration control clauses, loop
+#+cindex:loop iteration control clauses
+*Iteration control clauses* allow you to direct loop iteration.
+
+The loop keywords:
+#+cindex:as, loop keyword
+#+cindex:for, loop keyword
+#+cindex:repeat, loop keyword
+#+cindex:loop keywords: as, for, repeat
+
+- ~as~
+- ~for~
+- ~repeat~
+
+designate iteration control clauses.  They  must precede any other loop clauses
+except  ~initially~,  ~with~,  and   ~named~,  since  they  establish  variable
+bindings.
+
+/Iteration control clauses/ differ with respect to the specification of
+
+- termination conditions and
+- the initialization and
+- stepping
+
+of  loop  variables.  When  iteration  control  clauses  are  used in  a  loop,
+/termination tests/ in  the loop body are evaluated before  any other loop body
+code is executed.
+
+#+texinfo:@heading Iteration Control Clause Summary
+The ~for~ and  ~as~ clauses iterate by  using one or more  local loop variables
+that are initialized  to some value and  that can be modified  or stepped after
+each iteration.
+
+- For these clauses, iteration *terminates*  when a local variable reaches some
+  specified value or when some other loop clause terminates iteration.
+
+- At each iteration, variables can be  *stepped* by an increment or a decrement
+  or can be assigned a new value by the evaluation of an expression.
+
+- *Destructuring*  can be  used to  assign initial  values to  variables during
+  iteration.
+
+The ~for~ and ~as~ keywords are synonyms and may be used interchangeably.
+
+- There are seven syntactic representations for these constructs.
+
+- In each syntactic  description, the *data type* of ~var~  can be specified by
+  the optional ~type-spec~ argument.
+
+- If  ~var~  is  a  *destructuring  list*,  the  data  type  specified  by  the
+  ~type-spec~ argument must appropriately match the elements of the list.
+
+#+texinfo:@heading Variables and Return Values
+Iteration  clauses by  themselves  do not  cause the  Loop  Facility to  return
+values, but they  can be used in conjunction  with *value-accumulation clauses*
+to return values.
+
+All  variables are  *initialized*  in the  /loop prologue/.
+
+The  *scope* of  the  variable binding  is /lexical/  unless  it is  proclaimed
+/special/; thus,  the variable  can be  accessed only  by expressions  that lie
+textually within  the loop.   Stepping assignments  are made  in the  loop body
+before any other expressions are evaluated in the body.
+
+#+texinfo:@subheading Destructuring List
+#+cindex:destructuring list
+The  variable argument  in iteration  control  clauses can  be a  *destructuring
+list*.  A destructuring list is a tree  whose non-null atoms are symbols that can
+be assigned a value.
+
+#+texinfo:@heading Multiple Iteration Clauses and @command{and} Construct
+If  you  use   multiple  iteration  clauses  to   control  iteration,
+- variable initialization and
+- stepping
+
+occur /sequentially/ by default.
+
+You can use the  ~and~ construct to connect two or  more iteration clauses when
+sequential binding and  stepping are not necessary.  The  iteration behavior of
+clauses joined by ~and~  is analogous to the behavior of  the Common Lisp macro
+~do~ relative to ~do*~.
+
+#+begin_example
+  for-as ::= {for | as} for-as-subclause {and for-as-subclause}*
+  for-as-subclause ::= for-as-arithmetic
+                            | for-as-in-list
+                            | for-as-on-list
+                            | for-as-equals-then
+                            | for-as-across
+                            | for-as-hash
+                            | for-as-package
+
+  for-as-arithmetic ::= var [type-spec]
+                            [{from | downfrom | upfrom} expr1 ]
+                            [{to | downto | upto | below | above} expr2]
+                            [by expr3]
+
+  for-as-in-list ::= var [type-spec] in expr1
+                                    [by step-fun]
+
+  for-as-on-list ::= var [type-spec] on expr1
+                                    [by step-fun]
+
+  for-as-equals-then ::= var [type-spec] = expr1
+                                          [then step-fun]
+
+  for-as-across ::= var [type-spec] across vector
+
+  for-as-hash ::= var [type-spec]
+                  being {each | the}
+                        {hash-key | hash-keys | hash-value | hash-values}
+                        {in | of} hash-table
+                        [using ({hash-value | hash-key} other-var)]
+
+  for-as-package ::= var [type-spec]
+                          being {each | the}
+                          for-as-package-keyword {in | of} package
+
+  for-as-package-keyword ::= symbol
+                           | present-symbol
+                           | external-symbol
+                           | symbols
+                           | present-symbols
+                           | external-symbols
+#+end_example
+
+**** Examples of @command{for-as} Construct
+In the  following example, the variable  ~x~ is stepped before  ~y~ is stepped;
+thus, the value of ~y~ reflects the updated value of ~x~:
+
+#+begin_src lisp
+  (loop for x from 1 to 9
+        for y = nil then x
+        collect (list x y))
+
+  ;;; => ((1 NIL) (2 2) (3 3) (4 4) (5 5) (6 6) (7 7) (8 8) (9 9))
+#+end_src
+
+In the following example, ~x~ and ~y~ are stepped in parallel:
+
+#+begin_src lisp
+  (loop for x from 1 to 9
+        and y = nil then x
+        collect (list x y))
+  ;;;   => ((1 NIL) (2 1) (3 2) (4 3) (5 4) (6 5) (7 6) (8 7) (9 8))
+#+end_src
+
+**** @code{for-as-arithmetic}
+This is the first of seven for/as syntaxes.
+
+#+begin_example
+for var [type-spec] [{from | downfrom | upfrom} expr1]
+    [{to | downto | upto | below | above} expr2]
+    [by expr3]
+as var [type-spec] [{from | downfrom | upfrom} expr1]
+    [{to | downto | upto | below | above} expr2]
+    [by expr3]
+#+end_example
+
+The ~for~ or ~as~ construct iterates from the value specified by =expr1= to the
+value  specified by  =expr2= in  increments or  decrements denoted  by =expr3=.
+Each expression is evaluated only once and must evaluate to a number.
 
 *** End-Test Control
 
@@ -10414,6 +10959,7 @@ the object is of that type.
 : T
 * Scheme
 - [[https://schemers.org][Schemers.org]]
+
 - [[http://www.scheme.dk/planet/][Planet Scheme]]
 
 - [[https://wiki.c2.com/?SchemeLanguage]]
@@ -10489,7 +11035,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:8] does emphasize a  side-effect-free, applicative approach to
+book[fn:10] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -11704,7 +12250,7 @@ STING		PMLisp
 ;;			--- E O F ---			;;
 
 ** Resources on Scheme
-*** [[schemers.org][schemers.org]]
+*** [[https://schemers.org][schemers.org]]
 The main resource for all things Scheme
 
 
@@ -13922,12 +14468,9 @@ Copyright \copy 2020 by {{{author}}}
 #+texinfo_printed_title:LispLang---The Universe Known as LISP
 
 
-* Footnotes
+* Local Variables						   :noexport:
 
-[fn:10] Also, the tremendous CommonSQL tutorial that Nick Levine gave at
-ILC2002 is an excellent introduction to CLSQL. Even though his tutorial is
-targetted towards Xanalys CommonSQL, the examples work equally well in CLSQL
-(with the occasional minor tweak). 
+* Footnotes
 
 [fn:1] Runtime Compilation: https://wiki.c2.com/?RuntimeCompilation
 
@@ -13944,22 +14487,28 @@ in the steel industry and Andrew Mellon was a successful banker.
 
 [fn:5]The libraries were last updated on July 15, 2020.
 
-[fn:6]*namestring*:  a  string that  represents  a  filename using  either  the
+[fn:6] Also, the tremendous CommonSQL tutorial that Nick Levine gave at
+ILC2002 is an excellent introduction to CLSQL. Even though his tutorial is
+targetted towards Xanalys CommonSQL, the examples work equally well in CLSQL
+(with the occasional minor tweak).
+
+[fn:7]*namestring*:  a  string that  represents  a  filename using  either  the
 standardized    notation    for    naming    logical    pathnames    or    some
 implementation-defined notation for naming a physical pathname.
 
-[fn:7]A stream  on which it  makes sense  to perform interactive  querying. The
+[fn:8]A stream  on which it  makes sense  to perform interactive  querying. The
 general intent of having some streams be classified as /interactive/ streams is
 to allow them to be distinguished  from streams containing batch (or background
 or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:8]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:9]Detailed syntax descriptions of  individual clauses appear in sections
+26.6 through 26.12.
 
-[fn:9]Markdown requires the standard Perl library module Digest::MD5.
+[fn:10]In the browser, add =index.text= to the end of the URL to see the source.
 
-* Local Variables						   :noexport:
+[fn:11]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
