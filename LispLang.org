@@ -3,7 +3,7 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 10:56
+#+date:2021-11-23 11:09
 #+macro:version Version 0.0.120
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
@@ -10025,7 +10025,7 @@ introduce iterations that depend on a previous iteration specification.[fn:10]
       do (print i)) ;Prints 5 lines
 #+end_src
 
-**** for-as-in-list
+**** 'for-as-in-list'
 
 This is the second of seven =for/as= syntaxes.
 
@@ -10072,7 +10072,7 @@ This construct iterates over the contents of  a list.
       unless (eq item 'B) sum x)
 #+end_src
 
-**** for-as-on-list
+**** 'for-as-on-list'
 
 This is the third of seven =for/as= syntaxes
 
@@ -10117,12 +10117,12 @@ of the list each iteration).
       do (print item))  ;Prints 3 lines
 #+end_src
 
-**** for-as-equals-then
+**** 'for-as-equals-then'
 
-This is the fourth of seven for/as syntaxes.
+This is the fourth of seven =for/as= syntaxes.
 
 #+begin_example
-for var [type-spec] = expr1 [then expr2] 
+for var [type-spec] = expr1 [then expr2]
  as var [type-spec] = expr1 [then expr2]
 #+end_example
 
@@ -10155,18 +10155,16 @@ This construct
       (go tag))
 #+end_example
 
-- The loop keywords ='='= and =then= serve as valid prepositions in this syntax.
+- The loop keywords === and =then= serve as valid prepositions in this syntax.
 
 - This construct does not provide any termination conditions.
 
-#+begin_src lisp :results :output :exports both
+#+begin_src lisp :results raw :exports both
 ;;; Collect some numbers.
-(loop for item = 1 then (+ item 10)
-      repeat 5
-      collect item)
+(loop for item = 1 then (+ item 10) repeat 5 collect item)
 #+end_src
 
-**** for-as-across
+**** 'for-as-across'
 
 This is the fifth of seven =for/as= syntaxes.
 
@@ -10190,7 +10188,7 @@ for var [type-spec] across vector
       do (write-char char stream))
 #+end_src
 
-**** for-as-hash
+**** 'for-as-hash'
 
 This is the sixth of seven for/as syntaxes.
 
@@ -10249,7 +10247,7 @@ referenced in the specified hash table.
 
     These loop prepositions mark the hash table ~hash-table~.
 
-**** for-as-package
+**** 'for-as-package'
 
 This is the last of seven =for/as= syntaxes.
 
@@ -10322,7 +10320,7 @@ The following loop keywords serve as valid prepositions within this syntax.
       do (print x)) ;Prints 7 lines in this example
 #+end_src
 
-**** repeat
+**** 'repeat'
 
 : repeat expr
 
