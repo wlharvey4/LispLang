@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-24 08:15
-#+macro:version Version 0.0.123
+#+date:2021-11-24 08:36
+#+macro:version Version 0.0.124
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10679,6 +10679,8 @@ expression into  a list.
 
   You cannot specify a data type for ~var~; it must be of type =list=.
 
+#+texinfo:@heading Examples
+
 #+begin_src lisp :results value :export both
 ;;; Collect all the symbols in a list.
 (loop for i in '(bird 3 4 turtle (1 . 4) horse cat)
@@ -10728,6 +10730,7 @@ specified expression must be lists.
   if by  the construct =with=.   You cannot specify a  data type for  ~var~; it
   must be of type =list=.
 
+#+texinfo:@heading Examples
 
 #+begin_src lisp :results raw :exports both
 ;;; Use APPEND to concatenate some sublists.
@@ -10768,6 +10771,7 @@ counting expr [into var] [type-spec]
     type is implementation-dependent, but it must  be a subtype of ~(or integer
     float)~.
 
+#+texinfo:@heading Examples
 
 #+begin_src lisp :results value :exports both
 ;;; Sum the elements of a list.
@@ -10825,6 +10829,7 @@ minimizing expr [into var] [type-spec]
     The default type  is implementation-dependent, but it must be  a subtype of
     ~(or integer float)~.
 
+#+texinfo:@heading Examples
 
 #+begin_src lisp :results value :exports both
 (loop for i in '(2 1 5 3 4)
@@ -10855,6 +10860,142 @@ minimizing expr [into var] [type-spec]
 #+end_src
 
 *** Variable Initializations
+
+A *local  loop variable*  is one  that exists  only when  the Loop  Facility is
+invoked.  At that time, the variables  are declared and are initialized to some
+value.  These local  variables exist until loop iteration  terminates, at which
+point  they cease  to  exist.   Implicitly variables  are  also established  by
+iteration control clauses and the =into= preposition of accumulation clauses.
+
+- =with= ::
+
+  The loop keyword  =with= designates a loop clause that  allows you to declare
+  and  initialize  variables that  are  local  to  a  loop. The  variables  are
+  initialized  one  time only;  they  can  be  initialized sequentially  or  in
+  parallel.
+
+  #+texinfo:@subheading Sequential Initialization
+
+  By default, the  with construct initializes variables  sequentially; that is,
+  one   variable  is   assigned  a   value  before   the  next   expression  is
+  evaluated.
+
+  Use sequential binding for making the initialization of some variables depend
+  on the values  of previously bound variables.  For example,  suppose you want
+  to bind the variables a, b, and c in sequence:
+
+  #+begin_src lisp :results raw :exports both
+    (loop with a = 1
+      with b = (+ a 2)
+      with c = (+ b 3)
+      with d = (+ c 4)
+      return (list a b c d))
+  #+end_src
+
+  The execution  of the preceding  loop is equivalent  to the execution  of the
+  following code:
+
+  #+begin_src lisp
+    (let* ((a 1)
+           (b (+ a 2))
+           (c (+ b 3))
+           (d (+ c 4)))
+      (block nil
+        (tagbody
+          next-loop (return (list a b c d))
+                    (go next-loop)
+          end-loop)))
+  #+end_src
+
+  #+texinfo:@subheading Parallel Initialization with ``and''
+
+  However, by  using the loop keyword  =and= to join several  with clauses, you
+  can force initializations to occur in parallel; that is, all of the specified
+  expressions  are evaluated,  and  the  results are  bound  to the  respective
+  variables simultaneously.
+
+  If you are not  depending on the value of previously  bound variables for the
+  initialization of  other local  variables, you can  use parallel  bindings as
+  follows:
+
+  #+begin_src lisp :results raw :exports both
+    (loop with a = 1
+       and b = 2
+       and c = 3
+       and d = 4
+      return (list a b c d))
+  #+end_src
+
+  The execution  of the preceding  loop is equivalent  to the execution  of the
+  following code:
+
+  #+begin_src lisp
+    (let ((a 1)
+          (b 2)
+          (c 3)
+          (d 4))
+      (block nil
+        (tagbody
+           next-loop (return (list a b c))
+                     (go next-loop)
+           end-loop)))
+  #+end_src
+
+**** with
+
+: with var [type-spec] [= expr] {and var [type-spec] [= expr]}*
+
+- =with= ::
+
+  The =with=  construct initializes variables  that are  local to a  loop.  The
+  variables are initialized one time only.
+
+  If the optional =type-spec= argument is specified for any variable ~var~, but
+  there is no  related expression ~expr~ to be evaluated,  ~var~ is initialized
+  to an appropriate default value for its data type.  For example, for the data
+  types =t=,  =number=, and =float=,  the default values  are nil, 0,  and 0.0,
+  respectively.  It is an error to  specify a =type-spec= argument for ~var~ if
+  the related expression returns a value that is not of the specified type.
+
+- =and= ::
+
+  The   optional  =and=   clause   forces  parallel   rather  than   sequential
+  initializations.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp :results raw :exports both
+;;; These bindings occur in sequence.
+(loop with a = 1
+      with b = (+ a 2)
+      with c = (+ b 3)
+      with d = (+ c 4)
+      return (list a b c d))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; These bindings occur in parallel.
+(setq a 5 b 10 c 1729)
+(loop with a = 1
+       and b = (+ a 2)
+       and c = (+ b 3)
+       and d = (+ c 4)
+      return (list a b c d))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; This example shows a shorthand way to declare
+;;; local variables that are of different types.
+(loop with (a b c) (float integer float)
+      return (format nil "~A ~A ~A" a b c))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; This example shows a shorthand way to declare
+;;; local variables that are of the same type.
+(loop with (a b c) float
+      return (format nil "~A ~A ~A" a b c))
+#+end_src
 
 *** Conditional Execution
 
