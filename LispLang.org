@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-23 13:53
-#+macro:version Version 0.0.121
+#+date:2021-11-24 08:07
+#+macro:version Version 0.0.122
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10387,7 +10387,7 @@ termination conditions are tested in the order in which they appear.
 **** while-until
 
 #+begin_example
-while expr 
+while expr
 until expr
 #+end_example
 
@@ -10410,13 +10410,13 @@ If the  =while= or =until= construct  causes termination, control is  passed to
 the loop =epilogue=, where any =finally= clauses will be executed.
 
 #+begin_src lisp
-;;; A classic "while-loop". 
-(loop while (hungry-p) do (eat)) 
+;;; A classic "while-loop".
+(loop while (hungry-p) do (eat))
 #+end_src
 
 #+begin_src lisp
-;;; UNTIL NOT is equivalent to WHILE. 
-(loop until (not (hungry-p)) do (eat)) 
+;;; UNTIL NOT is equivalent to WHILE.
+(loop until (not (hungry-p)) do (eat))
 #+end_src
 
 #+begin_src lisp :results raw :exports both
@@ -10579,6 +10579,272 @@ Implementations are allowed to provide this construct as a local macro by using
 #+end_src
 
 *** Value Accumulation
+
+#+texinfo:@heading Clauses that accumulate values in lists and return them.
+
+- =append=,
+- =appending=,
+- =collect=,
+- =collecting=,
+- =nconc=, and
+- =nconcing=
+
+#+texinfo:@heading Clauses  that accumulate  and return numerical  values
+
+- =count=,
+- =counting=,[fn:11]
+- =maximize=,
+- =maximizing=,
+- =minimize=,
+- =minimizing=,
+- =sum=,  and
+- =summing=
+
+#+texinfo:@heading Accumulation Variable
+
+The preposition keyword
+
+- =into=
+
+  - can be used  to name the variable used to  hold partial accumulations.  The
+    variable is bound as if by the loop construct =with= (see section 26.9).
+
+  - If =into= is  used, the construct does not provide  a default return value;
+    however, the variable is available for use in any =finally= clause.
+
+#+texinfo:@heading Combining Accumulations
+
+You can  *combine* value-returning accumulation  clauses in  a loop if  all the
+clauses accumulate the same type of data object.  By default, the Loop Facility
+returns  only  one  value;  thus,   the  data  objects  collected  by  multiple
+accumulation clauses as return values must have compatible types.
+
+  - For example,  since both the  =collect= and =append=  constructs accumulate
+    objects into  a list  that is returned  from a loop,  you can  combine them
+    safely.
+
+#+begin_src lisp :results raw :exports both
+;;; Collect every name and the kids in one list by using
+;;; COLLECT and APPEND.
+(loop for name in '(fred sue alice joe june)
+      for kids in '((bob ken) () () (kris sunshine) ())
+      collect name
+      append kids)
+#+end_src
+
+#+begin_cartouche
+[In the preceding example, note that the items accumulated by the =collect= and
+=append= clauses are interleaved in the  result list, according to the order in
+which the clauses were executed.-GLS]
+#+end_cartouche
+
+Multiple  clauses that  do not  accumulate  the same  type of  data object  can
+coexist in a loop  only if each clause accumulates its  values into a different
+user-specified variable.  Any number of values  can be returned from  a loop if
+you use the Common Lisp function ~values~, as the next example shows:
+
+#+begin_src lisp
+;;; Count and collect names and ages.
+(loop for name in '(fred sue alice joe june)
+      as age in '(22 26 19 20 10)
+      append (list name age) into name-and-age-list
+      count name into name-count
+      sum age into total-age
+      finally
+        (return (values (round total-age name-count)
+                        name-and-age-list)))
+; => 19 and (FRED 22 SUE 26 ALICE 19 JOE 20 JUNE 10)
+#+end_src
+
+**** collect - collecting
+
+#+begin_example
+collect expr [into var]
+collecting expr [into var]
+#+end_example
+
+During  each iteration,  these constructs  collect the  value of  the specified
+expression into  a list.  The  argument ~var~ is set  to the list  of collected
+values.  When  iteration terminates, the list  is returned, except if  ~var~ is
+specified, the loop does not return  the final list automatically.  If ~var~ is
+not specified,  it is equivalent to  specifying an internal name  for ~var~ and
+returning its value in a =finally= clause.
+
+- The ~var~ argument is bound as if by the construct =with=.
+
+- You cannot specify a data type for ~var~; it must be of type =list=.
+
+#+begin_src lisp :results raw :export both
+;;; Collect all the symbols in a list.
+(loop for i in '(bird 3 4 turtle (1 . 4) horse cat)
+      when (symbolp i) collect i)
+#+end_src
+
+#+begin_src lisp :results raw :export both
+;;; Collect and return odd numbers.
+(loop for i from 1 to 10
+      if (oddp i) collect i)
+#+end_src
+
+#+begin_src lisp :results output :exports both
+;;; Collect items into local variable, but don't return them.
+(loop for i in '(a b c d) by #'cddr
+      collect i into my-list
+      finally (print my-list)) ;Prints 1 line
+#+end_src
+
+**** append - appending - nconc - nconcing
+
+#+begin_example
+append expr [into var]
+appending expr [into var]
+nconc expr [into var]
+nconcing expr [into var]
+#+end_example
+
+These  constructs are  similar  to  =collect= except  that  the  values of  the
+specified expression must be lists.
+
+- =append= ::
+
+   keyword causes its list values to be  concatenated into a single list, as if
+  they were arguments to the Common Lisp function ~append~.
+
+- =nconc= ::
+
+  keyword causes its list  values to be concatenated into a  single list, as if
+  they  were arguments  to the  Common Lisp  function ~nconc~.   Note that  the
+  =nconc= keyword destructively modifies its argument lists.
+
+- ~var~ ::
+
+  is set  to the list  of concatenated values; if  you specify ~var~,  the loop
+  does not return the final list automatically.  The ~var~ argument is bound as
+  if by  the construct =with=.   You cannot specify a  data type for  ~var~; it
+  must be of type =list=.
+
+#+begin_src lisp :results raw :exports both
+;;; Use APPEND to concatenate some sublists.
+(loop for x in '((a) (b) ((c)))
+      append x)
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; NCONC some sublists together.  Note that only lists
+;;; made by the call to LIST are modified.
+(loop for i upfrom 0
+      as x in '(a b (c))
+      nconc (if (evenp i) (list x) '()))
+#+end_src
+
+**** count - counting
+
+#+begin_example
+count expr [into var] [type-spec]
+counting expr [into var] [type-spec]
+#+end_example
+
+- =count= ::
+
+  - construct counts  the number of times  that the specified expression  has a
+    non-nil value.
+
+- ~var~ ::
+
+  - accumulates the number of occurrences; if ~var~ is specified, the loop does
+    not return the  final count automatically.  The ~var~ argument  is bound as
+    if by the construct =with=.
+
+  - If =into= ~var~ is used, the optional =type-spec= argument specifies a data
+    type for ~var~.   If there is no =into= variable,  the optional =type-spec=
+    argument applies  to the internal variable  that is keeping the  count.  In
+    either case it is an error to specify a non-numeric data type.  The default
+    type is implementation-dependent, but it must  be a subtype of ~(or integer
+    float)~.
+
+#+begin_src lisp :results value :exports both
+;;; Sum the elements of a list.
+
+(loop for i fixnum in '(1 2 3 4 5)
+      sum i)
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; Sum a function of elements of a list.
+
+(setq series
+      '(1.2 4.3 5.7))
+
+(loop for v in series
+      sum (* 2.0 v))
+#+end_src
+
+**** maximize - maximizing - minimize - minimizing
+
+#+begin_example
+maximize expr [into var] [type-spec]
+maximizing expr [into var] [type-spec]
+minimize expr [into var] [type-spec]
+minimizing expr [into var] [type-spec]
+#+end_example
+
+- =maximize= ::
+
+  - construct compares  the value of  the specified expression  obtained during
+    the first  iteration with  values obtained  in successive  iterations.
+
+  - The  maximum value  encountered is  determined and  returned.
+
+  - If the loop never executes the body, the returned value is not meaningful.
+
+- =minimize= ::
+
+  - construct is  similar to  maximize; it determines  and returns  the minimum
+    value.
+
+- ~var~ ::
+
+  - accumulates the  maximum or minimum  value;
+
+  - if  var is  specified, the  loop  does not  return the  maximum or  minimum
+    automatically.
+
+  - The var argument is bound as if by the construct =with=.
+
+  - If =into= var  is used, the optional =type-spec= argument  specifies a data
+    type for ~var~.   If there is no =into= variable,  the optional =type-spec=
+    argument applies to the internal  variable that is keeping the intermediate
+    result.  In either case it is an  error to specify a non-numeric data type.
+    The default type  is implementation-dependent, but it must be  a subtype of
+    ~(or integer float)~.
+
+#+begin_src lisp :results value :exports both
+(loop for i in '(2 1 5 3 4)
+      maximize i)
+#+end_src
+
+#+begin_src lisp :results value :exports both
+(loop for i in '(2 1 5 3 4)
+      minimize i)
+#+end_src
+
+#+begin_src lisp :results value :export both
+;;; In this example, FIXNUM applies to the internal
+;;; variable that holds the maximum value.
+
+(setq series '(1.2 4.3 5.7))
+
+(loop for v in series
+      maximize (round v) fixnum)
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;;; In this example, FIXNUM applies to the variable RESULT.
+
+(loop for v float in series
+      minimize (round v) into result fixnum
+      finally (return result))
+#+end_src
 
 *** Variable Initializations
 
@@ -11699,7 +11965,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:11] does emphasize a  side-effect-free, applicative approach to
+book[fn:12] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -15173,10 +15439,14 @@ expected effect.
 [fn:10]However, loop does not enforce this convention, and some of the examples
 below violate it. De gustibus non disputandum est.-GLS
 
+[fn:11][There  is  no semantic  difference  between  the  ``ing'' keywords  and  their
+non-``ing'' counterparts.  They  are provided purely for the  sake of stylistic
+diversity among  users.  I happen  to prefer  the non-``ing'' forms-when  I use
+loop at all.-GLS]
 
-[fn:11]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:12]In the browser, add =index.text= to the end of the URL to see the source.
 
-[fn:12]Markdown requires the standard Perl library module Digest::MD5.
+[fn:13]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
