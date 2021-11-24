@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-24 09:15
-#+macro:version Version 0.0.125
+#+date:2021-11-24 09:30
+#+macro:version Version 0.0.126
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -11007,6 +11007,7 @@ iteration control clauses and the =into= preposition of accumulation clauses.
 - =else=
 - =and=
 - =end=
+- =it=
 
 #+texinfo:@subheading True Conditions
 
@@ -11177,6 +11178,97 @@ preceding =when= or =if= construct that has no associated else.
 #+end_src
 
 *** Unconditional Execution
+
+- =do=
+- =doing=
+- =return=
+
+  The loop construct =do= (or =doing=) takes one or more expressions and simply
+  evaluates them in order.
+
+  The loop construct  =return= takes one expression and returns  its value.  It
+  is equivalent to the clause ~do (return value)~.
+
+**** do - doing
+
+#+begin_example
+do {expr}*
+doing {expr}*
+#+end_example
+
+- =do= ::
+
+  construct simply evaluates  the specified expressions wherever  they occur in
+  the expanded form of loop.
+
+- ~expr~ ::
+
+  argument can be any non-atomic Common Lisp form.  Each ~expr~ is evaluated in
+  every iteration.
+
+#+texinfo:@heading Constructs with Arbitraty Number of Forms
+
+The constructs
+- =do=,
+- =initially=, and
+- =finally=
+
+are the  only loop keywords  that take an arbitrary  number of forms  and group
+them as if using an implicit ~progn~.
+
+Because every  loop clause must  begin with a loop  keyword, you would  use the
+keyword =do= when no control action other than execution is required.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp :results output :exports both
+;;; Print some numbers.
+(loop for i from 1 to 5
+      do (print i)) ;Prints 5 lines
+#+end_src
+
+#+begin_src lisp :results output :export both
+;;; Print numbers and their squares.
+;;; The DO construct applies to multiple forms.
+(loop for i from 1 to 4
+      do (print i)
+         (print (* i i))) ;Prints 8 lines
+#+end_src
+
+**** return
+
+: return expr
+
+The =return= construct terminates a loop and returns the value of the specified
+expression as the value  of the loop.  This construct is  similar to the Common
+Lisp special form ~return-from~ and the Common Lisp macro ~return~.
+
+The Loop  Facility supports the  =return= construct for  backward compatibility
+with older  loop implementations.   The =return= construct  returns immediately
+and does not execute any =finally= clause that is given.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp
+;;; Signal an exceptional condition.
+(loop for item in '(1 2 3 a 4 5)
+      when (not (numberp item))
+      return (cerror "enter new value"
+                     "non-numeric value: ~s"
+                     item)) ;Signals an error
+;;; >>Error: non-numeric value: A
+#+end_src
+
+#+begin_src lisp
+;;; The previous example is equivalent to the following one.
+(loop for item in '(1 2 3 a 4 5)
+     when (not (numberp item))
+      do (return
+           (cerror "enter new value"
+                   "non-numeric value: ~s"
+                   item)))  ;Signals an error
+;;; >>Error: non-numeric value: A
+#+end_src
 
 *** Miscellaneous Features
 
