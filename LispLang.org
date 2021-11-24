@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-24 08:36
-#+macro:version Version 0.0.124
+#+date:2021-11-24 09:15
+#+macro:version Version 0.0.125
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10999,6 +10999,183 @@ iteration control clauses and the =into= preposition of accumulation clauses.
 
 *** Conditional Execution
 
+#+texinfo:@heading Constructs that are useful when you want some loop clauses to operate under a specified condition.
+
+- =if=
+- =when=
+- =unless=
+- =else=
+- =and=
+- =end=
+
+#+texinfo:@subheading True Conditions
+
+- If the specified condition is =true=, the succeeding loop clause is executed.
+
+#+texinfo:@subheading Not True Conditions
+
+- If the specified  condition is =not true=, the succeeding  clause is skipped,
+  and program control moves to the clause that follows the loop keyword else.
+
+- If the specified  condition is =not true= and no  =else= clause is specified,
+  the entire conditional construct is skipped.
+
+#+texinfo:@subheading Compound Clauses
+
+- Several  clauses can  be connected  into one  compound clause  with the  loop
+  keyword =and=.
+
+#+texinfo:@subheading End of Conditions
+
+- The end of the conditional clause can be marked with the keyword =end=.
+
+**** if - when - unless
+
+#+begin_example
+if expr clause {and clause}*
+   [else clause {and clause}*] [end]
+when expr clause {and clause}*
+   [else clause {and clause}*] [end]
+unless expr clause {and clause}*
+   [else clause {and clause}*] [end]
+#+end_example
+
+- =when= ::
+- =if= ::
+
+  The constructs  =when=[fn:12] and  =if= allow  conditional execution  of loop
+  clauses.  These constructs are synonyms and can be used interchangeably.
+
+- ~expr~ ::
+
+  - *non-nil* ::  If the value  of the test  expression ~expr~ is  non-nil, the
+    expression ~clause1~ is evaluated.
+
+  - *nil* :: If the test expression  evaluates to =nil= and an =else= construct
+    is  specified,  the  statements  that  follow  the  =else=  are  evaluated;
+    otherwise, control passes to the =next= clause.
+
+- =unless= ::
+
+  construct is  equivalent to  ~when (not  expr)~ and ~if  (not expr~).[fn:13]
+
+  - *nil* :: If the value of the  test expression ~expr~ is nil, the expression
+    clause1 is   evaluated.
+
+  - *non-nil*   ::  If  the test expression evaluates to non-nil  and an =else=
+    construct  is  specified,  the  statements   that  follow  the  =else=  are
+    evaluated; otherwise, control passes to the next clause.
+
+#+texinfo:@heading Clause Argument Types
+
+The clause arguments must be either
+- accumulation,
+- unconditional, or
+- conditional clauses (see  section 26.3.2).
+
+#+texinfo:@heading Compound Clauses
+
+Clauses  that follow  the test  expression  can be  grouped by  using the  loop
+keyword =and= to produce a compound clause.
+
+#+texinfo:@heading Referring to the Result of the Test Expression using ``it''
+
+- =it= ::
+
+  keyword =it= can be  used to refer to the result of the  test expression in a
+  clause.  If  multiple clauses  are connected with  =and=, the  =it= construct
+  must be used in the first clause in the block.  Since =it= is a loop keyword,
+  it may not be used as a local variable within a loop.
+
+#+texinfo:@heading Nesting Clauses and ``else''
+
+If =when= or  =if= clauses are nested,  each =else= is paired  with the closest
+preceding =when= or =if= construct that has no associated else.
+
+#+texinfo:@heading Marking the End of the Conditional Clauses
+
+- =end= ::
+
+  optional loop keyword  marks the end of  the clause.  If this  keyword is not
+  specified,  the next  loop  keyword marks  the  end.  You  can  use =end=  to
+  distinguish the scoping of compound clauses.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp
+;;; Group conditional clauses into a block.
+(loop for i in numbers-list
+      when (oddp i)
+        do (print i)
+        and collect i into odd-numbers
+        and do (terpri)
+      else     ;I is even
+        collect i into even-numbers
+      finally
+        (return (values odd-numbers even-numbers)))
+#+end_src
+
+#+begin_src lisp :results list :exports both
+;;; Collect numbers larger than 3.
+(loop for i in '(1 2 3 4 5 6)
+      when (and (> i 3) i)
+      collect it)     ;it refers to (and (> i 3) i)
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;;; Find a number in a list.
+(loop for i in '(1 2 3 4 5 6)
+      when (and (> i 3) i)
+      return it)
+#+end_src
+
+#+begin_src lisp :results value :exports both
+;; The preceding example is similar to the following one.
+(loop for i in '(1 2 3 4 5 6)
+      thereis (and (> i 3) i))
+#+end_src
+
+#+begin_src lisp
+;;; An example of using UNLESS with ELSE (yuk).-GLS
+
+(loop for turtle in teenage-mutant-ninja-turtles do
+  (loop for x in '(joker brainiac shredder krazy-kat)
+        unless (evil x)
+          do (eat (make-pizza :anchovies t))
+        else unless (and (eq x 'shredder) (attacking-p x))
+               do (cut turtle slack);When the evil Shredder attacks,
+             else (fight turtle x)));those turtle boys don't cut no slack
+#+end_src
+
+#+begin_src lisp
+;;; Nest conditional clauses.
+(loop for i in list
+      when (numberp i)
+        when (bignump i)
+          collect i into big-numbers
+        else     ;Not (bignump i)
+          collect i into other-numbers
+      else     ;Not (numberp i)
+        when (symbolp i)
+          collect i into symbol-list
+        else     ;Not (symbolp i)
+          (error "found a funny value in list ~S, value ~S~%"
+               (list i)))
+#+end_src
+
+#+begin_src lisp
+;;; Without the END marker, the last AND would apply to the
+;;; inner IF rather than the outer one.
+(loop for x from 0 to 3
+      do (print x)
+      if (zerop (mod x 2))
+        do (princ " a")
+          and if (zerop (floor x 2))
+                do (princ " b")
+              end
+          and do (princ " c"))
+#+end_src
+
 *** Unconditional Execution
 
 *** Miscellaneous Features
@@ -12114,7 +12291,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:12] does emphasize a  side-effect-free, applicative approach to
+book[fn:14] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -15593,9 +15770,16 @@ non-``ing'' counterparts.  They  are provided purely for the  sake of stylistic
 diversity among  users.  I happen  to prefer  the non-``ing'' forms-when  I use
 loop at all.-GLS]
 
-[fn:12]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:12][Compare this to the macro when, which does not allow an ``else'' part.-GLS]
 
-[fn:13]Markdown requires the standard Perl library module Digest::MD5.
+[fn:13][Compare this  to the macro ~unless~,  which does not allow  an ``else''
+  part---or do I mean a ``then'' part?!  Ugh.  To prevent confusion, I strongly
+  recommend as  a matter of  style that =else= not  be used with  =unless= loop
+  clauses.-GLS]
+
+[fn:14]In the browser, add =index.text= to the end of the URL to see the source.
+
+[fn:15]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
