@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-24 08:07
-#+macro:version Version 0.0.122
+#+date:2021-11-24 08:15
+#+macro:version Version 0.0.123
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10664,25 +10664,30 @@ collecting expr [into var]
 #+end_example
 
 During  each iteration,  these constructs  collect the  value of  the specified
-expression into  a list.  The  argument ~var~ is set  to the list  of collected
-values.  When  iteration terminates, the list  is returned, except if  ~var~ is
-specified, the loop does not return  the final list automatically.  If ~var~ is
-not specified,  it is equivalent to  specifying an internal name  for ~var~ and
-returning its value in a =finally= clause.
+expression into  a list.
 
-- The ~var~ argument is bound as if by the construct =with=.
+- ~var~ ::
 
-- You cannot specify a data type for ~var~; it must be of type =list=.
+  is set to the list of  collected values.  When iteration terminates, the list
+  is returned, except if ~var~ is specified, the loop does not return the final
+  list  automatically.
 
-#+begin_src lisp :results raw :export both
+  If ~var~  is not specified, it  is equivalent to specifying  an internal name
+  for ~var~ and returning its value in a =finally= clause.
+
+  The ~var~ argument is bound as if by the construct =with=.
+
+  You cannot specify a data type for ~var~; it must be of type =list=.
+
+#+begin_src lisp :results value :export both
 ;;; Collect all the symbols in a list.
 (loop for i in '(bird 3 4 turtle (1 . 4) horse cat)
       when (symbolp i) collect i)
 #+end_src
 
-#+begin_src lisp :results raw :export both
+#+begin_src lisp :results value :export both
 ;;; Collect and return odd numbers.
-(loop for i from 1 to 10
+(loop for i from 1 to 10n
       if (oddp i) collect i)
 #+end_src
 
@@ -10723,6 +10728,7 @@ specified expression must be lists.
   if by  the construct =with=.   You cannot specify a  data type for  ~var~; it
   must be of type =list=.
 
+
 #+begin_src lisp :results raw :exports both
 ;;; Use APPEND to concatenate some sublists.
 (loop for x in '((a) (b) ((c)))
@@ -10761,6 +10767,7 @@ counting expr [into var] [type-spec]
     either case it is an error to specify a non-numeric data type.  The default
     type is implementation-dependent, but it must  be a subtype of ~(or integer
     float)~.
+
 
 #+begin_src lisp :results value :exports both
 ;;; Sum the elements of a list.
@@ -10817,6 +10824,7 @@ minimizing expr [into var] [type-spec]
     result.  In either case it is an  error to specify a non-numeric data type.
     The default type  is implementation-dependent, but it must be  a subtype of
     ~(or integer float)~.
+
 
 #+begin_src lisp :results value :exports both
 (loop for i in '(2 1 5 3 4)
