@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-25 09:21
-#+macro:version Version 0.0.127
+#+date:2021-11-25 09:43
+#+macro:version Version 0.0.128
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -9278,11 +9278,12 @@ Jon L White.
 #+cindex:Loop Facility
 #+cindex:loop keywords, first
 A *loop*  is a series  of expressions  that are executed  one or more  times, a
-process known as /iteration/.  The *Loop  Facility* defines a variety of useful
-methods  (``constructs''), indicated  by  /loop keywords/,  to  iterate and  to
-accumulate values in a loop.
+process known as /iteration/.
 
-#+texinfo:@heading Loop Keywords
+#+texinfo:@heading Loop Keywords (``Constructs'')
+The  *Loop Facility*  defines  a variety  of  useful methods  (``constructs''),
+indicated by /loop keywords/, to iterate and to accumulate values in a loop.
+
 *Loop keywords*  are not true Common  Lisp keywords; they are  symbols that are
 recognized  by  the  Loop  Facility  and  that  provide  such  capabilities  as
 
@@ -9400,7 +9401,8 @@ Each *loop keyword*  introduces either
   - a single *Lisp form*.
 
 The number  of /forms/  in a clause  is determined by  the /loop  keyword/ that
-begins the clause and by the /auxiliary keywords/ in the clause.
+begins the  clause and  by the /auxiliary  keywords/ (``prepositions'')  in the
+clause.
 
 The keywords
 - ~do~,
@@ -9410,8 +9412,10 @@ The keywords
 are the  only loop keywords that  can take any  number of Lisp forms  and group
 them as if in a single ~progn~ form.
 
+#+texinfo:@heading Prepositions or Auxiliary Keywords
 #+cindex:auxiliary keyword, loop clause
 #+cindex:preposition
+
 Loop  clauses can  contain  *auxiliary keywords*,  which  are sometimes  called
 *prepositions*.
 
@@ -9442,8 +9446,8 @@ The following actions are exceptions to the linear order of execution:
   accumulation  clauses are  returned.   Explicit ~return~  s  anywhere in  the
   source, however, will exit the loop without executing the epilogue code.
 
-- A  with clause  ::  introduces a  variable binding  and  an optional  initial
-  value.  The initial  values are  calculated in  the order  in which  the with
+- A =with=  clause   ::  introduces a variable binding and  an optional initial
+  value.  The  initial values are calculated  in the order in  which the =with=
   clauses occur.
 
 - Iteration control clauses :: implicitly perform the following actions:
@@ -9459,26 +9463,25 @@ The following actions are exceptions to the linear order of execution:
 Loop clauses fall into one of the following categories:
 #+cindex:loop clauses, categories
 
-- variable initialization and stepping
+- *VARIABLE INITIALIZATION and STEPPING* ::
   #+cindex:variable initalization, stepping
   #+cindex:for, loop keyword
   #+cindex:as, loop keyword
+  - =for= and =as= ::
 
-  - ~for~ and ~as~ ::
-
-    provide  iteration  control  clauses  that   establish  a  variable  to  be
-    initialized.
+    provide  *iteration  control  clauses*  that establish  a  variable  to  be
+    *initialized*.
 
     You can combine ~for~  and ~as~ clauses with the loop  keyword ~and~ to get
     parallel initialization and stepping.
 
-  - ~with~ constuct ::
+  - =with= constuct ::
 
     is similar to a single ~let~ clause.
 
-    You can combine ~with~ clauses using ~and~ to get parallel initialization.
+    You can combine =with= clauses using =and= to get parallel initialization.
 
-  - ~repeat~ construct ::
+  - =repeat= construct ::
 
     causes iteration to terminate after a specified number of times.
 
@@ -9486,120 +9489,120 @@ Loop clauses fall into one of the following categories:
 
   - data type ::
 
-    You can specify  *data types* for loop variables (see  section 26.12.1). It
-    is an error to bind the  same variable twice in any variable-binding clause
-    of  a  single loop  expression.  Such  variables include  local  variables,
-    iteration control variables, and variables found by destructuring.
+    You can specify *data types* for loop variables. It is an error to bind the
+    same  variable  twice in  any  variable-binding  clause  of a  single  loop
+    expression.   Such variables  include  local  variables, iteration  control
+    variables, and variables found by destructuring.
 
-- value accumulation
+- *VALUE ACCUMULATION* ::
 
-  - ~collect~ construct ::
+  - =collect= construct ::
 
     takes one form in its clause and adds  the value of that form to the end of
     a list of values.
 
     By default, the list of values is returned when the loop finishes.
 
-  - ~append~ construct ::
+  - =append= construct ::
 
     takes one form in its clause and appends  the value of that form to the end
     of a list  of values.
 
     By default, the list of values is returned when the loop finishes.
 
-  - ~nconc~ construct ::
+  - =nconc= construct ::
 
-    is similar to ~append~,  but its list values are concatenated  as if by the
+    is similar to =append=,  but its list values are concatenated  as if by the
     Common Lisp function ~nconc~.
 
     By default, the list of values is returned when the loop finishes.
 
-  - ~sum~ construct ::
+  - =sum= construct ::
 
     takes one form in  its clause that must evaluate to a  number and adds that
     number into  a running total.
 
     By default, the cumulative sum is returned when the loop finishes.
 
-  - ~count~ construct ::
+  - =count= construct ::
 
     takes one form in  its clause and counts the number of  times that the form
     evaluates to  a non-nil value.
 
     By default, the count is returned when the loop finishes.
 
-  - ~minimize~ construct ::
+  - =minimize= construct ::
 
     takes one form  in its clause and determines the  minimum value obtained by
     evaluating that form.
 
     By default, the minimum value is returned when the loop finishes.
 
-  - ~maximize~ construct ::
+  - =maximize= construct ::
 
     takes one form  in its clause and determines the  maximum value obtained by
     evaluating that form.
 
     By default, the maximum value is returned when the loop finishes.
 
-- termination conditions
+- *TERMINATION CONDITIONS* ::
 
-  - ~loop-finish~ Lisp macro ::
+  - =loop-finish= Lisp macro ::
 
     terminates iteration and returns any  accumulated result. If specified, any
-    ~finally~ clauses are evaluated.
+    =finally= clauses are evaluated.
 
-  - ~for~ and ~as~ constructs ::
+  - =for= and =as= constructs ::
 
     provide  a termination  test that  is determined  by the  iteration control
     clause.
 
-  - ~repeat~ construct ::
+  - =repeat= construct ::
 
     causes termination after a specified number of iterations.
 
-  - ~while~ construct ::
+  - =while= construct ::
 
     akes one form,  a condition, and terminates the iteration  if the condition
     evaluates to ~nil~.
 
-    A  ~while~ clause  is equivalent  to  the expression
+    A  =while= clause  is equivalent  to  the expression
 
     : (if (not  condition) (loop-finish))
 
-  - ~until~ construct ::
+  - =until= construct ::
 
-    is the ~inverse~  of ~while~; it terminates the iteration  if the condition
+    is the inverse  of =while=; it terminates the iteration  if the condition
     evaluates to any non-~nil~ value.
 
-    An ~until~ clause is equivalent to the expression
+    An =until= clause is equivalent to the expression
 
     : (if condition (loop-finish))
 
-  - ~always~ construct ::
+  - =always= construct ::
 
     takes one form and terminates the loop if the form ever evaluates to ~nil~;
     in this  case, it returns ~nil~.   Otherwise, it provides a  default return
     value of ~t~.
 
-  - ~never~ construct ::
+  - =never= construct ::
 
     takes  one form  and terminates  the  loop if  the form  ever evaluates  to
     non-~nil~;  in this  case,  it  returns ~nil~.   Otherwise,  it provides  a
     default return value of ~t~.
 
-  - ~thereis~ construct ::
+  - =thereis= construct ::
 
-    The ~thereis~ construct takes one form  and terminates the loop if the form
-    ever evaluates to non-~nil~; in this case, it returns that value.
+    takes  one form  and terminates  the  loop if  the form  ever evaluates  to
+    non-~nil~; in this case, it returns that value.
 
-- unconditional execution ::
+- *UNCONDITIONAL EXECUTION* ::
 
-  - ~do~ construct ::
+  - =do= construct ::
 
     simply evaluates all forms in its clause.
 
-  - ~return~ construct ::
+  - =return= construct ::
 
     takes one form and returns its value.
 
@@ -9607,9 +9610,9 @@ Loop clauses fall into one of the following categories:
 
     : do (return value)
 
-- conditional execution
+- *CONDITIONAL EXECUTION* ::
 
-  - ~if~ construct ::
+  - =if= construct ::
 
     takes
     - one form  as a  predicate and
@@ -9622,42 +9625,42 @@ Loop clauses fall into one of the following categories:
 
     it can also be
     - any combination of such clauses
-    - connected by the loop keyword ~and~.
+    - connected by the loop keyword =and=.
 
-  - ~when~ construct :: is a synonym for ~if~.
+  - =when= construct :: is a synonym for =if=.
 
-  - ~unless~ construct ::
+  - =unless= construct ::
 
-    is similar to ~when~ except that  it complements the predicate; it executes
+    is similar to =when= except that  it complements the predicate; it executes
     the following clause if the predicate is ~false~.
 
-  - ~else~ construct ::
+  - =else= construct ::
 
-    provides an optional  component of ~if~, ~when~, and  ~unless~ clauses that
+    provides an optional  component of =if=, =when=, and  =unless= clauses that
     is executed  when the predicate  is ~false~.  The  component is one  of the
     clauses described under ~if~.
 
-  - ~end~ construct ::
+  - =end= construct ::
 
     provides an optional component to mark the end of a conditional clause.
 
-- miscellaneous operations
+- *MISCELLANEOUS OPERATIONS* ::
 
-  - ~named~ construct ::
+  - =named= construct ::
 
     assigns a name to a loop construct.
 
-  - ~initially~ construct ::
+  - =initially= construct ::
 
     causes its forms to be evaluated in the *loop prologue*, which precedes all
-    loop code except  for initial settings specified by  the constructs ~with~,
-    ~for~, or ~as~.
+    loop code except  for initial settings specified by  the constructs =with=,
+    =for=, or =as=.
 
-  - ~finally~ construct ::
+  - =finally= construct ::
 
     causes  its forms  to  be evaluated  in the  *loop  epilogue* after  normal
     iteration terminates.   An unconditional  clause can  also follow  the loop
-    keyword ~finally~.
+    keyword =finally=.
 
 **** Loop Syntax
 The following  syntax description provides an  overview of the syntax  for loop
