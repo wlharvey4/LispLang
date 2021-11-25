@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-24 09:30
-#+macro:version Version 0.0.126
+#+date:2021-11-25 09:21
+#+macro:version Version 0.0.127
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -10347,7 +10347,9 @@ but, in some implementations, the =repeat= construct might be more efficient.
 #+end_src
 
 *** End-Test Control
+
 #+texinfo:@heading Loop Termination Constructs
+#+cindex:loop termination constructs
 
 The loop keywords
 - =always=,
@@ -10377,10 +10379,12 @@ In all other respects these constructs behave like the
 
 constructs.
 
+#+cindex:loop-finish macro
 The macro  ~loop-finish~ can be used  at any time to  cause normal termination.
 In normal termination, =finally= clauses are executed and default return values
 are returned.
 
+#+cindex:end-test loop control constructs
 =End-test= control constructs  can be used anywhere within the  loop body.  The
 termination conditions are tested in the order in which they appear.
 
@@ -10392,13 +10396,13 @@ until expr
 #+end_example
 
 - =while= ::
-
+  #+cindex:while loop construct
   allows iteration to continue until  the specified expression ~expr~ evaluates
   to ~nil~.   The expression  is re-evaluated  at the  location of  the =while=
   clause.
 
 - =until= ::
-
+  #+cindex:until loop construct
   is  equivalent  to =while=  ~(not  expr)~.  If  the  value of  the  specified
   expression is non-nil, iteration terminates.
 
@@ -10438,25 +10442,25 @@ the loop =epilogue=, where any =finally= clauses will be executed.
 **** always-never-thereis
 
 #+begin_example
-always expr 
-never expr 
+always expr
+never expr
 thereis expr
 #+end_example
 
 - =always= ::
-
+  #+cindex:always loop construct
   takes one form and  terminates the loop if the form  ever evaluates to ~nil~;
   in this  case, it  returns ~nil~.   Otherwise, it  provides a  default return
   value of =t=.
 
 - =never= ::
-
+  #+cindex:never loop construct
   takes one form and terminates the loop if the form ever evaluates to non-nil;
   in this  case, it  returns ~nil~.   Otherwise, it  provides a  default return
   value of =t=.
 
 - =thereis= ::
-
+  #+cindex:thereis loop construct
   takes one form and terminates the loop if the form ever evaluates to non-nil;
   in this case, it returns that value.
 
@@ -10540,6 +10544,7 @@ terminate iteration, any =finally= clause that is specified is not evaluated.
 #+end_src
 
 **** loop-finish Macro
+#+cindex:loop-finish loop macro
 The  macro   ~loop-finish~  terminates  iteration  normally   and  returns  any
 accumulated result.  If specified, a =finally= clause is evaluated.
 
@@ -10579,6 +10584,7 @@ Implementations are allowed to provide this construct as a local macro by using
 #+end_src
 
 *** Value Accumulation
+#+cindex:accumulation loop constructs
 
 #+texinfo:@heading Clauses that accumulate values in lists and return them.
 
@@ -10605,7 +10611,8 @@ Implementations are allowed to provide this construct as a local macro by using
 The preposition keyword
 
 - =into=
-
+  #+cindex:into preposition
+  #+cindex:preposition into
   - can be used  to name the variable used to  hold partial accumulations.  The
     variable is bound as if by the loop construct =with= (see section 26.9).
 
@@ -10663,6 +10670,7 @@ collect expr [into var]
 collecting expr [into var]
 #+end_example
 
+#+cindex:collect, collecting loop constructs
 During  each iteration,  these constructs  collect the  value of  the specified
 expression into  a list.
 
@@ -10709,6 +10717,8 @@ nconc expr [into var]
 nconcing expr [into var]
 #+end_example
 
+#+cindex:append, appending loop constructs
+#+cindex:nconc, nconcing loop constructs
 These  constructs are  similar  to  =collect= except  that  the  values of  the
 specified expression must be lists.
 
@@ -10754,7 +10764,7 @@ counting expr [into var] [type-spec]
 #+end_example
 
 - =count= ::
-
+  #+cindex:count loop construct
   - construct counts  the number of times  that the specified expression  has a
     non-nil value.
 
@@ -10800,7 +10810,7 @@ minimizing expr [into var] [type-spec]
 #+end_example
 
 - =maximize= ::
-
+  #+cindex:maximize loop construct
   - construct compares  the value of  the specified expression  obtained during
     the first  iteration with  values obtained  in successive  iterations.
 
@@ -10809,7 +10819,7 @@ minimizing expr [into var] [type-spec]
   - If the loop never executes the body, the returned value is not meaningful.
 
 - =minimize= ::
-
+  #+cindex:minimize loop construct
   - construct is  similar to  maximize; it determines  and returns  the minimum
     value.
 
@@ -10861,6 +10871,7 @@ minimizing expr [into var] [type-spec]
 
 *** Variable Initializations
 
+#+cindex:local loop variable
 A *local  loop variable*  is one  that exists  only when  the Loop  Facility is
 invoked.  At that time, the variables  are declared and are initialized to some
 value.  These local  variables exist until loop iteration  terminates, at which
@@ -10868,7 +10879,7 @@ point  they cease  to  exist.   Implicitly variables  are  also established  by
 iteration control clauses and the =into= preposition of accumulation clauses.
 
 - =with= ::
-
+  #+cindex:with loop keyword
   The loop keyword  =with= designates a loop clause that  allows you to declare
   and  initialize  variables that  are  local  to  a  loop. The  variables  are
   initialized  one  time only;  they  can  be  initialized sequentially  or  in
@@ -10946,7 +10957,7 @@ iteration control clauses and the =into= preposition of accumulation clauses.
 : with var [type-spec] [= expr] {and var [type-spec] [= expr]}*
 
 - =with= ::
-
+  #+cindex:with loop construct
   The =with=  construct initializes variables  that are  local to a  loop.  The
   variables are initialized one time only.
 
@@ -10999,7 +11010,8 @@ iteration control clauses and the =into= preposition of accumulation clauses.
 
 *** Conditional Execution
 
-#+texinfo:@heading Constructs that are useful when you want some loop clauses to operate under a specified condition.
+#+texinfo:@heading Constructs for loop clauses to operate under a specified condition.
+#+cindex:conditional loop constructs
 
 - =if=
 - =when=
@@ -11043,7 +11055,8 @@ unless expr clause {and clause}*
 
 - =when= ::
 - =if= ::
-
+  #+cindex:if loop construct
+  #+cindex:when loop construct
   The constructs  =when=[fn:12] and  =if= allow  conditional execution  of loop
   clauses.  These constructs are synonyms and can be used interchangeably.
 
@@ -11057,7 +11070,7 @@ unless expr clause {and clause}*
     otherwise, control passes to the =next= clause.
 
 - =unless= ::
-
+  #+cindex:unless loop construct
   construct is  equivalent to  ~when (not  expr)~ and ~if  (not expr~).[fn:13]
 
   - *nil* :: If the value of the  test expression ~expr~ is nil, the expression
@@ -11082,7 +11095,7 @@ keyword =and= to produce a compound clause.
 #+texinfo:@heading Referring to the Result of the Test Expression using ``it''
 
 - =it= ::
-
+  #+cindex:it loop keyword
   keyword =it= can be  used to refer to the result of the  test expression in a
   clause.  If  multiple clauses  are connected with  =and=, the  =it= construct
   must be used in the first clause in the block.  Since =it= is a loop keyword,
@@ -11183,9 +11196,11 @@ preceding =when= or =if= construct that has no associated else.
 - =doing=
 - =return=
 
+  #+cindex:do, doing loop construct
   The loop construct =do= (or =doing=) takes one or more expressions and simply
   evaluates them in order.
 
+  #+cindex:return loop construct
   The loop construct  =return= takes one expression and returns  its value.  It
   is equivalent to the clause ~do (return value)~.
 
@@ -11197,7 +11212,7 @@ doing {expr}*
 #+end_example
 
 - =do= ::
-
+  #+cindex:do loop construct
   construct simply evaluates  the specified expressions wherever  they occur in
   the expanded form of loop.
 
@@ -11217,7 +11232,7 @@ are the  only loop keywords  that take an arbitrary  number of forms  and group
 them as if using an implicit ~progn~.
 
 Because every  loop clause must  begin with a loop  keyword, you would  use the
-keyword =do= when no control action other than execution is required.
+keyword =do= when *no control action* other than execution is required.
 
 #+texinfo:@heading Examples
 
@@ -11272,9 +11287,286 @@ and does not execute any =finally= clause that is given.
 
 *** Miscellaneous Features
 
+#+texinfo:@heading Named Construct
+#+cindex:named construct
+
+The Loop  Facility provides the  =named= construct to name  a loop so  that the
+Common Lisp special form ~return-from~ can be used.
+
+#+texinfo:@heading Initially and Finally Constructs
+#+cindex:initially construct
+#+cindex:finally construct
+
+The  loop keywords  =initially= and  =finally= designate  loop constructs  that
+cause expressions to be evaluated before and after the loop body, respectively.
+
+#+texinfo:@subheading Initially Clauses
+#+cindex:initially clauses
+
+The code for any =initially= clauses is collected into one ~progn~ in the order
+in which the clauses appeared in the loop.  The collected code is executed once
+in the loop prologue after any implicit variable initializations.
+
+#+texinfo:@subheading Finally Clauses
+#+cindex:finally clauses
+
+The code for any  =finally= clauses is collected into one  ~progn~ in the order
+in which the clauses appeared in the loop.  The collected code is executed once
+in  the  loop  epilogue  before  any implicit  values  are  returned  from  the
+accumulation clauses.   Explicit returns in  the loop body, however,  will exit
+the loop without executing the epilogue code.
+
 **** Data Types
 
+#+texinfo:@heading Type-Spec Argument
+#+cindex:type-spec argument
+
+Many loop  constructs take a  =type-spec= argument  that allows you  to specify
+certain data types for loop variables.  While  it is not necessary to specify a
+data type  for any variable,  by doing  so you ensure  that the variable  has a
+correctly typed initial  value.  The type declaration is made  available to the
+compiler for more efficient loop  expansion.  In some implementations, =fixnum=
+and =float= declarations  are especially useful; the compiler  notices them and
+emits more efficient code.
+
+#+texinfo:@heading Type-Spec Syntax
+The =type-spec= argument has the following syntax:
+
+#+begin_example
+type-spec ::= of-type d-type-spec
+d-type-spec ::= type-specifier | (d-type-spec . d-type-spec)
+#+end_example
+
+A =type-specifier= in  this syntax can be any Common  Lisp type specifier.
+
+The =d-type-spec= argument  is used for destructuring, as  described in section
+26.12.2.  If the =d-type-spec= argument  consists solely of the types =fixnum=,
+=float=,  =t=,  or =nil=,  the  of-type  keyword  is optional.   The  =of-type=
+construct is  optional in these  cases to provide backward  compatibility; thus
+the following two expressions are the same:
+
+#+begin_src lisp
+;;; This expression uses the old syntax for type specifiers.
+(loop for i fixnum upfrom 3 ...)
+
+;;; This expression uses the new syntax for type specifiers.
+(loop for i of-type fixnum upfrom 3 ...)
+#+end_src
+
 **** Destructuring
+
+*Destructuring* allows you to bind a set of variables to a corresponding set of
+values anywhere that you can normally bind a value to a single variable.[fn:14]
+#+cindex:destructuring
+
+- During loop expansion, each variable in the variable list is matched with the
+  values in the values list.
+
+- If there are more variables in the variable list than there are values in the
+  values list,  the remaining variables are  given a value of  =nil=.
+
+- If  there  are more  values  than  variables  listed,  the extra  values  are
+  discarded.
+
+Suppose you want  to assign values from  a list to the variables  ~a~, ~b~, and
+~c~.  You could use one =for= clause  to bind the variable ~numlist~ to the car
+of the  specified expression, and  then you could  use another =for=  clause to
+bind the variables ~a~, ~b~, and ~c~ sequentially.
+
+#+begin_src lisp :results raw :exports both
+  ;;; Collect values by using FOR constructs.
+  (loop for numlist in '((1 2 4.0) (5 6 8.3) (8 9 10.4))
+        for a = (first numlist)
+        for b = (second numlist)
+        for c = (third numlist)
+        collect (list a b c))
+#+end_src
+
+*Destructuring* makes this process easier by allowing the variables to be bound
+in parallel in each loop iteration.  You can declare data types by using a list
+of  =type-spec= arguments.  If  all the  types  are  the same,  you  can use  a
+shorthand destructuring syntax, as the second example following illustrates.
+
+#+begin_src lisp :results raw :exports both
+;;; Destructuring simplifies the process.
+(loop for (a b c) (integer integer float) in
+      '((1 2 4.0) (5 6 8.3) (8 9 10.4))
+      collect (list c b a)))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+;;; If all the types are the same, this way is even simpler.
+(loop for (a b c) float in
+      '((1.0 2.0 4.0) (5.0 6.0 8.3) (8.0 9.0 10.4))
+      collect (list c b a))
+#+end_src
+
+If  you use  destructuring  to declare  or  initialize a  number  of groups  of
+variables  into types,  you can  use  the loop  keyword =and=  to simplify  the
+process further.
+
+#+begin_src lisp :results raw :exports both
+;;; Initialize and declare variables in parallel
+;;; by using the AND construct.
+(loop with (a b) float = '(1.0 2.0)
+      and (c d) integer = '(3 4)
+      and (e f)
+      return (list a b c d e f))
+#+end_src
+
+#+cindex:data type specifiers
+A data type specifier for a destructuring  pattern is a tree of type specifiers
+with the same shape as the tree of variables, with the following exceptions:
+
+- When aligning the  trees, an atom in  the type specifier tree  that matches a
+  =cons= in the variable tree declares the same type for each variable.
+
+- A =cons= in the type specifier tree that matches an atom in the variable tree
+  is a non-atomic type specifer.
+
+#+begin_src lisp
+;;; Declare X and Y to be of type VECTOR and FIXNUM, respectively.
+(loop for (x y) of-type (vector fixnum) in my-list do ...)
+#+end_src
+
+If nil is used in a destructuring list, no variable is provided for its place.
+
+#+begin_src lisp :results raw :exports both
+(loop for (a nil b) = '(1 2 3)
+      do (return (list a b)))
+#+end_src
+
+Note that nonstandard lists can specify destructuring.
+
+#+begin_src lisp :results raw :exports both
+(loop for (x . y) = '(1 . 2)
+      do (return y))
+#+end_src
+
+#+begin_src lisp :results raw :exports both
+(loop for ((a . b) (c . d))
+          of-type ((float . float) (integer . integer))
+          in '(((1.2 . 2.4) (3 . 4)) ((3.4 . 4.6) (5 . 6)))
+      collect (list a b c d))
+#+end_src
+
+***** initially - finally - finally return
+
+#+begin_example
+initially {expr}*
+finally [do | doing] {expr}*
+finally return expr
+#+end_example
+
+#+cindex:initially
+#+cindex:finally
+- =initially= ::
+
+  The =initially= construct causes the  specified expression to be evaluated in
+  the loop prologue,  which precedes all loop code except  for initial settings
+  specified by constructs =with=, =for=, or =as=.
+
+- =finally= ::
+
+  The =finally=  construct causes the  specified expression to be  evaluated in
+  the loop epilogue after normal iteration terminates.
+
+- ~expr~ ::
+
+  The ~expr~ argument can be any non-atomic Common Lisp form.
+
+#+texinfo:@subheading Bypass finally
+
+Clauses such as
+- =return,
+- =always=,
+- =never=, and
+- =thereis=
+
+can bypass the =finally= clause.
+
+#+texinfo: @subheading Avoiding finally using return
+#+cindex:return
+
+The Common  Lisp macro ~return~  (or the =return  loop= construct) can  be used
+after =finally= to  return values from a loop.  The  evaluation of the ~return~
+form  inside  the   =finally=  clause  takes  precedence   over  returning  the
+accumulation from  clauses specified  by such  keywords as  =collect=, =nconc=,
+=append=, =sum=,  =count=, =maximize=, and =minimize=;  the accumulation values
+for these pre-empted clauses are not returned by the loop if ~return~ is used.
+
+#+texinfo:@subheading Arbitrary Number of Forms Grouped by progn
+
+The constructs
+- =do=,
+- =initially=, and
+- =finally=
+
+are the only loop keywords that  take an arbitrary number of (non-atomic) forms
+and group them as if by using an implicit ~progn~.
+
+#+texinfo:@heading Examples
+
+#+begin_src lisp
+;;; This example parses a simple printed string representation
+;;; from BUFFER (which is itself a string) and returns the
+;;; index of the closing double-quote character.
+
+(loop initially (unless (char= (char buffer 0) #\")
+                  (loop-finish))
+      for i fixnum from 1 below (string-length buffer)
+      when (char= (char buffer i) #\")
+        return i)
+#+end_src
+
+#+begin_src lisp :results output :exports both
+;;; The FINALLY clause prints the last value of I.
+;;; The collected value is returned.
+
+(loop for i from 1 to 10
+      when (> i 5)
+        collect i
+      finally (print i)) ;Prints 1 line
+;;; => (6 7 8 9 10)
+#+end_src
+
+#+begin_src lisp
+;;; Return both the count of collected numbers
+;;; as well as the numbers themselves.
+
+(loop for i from 1 to 10
+      when (> i 5)
+        collect i into number-list
+        and count i into number-count
+      finally (return (values number-count number-list)))
+;;; => 5 and (6 7 8 9 10)
+#+end_src
+
+***** named
+
+: named name
+
+The =named= construct allows  you to assign a name to a  loop construct so that
+you can use the Common Lisp special form ~return-from~ to exit the named loop.
+#+cindex:named construct
+
+Only one name may be assigned per  loop; the specified name becomes the name of
+the implicit block for the loop.
+
+If used, the =named= construct must be the first clause in the loop expression,
+coming right after the word =loop=.
+
+#+texinfo:@heading Example
+
+#+begin_src lisp :results output :exports both
+;;; Just name and return.
+(loop named max
+      for i from 1 to 10
+      do (print i)
+      do (return-from max 'done)) ;Prints 1 line
+;;; => DONE
+#+end_src
+
 
 ** Pretty Printing
 ** Common Lisp Object System
@@ -12383,7 +12675,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:14] does emphasize a  side-effect-free, applicative approach to
+book[fn:15] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -15869,9 +16161,13 @@ loop at all.-GLS]
   recommend as  a matter of  style that =else= not  be used with  =unless= loop
   clauses.-GLS]
 
-[fn:14]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:14][It is  worth noting that  the destructuring facility of  loop predates,
+and differs in some details from, that of destructuring-bind, an extension that
+has been provided by many implementors of Common Lisp.-GLS]
 
-[fn:15]Markdown requires the standard Perl library module Digest::MD5.
+[fn:15]In the browser, add =index.text= to the end of the URL to see the source.
+
+[fn:16]Markdown requires the standard Perl library module Digest::MD5.
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
