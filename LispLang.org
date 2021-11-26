@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-25 09:43
-#+macro:version Version 0.0.128
+#+date:2021-11-26 13:42
+#+macro:version Version 0.0.129
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -8747,27 +8747,76 @@ and tips on writing portable code. Appendix C contains a piece of code that may
 help in understanding the *backquote* syntax.
 
 ** Introduction
-Common  Lisp  is  a new  dialect  of  Lisp,  a  successor to  MacLisp  [33,37],
-influenced strongly by  Zetalisp [55,34] and to some extent  by Scheme [46] and
-Interlisp [50].
+Common  Lisp  is  a new  dialect  of  Lisp,
+- a  successor to  *MacLisp*,
+- influenced strongly by  *Zetalisp*,
+- and to some extent  by *Scheme* and
+- *Interlisp*.
 
 *** Purpose
 Common Lisp is intended to meet these goals:
 #+cindex:goals of book
 
-- Commonality
-- Portability
-- Consistency
-- Expressiveness
-- Compatibility
-- Efficiency
-- Power
-- Stability
+- Commonality ::
 
-The goals of Common Lisp are thus very close to those of Standard Lisp [31] and
-Portable Standard Lisp  [51]. Common Lisp differs from  Standard Lisp primarily
-in incorporating more features, including a  richer and more complicated set of
-data types and more complex control structures.
+  Common  Lisp  originated  in  an  attempt   to  focus  the  work  of  several
+  implementation   groups,   each   of   which   was   constructing   successor
+  implementations of MacLisp for different  computers.  Common Lisp serves as a
+  common dialect to which each implementation makes any necessary extensions.
+
+- Portability ::
+
+  Common Lisp intentionally excludes features that cannot be implemented easily
+  on a  broad class of machines.   Common Lisp is  designed to make it  easy to
+  write  programs  that  depend  as  little  as  possible  on  machine-specific
+  characteristics,  such  as  word  length,  while  allowing  some  variety  of
+  implementation techniques.
+
+- Consistency ::
+
+  The definition of  Common Lisp avoids such anomalies  by explicitly requiring
+  the  interpreter  and  compiler  to impose  identical  semantics  on  correct
+  programs so far as possible.
+
+- Expressiveness ::
+
+  Common  Lisp culls  what  experience has  shown  to be  the  most useful  and
+  understandable constructs  from not  only MacLisp  but also  Interlisp, other
+  Lisp dialects, and other programming languages.
+
+- Compatibility ::
+
+  Common Lisp  strives to be  compatible with  Lisp Machine Lisp,  MacLisp, and
+  Interlisp, roughly in that order.
+
+- Efficiency ::
+
+  Common Lisp has a number of features designed to facilitate the production of
+  high-quality compiled code in those  implementations whose developers care to
+  invest effort in an optimizing compiler.
+
+- Power ::
+
+  Common  Lisp is  a  descendant  of MacLisp,  which  has traditionally  placed
+  emphasis on  providing system-building tools.   It is expected  such packages
+  will be built on top of the Common Lisp core.
+
+- Stability ::
+
+  It  is  intended that  Common  Lisp  will change  only  slowly  and with  due
+  deliberation.
+
+Common  Lisp  differs  from  Standard  Lisp  primarily  in  incorporating  more
+features, including  a richer and more  complicated set of data  types and more
+complex control structures.
+
+The goals of Common Lisp are thus very close to those of
+- *Standard Lisp*[fn:9] and
+- *Portable Standard Lisp*[fn:10].
+
+Common  Lisp  differs  from  Standard  Lisp  primarily  in  incorporating  more
+features, including  a richer and more  complicated set of data  types and more
+complex control structures.
 
 This  book  is  intended  to  be   a  language  specification  rather  than  an
 implementation  specification.  ...   It  defines a  set  of standard  language
@@ -8802,6 +8851,7 @@ A number  of special notational conventions  are used throughout this  book for
 the sake of conciseness.
 
 **** Decimal Numbers
+#+cindex:decimal notation
 All numbers in  this book are in  decimal notation unless there  is an explicit
 indication to the contrary. (Decimal notation is normally taken for granted, of
 course.  Unfortunately,  for  certain  other   dialects  of  Lisp,  MacLisp  in
@@ -9664,7 +9714,7 @@ Loop clauses fall into one of the following categories:
 
 **** Loop Syntax
 The following  syntax description provides an  overview of the syntax  for loop
-clauses.[fn:9]
+clauses.[fn:11]
 
 A loop consists of the following types of clauses:
 
@@ -10003,7 +10053,7 @@ by ~expr2~.
 
 
 A common  convention is to  use =for= to introduce  new iterations and  =as= to
-introduce iterations that depend on a previous iteration specification.[fn:10]
+introduce iterations that depend on a previous iteration specification.[fn:12]
 
 #+texinfo:@heading Examples
 
@@ -10601,7 +10651,7 @@ Implementations are allowed to provide this construct as a local macro by using
 #+texinfo:@heading Clauses  that accumulate  and return numerical  values
 
 - =count=,
-- =counting=,[fn:11]
+- =counting=,[fn:13]
 - =maximize=,
 - =maximizing=,
 - =minimize=,
@@ -11060,7 +11110,7 @@ unless expr clause {and clause}*
 - =if= ::
   #+cindex:if loop construct
   #+cindex:when loop construct
-  The constructs  =when=[fn:12] and  =if= allow  conditional execution  of loop
+  The constructs  =when=[fn:14] and  =if= allow  conditional execution  of loop
   clauses.  These constructs are synonyms and can be used interchangeably.
 
 - ~expr~ ::
@@ -11074,7 +11124,7 @@ unless expr clause {and clause}*
 
 - =unless= ::
   #+cindex:unless loop construct
-  construct is  equivalent to  ~when (not  expr)~ and ~if  (not expr~).[fn:13]
+  construct is  equivalent to  ~when (not  expr)~ and ~if  (not expr~).[fn:15]
 
   - *nil* :: If the value of the  test expression ~expr~ is nil, the expression
     clause1 is   evaluated.
@@ -11359,7 +11409,7 @@ the following two expressions are the same:
 **** Destructuring
 
 *Destructuring* allows you to bind a set of variables to a corresponding set of
-values anywhere that you can normally bind a value to a single variable.[fn:14]
+values anywhere that you can normally bind a value to a single variable.[fn:16]
 #+cindex:destructuring
 
 - During loop expansion, each variable in the variable list is matched with the
@@ -11569,7 +11619,6 @@ coming right after the word =loop=.
       do (return-from max 'done)) ;Prints 1 line
 ;;; => DONE
 #+end_src
-
 
 ** Pretty Printing
 ** Common Lisp Object System
@@ -12678,7 +12727,7 @@ of keyword  arguments to  greatly extend the  utility of  the sequence
 functions. The combination of tremendous power, extensive manufacturer
 support,  and a  built-in  object-oriented  programming facility  make
 Common  Lisp   the  only  industrial  strength   Lisp.  Although  this
-book[fn:15] does emphasize a  side-effect-free, applicative approach to
+book[fn:17] does emphasize a  side-effect-free, applicative approach to
 programming with which Scheme afficionados will feel quite at home, it
 does so in purely Common Lisp style."
 #+end_quote
@@ -16119,58 +16168,70 @@ Copyright \copy 2021 by {{{author}}}
 
 [fn:2] MetaObjectProtocol: https://wiki.c2.com/?MetaObjectProtocol
 
-[fn:3]Recursive Functions of Symbolic Expressions and Their Computation by
-Machine, Part I, by John McCarthy, April 1960 @
-http://www-formal.stanford.edu/jmc/recursive/recursive.html.
-Note: Part II never appeared.
+[fn:3] Recursive  Functions of  Symbolic Expressions  and Their  Computation by
+Machine,     Part     I,     by     John     McCarthy,     April     1960     @
+http://www-formal.stanford.edu/jmc/recursive/recursive.html.   Note:   Part  II
+never appeared.
 
-[fn:4]The  name "Steel  Bank Common  Lisp" is  a reference  to Carnegie  Mellon
+[fn:4] The  name "Steel  Bank Common  Lisp" is a  reference to  Carnegie Mellon
 University Common Lisp from which SBCL forked: Andrew Carnegie made his fortune
 in the steel industry and Andrew Mellon was a successful banker.
 
-[fn:5]The libraries were last updated on July 15, 2020.
+[fn:5] The libraries were last updated on July 15, 2020.
 
 [fn:6] Also, the tremendous CommonSQL tutorial that Nick Levine gave at
 ILC2002 is an excellent introduction to CLSQL. Even though his tutorial is
 targetted towards Xanalys CommonSQL, the examples work equally well in CLSQL
 (with the occasional minor tweak).
 
-[fn:7]*namestring*:  a  string that  represents  a  filename using  either  the
+[fn:7]  *namestring*: a  string that  represents  a filename  using either  the
 standardized    notation    for    naming    logical    pathnames    or    some
 implementation-defined notation for naming a physical pathname.
 
-[fn:8]A stream  on which it  makes sense  to perform interactive  querying. The
+[fn:8] A  stream on which it  makes sense to perform  interactive querying. The
 general intent of having some streams be classified as /interactive/ streams is
 to allow them to be distinguished  from streams containing batch (or background
 or command-file) input. Output to batch streams is typically discarded or saved
 for later  viewing, so interactive queries  to such streams might  not have the
 expected effect.
 
-[fn:9]Detailed syntax descriptions of  individual clauses appear in sections
+[fn:9] Marti,  J., Hearn,  A. C.,  Griss, M.  L., and  Griss, C.  Standard Lisp
+report.     ACM   SIGPLAN    Notices   14,    10   (October    1979),   48-68.,
+https://dl.acm.org/doi/10.1145/953997.953999
+
+[fn:10] The Utah  Symbolic Computation Group. The Portable  Standard LISP Users
+Manual. Technical Report  TR-10. Department of Computer  Science, University of
+Utah (Salt Lake City, Utah, January 1982).
+- https://usermanual.wiki/Document/USCPPortableStandardLISPUsersManualTR101984.1332603447/help
+
+[fn:11] Detailed syntax  descriptions of individual clauses  appear in sections
 26.6 through 26.12.
 
-[fn:10]However, loop does not enforce this convention, and some of the examples
-below violate it. De gustibus non disputandum est.-GLS
+[fn:12]  However, loop  does  not  enforce this  convention,  and  some of  the
+examples below violate it. De gustibus non disputandum est.-GLS
 
-[fn:11][There  is  no semantic  difference  between  the  ``ing'' keywords  and  their
+[fn:13] [There is no semantic difference between the ``ing'' keywords and their
 non-``ing'' counterparts.  They  are provided purely for the  sake of stylistic
 diversity among  users.  I happen  to prefer  the non-``ing'' forms-when  I use
 loop at all.-GLS]
 
-[fn:12][Compare this to the macro when, which does not allow an ``else'' part.-GLS]
+[fn:14]  [Compare this  to the  macro when,  which does  not allow  an ``else''
+part.-GLS]
 
-[fn:13][Compare this  to the macro ~unless~,  which does not allow  an ``else''
-  part---or do I mean a ``then'' part?!  Ugh.  To prevent confusion, I strongly
-  recommend as  a matter of  style that =else= not  be used with  =unless= loop
-  clauses.-GLS]
+[fn:15] [Compare this  to the macro ~unless~, which does  not allow an ``else''
+part---or do I  mean a ``then'' part?!  Ugh.  To  prevent confusion, I strongly
+recommend as  a matter  of style  that =else=  not be  used with  =unless= loop
+clauses.-GLS]
 
-[fn:14][It is  worth noting that  the destructuring facility of  loop predates,
+[fn:16] [It is  worth noting that the destructuring facility  of loop predates,
 and differs in some details from, that of destructuring-bind, an extension that
 has been provided by many implementors of Common Lisp.-GLS]
 
-[fn:15]In the browser, add =index.text= to the end of the URL to see the source.
+[fn:17] In  the browser,  add =index.text=  to the end  of the  URL to  see the
+source.
 
-[fn:16]Markdown requires the standard Perl library module Digest::MD5.
+[fn:18] Markdown requires the standard Perl library module Digest::MD5.
+
 # Local Variables:
 # fill-column: 79
 # eval: (auto-fill-mode)
