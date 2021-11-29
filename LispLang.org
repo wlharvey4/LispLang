@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-28 16:49
-#+macro:version Version 0.0.127
+#+date:2021-11-28 16:53
+#+macro:version Version 0.0.129a
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
