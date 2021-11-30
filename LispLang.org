@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-11-28 16:53
-#+macro:version Version 0.0.129a
+#+date:2021-11-29 23:13
+#+macro:version Version 0.0.129b
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -14797,6 +14797,7 @@ Hello world, the time is 02:07 PM
 :dependency3: GitHub Account with personal access token stored in GITHUB_TOKEN
 :dependency4: texinfo @6.7._
 :dependency5: Emacs, Org-mode, Babel language 'shell' enabled
+:dependency6: SLIME has been started, and is connected to a Common Lisp implementation
 :env_var1: SYNC_ORG_TEMPLATE: holds the full path to this Template.org file
 :env_var2: GITHUB_TOKEN: holds the GitHub personal access token
 :env_var3: EDITOR: must hold a reference to a working emacsclient server
@@ -15088,13 +15089,13 @@ Hello world, the time is 02:07 PM
 		  printf "$${CYAN}Texinfo backend: $${GREEN}INSTALLED.$${CLEAR}\n" || \
 		  { printf "$${YELLOW}Texinfo backend:$${CLEAR} $${RED}NOT INSTALLED; it must be installed.$${CLEAR}\n"; exit 1; }
 
+	    @[[ $(shell $(EDITOR) --eval '(processp (slime-current-connection))') == "nil" ]] && \
+		  { printf "$${YELLOW}SWANK: $${RED}NOT CONNECTED$${CLEAR}\n"; exit 1; } || \
+		  printf "$${CYAN}SWANK: $${GREEN}IS CONNECTED using %s\n$${CLEAR}" $(shell $(EDITOR) --eval '(slime-connection-name)');
+
 	    @[[ $(shell $(EDITOR) --eval '(symbol-value org-confirm-babel-evaluate)') == "t" ]] && \
 		  { printf "$${YELLOW}org-confirm-babel-evaluate:$${CLEAR} $${RED}T; set to NIL.$${CLEAR}\n"; exit 1; } || \
 		  printf "$${CYAN}org-confirm-babel-evaluate: $${GREEN}OFF.$${CLEAR}\n\n"
-
-  check-slime:
-	     @[[ $(shell $(EDITOR) --eval '(processp (slime-current-connection))' == "nil" ]] && \
-		  { printf "$${RED}SLIME is not connected; please start SLIME$${CLEAR}\n"; exit 1; }
 
   open-org: $(ORG)
 	    @$(EDITOR) -n $(ORG)
@@ -15102,13 +15103,26 @@ Hello world, the time is 02:07 PM
 	    @echo 'THERE IS NO $(ORG) FILE!!!'
 	    exit 1
 
-  texi: check-slime $(TEXI)
+  # Creating a texi file in this program runs Common Lisp code; therefore, SLIME must be started and
+  # be connected to a running Common Lisp process, such as ccl or sbcl.
+  # `slime-current-connection' returns a process if SWANK has been started, no nil otherwise.
+  # This code starts SLIME if it is not currently running, then polls for the process until it is ready.
+  # Starting SLIME opens a window on the buffer `*slime-repl <implementation>*', which should be closed
+  # TODO: allow for code to select an implementation to run, or else use the default.
+  texi: $(TEXI)
   $(TEXI): $(ORG)
 	   @echo Making TEXI...
 	   @$(EDITOR) -u --eval \
-		  "(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
-			  (save-excursion \
-			  (org-texinfo-export-to-texinfo)))"
+		  "(progn \
+		  	(unless (processp (slime-current-connection)) \
+				(require (quote cl-lib)) \
+				(cl-loop initially (slime (quote ccl)) \
+				   do (sleep-for 1) \
+				   until (process-status (get-process \"SLIME Lisp\")) \
+				   finally (delete-windows-on \"*slime-repl ccl*\"))) \
+		  	(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
+				(save-excursion \
+				(org-texinfo-export-to-texinfo))))"
 	   @echo Done making TEXI.
   open-texi: texi
 	   @$(EDITOR) -n $(TEXI)
