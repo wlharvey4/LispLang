@@ -278,6 +278,10 @@ check:
 		printf "$${CYAN}Texinfo backend: $${GREEN}INSTALLED.$${CLEAR}\n" || \
 		{ printf "$${YELLOW}Texinfo backend:$${CLEAR} $${RED}NOT INSTALLED; it must be installed.$${CLEAR}\n"; exit 1; }
 
+	  @[[ $(shell $(EDITOR) --eval '(processp (slime-current-connection))') == "nil" ]] && \
+		{ printf "$${YELLOW}SWANK: $${RED}NOT CONNECTED$${CLEAR}\n"; exit 1; } || \
+		printf "$${CYAN}SWANK: $${GREEN}IS CONNECTED using %s\n$${CLEAR}" $(shell $(EDITOR) --eval '(slime-connection-name)');
+
 	  @[[ $(shell $(EDITOR) --eval '(symbol-value org-confirm-babel-evaluate)') == "t" ]] && \
 		{ printf "$${YELLOW}org-confirm-babel-evaluate:$${CLEAR} $${RED}T; set to NIL.$${CLEAR}\n"; exit 1; } || \
 		printf "$${CYAN}org-confirm-babel-evaluate: $${GREEN}OFF.$${CLEAR}\n\n"
@@ -288,13 +292,26 @@ $(ORG):
 	  @echo 'THERE IS NO $(ORG) FILE!!!'
 	  exit 1
 
+# Creating a texi file in this program runs Common Lisp code; therefore, SLIME must be started and
+# be connected to a running Common Lisp process, such as ccl or sbcl.
+# `slime-current-connection' returns a process if SWANK has been started, no nil otherwise.
+# This code starts SLIME if it is not currently running, then polls for the process until it is ready.
+# Starting SLIME opens a window on the buffer `*slime-repl <implementation>*', which should be closed
+# TODO: allow for code to select an implementation to run, or else use the default.
 texi: $(TEXI)
 $(TEXI): $(ORG)
 	 @echo Making TEXI...
 	 @$(EDITOR) -u --eval \
-		"(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
-			(save-excursion \
-			(org-texinfo-export-to-texinfo)))"
+		"(progn \
+		      (unless (processp (slime-current-connection)) \
+			      (require (quote cl-lib)) \
+			      (cl-loop initially (slime (quote ccl)) \
+				 do (sleep-for 1) \
+				 until (process-status (get-process \"SLIME Lisp\")) \
+				 finally (delete-windows-on \"*slime-repl ccl*\"))) \
+		      (with-current-buffer (find-file-noselect \"$(ORG)\" t) \
+			      (save-excursion \
+			      (org-texinfo-export-to-texinfo))))"
 	 @echo Done making TEXI.
 open-texi: texi
 	 @$(EDITOR) -n $(TEXI)
