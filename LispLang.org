@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-12-01 17:25
-#+macro:version Version 0.0.133
+#+date:2021-12-03 07:58
+#+macro:version Version 0.0.134
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -1078,6 +1078,7 @@ ANSI Common Lisp standard. CMUCL provides:
 - freely redistributable
 
 ** Steel Bank Common Lisp
+
 - http://www.sbcl.org
 - [[http://www.sbcl.org/manual/index.html][SBCL Manual]]
 
@@ -1099,6 +1100,7 @@ previous version of The Computer Language Benchmarks Game.
   - [[http://www.sbcl.org/manual/index.html][SBCL 2.0.8 User Manual]]
 
 *** Running and Stopping SBCL
+
 To run SBCL type =sbcl= at the command  line. You should end up in the toplevel
 REPL (read,  eval, print  -loop), where  you can interact  with SBCL  by typing
 expressions.
@@ -1141,6 +1143,7 @@ Unix pipelines.
 See [[http://www.sbcl.org/manual/index.html#Editor-Integration][Editor Integration]]
 
 **** SBCL as a Shell Script
+
 Standard Unix tools that are interpreters follow a common command line protocol
 that is  necessary to work with  “shebang scripts”. SBCL supports  this via the
 --script command line option.
@@ -1159,6 +1162,7 @@ Hello, World!
 #+end_example
 
 ** Clozure Common Lisp --- CCL
+
 - https://ccl.clozure.com
 - [[https://ccl.clozure.com/manual/][Clozure CL Documentation]]
 - [[https://ccl.clozure.com/docs/ccl.html][CCL Manual (one page HTML)]]
@@ -1326,6 +1330,7 @@ To suppress the loading of this init-file, invoke Clozure CL with the:
 option.
 
 *** CCLDoc Documentation System
+
 - [[https://github.com/Clozure/ccldoc][CCLDoc on GitHub]]
 
 
@@ -1360,6 +1365,7 @@ There  is   also  a   not-quite-complete  LaTeX  converter.   To  use   it,  do
 MacTeX 2014 works.
 
 *** CCL History
+
 - 1984 :: Coral Software began the development of a Common Lisp for the
   Macintosh, called Coral Common Lisp (CCL).
 - 1987 :: CCL 1.0 was released. It ran on a 1 MB Macintosh Plus.
@@ -1382,6 +1388,7 @@ MacTeX 2014 works.
   renamed to Clozure CL.
 
 ** Armed Bear Common Lisp---JVM
+
 - https://common-lisp.net/project/armedbear/
 - [[https://github.com/slyrus/abcl][ABCL on GitHub]]
 
@@ -1410,7 +1417,9 @@ MacTeX 2014 works.
   - features both an interpreter and a compiler, running in the JVM.
   - [[https://abcl.org/doc/abcl-user.html][User Documentation]]
   - [[https://abcl.org/releases/1.7.1/abcl-1.7.1.pdf][Armed Bear Common Lisp User Manual Version 1.7.1 July 2020]]
+
 *** Install ABCL
+
 - Go to [[https://abcl.org/][ABCL Home]] and download ABCL
 - Build according to [[http://common-lisp.net/project/armedbear/doc/abcl-install-with-java.html][instructions]]
 - or install using MacPorts: ~port install abcl~
@@ -1419,6 +1428,7 @@ MacTeX 2014 works.
 : /opt/local/share/java/abcl/abcl.jar
 
 ** GNU Common Lisp
+
 - https://www.gnu.org/software/gcl/
 
 
@@ -1429,6 +1439,7 @@ MacTeX 2014 works.
     by first generating C code and then calling a C compiler.
 
 ** CLISP
+
 - https://clisp.sourceforge.io
 - [[https://clisp.sourceforge.io/impnotes/clisp.html][CLISP Manual]]
 
@@ -1441,6 +1452,7 @@ MacTeX 2014 works.
     the Atari ST
 
 ** CLASP---C++
+
 - [[https://github.com/clasp-developers/clasp][CLASP on GitHub]]
 - [[https://github.com/roswell/clasp][CLASP on Roswell on GitHub]]
 
@@ -1466,9 +1478,11 @@ incremental  development,  and  other  capabilities that  make  it  a  powerful
 language.
 
 *** CLASP Manual
+
 - https://github.com/clasp-developers/clasp/wiki/Manual
 
 *** Build CLASP
+
 - https://github.com/clasp-developers/clasp/wiki/Build-Instructions
 
 
@@ -1490,6 +1504,7 @@ The executables will be in ~clasp/build/boehm/cclasp-boehm~ and
 ~clasp/build/mps/cclasp-mps~
 
 ** Embeddable Common Lisp---C
+
 - https://common-lisp.net/project/ecl/
 - [[https://gitlab.com/embeddable-common-lisp/ecl/][ECL on GitLab]]
 - [[https://common-lisp.net/project/ecl/static/manual/][ECL Manual]]
@@ -1508,10 +1523,39 @@ The executables will be in ~clasp/build/boehm/cclasp-boehm~ and
 
 ** LispWorks
 
-- LispWorks ::
-  Proprietary
+- [[http://www.lispworks.com/products/lispworks.html][LispWorks Homepage]] (proprietary)
+
+LispWorks is  an implementation of ANSI  Common Lisp running on
+- Windows,
+- =x86_64=
+- Linux,
+- ARM Linux,
+- Mac OS X,
+- FreeBSD,
+- AIX,
+- x86/x64
+- Solaris and
+- SPARC/Solaris.
+
+LispWorks  offers many  features including
+- an advanced  Common Lisp  compiler,
+- interpreter,
+- runtime system,
+- language extensions,
+- CAPI portable GUI toolkit and
+- the LispWorks IDE.
+
+#+texinfo:@heading Personal Edition
+
+- [[http://www.lispworks.com/downloads/index.html][LispWorks Personal Edition Home]]
+
+LispWorks  Personal  Edition is  intended  for  personal and  educational  Lisp
+programming.  It is  available  free  of charge.   While  the Personal  Edition
+includes the  full Common  Lisp compiler and  development environment,  it does
+limit program size and duration and it does not support application delivery.
 
 ** SICL
+
 - [[https://github.com/robert-strandh/SICL][SICL on GitHub]]
 
 
@@ -5481,8 +5525,136 @@ https://github.com/ledger/cl-ledger
 
 CL-Ledger is a Common Lisp port of the [[http://ledger-cli.org/][Ledger]] double-entry accounting
 system.
+
 *** Brain
 - http://www.aiai.ed.ac.uk/project/pub/packages/lisp/random/coherent.l
+
+*** CAPI---Common Application Programming Interface
+
+- [[http://www.lispworks.com/products/capi.html][Home Page]]
+
+The Common Application Programming Interface  (CAPI) is a portable GUI toolkit,
+supporting  native  look and  feel  on  Microsoft  Windows®, GTK+,  Cocoa®  and
+Motif®.  The CAPI  is included  in LispWorks  on all  supported platforms.  The
+LispWorks IDE is implemented using CAPI.
+
+#+texinfo:@heading Features
+
+- Conceptually simple, CLOS-based model.
+- Standard  set of  elements including  menus, buttons,  toolbars, text  panes,
+  lists, graphs, scroll bars, tabs, dividers and so on.
+- Window-system specifics hidden from the programmer.
+- User-defined elements and interface classes.
+- Integrated with Graphics Ports drawing API.
+- Multiple-document interface (MDI) and docking supported on Microsoft Windows.
+- Comprehensive documentation.
+
+*** CLIM---Common Lisp Interface Manager
+
+- [[the landlord may proceed directly to an unlawful detainer action in accordance with chapter 59.12 RCW][CLiki Page]]
+
+The Common Lisp Interface Manager  (CLIM) is a Lisp-based programming interface
+specification  that  provides   a  layered  set  of   portable  facilities  for
+constructing GUIs. These  include basic windowing, input,  output, and graphics
+services; stream-oriented  input and  output extended  with facilities  such as
+output  recording,  presentations,  and  context sensitive  input;  high  level
+"formatted  output"   facilities;  application  building   facilities;  command
+processing; and a  compositional toolkit similar to those found  in the X world
+that supports look and feel independence.
+
+****  CLIM II Specification
+
+- [[http://bauhh.dyndns.org:8000/clim-spec/index.html][Documentation TOC]]
+
+**** McCLIM
+
+``An implementation of the Common Lisp Interface Manager, version II''
+
+- [[https://www.cliki.net/McCLIM][CLiki Page]]
+- [[https://common-lisp.net/project/mcclim/posts/McCLIM-097-Imbolc-release.html][Home Page]]
+- [[https://github.com/McCLIM][GitHub Source]]
+- [[https://common-lisp.net/project/mcclim/static/manual/mcclim.html][User's Manual HTML]] and [[https://common-lisp.net/project/mcclim/static/documents/mcclim.pdf][PDF]]
+- [[https://common-lisp.net/project/mcclim/static/documents/guided-tour.pdf][Guided Tour]]
+- [[https://common-lisp.net/project/mcclim/static/documents/mcclim-demo.pdf][McCLIM Demonstration]]
+- [[https://common-lisp.net/project/mcclim/static/documents/clim-paper.pdf][A Free Implementation of CLIM]]
+
+McCLIM is Mike McDonald's Free and  portable implementation of CLIM, the Common
+Lisp ueber-GUI toolkit.
+
+The current release is 0.9.7  (Imbolc), released 2018-02-16. Using Quicklisp is
+a preferred way to run McCLIM.
+
+McCLIM is  available on  Quicklisp.  McCLIM  can be  installed by  entering the
+following in your REPL:
+
+: (ql:quickload "mcclim")
+
+To see if McCLIM  works on your host you may load the  system with examples and
+run the example browser application:
+
+#+begin_src lisp
+(ql:quickload "clim-examples")   ; Load the system with examples.
+(clim-demo:demodemo)             ; Run the example browser application.
+#+end_src
+
+***** An Example
+
+1. Quickload McCLIM by running ~(ql:quickload "mcclim")~.
+2. Put the following code in a file ~example.lisp~.
+
+#+begin_src lisp
+  (in-package :common-lisp-user)
+
+  (defpackage "APP"
+    (:use :clim :clim-lisp)
+    (:export "APP-MAIN"))
+
+  (in-package :app)
+
+  ;;; Define a application-frame (a.k.a. application window in traditional GUI's).
+
+  (define-application-frame superapp ()
+    ()
+    ;; :panes section describes different parts of the
+    ;; application-frame. This application has only one pane.
+    (:panes
+     (int :interactor :height 400 :width 600))
+
+    ;; :layouts section describes how the panes are layed out.
+    ;; This application has one layout named "default" which has a single pane.
+    (:layouts
+     (default int)))
+
+  ;;; Following function launches an instance of "superapp" application-frame.
+  (defun app-main ()
+    (run-frame-top-level (make-application-frame 'superapp)))
+#+end_src
+
+3. [@3]Load the file and run:
+
+   : (app:app-main)
+
+**** Franzinc clim2
+
+- [[https://common-lisp.net/project/mcclim/static/documents/clim-paper.pdf][GitHub Source]]
+
+An alternative  implementation of  the CLIM II  specification created  by Franz
+Inc. for Allegro CL (it was recently opensourced and there is an effort to port
+it to other implementations)
+
+The contents of this  repo are known to compile and work in  Allegro CL 8.2 and
+later. No work has been done to make it work on other Common Lisps, even though
+there is considerable conditionalization for many other CLs.
+
+**** LispWorks CLIM
+
+- [[http://www.lispworks.com/products/clim.html][Home Page]]
+
+CLIM 2.0  is available  on LispWorks  for the  X11/Motif and  Microsoft Windows
+GUIs. It is included with  LispWorks Professional and Enterprise Editions where
+LispWorks supports these GUIs.  CLIM is not supported on ARM  Linux, and on Mac
+OS X it  is supported only in the  deprecated Motif GUI. It is  available as an
+add-on product for LispWorks (32-bit) for SPARC Solaris.
 
 ** CMU Common Lisp Repository
 
@@ -8478,6 +8650,29 @@ SBCL implementation.
 - [[https://common-lisp.net/project/usocket/api-docs.shtml][USOCKET API documentation]]
 - https://github.com/usocket/usocket
 - [[http://beej.us/guide/bgnet/html/][Beej's Guide to Network Programming]]
+
+** Drakma
+:PROPERTIES:
+:version:  2.0.8
+:date:     2021-07-17
+:END:
+
+``A common lisp HTTP client''
+
+- [[https://edicl.github.io/drakma/][Home]]
+- [[https://github.com/edicl/drakma][GitHub Source]]
+
+Drakma is a full-featured HTTP client  implemented in Common Lisp. It knows how
+to handle
+
+- HTTP/1.1 chunking,
+- persistent connections,
+- re-usable sockets,
+- SSL,
+- continuable uploads,
+- file uploads,
+- cookies,
+- and more.
 
 ** Network Programming in ANSI Common Lisp with IOLib
 :PROPERTIES:
@@ -16549,6 +16744,10 @@ development anymore.
 - [[https://github.com/emacs-tw/awesome-emacs][Awesome Emacs]]  Welcome to Awesome  Emacs, a  community driven list  of useful
   Emacs packages, utilities and libraries.
 
+** FranzInc
+
+- [[https://github.com/franzinc][GitHub Source]]
+
 ** Edmund Weitz
 - [[http://weitz.de][Home Page]]
 - [[https://github.com/nhabedi][GitHub Page]]
@@ -16557,6 +16756,11 @@ development anymore.
   - [[https://edicl.github.io/hunchentoot/][Hunchentoot - The Common Lisp web server formerly known as TBNL]]
   - [[https://edicl.github.io/cl-ppcre/][CL-PPCRE - Portable Perl-compatible regular expressions for Common Lisp]]
     - [[https://github.com/edicl/cl-ppcre/][GitHub Source]]
+
+** Stas Boukarev
+
+- [[https://github.com/stassats][GitHub]]
+- [[https://github.com/stassats/emacs-config][Emacs-Config]]
 
 ** Steve Purcell
 - [[https://github.com/purcell][GitHub]]
