@@ -1,10 +1,10 @@
-# -*- mode:org; -*-
+q# -*- mode:org; -*-
 
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2021-12-03 07:58
-#+macro:version Version 0.0.134
+#+date:2021-12-04 12:23
+#+macro:version Version 0.0.135
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -460,7 +460,9 @@ written in MacLisp.
 - [[http://www.maclisp.info/pitmanual/index.html][The MacLISP Manual]]
 
 - [[https://www.gnu.org/software/emacs/emacs-paper.html][EMACS: The Extensible, Customizable Display Editor (RMS 1981)]]
+
 ** What is Common Lisp?
+
 Common  Lisp is  well  suited  to large  programming  projects and  explorative
 programming. The language  has a dynamic semantics which  distinguishes it from
 languages  such as  C  and Ada.  It features  automatic  memory management,  an
@@ -471,9 +473,12 @@ generic functions, an  exception system, user-defined types and  a macro system
 which allows programmers to extend the language.
 
 ** The Roots of Lisp
-*** John McCarthy and LISP
- - http://jmc.stanford.edu/articles/recursive.html
 
+*** John McCarthy and LISP
+
+[[https://www.lisp.org]]
+
+ - http://jmc.stanford.edu/articles/recursive.html
 
  #+texinfo: @heading Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I
 
@@ -583,8 +588,9 @@ extensions, but more theory and some smoothing of the language itself are
 required before we can take full advantage of LISP's mathematical basis.
 
 - [[http://jmc.stanford.edu/articles/lisp20th/lisp20th.pdf][Download the article in PDF.]]
+
 *** Common Lisp --- The Untold Story
-    :PROPERTIES:
+:PROPERTIES:
     :author:   Kent M. Pitman
     :date:     2008
     :END:
@@ -594,16 +600,18 @@ Lisp workshop, Monday, October 20, 2008, an event co-located with the OOPSLA’0
 in Nashville, TN, in  which I offered my personal, subjective  account of how I
 came to be involved with Common Lisp  and the Common Lisp standard, and of what
 I learned from the process.
+
 *** Lisp 1 Programmer's Manual
-    :PROPERTIES:
+:PROPERTIES:
     :author:   Phyllis Fox
     :date:     1960
     :END:
+
 - http://history.siam.org/sup/Fox_1960_LISP.pdf
 
 *** Lisp 1.5 Programmer's Manual
-- http://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf
 
+- http://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf
 
 By John McCarthy, Paul W. Abrahams, Daniel J. Edwards, Timothy P. Hart and
 Michael I. Levin, 1962
@@ -626,11 +634,27 @@ processed. Third, LISP  can interpret and execute programs written  in the form
 of S-expressions. Thus, like machine language, and unlike most other high level
 languages, it can be used to generate programs for further executions.
 
+*** Lisp Machines
+
+**** A few things I know about LISP Machines
+:PROPERTIES:
+:author:   François-René Rideau
+:url:      http://fare.tunes.org/LispM.html
+:END:
+
+I wanted to know what LISP Machines (LispM) were like, so I bought one. Since I
+learnt many things about them in  the process that were not documented anywhere
+on the  web, I  thought I'd write  a page  about them. Most  of the  material I
+publish is  just trivia  or curiosity;  for more  useful or  spectacular stuff,
+follow the provided pointers.
+
 ** Essays About Lisp
+
 *** What's Wrong With Lisp
-    :PROPERTIES:
+:PROPERTIES:
     :author:   Robert Standh
     :END:
+
 - http://metamodular.com/Essays/wrong.html
 
 
@@ -687,12 +711,14 @@ Dumbing it down to attract mediocre performance-oriented programmers would be a
 grave mistake.
 
 *** Tutorial on Good Lisp Programming Style
+
 - https://www.iiia.csic.es/~puyol/TAPIA/transpas/Norvig-luv-slides.pdf
 
   - By Peter Norvig and Kent Pitman
   - August 10, 1993
+
 *** Lisp---Good News Bad News How to Win Big
-    :PROPERTIES:
+:PROPERTIES:
     :author:   Richard P. Gabriel
     :date:     1991
     :END:
@@ -703,20 +729,23 @@ forming  the basis  of a  commercial sector,  achieving excellent  performance,
 having good environments, able to  deliver applications. Yet the Lisp community
 has  failed to  do as  well as  it  could have.  In this  paper I  look at  the
 successes, the failures, and what to do next.
-*** Parenthetically Speaking (with Kent M. Pitman)
-- http://www.nhplace.com/kent/PS/About-PS.html
 
+*** Parenthetically Speaking (with Kent M. Pitman)
+
+- http://www.nhplace.com/kent/PS/About-PS.html
 
 Parenthetically Speaking expresses opinions and  analysis about the Lisp family
 of languages. Except as explicitly  indicated otherwise, the opinions expressed
 are those of  the author and do not necessarily  reflect the official positions
 of any organization or company with which the author is affiliated.
+
 *** Alan Kay’s advice to computer science students
-    :PROPERTIES:
+:PROPERTIES:
     :date:     2018-11-09
     :author:   Mark Miller
     :cite:     https://tekkie.wordpress.com/2018/11/09/alan-kays-advice-to-computer-science-students/
     :END:
+
 #+texinfo: @heading Tekkie
 - https://tekkie.wordpress.com/2018/11/09/alan-kays-advice-to-computer-science-students/
 - by Mark Miller, Nov 9, 2018
@@ -814,18 +843,26 @@ at age 16, and is able to write  a clear illuminating history of the world from
 the time of Mohammed from the point  of view of this world, and without special
 pleading.
 #+end_quote
+
 *** Multics
+
 - https://www.multicians.org/multics.html
 - https://www.multicians.org/mepap.html
+
 *** Lisp as an Alternative to Java
+
 - https://www.iiia.csic.es/~puyol/TAPIA/lisp-java.pdf
+
 *** Lisping Copyleft---A Close Reading of the Lisp LGPL
 :PROPERTIES:
 :url:      https://www.jolts.world/index.php/jolts/article/view/75/146
 :author:   Eli Greenbaum
 :END:
+
 About the author Eli Greenbaum[fn:4]
+
 **** Abstract
+
 The  idioms of  both the  General  Public License  (the “GPL”)  and the  Lesser
 General Public  License (the “LGPL”) seem  to be grounded in  the C programming
 language.  This  article  analyses  the  Lisp  Lesser  General  Public  License
@@ -838,6 +875,7 @@ context  or  whether  the  LLGPL changes  the  requirements  and  philosophical
 moorings of the LGPL.
 
 ** A Note on S-expressions--Forms--Types
+
 The development of  the package system is  related to the change  of focus from
 S-expressions  to   forms.   The  index   of  CLtL-2  contains  no   entry  for
 S-expressions  or symbolic  expressions, but  the entry  for forms  contains 14
@@ -943,11 +981,13 @@ than typed expressions.
   rather than expressions, have types.
 
 ** A Road to Common Lisp
-"This is a road to Common Lisp, not the road to Common Lisp."
+
+``This is a road to Common Lisp, not the road to Common Lisp.''
 
 - https://stevelosh.com/blog/2018/08/a-road-to-common-lisp/
 
 ** What the Hell is Symbolic Computation?
+
 "symbols" and  "quoting": for many  programmers coming from  non-Lisp languages
 these are new, foreign concepts that don't really map back to anything in their
 previous experience.
@@ -960,6 +1000,14 @@ does.
 One book that  does spend more time on this  is the appropriately-named /Common
 Lisp: A Gentle  Introduction to Symbolic Computation/. If you're  looking for a
 good introductory Lisp book, that's the one I'd recommend.
+
+** 14th European Lisp Symposium 2021
+:PROPERTIES:
+:url:      https://european-lisp-symposium.org/static/proceedings/2021.pdf
+:date:     2021-05-03--04
+:END:
+
+Proceedings and minutes
 
 * Common Lisp Implementations
 
@@ -1591,43 +1639,8 @@ Lisp system unmatched on Windows platforms.
 
 * Common Lisp Ecosystem
 
-** Roswell---Common Lisp environment setup Utility
-- [[https://github.com/roswell/roswell][Github Source]]
-- [[https://github.com/roswell/roswell/wiki][Wiki]]
-
-Roswell is a Lisp implementation installer/manager, launcher, and much more!
-
-Roswell started out as a command-line tool  with the aim to make installing and
-managing Common Lisp implementations really simple and easy.
-
-Roswell  has  now  evolved  into  a  full-stack  environment  for  Common  Lisp
-development,  and has  many features  that makes  it easy  to test,  share, and
-distribute your Lisp applications. With Roswell, we aim to push the Common Lisp
-community to a whole new level of productivity.
-
-** SLIME---Superior Lisp Interaction Mode for Emacs
-- [[https://common-lisp.net/project/slime/][SLIME Home]]
-- [[https://github.com/slime/slime][Github Source]]
-- [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual v2.24]]
-- [[https://www.youtube.com/watch?v=NUpAvqa5hQw][SLIME Tutorial from Marco Baringer 2005]]
-- [[https://www.youtube.com/watch?v=VnWVu8VVDbI][Baggers' Installing Common Lisp, Emacs, SLIME & Quicklisp. 2013]]
-- [[https://www.youtube.com/watch?v=sBcPNr1CKKw][Baggers' Emacs with SLIME — Really useful keyboard shortcuts. 2014]]
-
-SLIME  extends  Emacs  with  support  for  interactive  programming  in  Common
-Lisp. The  features are  centered around slime-mode,  an Emacs  minor-mode that
-complements  the  standard lisp-mode.  While  lisp-mode  supports editing  Lisp
-source files,  slime-mode adds  support for interacting  with a  running Common
-Lisp process for compilation, debugging, documentation lookup, and so on.
-
-*** SLIME Features
-
-- SLIME mode---An Emacs minor-mode to enhance lisp-mode with
-- SLDB---Common Lisp debugger with an Emacs-based user interface
-- REPL---The Read-Eval-Print Loop ("top-level")
-- Compilation notes
-- Inspector
-
 ** ASDF3---Another System Definition Facility
+
 - [[https://common-lisp.net/project/asdf/][ASDF Home]]
 
 #+cindex:asdf
@@ -1730,6 +1743,57 @@ essential to being productive.
 #+texinfo:@heading HTML and PDF versions of the short version of the article (8 pages), as submitted to ELS 2014
 - http://fare.tunes.org/files/asdf3/asdf3-els2014.html
 - http://fare.tunes.org/files/asdf3/asdf3-els2014.pdf
+** Roswell---Common Lisp environment setup Utility
+
+- [[https://github.com/roswell/roswell][Github Source]]
+- [[https://github.com/roswell/roswell/wiki][Wiki]]
+
+Roswell is a Lisp implementation installer/manager, launcher, and much more!
+
+Roswell started out as a command-line tool  with the aim to make installing and
+managing Common Lisp implementations really simple and easy.
+
+Roswell  has  now  evolved  into  a  full-stack  environment  for  Common  Lisp
+development,  and has  many features  that makes  it easy  to test,  share, and
+distribute your Lisp applications. With Roswell, we aim to push the Common Lisp
+community to a whole new level of productivity.
+
+*** Day 1---Roswell as a Common Lisp implementation manager
+:PROPERTIES:
+:url:      https://fukamachi.hashnode.dev/day-1-roswell-as-a-common-lisp-implementation-manager
+:author:   Eitaro Fukamachi
+:date:     Oct 18, 2021
+:END:
+
+*** Day 2---Roswell-- Install libraries/applications
+:PROPERTIES:
+:url:      https://fukamachi.hashnode.dev/day-2-roswell-install-libraries-and-applications
+:author:   Eitaro Fukamachi
+:date:     Nov 12, 2021
+:END:
+
+** SLIME---Superior Lisp Interaction Mode for Emacs
+
+- [[https://common-lisp.net/project/slime/][SLIME Home]]
+- [[https://github.com/slime/slime][Github Source]]
+- [[https://common-lisp.net/project/slime/doc/html/][SLIME User Manual v2.24]]
+- [[https://www.youtube.com/watch?v=NUpAvqa5hQw][SLIME Tutorial from Marco Baringer 2005]]
+- [[https://www.youtube.com/watch?v=VnWVu8VVDbI][Baggers' Installing Common Lisp, Emacs, SLIME & Quicklisp. 2013]]
+- [[https://www.youtube.com/watch?v=sBcPNr1CKKw][Baggers' Emacs with SLIME — Really useful keyboard shortcuts. 2014]]
+
+SLIME  extends  Emacs  with  support  for  interactive  programming  in  Common
+Lisp. The  features are  centered around slime-mode,  an Emacs  minor-mode that
+complements  the  standard lisp-mode.  While  lisp-mode  supports editing  Lisp
+source files,  slime-mode adds  support for interacting  with a  running Common
+Lisp process for compilation, debugging, documentation lookup, and so on.
+
+*** SLIME Features
+
+- SLIME mode---An Emacs minor-mode to enhance lisp-mode with
+- SLDB---Common Lisp debugger with an Emacs-based user interface
+- REPL---The Read-Eval-Print Loop ("top-level")
+- Compilation notes
+- Inspector
 
 ** QuickLisp---Common-Lisp Library Manager
 
@@ -2444,7 +2508,6 @@ portable ANSI CL making use of the low-level operators exported by CFFI-SYS.
 <<Bordeaux-Threads>>
 
 ** Unicode
-
 ** snooze
 
 ``Common Lisp RESTful web development''
@@ -2580,7 +2643,9 @@ same textual name, you need the reader to create different symbols to represent
 each name.
 
 ** Common Lisp Package System
+
 *** The Reader and the Evaluator
+
  #+cindex:reader
  #+cindex:evaluator
  Common Lisp defines two "black boxes", one that translates text into Lisp
@@ -2710,6 +2775,7 @@ each name.
    will be printed using the =#:= syntax.
 
 *** The Three Standard Packages
+
  When  you  first  start  Lisp,  the  value  of  =*PACKAGE*=  is  typically  the
  =COMMON-LISP-USER= package, also known as =CL-USER=. =CL=USER= uses the package
  =COMMON-LISP=, which exports all the names defined by the language standard.
@@ -2728,6 +2794,7 @@ each name.
  reader uses to intern names starting with a colon.
 
 *** Defining Your Own Packages
+
 #+cindex:package
 Packages provide  basic control over  namespaces by controlling how  the reader
 translates textual  names into symbol  objects. It is  not until later,  in the
@@ -2783,7 +2850,9 @@ changing the way the reader reads the rest of the file during compilation.
 With the current package set to the =COM.GIGAMONKEYS.EMAIL-DB= package, other
 than names inherited from the =COMMON-LISP= package, you can use any names you
 want for whatever purpose you want.
+
 *** Packaging Reusable Libraries
+
 Define a new package, but export certain  names to make them available to other
 packages.
 
@@ -2811,6 +2880,7 @@ refer    to    the   exported    symbols    from    both   =COMMON-LISP=    and
 directly in the =COM.GIGAMONKEYS.EMAIL-DB= package.
 
 *** Importing Individual Names
+
 You  can import  an  individual symbol  with an  =:import-from=  clause in  the
 =DEFPACKAGE=.  For example:
 
@@ -2830,6 +2900,7 @@ clauses in order to import symbols from different packages.
 *** Shadowing Individual Names
 
 *** Quickproject
+
 - [[https://www.xach.com/lisp/quickproject/][Quickproject Home]]
 - [[https://github.com/xach/quickproject][Github Source]]
 
@@ -2842,18 +2913,61 @@ a  project, it  extends the  ASDF registry  so the  project may  be immediately
 loaded.
 
 *** Buildapp
+
 - [[https://www.xach.com/lisp/buildapp/][Buildapp Home]]
 - [[https://github.com/xach/buildapp][Githup Source]]
 
 Buildapp  is an  application  for SBCL  or  CCL that  configures  and saves  an
 executable Common Lisp image. It is similar to ~cl-launch~ and ~hu.dwim.build~.
 
+*** Qlot
+
+``A project-local library installer for Common Lisp''
+
+- [[https://github.com/fukamachi/qlot/][GitHub Source]]
+
+Qlot (pronounced kyü-'lät,  like culotte) is a  project-local library installer
+using Quicklisp  facility. This aims  to be like Bundler  of Ruby or  Carton of
+Perl.
+
+#+texinfo:@heading What Qlot is trying to solve
+
+We  have Quicklisp,  the  central  library registry.  It  made installation  of
+libraries damn easy.
+
+However, what  only you can specify  is the month of  distribution. Which means
+you  have to  use  all  libraries of  the  same moment  and  you  cannot use  a
+newer/older version of a library for your project.
+
+"local-projects/" or ASDF configurations may be a solution to this problem, but
+there are a couple of problems.
+
+1. /They  are not project-local./  If you have  multiple projects that  use the
+   different version of the same library, it would be a problem.
+
+2. /They are difficult  to fix the version or to update  them./ If your project
+   need to  work on  other than  your machine, for  instance on  other people's
+   machine or  on servers,  the version  of depending  libraries should  be the
+   same.
+
+This is what Qlot is trying to solve.
+
+*** Qi
+
+``Qi - A Package Manager for Common Lisp''
+
+- [[https://github.com/CodyReichert/qi][GitHub Source]]
+
 ** Common Lisp Packages for JSON
+
 *** FranzInc st-json
+
 - https://github.com/franzinc/st-json
 
 ** Common Lisp Packages for CSV
+
 *** cl-csv
+
  "A common lisp library providing easy csv reading and writing"
 
  - https://github.com/AccelerationNet/cl-csv
@@ -2870,7 +2984,9 @@ executable Common Lisp image. It is similar to ~cl-launch~ and ~hu.dwim.build~.
  - A test suite
  - Detailed state about  the process on error (line number,  column number, char
    index), current collection state
+
 *** csv-parser
+
 "Some hacks on top of Alain Picard's CSV parser"
 
 - https://github.com/sharplispers/csv-parser
@@ -2880,6 +2996,7 @@ executable Common Lisp image. It is similar to ~cl-launch~ and ~hu.dwim.build~.
      :PROPERTIES:
      :cite:     http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/csv-parser.lisp
      :END:
+
 #+name:csv-parser.lisp
 #+begin_src lisp
 ;;                      -*- mode: lisp -*-
@@ -3352,17 +3469,277 @@ executable Common Lisp image. It is similar to ~cl-launch~ and ~hu.dwim.build~.
 
 ;;; END OF FILE
 #+end_src
+
 ** Common Lisp Packages for MongoDB
+
 *** cl-mongo
+
 - [[https://www.mongodb.com][MongoDB]]
 - [[https://github.com/fons/cl-mongo][fons/cl-mongo]] --- lisp interface to mongo db
 - [[https://quickref.common-lisp.net/cl-mongo.html][cl-mongo reference manual]]
 - [[https://www.quicklisp.org/beta/UNOFFICIAL/docs/cl-mongo/doc/index.html][CL-MONGO - api reference]]
+
 ** Common Lisp Packages for SQLite
+
 *** Alain Picard's cl-sqlite
+
 - http://mirror.informatimago.com/lisp/members.optusnet.com.au/apicard/index.html
 
-** Common Lisp Regular Expressions
+** Alexandria
+
+- [[https://common-lisp.net/project/alexandria/][Home]]
+- [[https://common-lisp.net/project/alexandria/draft/alexandria.html][Documenttion]]
+- [[https://gitlab.common-lisp.net/alexandria/alexandria][Gitlab Source]]
+
+Alexandria is a project and a library.
+
+As a project  Alexandria's goal is to reduce duplication  of effort and improve
+portability of Common  Lisp code according to its own  idiosyncratic and rather
+conservative aesthetic.  What this actually means  is open to debate,  but each
+project  member  has  a  veto  on  all  project  activities,  so  a  degree  of
+conservativism is inevitable.
+
+As a library  Alexandria is one of  the means by which the  project strives for
+its goals. Alexandria is a collection  of portable public domain utilities that
+meet the following constraints:
+
+** Iterate
+
+- [[https://common-lisp.net/project/iterate/][Iterate]]
+- [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
+- [[https://gitlab.common-lisp.net/iterate/iterate][Iterate on GitLab]]
+
+~iterate~  is an  iteration construct  for Common  Lisp. It  is similar  to the
+=CL:LOOP= macro, with these distinguishing marks:
+
+- it is extensible,
+- it helps editors  like Emacs indent iterate forms by  having a more lisp-like
+  syntax, and
+- it isn't part of the ANSI standard  for Common Lisp (which is sometimes a bad
+  thing and sometimes good).
+
+
+It is available from QuickLisp.
+
+: #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
+
+** Series
+
+- [[http://series.sourceforge.net][Series]]
+- [[https://sourceforge.net/projects/series/files/][Download Series v2.2.1.1.tar]]
+- [[#CLTL2-SERIES][See Documentation in Appendix A of CCTL2]]
+
+A  series is  a data  structure much  like a  sequence, with  similar kinds  of
+operations.  The  difference is that  in many situations, operations  on series
+may be composed  functionally and yet execute iteratively, without  the need to
+construct  intermediate  series  values  explicitly.  In  this  manner,  series
+provide both the  clarity of a functional programming style  and the efficiency
+of an iterative programming style.
+
+Series is  the culmination of  many years of design  and use of  this approach,
+during which some 100,000 lines of application code have been written (by about
+half a dozen people  over the course of seven years)  using the series facility
+in nearly all  iteration situations.  This includes one  large system (KBEmacs)
+of over 40,000 lines of code.
+
+** ZIP library
+
+- [[https://common-lisp.net/project/zip/][Home]]
+- [[https://github.com/bluelisp/zip][Github Source]]
+
+A library for .zip-file reading and writing, written in Common Lisp.
+
+** Flexi-Streams
+
+- [[https://edicl.github.io/flexi-streams/][Home]]
+
+Flexible bivalent streams for Common Lisp
+
+FLEXI-STREAMS implements  "virtual" bivalent streams  that can be  layered atop
+real  binary or  bivalent  streams and  that  can  be used  to  read and  write
+character data in various single- or multi-octet encodings which can be changed
+on the  fly. It  also supplies  in-memory binary streams  which are  similar to
+string streams.
+
+** CL+SSL---Trivial Gray Streams
+
+- [[https://common-lisp.net/project/cl-plus-ssl/#trivial-gray-streams][Home]]
+- [[https://github.com/cl-plus-ssl/cl-plus-ssl][Github Source]]
+
+A Common Lisp interface to OpenSSL.
+
+This library  is a fork  of SSL-CMUCL. The  original SSL-CMUCL source  code was
+written   by    Eric   Marsden    and   includes   contributions    by   Jochen
+Schmidt.  Development  into  CL+SSL  was done  by  David  Lichteblau.  License:
+MIT-style.
+
+Distinguishing  features:  CL+SSL is  portable  code  based  on CFFI  and  gray
+streams. It defines its  own libssl BIO method, so that SSL  I/O can be written
+over portable  Lisp streams instead of  bypassing the streams and  sending data
+over Unix  file descriptors  directly. (But the  traditional approach  is still
+used if possible.)
+
+** closure-html
+
+- [[https://github.com/bluelisp/closure-html][Github Source]]
+
+An HTML parser written in Common Lisp.
+
+Closure  HTML  was written  by  Gilbert  Baumann as  part  of  the Closure  web
+browser.  It was  first  converted  into a  stand-alone  installation by  Ignas
+Mikalajunas,  and  finally  reassembled  and documented  for  integration  with
+Closure XML  and use  with the  Closure browser by  David Lichteblau  under its
+current name.
+
+** trivial-file-size
+
+- [[https://github.com/ruricolist/trivial-file-size][Github source]]
+
+This library exports a single  function, ~file-size-in-octets~.  It returns the
+size of a file in bytes, using system calls when possible.
+
+** SharpListers
+
+A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
+quasi-abandoned Common Lisp software packages.
+
+- https://github.com/sharplispers
+
+** ZS3---Amazon S3 and CloudFront from Common Lisp
+
+#+cindex:ZS3
+#+cindex:Amazon S3
+#+cindex:S3, Amazon
+#+cindex:Amazon CloudFront
+#+cindex:CloudFront, Amazon
+ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
+(S3) and CloudFront content delivery service.
+
+- [[https://www.xach.com/lisp/zs3/][Z3 Home]]
+- [[https://github.com/xach/zs3/][ZS3 on GitHub]]
+- [[https://www.xach.com/lisp/zs3/][Documentation]]
+
+The latest version is 1.3.3, released on September 29th, 2019.  [2021-10-26 Tue]
+
+** Writing Modules
+
+- https://gist.github.com/substack/5075355
+
+My thoughts on writing tiny reusable modules that each do just one
+thing. These notes were adapted from an email I recently sent.
+
+-----
+
+If some component is reusable enough to  be a module then the maintenance gains
+are really worth the  overhead of making a new project  with separate tests and
+docs. Splitting out a  reusable component might take 5 or 10  minutes to set up
+all the package overhead but it's much easier to test and document a piece that
+is completely separate from a larger project. When something is easy, you do it
+more often.
+
+I've observed  the biggest gains  for splitting  something out into  a separate
+module when I'm completely stuck mucking around in a larger application. When I
+isolate the problem  down to the scope  of a small module, it's  much easier to
+see how that small piece fits in with the greater application objective.
+
+Another technique is to  pick tools and approaches that don't  involve a lot of
+boilerplate in the first place. My usual flow for writing a new module is:
+
+1. hack  up some tiny (<10  line) example file  that does just enough  to start
+   experimenting with the api
+
+2. start fleshing out an index.js file required by the example file
+
+3. make incremental changes to the index file to get the example further along,
+   updating the example as necessary to reflect changes
+
+4. once the example pretty much works, copy it into test/
+
+5. `npm install  tap` or `npm install tape`  for modules I want to  test in the
+   browser.  I like  simple,  imperative tests  that I  can  adapt from  simple
+   examples.
+
+6. add some assertions around the example code
+
+7. `pkginit`  (https://github.com/substack/pkginit) to generate  a package.json
+   (or you could just use `npm init`)
+
+8.  copy the  example file  into  a readme.markdown  since I  really like  when
+   packages have code in their readmes when I'm looking for modules to use
+
+9. add a blurb  at the top of the readme.markdown,  document the methods (there
+   are only a few to document usually), add a license and install instructions
+
+10. create a github repo
+
+11. add travis and/or testling-ci github hooks as appropriate
+
+12. `git push` and `npm publish`
+
+With practice, I run through all these steps very quickly now. Not all of these
+are strictly necessary  and sometimes I'll skip  a step but this  is mostly the
+procedure I use for new modules.
+
+As much  as possible, I  try to build large-scale  projects using lots  of tiny
+modules so I  just repeat this process whenever I  need some reusable component
+that doesn't yet  exist in quite the form  I need it to exist.  As more modules
+are published to npm  I expect I won't need to write so  many modules but there
+will always be room for new stuff.
+
+When applications are done well, they are just the really application-specific,
+brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
+reusable  components sublimate  away onto  github and  npm where  everybody can
+collaborate to advance the commons.
+
+** Common Lisp Open Code Collection (CCLOS)
+
+- [[http://clocc.sourceforge.net][CCLOS HOME]]
+- [[https://sourceforge.net/projects/clocc/][CCLOS Download]]
+- [[https://sourceforge.net/p/clocc/bugs/57/][Problems Installing?]]
+
+Our aim is to create a collection of useful and free Common Lisp - Applications
+that are easily portable among the various CL - Implementations.
+
+It contains Lisp code for various applications which is:
+
+- Common Lisp
+- Free Software
+- Portable
+- Self-contained
+- Ready to use
+
+*** Port
+
+- [[http://clocc.sourceforge.net/dist/port.html][Port Home]]
+
+This  package provides  a  platform-independent interface  to various  features
+absent from the ANSI Common Lisp standard, such as sockets, shell, Gray streams
+etc.  The  implementation-specific things,  like loads  of =#+/#-=,  are hidden
+from the user.
+
+PORT is now  a part of CLOCC  (in ~src/port~), and, as such,  is accessible via
+anonymous  CVS  and  FTP,  as  explained on  the  CLOCC  homepage.   PORT  uses
+~mk:defsystem~, which is a part of CLOCC too.
+
+*** CLLIB
+
+- [[http://clocc.sourceforge.net/dist/cllib.html][CLLIP Home]]
+
+This is a library of various tools, written in Common Lisp.
+
+CLLIB is now a part of CLOCC  (in ~src/cllib~), and, as such, is accessible via
+anonymous  CVS and  FTP, as  explained  on the  CLOCC homepage.   CLLIB can  be
+compiled  using ~mk:defsystem~,  which is  a part  of CLOCC,  and it  relies on
+~src/port~, which was actually a part of CLLIB before.
+** serapeum
+
+- [[https://github.com/ruricolist/serapeum][Github Source]]
+
+Serapeum  is  a  conservative  library  of  Common  Lisp  utilities.  It  is  a
+supplement, not a competitor, to Alexandria.
+
+* Common Lisp Regular Expressions
+
 #+cindex:regular expressions
 The  ANSI  Common  Lisp  standard  does  not  include  facilities  for  regular
 expressions,  but a  couple of  libraries exist  for this  task, for  instance:
@@ -3370,8 +3747,9 @@ expressions,  but a  couple of  libraries exist  for this  task, for  instance:
 
 - [[https://www.cliki.net/Regular%20Expression][CLiki Regular Expressions page]]
 
-*** CL-Portable Perl-compatible Regular Expressions---CL-PPCRE
-"Portable Perl-compatible regular expressions for Common Lisp"
+** CL-Portable Perl-compatible Regular Expressions---CL-PPCRE
+
+``Portable Perl-compatible regular expressions for Common Lisp''
 
 - [[https://edicl.github.io/cl-ppcre/][CL-PPCRE Home]]
 - [[https://github.com/edicl/cl-ppcre][CL-PPCRE on GitHub]]
@@ -3393,8 +3771,8 @@ To use it, load it through ~quicklisp~:
 
 : (ql:quickload :cl-ppcre)
 
-**** CL-PPCRE Basic Operations
-***** Scan Functions---Looking for matching patterns
+*** CL-PPCRE Basic Operations
+**** Scan Functions---Looking for matching patterns
      #+cindex:scan function
 - ~scan~ :: The ~scan~ function tries to match the given pattern and on success
   returns four multiple-values values:
@@ -3426,7 +3804,7 @@ To use it, load it through ~quicklisp~:
   but  will  require  less  time  for repeated  ~scan~  calls  as  parsing  the
   expression and compiling it is done only once.
 
-***** Extracting information
+**** Extracting information
 
 - ~scan-to-strings~  :: The ~scan-to-strings~ function is similar to ~scan~ but
   returns /substrings/  of =target-string= instead of  positions. This function
@@ -3460,7 +3838,7 @@ To use it, load it through ~quicklisp~:
   ;; => ("Frank" "Zappa" 1292889600)
   #+end_example
 
-**** Scanning
+*** Scanning
 
 #+attr_texinfo: :options create-scanner (re-string string) &key case-insensitive-mode multi-line-mode single-line-mode extended-mode destructive
 #+begin_defun
@@ -3564,262 +3942,23 @@ i.e. this function returns  two values on success:
   ~target-string~.
 #+end_defun
 
-**** Splitting and Replacing
+*** Splitting and Replacing
 
-**** Modifying scanner behaviour
+*** Modifying scanner behaviour
 
-**** Miscellaneous
+*** Miscellaneous
 
-**** Conditions
+*** Conditions
 
-**** Unicode Properties
+*** Unicode Properties
 
-**** Filters
+*** Filters
 
-**** Compatibility with Perl
+*** Compatibility with Perl
 
-**** Bugs and Problems
+*** Bugs and Problems
 
-**** Hints---Comments---Performance
-
-** Alexandria
-- [[https://common-lisp.net/project/alexandria/][Home]]
-- [[https://common-lisp.net/project/alexandria/draft/alexandria.html][Documenttion]]
-- [[https://gitlab.common-lisp.net/alexandria/alexandria][Gitlab Source]]
-
-Alexandria is a project and a library.
-
-As a project  Alexandria's goal is to reduce duplication  of effort and improve
-portability of Common  Lisp code according to its own  idiosyncratic and rather
-conservative aesthetic.  What this actually means  is open to debate,  but each
-project  member  has  a  veto  on  all  project  activities,  so  a  degree  of
-conservativism is inevitable.
-
-As a library  Alexandria is one of  the means by which the  project strives for
-its goals. Alexandria is a collection  of portable public domain utilities that
-meet the following constraints:
-
-** Iterate
-- [[https://common-lisp.net/project/iterate/][Iterate]]
-- [[https://common-lisp.net/project/iterate/doc/index.html][The Iterate Manual]]
-- [[https://gitlab.common-lisp.net/iterate/iterate][Iterate on GitLab]]
-
-~iterate~  is an  iteration construct  for Common  Lisp. It  is similar  to the
-=CL:LOOP= macro, with these distinguishing marks:
-
-- it is extensible,
-- it helps editors  like Emacs indent iterate forms by  having a more lisp-like
-  syntax, and
-- it isn't part of the ANSI standard  for Common Lisp (which is sometimes a bad
-  thing and sometimes good).
-
-
-It is available from QuickLisp.
-
-: #<SYSTEM iterate / iterate-20200610-git / quicklisp 2020-10-16>
-
-** Series
-- [[http://series.sourceforge.net][Series]]
-- [[https://sourceforge.net/projects/series/files/][Download Series v2.2.1.1.tar]]
-- [[#CLTL2-SERIES][See Documentation in Appendix A of CCTL2]]
-
-A  series is  a data  structure much  like a  sequence, with  similar kinds  of
-operations.  The  difference is that  in many situations, operations  on series
-may be composed  functionally and yet execute iteratively, without  the need to
-construct  intermediate  series  values  explicitly.  In  this  manner,  series
-provide both the  clarity of a functional programming style  and the efficiency
-of an iterative programming style.
-
-Series is  the culmination of  many years of design  and use of  this approach,
-during which some 100,000 lines of application code have been written (by about
-half a dozen people  over the course of seven years)  using the series facility
-in nearly all  iteration situations.  This includes one  large system (KBEmacs)
-of over 40,000 lines of code.
-
-** ZIP library
-- [[https://common-lisp.net/project/zip/][Home]]
-- [[https://github.com/bluelisp/zip][Github Source]]
-
-A library for .zip-file reading and writing, written in Common Lisp.
-
-** Flexi-Streams
-- [[https://edicl.github.io/flexi-streams/][Home]]
-
-Flexible bivalent streams for Common Lisp
-
-FLEXI-STREAMS implements  "virtual" bivalent streams  that can be  layered atop
-real  binary or  bivalent  streams and  that  can  be used  to  read and  write
-character data in various single- or multi-octet encodings which can be changed
-on the  fly. It  also supplies  in-memory binary streams  which are  similar to
-string streams.
-
-** CL+SSL---Trivial Gray Streams
-- [[https://common-lisp.net/project/cl-plus-ssl/#trivial-gray-streams][Home]]
-- [[https://github.com/cl-plus-ssl/cl-plus-ssl][Github Source]]
-
-A Common Lisp interface to OpenSSL.
-
-This library  is a fork  of SSL-CMUCL. The  original SSL-CMUCL source  code was
-written   by    Eric   Marsden    and   includes   contributions    by   Jochen
-Schmidt.  Development  into  CL+SSL  was done  by  David  Lichteblau.  License:
-MIT-style.
-
-Distinguishing  features:  CL+SSL is  portable  code  based  on CFFI  and  gray
-streams. It defines its  own libssl BIO method, so that SSL  I/O can be written
-over portable  Lisp streams instead of  bypassing the streams and  sending data
-over Unix  file descriptors  directly. (But the  traditional approach  is still
-used if possible.)
-
-** closure-html
-- [[https://github.com/bluelisp/closure-html][Github Source]]
-
-An HTML parser written in Common Lisp.
-
-Closure  HTML  was written  by  Gilbert  Baumann as  part  of  the Closure  web
-browser.  It was  first  converted  into a  stand-alone  installation by  Ignas
-Mikalajunas,  and  finally  reassembled  and documented  for  integration  with
-Closure XML  and use  with the  Closure browser by  David Lichteblau  under its
-current name.
-
-** zs3
-- [[https://github.com/xach/zs3][Github Source]]
-- [[https://www.xach.com/lisp/zs3/][Documentation]]
-
-This is  ZS3, a library for  working with Amazon's Simple  Storage Service (S3)
-and CloudFront service from Common Lisp.
-
-The latest version is 1.3.3, released on September 29th, 2019.  [2021-10-26 Tue]
-
-** trivial-file-size
-- [[https://github.com/ruricolist/trivial-file-size][Github source]]
-
-This library exports a single  function, ~file-size-in-octets~.  It returns the
-size of a file in bytes, using system calls when possible.
-
-** SharpListers
-A group of Common Lisp hackers who occasionally maintain otherwise abandoned or
-quasi-abandoned Common Lisp software packages.
-
-- https://github.com/sharplispers
-** ZS3---Amazon S3 and CloudFront from Common Lisp
-#+cindex:ZS3
-#+cindex:Amazon S3
-#+cindex:S3, Amazon
-#+cindex:Amazon CloudFront
-#+cindex:CloudFront, Amazon
-ZS3 is a  Common Lisp library for working with  Amazon's Simple Storage Service
-(S3) and CloudFront content delivery service.
-
-- https://www.xach.com/lisp/zs3/
-- [[https://github.com/xach/zs3/][ZS3 on GitHub]]
-** Writing Modules
-- https://gist.github.com/substack/5075355
-
-My thoughts on writing tiny reusable modules that each do just one
-thing. These notes were adapted from an email I recently sent.
-
------
-
-If some component is reusable enough to  be a module then the maintenance gains
-are really worth the  overhead of making a new project  with separate tests and
-docs. Splitting out a  reusable component might take 5 or 10  minutes to set up
-all the package overhead but it's much easier to test and document a piece that
-is completely separate from a larger project. When something is easy, you do it
-more often.
-
-I've observed  the biggest gains  for splitting  something out into  a separate
-module when I'm completely stuck mucking around in a larger application. When I
-isolate the problem  down to the scope  of a small module, it's  much easier to
-see how that small piece fits in with the greater application objective.
-
-Another technique is to  pick tools and approaches that don't  involve a lot of
-boilerplate in the first place. My usual flow for writing a new module is:
-
-1. hack  up some tiny (<10  line) example file  that does just enough  to start
-   experimenting with the api
-
-2. start fleshing out an index.js file required by the example file
-
-3. make incremental changes to the index file to get the example further along,
-   updating the example as necessary to reflect changes
-
-4. once the example pretty much works, copy it into test/
-
-5. `npm install  tap` or `npm install tape`  for modules I want to  test in the
-   browser.  I like  simple,  imperative tests  that I  can  adapt from  simple
-   examples.
-
-6. add some assertions around the example code
-
-7. `pkginit`  (https://github.com/substack/pkginit) to generate  a package.json
-   (or you could just use `npm init`)
-
-8.  copy the  example file  into  a readme.markdown  since I  really like  when
-   packages have code in their readmes when I'm looking for modules to use
-
-9. add a blurb  at the top of the readme.markdown,  document the methods (there
-   are only a few to document usually), add a license and install instructions
-
-10. create a github repo
-
-11. add travis and/or testling-ci github hooks as appropriate
-
-12. `git push` and `npm publish`
-
-With practice, I run through all these steps very quickly now. Not all of these
-are strictly necessary  and sometimes I'll skip  a step but this  is mostly the
-procedure I use for new modules.
-
-As much  as possible, I  try to build large-scale  projects using lots  of tiny
-modules so I  just repeat this process whenever I  need some reusable component
-that doesn't yet  exist in quite the form  I need it to exist.  As more modules
-are published to npm  I expect I won't need to write so  many modules but there
-will always be room for new stuff.
-
-When applications are done well, they are just the really application-specific,
-brackish  residue that  can't  be  so easily  abstracted  away.  All the  nice,
-reusable  components sublimate  away onto  github and  npm where  everybody can
-collaborate to advance the commons.
-** Common Lisp Open Code Collection (CCLOS)
-- [[http://clocc.sourceforge.net][CCLOS HOME]]
-- [[https://sourceforge.net/projects/clocc/][CCLOS Download]]
-- [[https://sourceforge.net/p/clocc/bugs/57/][Problems Installing?]]
-
-Our aim is to create a collection of useful and free Common Lisp - Applications
-that are easily portable among the various CL - Implementations.
-
-It contains Lisp code for various applications which is:
-
-- Common Lisp
-- Free Software
-- Portable
-- Self-contained
-- Ready to use
-*** Port
-- [[http://clocc.sourceforge.net/dist/port.html][Port Home]]
-
-This  package provides  a  platform-independent interface  to various  features
-absent from the ANSI Common Lisp standard, such as sockets, shell, Gray streams
-etc.  The  implementation-specific things,  like loads  of =#+/#-=,  are hidden
-from the user.
-
-PORT is now  a part of CLOCC  (in ~src/port~), and, as such,  is accessible via
-anonymous  CVS  and  FTP,  as  explained on  the  CLOCC  homepage.   PORT  uses
-~mk:defsystem~, which is a part of CLOCC too.
-*** CLLIB
-- [[http://clocc.sourceforge.net/dist/cllib.html][CLLIP Home]]
-
-This is a library of various tools, written in Common Lisp.
-
-CLLIB is now a part of CLOCC  (in ~src/cllib~), and, as such, is accessible via
-anonymous  CVS and  FTP, as  explained  on the  CLOCC homepage.   CLLIB can  be
-compiled  using ~mk:defsystem~,  which is  a part  of CLOCC,  and it  relies on
-~src/port~, which was actually a part of CLLIB before.
-** serapeum
-- [[https://github.com/ruricolist/serapeum][Github Source]]
-
-Serapeum  is  a  conservative  library  of  Common  Lisp  utilities.  It  is  a
-supplement, not a competitor, to Alexandria.
+*** Hints---Comments---Performance
 
 * Common Lisp Resources
 
@@ -4167,6 +4306,42 @@ Symbol redirects are available for
 
  Implementations are encouraged to respond to the  typing of =?= or a ``help key''
  by providing help, including a list of commands.
+
+** Current recommended libraries
+
+- [[https://www.cliki.net/Current%20recommended%20libraries][CLiki Page]]
+
+Cliki contributors  (that's you!) believe that  the libraries on this  page are
+considered "good enough for government use", and serve as a starting point when
+looking for a library covering a given field.
+
+- [[https://awesome-cl.com][awesome-cl]]
+- [[https://github.com/CodyReichert/awesome-cl][GitHub Source]]
+
+A curated  list of awesome  Common Lisp  frameworks, libraries and  other shiny
+stuff.
+
+- [[https://github.com/azzamsa/awesome-cl-software][awesome-cl-software]]
+
+List of awesome application software built with Common Lisp.
+
+** State of the Common Lisp ecosystem 2020
+
+- [[https://lisp-journey.gitlab.io/blog/state-of-the-common-lisp-ecosystem-2020/][Page]]
+
+This is a description  of the Common Lisp ecosystem, as  of January, 2021, from
+the perspective of a user and contributor.
+
+This  article is  derived from  Fernando Borretti’s  State of  the Common  Lisp
+ecosystem from 2015, hence the introduction that sounded familiar. This new one
+will be an opportunity to look at what was achieved, or what is still lacking.
+
+** State of the Common Lisp Ecosystem 2015
+
+- [[https://borretti.me/article/common-lisp-sotu-2015][Page]]
+
+This is a description of the Common Lisp ecosystem, as of August 2015, from the
+perspective of a user and contributor.
 
 ** Zach Beane's Lisp Resources
 
@@ -5551,7 +5726,7 @@ LispWorks IDE is implemented using CAPI.
 
 *** CLIM---Common Lisp Interface Manager
 
-- [[the landlord may proceed directly to an unlawful detainer action in accordance with chapter 59.12 RCW][CLiki Page]]
+- [[https://www.cliki.net/CLIM][CLiki Page]]
 
 The Common Lisp Interface Manager  (CLIM) is a Lisp-based programming interface
 specification  that  provides   a  layered  set  of   portable  facilities  for
@@ -5655,6 +5830,26 @@ GUIs. It is included with  LispWorks Professional and Enterprise Editions where
 LispWorks supports these GUIs.  CLIM is not supported on ARM  Linux, and on Mac
 OS X it  is supported only in the  deprecated Motif GUI. It is  available as an
 add-on product for LispWorks (32-bit) for SPARC Solaris.
+
+**** mcclim-desktop
+
+``a clim-desktop clone''
+
+- [[https://github.com/gas2serra/mcclim-desktop][GitHub Source]]
+
+**** clim-desktop
+
+- [[https://www.cliki.net/clim-desktop][CLiki Page]]
+- [[https://gitlab.common-lisp.net/clim-desktop/clim-desktop][GitLab Source]]
+
+CLIM-desktop integrates several  McCLIM apps to make a  Common Lisp development
+environment.
+
+**** clim-chess
+
+``CLIM interface for playing chess''
+
+- [[https://github.com/stassats/clim-chess][GitHub Source]]
 
 ** CMU Common Lisp Repository
 
@@ -6238,8 +6433,9 @@ stream, its associated file is used.
 #+end_defun
 
 *** Reading File Streams
-    #+cindex:stream, file
-    #+findex:open
+
+#+cindex:stream, file
+#+findex:open
 The most basic file I/O task is to read the contents of a file.  To do so, you
 obtain a stream from which you can read a file's contents.  You do this with
 the ~open~ function.
@@ -6326,6 +6522,7 @@ that is one of:
 #+end_deftp
 
 ** Streams
+
 <<a-stream>>
 #+attr_texinfo: :options Object stream
 #+begin_deftp
@@ -6390,6 +6587,7 @@ Streams are either:
 #+end_deftp
 
 *** Stream Subclasses
+
 The class /stream/ has a number of subclasses defined by this specification.
 The following are subclasses of /stream/.
 
@@ -6611,6 +6809,7 @@ that is returned, and how to handle errors.
     :PROPERTIES:
     :source:   http://cl-cookbook.sourceforge.net/files.html#line
     :END:
+
 ~READ-LINE~ will  read one  line from  a stream  (which defaults  to =*STANDARD
 INPUT*=) the end  of which is determined  by either a newline  character or the
 end of  the file. It  will return  this line as  a string without  the trailing
@@ -6681,6 +6880,7 @@ eof-value).
 #+end_example
 
 *** Stream Functions
+
 Some operations may be performed on any kind of stream; the following is a list
 of standardized operations that are potentially useful with any kind of stream.
 
@@ -6770,6 +6970,7 @@ executed as an implicit ~progn~.
 #+end_defun
 
 *** Input Stream Functions
+
 The following are operators relating to input streams:
 
 - ~clear-input~
@@ -6786,6 +6987,7 @@ The following are operators relating to input streams:
 - ~unread-char~
 
 *** Output Stream Functions
+
 The following are operators relating to output streams:
 
 - ~clear-output~
@@ -6808,6 +7010,7 @@ The following are operators relating to output streams:
 - ~write-to-string~
 
 *** Bidirectional Functions
+
 Any of the operators listed above under *Input Stream Functions* and *Output
 Stream Functions* can be used on bidirectional streams.  In addition, the
 following operators relate specifically to bidirectional streams:
@@ -6816,7 +7019,9 @@ following operators relate specifically to bidirectional streams:
 - ~yes-or-no-p~
 
 *** Functions Taking Stream Arguments
+
 **** Either Open or Closed Streams
+
 These operators accept stream arguments that might be either open or closed
 streams.
 
@@ -6860,6 +7065,7 @@ streams.
 - ~with-open-file~
 
 **** Open Streams
+
 These opertors require open streams:
 
 - clear-input
@@ -6916,6 +7122,7 @@ These opertors require open streams:
 - yes-or-no-p
 
 ** Common Lisp Formatting
+
  ~format~ produces three kinds of formatting:
 
  1. printing tables of data as text
@@ -6930,6 +7137,7 @@ These opertors require open streams:
  3. generating human-readable messages with interpolated values
 
 *** format Function
+
  #+attr_texinfo: :options format @var{destination} @var{control-string} &rest @var{format-args}
  #+begin_defun
 
@@ -6956,6 +7164,7 @@ These opertors require open streams:
  #+end_defun
 
 *** format Directives
+
  All directives start with a tilde (=~=) and end with a single character (upper-
  or  lowercase) that  identifies  the directive.
 
@@ -7007,6 +7216,7 @@ These opertors require open streams:
  :             ^
 
 *** Basic Formatting
+
 **** General Directives
  - =~A= :: The most general-purpose directive is =~A=, which consumes one format
    argument  of any  type and  outputs  it in  aesthetic (human-readable)  form:
@@ -7038,6 +7248,7 @@ These opertors require open streams:
    to determine how many to print.
 
 **** Character and Integer Directives
+
  ~FORMAT~  supports several  directives  that  can be  used  to  emit values  of
  specific types in particular ways.
 
@@ -7139,6 +7350,7 @@ These opertors require open streams:
    : (format nil "~2,4$" pi) ==> "0003.14"
 
 **** English Language Directives
+
  These directives  allow you to  emit numbers as  English words, to  emit plural
  markers based on the value of a  format argument, and to apply case conversions
  to sections of FORMAT's output.
@@ -7185,6 +7397,7 @@ These opertors require open streams:
    #+end_example
 
 *** Controlled Formatting
+
  FORMAT  provides several  directives that  implement simple  control constructs
  within the control string.
 
@@ -7297,6 +7510,7 @@ These opertors require open streams:
    directive.
 
 **** Jump Directive
+
  - =~*= :: The =~*=  directive, allows you to jump around in  the list of format
    arguments. In  its basic form,  without modifiers,  it simply skips  the next
    argument, consuming it  without emitting anything.
@@ -7368,6 +7582,7 @@ the condition system:U
   choosing which recovery strategy to use.
 
 ** Terminology
+
 - error :: not a  bug, but rather something occurring that may  stop a piece of
   code from running: a  file is missing, a disk is full,  a server has crashed,
   the network is down. However, if the  rest of the program is depending on the
@@ -7502,6 +7717,7 @@ the condition system:U
   restart if it's available and returns =NIL= otherwise.
 
 ** Common Lisp Conditions
+
 Common Lisp's error  handling system gives you  a way out of  this conundrum by
 letting you  separate the code  that actually recovers  from an error  from the
 code that decides how to recover. Thus,  you can put recovery code in low-level
@@ -7509,6 +7725,7 @@ functions  without  committing  to   actually  using  any  particular  recovery
 strategy, leaving that decision to code in high-level functions.
 
 *** An Example
+
 To get a sense  of how this works, let's suppose  you're writing an application
 that reads some sort of textual log file, such as a Web server's log. Somewhere
 in your application you'll have a function to parse the individual log entries.
@@ -7525,6 +7742,7 @@ you'd return a special value to indicate there was a problem. In Java or Python
 you'd throw or raise an exception. In Common Lisp, you signal a condition.
 
 *** Condition Object
+
 A /condition/  is an  object whose  class indicates the  general nature  of the
 condition and whose instance data carries  information about the details of the
 particular circumstances  that lead  to the condition  being signaled.  In this
@@ -7533,6 +7751,7 @@ hypothetical  log  analysis  program,  you  might  define  a  condition  class,
 data it can't parse.
 
 **** Condition Classes are defined with DEFINE-CONDITION Macro
+
 Condition classes  are defined with  the ~DEFINE-CONDITION~ macro,  which works
 essentially  the same  as  ~DEFCLASS~  except that  the  default superclass  of
 classes   defined   with   ~DEFINE-CONDITION~  is   =CONDITION=   rather   than
@@ -7547,12 +7766,14 @@ slots can't be accessed using ~SLOT-VALUE~; you must specify either a =:reader=
 option or  an =:accessor= option  for any slot whose  value you intend  to use.
 
 **** New Condition Objects are created with MAKE-CONDITION
+
 Likewise, new condition  objects are created with  ~MAKE-CONDITION~ rather than
 ~MAKE-INSTANCE~. ~MAKE-CONDITION~  initializes the  slots of the  new condition
 based on the =:initargs= it's passed, but there's no way to further customize a
 condition's initialization, equivalent to ~INITIALIZE-INSTANCE~.
 
 **** Subclass of ERROR
+
 When using  the condition  system for  error handling,  you should  define your
 conditions as subclasses of =ERROR=, a subclass of =CONDITION=. Thus, you might
 define =malformed-log-entry-error=,  with a  slot to hold  the argument  that was
@@ -7562,6 +7783,7 @@ passed to ~parse-log-entry~, like this:
 :   ((text :initarg :text :reader text)))
 
 *** Condition Handler
+
 In ~parse-log-entry~  you'll signal a =malformed-log-entry-error=  if you can't
 parse the log entry.
 
@@ -7684,6 +7906,7 @@ parsing of  the log  file altogether.  What you want  is a  way to  provide the
 current recovery strategy without requiring that it always be used.
 
 *** Restarts
+
 The condition system lets you do this by splitting the error handling code into
 two parts.
 
@@ -7856,6 +8079,7 @@ return normally, giving other condition handlers,  bound higher on the stack, a
 chance to handle the condition.
 
 *** Multiple Restarts
+
 Since restarts  must be explicitly invoked  to have any effect,  you can define
 /multiple  restarts/, each  providing a  different recovery  strategy. Not  all
 log-parsing applications will necessarily want  to skip malformed entries. Some
@@ -7915,6 +8139,7 @@ As  it stands,  the  ~skip-log-entry~  is a  properly  abstracted  part of  the
 ~log-parsing~ API.
 
 *** Other Uses for Conditions
+
 While conditions are mainly used for error handling, they can be used for other
 purposes--you can use  conditions, condition handlers, and restarts  to build a
 variety of protocols between low- and high-level code. The key to understanding
@@ -8097,6 +8322,7 @@ expected, and in the second case, it was because ~(pick-greater -5 0)~ returned
 -5 when 0 was expected.
 
 **** Assertion Forms
+
 The most commonly used assertion form is
 : (assert-equal value form)
 
@@ -8160,6 +8386,7 @@ resume execution. A similar collision of names exists in JUnit and Java.
 #+end_quote
 
 **** How to Organize Tests with Packages
+
 Tests are grouped internally by the current package, so that a set of tests can
 be defined  for one package  of code without  interfering with tests  for other
 packages.
@@ -8218,6 +8445,7 @@ Alternately, you could run all your date tests from any package with:
 #+end_src
 
 **** Reference Section
+
 Here is a list of the functions and macros exported by ~lisp-unit~.
 
 ***** Test definition forms
@@ -8295,6 +8523,7 @@ with ~assert-equality~.
 : (unordered-equal list1 list2 [:test])
 
 *** Test Anything Protocol Extensions
+
 - [[http://testanything.org][Home]]  TAP, the  Test  Anything  Protocol, is  a  simple text-based  interface
   between testing modules  in a test harness.  TAP started life as  part of the
   test harness  for Perl but  now has implementations  in C, C++,  Python, PHP,
@@ -8315,6 +8544,7 @@ with ~assert-equality~.
   the TAP format.
 
 *** Code the Unit Test First
+
 - http://www.extremeprogramming.org/rules/testfirst.html
 
 
@@ -8341,6 +8571,7 @@ Not until you have  yet a third test. You continue until  there is nothing left
 to test. The coffee maker problem shows an example written in Java.
 
 **** Extreme Programming---A gentle introduction
+
 - http://www.extremeprogramming.org/index.html
 
 
@@ -8359,6 +8590,7 @@ Programming  empowers  your  developers  to  confidently  respond  to  changing
 customer requirements, even late in the life cycle.
 
 ***** Simple Rules
+
 - http://www.extremeprogramming.org/rules.html
 
 ****** Planning
@@ -8401,12 +8633,15 @@ customer requirements, even late in the life cycle.
 - Acceptance tests are run often
 
 **** The Values of Extreme Programming
+
 - http://www.extremeprogramming.org/values.html
 
 **** Simplicity is the Key
+
 - http://www.extremeprogramming.org/rules/simple.html
 
 **** User Stories
+
 - http://www.extremeprogramming.org/rules/userstories.html
 
 User stories serve the same purpose as use cases but are not the same. They are
@@ -8418,6 +8653,7 @@ interface. They are in  the format of about three sentences  of text written by
 the customer in the customers terminology without techno-syntax.
 
 *** CS 325 Lisp Unit Tester
+
 - by Chris Riesbeck
 
 
@@ -8425,6 +8661,7 @@ My main  goal for ~lisp-unit~  was to make it  simple to use,  particularly for
 beginning Lisp programmers.
 
 ** Lisp Unit2
+
 "A  Test  Framework  for Common  Lisp  in  the  style  of JUnit,  designed  and
 implemented with simplicity of use in mind."
 
@@ -8463,6 +8700,7 @@ or
 : (asdf:load-system :lisp-unit2)
 
 ** Prove
+
 Yet another unit testing framework for Common Lisp by Eitaro Fukamachi.
 
 (This project was originally called =CL-TEST-MORE=.)
@@ -8485,20 +8723,28 @@ You can install 'prove' via Quicklisp.
 
 See [[*SLIME Colors for Testing using Prove][SLIME Colors for Testing using Prove]] to add colored output in SLIME when
 using Prove.
+
 ** Rove
+
 "Rove  is a  unit  testing  framework for  Common  Lisp  applications. This  is
 intended to be a successor of Prove."  Eitaro Fukamachi (author of Prove)
 
 - [[https://github.com/fukamachi/rove][Rove on GitHub]]
+
 ** clunit
+
 "A Common Lisp Unit Testing Framework."
 
 - [[https://github.com/tgutu/clunit][clunit on GitHub]]
+
 ** Parachute
+
 "An extensible and cross-compatible testing framework."
 
 - [[https://github.com/Shinmera/parachute][Parachute on GitHub]]
+
 ** Mockingbird
+
 "A small stubbing and mocking library for Common Lisp"
 
 - [[https://github.com/Chream/mockingbird][Mockingbird on GitHub]]
@@ -8507,7 +8753,9 @@ intended to be a successor of Prove."  Eitaro Fukamachi (author of Prove)
 This  package  provides  some  useful  stubbing and  mocking  macros  for  unit
 testing. Used  when specified functions  in a test  should not be  computed but
 should instead return a provided constant value.
+
 ** Check-it
+
 "Randomized specification-based testing for Common Lisp. Available through
 Quicklisp."
 
@@ -8517,16 +8765,21 @@ Quicklisp."
 This is  a randomized  property-based testing library  for Common  Lisp. Rather
 than  being a  full-fledged  general  test framework  in  its  own right,  it's
 designed to embed randomized tests in whatever framework you like.
+
 ** CL-Coverals
+
 "A helper library to post test coverage to [[https://coveralls.io/][Coveralls]]."
 
 - [[https://github.com/fukamachi/cl-coveralls][CL-Coveralls on GitHub]]
+
 ** FranzInc Tester
+
 "Tester framework for Common Lisp"
 
 - https://github.com/franzinc/tester
 
 ** CL-Travis
+
 ``Travis-CI scripts for testing Common Lisp software''
 
 - [[https://github.com/lispci/cl-travis][GitHub Source]]
@@ -8536,6 +8789,7 @@ designed to embed randomized tests in whatever framework you like.
 different Lisp implementations: ABCL, Allegro CL, SBCL, CMUCL, CCL and ECL.
 
 ** Fiasco
+
 ``A test framework for Common Lisp''
 
 - [[https://github.com/joaotavora/fiasco][GitHub Source]]
@@ -8549,6 +8803,7 @@ Tamás Borbély and Levente Mészáros.
 - https://www.dreamsongs.com/CLOS.html
 
 ** CLOS History
+
 - Levine, /Fundamentals of CLOS/ 2003-07-15 ([[Livine][see below]])
 
 The functionality  belonging to this name  [CLOS] was added to  the Common Lisp
@@ -8586,6 +8841,7 @@ a  report on  the specification  of the  Common Lisp  Object System  Programmer
 Interface that was adopted by X3J13 in June 1988.
 
 ** Common Lisp Object System Specification
+
 - [[https://www.dreamsongs.com/CLOS.html][CLOS]]
 
   The specification was published in  the journal Lisp and Symbolic Computation
@@ -8610,6 +8866,7 @@ Interface that was adopted by X3J13 in June 1988.
 - [[https://www.dreamsongs.com/Files/clos-book.pdf][CLOS in Context: The Shape of the Design Space]], 2004
 
 ** CLOS Fundamentals
+
 - <<Livine>>[[http://cl-cookbook.sourceforge.net/clos-tutorial/][Fundamentals of CLOS]] by Nick Levine 2003-07-15
 
 
@@ -8618,13 +8875,16 @@ The intention  of this  tutorial is  to provide a  sufficient grounding  in the
 the ground.
 
 ** CLOS Programming
+
 - Sonya Keene, /Object-Oriented Programming in Common Lisp--A Programmer's
   Guide to CLOS/, 1989
   - https://doc.lagout.org/programmation/Lisp/Object-Oriented%20Programming%20in%20Common%20Lisp_%20A%20Programmer%27s%20Guide%20to%20CLOS%20%5BKeene%201989-01-11%5D.pdf
 
   "[This] is a very easy introduction and more thorough than the single chapter
   in [Graham 1995], but it will obviously take you longer to read." --Levine.
+
 ** CLOS References
+
 - [[https://lifegoo.pluskid.org/upload/doc/object_models/CLOS.pdf][CLOS: The Common Lisp Object System A Overview]]
 
 - [[https://engineering.purdue.edu/RVL/Publications/Kersten93ATutorial2.pdf][A TUTORIAL ON LISP OBJECT-ORIENTED PROGRAMMING FOR BLACKBOARD COMPUTATION]]
@@ -8730,7 +8990,48 @@ SPLIT-SEQUENCE package for some parsing needs.
 
 * Common Lisp Web Servers
 
+** Clack
+
+``Web server abstraction layer for Common Lisp''
+
+- [[https://github.com/fukamachi/clack][GitHub Source]]
+- [[https://quickdocs.org/clack][QuickDocs]]
+
+Clack is  a web application  environment for  Common Lisp inspired  by Python's
+WSGI and Ruby's Rack.
+
+Clack provides a script  to start a web server. It's useful  when you deploy to
+production environment.  Install Roswell before as it depends on it.
+
 ** Hunchentoot
+
+``Web server written in Common Lisp''
+
+- [[https://edicl.github.io/hunchentoot/][Home Page]]
+- [[https://github.com/edicl/hunchentoot][GitHub Source]]
+
+Hunchentoot is  a web  server written  in Common Lisp  and at  the same  time a
+toolkit for building dynamic websites. As a stand-alone web server, Hunchentoot
+is  capable  of HTTP/1.1  chunking  (both  directions), persistent  connections
+(keep-alive), and SSL.
+
+Hunchentoot  provides  facilities like  automatic  session  handling (with  and
+without cookies), logging, customizable error  handling, and easy access to GET
+and POST  parameters sent by the  client. It does not  include functionality to
+programmatically generate  HTML output. For this  task you can use  any library
+you like, e.g. (shameless self-plug) [[https://github.com/edicl/cl-who/][CL-WHO]] or [[https://github.com/edicl/html-template/][HTML-TEMPLATE]].
+
+Hunchentoot talks with its front-end or with the client over TCP/IP sockets and
+optionally  uses  multiprocessing  to  handle  several  requests  at  the  same
+time.  Therefore,  it  cannot  be implemented  completely  in  portable  Common
+Lisp. It  currently works with LispWorks  and all Lisps which  are supported by
+the compatibility layers [[https://common-lisp.net/project/usocket/][usocket]] ([[https://github.com/usocket/usocket][github]]) and [[https://common-lisp.net/project/bordeaux-threads/][Bordeaux Threads]] ([[https://github.com/sionescu/bordeaux-threads][github]]).
+
+*** easy-routes
+
+``Yet another routes handling utility on top of Hunchentoot''
+
+- [[https://github.com/mmontone/easy-routes][GitHub Source]]
 
 ** toot
 ``A  web  server  created  by  stripping  down  and  reorganizing  Edi  Weitz's
@@ -8762,18 +9063,6 @@ need access to a Python library written in C, or there’s a bug and you can’t
 bothered to narrow it  down to a small test case, CLPython  can’t help you. Two
 out of three of  those are more your problem than CLPython’s,  but hey, I’m not
 here to judge.
-
-* Common Lisp Scripting
-
-** guarded-commands
-
-``Better Scripts Through Copying Perl Libraries''
-
-- [[https://github.com/pinterface/guarded-commands][GitHub Source]]
-
-~guarded-commands~  is  a  Common  Lisp  port  of  my  favourite  Perl  module,
-[[http://search.cpan.org/~trey/Commands-Guarded/lib/Commands/Guarded.pm][Commands::Guarded]].  As  its inspiration  says, “Better scripts  through guarded
-commands.”.
 
 * Common Lisp Learning
 
@@ -9345,6 +9634,437 @@ In the  description of  a special  form or  macro,
 :END:
 
 ``Free unaffiliated eBook created from Stack Overflow articles''
+** Common Lisp Scripting and Programming
+
+*** Common Lisp as a Scripting Language 2015 edition
+:PROPERTIES:
+:url:      https://fare.livejournal.com/184127.html
+:author:   François-René Rideau
+:END:
+
+<<cl-scripting>>
+The first computer I used had about 2KB of RAM. The other day, I compiled a 2KB
+Common  Lisp script  into  a 16MB  executable  to get  its  startup (and  total
+execution) time  down from 2s to  subjectively instantaneous — and  that didn't
+bother me the least, for my current computer has 8GB of working memory and over
+100GB of persistent memory. But it did  bother me that it didn't bother me, for
+16MB  was also  the memory  on the  first  computer in  which I  felt I  wasn't
+RAM-starved: I  could run  an X server,  an Emacs editor  and a  shell terminal
+simultaneously without swapping! Now an entire comfortable software development
+universe could be casually  wasted over a stupid optimization —  that I have to
+care about  because software  systems still  suck. And  to imagine  that before
+sentientkind reaches  its malthusian  future, code bumming  will have  become a
+popular activity again...
+
+_Background_ (skip  to the next  paragraph if you  don't care for  hardware war
+stories): I  just returned  my many-years  old work  laptop (a  Lenovo Thinkpad
+X230), because of various hardware issues  I was starting to experience: mostly
+a bad connection with the batteries at times causing the machine to shutdown at
+the least auspicious moment, in addition to the traditional overheating and the
+wifi card that often failed to connect requiring the wpa_supplicant daemon to be
+killed. I liked the Thinkpad form factor a lot, but my employer wasn't offering
+Thinkpad-s anymore, so I opted instead for  a slim HP EliteBook Folio 1040: its
+form factor is obviously inspired from the  macbook air, except it is running a
+Linux system whereby I was master of my ship. Now, the EliteBook has a touchpad
+that is particularly bad, even worse than the Thinkpad's in being triggered all
+the time by my thumb as I type;  I decided to disable it immediately, just like
+I did eventually with the Thinkpad; however, unlike the Thinkpad, the EliteBook
+doesn't have a "clit" interface to  supplement the touchpad. Therefore I had to
+toggle the  touchpad on and off  instead of permanently disabling  it. A Google
+search quickly found a shell script to toggle the touchpad, and instructions on
+how to  map Penguin-Space to it  (the Penguin is  Super, much more so  than the
+Windows it replaces). But the shell script  frankly made me puke, and I decided
+to rewrite it in Lisp, which yielded a very nice program less than 2KB long...
+
+Indeed for several  years now, I've been  peddling the use of Common  Lisp as a
+scripting  language: the  combination  of  syntactic abstraction,  higher-order
+functions and an  advanced object system, the relatively  simple semantic model
+allowing  for   efficient  compilation,   the  robust  compilers   with  decent
+performance and portability  to all platforms that matter, and  the support for
+interactive debugging  and structured editing —  all put it years  ahead of all
+the other  dynamically typed  scripting languages in  common use  (shell, perl,
+python,  ruby, javascript),  even though  it was  initially developed  years or
+decades before them. However,  until recently, it was missing a  few bits to be
+usable as a scripting language, and I  am proud of having hammered the last few
+nails  on  the coffin:  zero-configuration  in  looking for  source  libraries,
+zero-management  in storing  compiled outputs,  portable invocation  from other
+programs, portable  invocation of other program  — if you implement  these, you
+too can make your favorite programming language suitable for "scripting".
+
+Well,  I  recently added  an  extra  nail to  the  coffin,  that addresses  the
+remaining  tradeoff between  startup  times  and memory  occupancy:  it is  now
+possible to easily  share a dumped image  between all the scripts  you need, to
+achieve  instant startup  without massive  bloat  of either  working memory  or
+persistent storage. Admittedly,  you could already do it  semi-portably on SBCL
+and CCL  using Xach's buildapp;  but now  you can do  it fully portably  on all
+implementations using  the cl-launch utility that  you would use to  invoke the
+program as a script.
+
+The portable way to  write a Common Lisp script is  to use cl-launch, typically
+via a #!/usr/bin/cl script specification  line when you're using Unix. However,
+when launching a script this way, even a relatively simple program can take one
+to several seconds to start: the Lisp compiler locates and loads all the object
+files into memory,  linking the code into symbol, class  and method tables; and
+this somehow  takes a non-negligible  amount of time  even when the  files were
+precompiled, because compilers  were never optimized to make  this fast; indeed
+the typical Lisp hacker  only recompiles and reloads one file at  a time at his
+interactive  REPL, and  doesn't often  reload all  the files  from scratch.  By
+installing  ASDF  3.1.4 over  the  one  provided  by  SBCL using  the  provided
+install-asdf.lisp      script,     and      by      using     the      provided
+cl-source-registry-cache.lisp  script to  avoid search  through my  quite large
+collection of CL source code, I could get the startup time down to around .7 or
+.8s, but that was still too much. This is fine for computation-intensive and/or
+long-running programs for  which this startup latency doesn't  matter. But that
+makes this solution totally impractical for interactive scripts where execution
+latency is all-important, as compared  to other scripting languages, that while
+inferior as languages, at least start up instantaneously in subjective time.
+
+/bin/sh or  perl execute an  empty command  in about 5  ms of wall  clock time,
+python in about 18ms  (all timing and sizes rough averages  and estimates on my
+current linux  x86-64 laptop). Without  my portability infrastructure,  you can
+also do the  same with sbcl in 10 ms  or clisp in 15 ms, but  then you lose the
+portability and are either restricted to not using any software library, or are
+back in non-portable  configuration and compilation hell in  addition to having
+the same slow loading issue. With  such startup pause, Common Lisp might remain
+somewhat  suitable  to   scripting,  unlike  the  vast   majority  of  compiled
+programming  languages,   that  require   a  explicit  compilation   step  with
+non-trivial configuration  of source  and object files;  still it  finds itself
+unsuitable for producing scripts destined  for use as instantaneous interactive
+commands outside its own autistic interactive development environment.
+
+Now, all  serious Common Lisp implementations  also allow you to  dump a memory
+image, with all the code already loaded and linked, and such images start quite
+fast, about 20 ms  for a fully loaded image on sbcl, about  35 ms on clisp; and
+you  can portably  dump an  image  using my  cl-launch utility  by just  adding
+--output /path/to/executable  --dump ! to  the very  same command you'd  use to
+start a script.  Thus, at the expense  of an extra but trivial  build step that
+takes many seconds once, you  can portably transform your slow-starting scripts
+into a  precompiled executable,  that will have  startup time  competitive with
+other  scripting  language,  and  efficiency competitive  with  other  compiled
+languages.
+
+The problem is that such an image has a significant overhead in terms of space:
+an empty cl-launch program  has an image of size 13MB with  CLISP, 28MB on CCL,
+or 52MB  on SBCL  (which isn't  that bad  when you  consider this  contains the
+entire compiler and basic libraries — GCC  is bigger than that!); an image with
+all the code  I want loaded takes 27MB  on CLISP, 50MB on CCL, 82MB  on SBCL. A
+poly-deca-megabyte image file is no big deal. The biggest of these images is 1%
+of the  memory of my  laptop. So, by today's  standards, it's a  small additive
+overhead. But if you need one image  per script, then 80MB of memory to execute
+a 2KB script is a multiplicative factor 40000 in memory waste — and that is not
+acceptable if  like me  you want to  replace lots of  small shell  scripts with
+Common Lisp  code. Compare that to  the incremental space expenditure  for each
+additional 1KB  of scripting code, which  is typically between 1KB  and 10KB of
+additional size for the image, a reasonable factor of 1 to 10. This suggests an
+obvious solution:  to share the  image-dumping expenditure between all  your CL
+scripts, so  the space overhead is  back to a negligible  additive overhead and
+reasonable multiplicative factor, instead of being an outrageous multiplicative
+factor.
+
+busybox made popular the old concept  of a multi-call binary: a same executable
+binary program  that when executed behaves  differently based on what  name the
+program was called,  such that by using multiple symbolic  links (or hardlinks)
+to the same program, you can  replace multiple different binaries with a single
+one,  benefitting from  both the  sharing effects  of dynamic  linking and  the
+optimizations  of  static  linking.  The  same can  be  done  for  Common  Lisp
+code. Xach's  buildapp already let you  do that on  SBCL then on CCL  using its
+option --dispatched-entry. I just enriched  cl-launch 4.1.2 to support the very
+same  interface  on all  its  12+  supported  implementations (well,  the  same
+interface, modulo a different treatment of  corner cases). Now, I already share
+the same executable  for 7 personal use  scripts, and will only use  CL for new
+scripts while slowly  migrating all my old scripts. [November  2015 update: now
+44 personal scripts in a 95MB SBCL image that starts in 16ms]
+
+The  feature   was  a  hundred   lines  of  code  total,   including  comments,
+documentation and a new cl-launch-dispatch.asd  file; the Lisp support for this
+feature is only loaded on-demand if  you use --dispatched-entry, at which point
+it is marginally free to load a  tiny additional ASDF system. I love how Common
+Lisp  lets me  implement  this feature  in  such  a modular  way.  Here is  the
+documentation:
+
+- If option  -DE --dispatch-entry is used,  then the next argument  must follow
+  the format NAME/ENTRY, where  NAME is a name that the  program may be invoked
+  as (the basename of  the uiop:argv0 argument), and ENTRY is  a function to be
+  invoked  as if  by --entry  when that  is the  case. Support  for option  -DE
+  --dispatch-entry  is  delegated  to  a  dispatch  library,  distributed  with
+  cl-launch but not part of cl-launch itself, by
+
+  1.  registering  a  dependency  on   the  dispatch  library  as  if  --system
+     cl-launch-dispatch had been specified (if not already)
+
+  2. if neither --restart nor --entry  was specified yet, registering a default
+     entry function as if by --entry cl-launch-dispatch:dispatch-entry.
+
+  3.  registering  an  init-form  that  registers  the  dispatch  entry  as  if
+     (cl-launch-dispatch:register-name/entry  "NAME/ENTRY"  :PACKAGE) had  been
+     specified where PACKAGE  is the current package. See  the documentation of
+     said library for further details.
+
+Now, this  is a great workaround,  but doesn't fully solve  the original issue.
+To completely solve it, an obvious strategy would be for some implementation to
+radically optimize loading of compiled objects  (so called FASL files, for FASt
+Loading,  which some  jest  should  be renamed  SLOw  Loading),  so it  becomes
+actually fast. For instance, the compiler could produce a prelinked object that
+optimistically  assumes it  knows  the  load address,  that  there  will be  no
+conflict in symbol  tables, class and method definitions, etc.,  and at runtime
+patches only  a minimal set  of pointers  in the usual  case. Doing it  for 12+
+implementations  is   not  doable,   but  only  one   suffices,  say   SBCL  or
+CCL. Alternatively, an "incremental image"  feature might do, whereby one could
+dump all the  symbols in some set  of packages and not  others, with associated
+functions, classes, etc.; it would require minor change in programmers' habits,
+though,  so is  less likely  to  happen. But  any such  complete solution  will
+require  hacking into  the guts  of a  CL implementation,  and that's  no small
+undertaking.
+
+Assuming we  are not going  to improve  the underlying implementations,  a more
+long-winded "solution"  might be to  extend the  workaround until it  becomes a
+solution:  enabling  the  automatic  sharing of  executables  between  all  the
+programs  that matter.  The  old Common-Lisp-Controller  from  Debian could  be
+resurrected, to  create shared  images and/or  shared executables  for software
+installed  by  the   system's  package  manager;  a   similar  mechanism  could
+declaratively manage all the programs of  a given user (possibly layered on top
+of the above when available). This might require some tweaks to ASDF so that it
+doesn't try to  build pre-built software from  system-managed directories using
+system-managed  implementations, but  compiles the  usual way  when there  is a
+user-specified upgrade, the software wasn't  built, or the implementation isn't
+system-managed.  Importantly,   there  must   not  be  an   insecure  writeable
+system-wide FASL cache. (i.e. reverting to per-user cache when any write access
+is required, or somehow talking to  a trusted daemon to compile trusted sources
+with trusted compilers). This workaround  through system management is somewhat
+ugly, though.
+
+Note  that these  issues  do not  affect  Common Lisp  developers  who run  the
+functionality provided  by these scripts  from the  Common Lisp REPL;  they can
+already do  that. It  only affect  users who run  the functionality  from these
+scripts  from  the   shell  command  line  or  some   other  external  non-Lisp
+programs. To a Common Lisp developer who needs such a use case, the solution to
+these issues  is now trivial  thanks to this  new cl-launch feature.  But these
+issues do make it hard for people  to publish scripts that will "just work" for
+end-users  — an  end-user being  someone who  shan't be  required to  manage an
+installation or configuration step. These  end-users will have to either suffer
+a  multi-second pause  at startup,  or be  burdened with  a poly-deca-mega-byte
+executable for  every script or  set of related scripts  they use. And  so, the
+temporary conclusion  is that while  Common Lisp is in  many ways far  ahead of
+competition with respect to being  a low-overhead "scripting language", it does
+at  the  moment  have an  issue  putting  it  at  a disadvantage  against  this
+competition in one crucial way with respect to deployment to end-users.
+
+_PS:_       Examples       available        in       my       github       repo
+https://github.com/fare/fare-scripts, with some common functionality in my repo
+https://github.com/fare/cl-scripting.
+
+#+texinfo:@heading Are you still scripting in Common Lisp?
+
+#+texinfo:@subheading Aug. 31st, 2016 12:43 am (UTC) 
+
+Yes.  Inasmuch as  I'm doing  any personal  scripting these  days, I  still use
+Common Lisp,  because it  beats all  the blub  languages hands  down, and  I am
+familiar with it. Maybe I'll learn  enough Racket and/or Haskell to replace it,
+but for now, it's still Common Lisp  for anything bigger than a one-liner (that
+I still do in zsh).
+
+Since I wrote that  article, I tested my scripting support  by driving the ASDF
+tests portably between Linux, MacOS  X and Windows (see Makefile-lisp-scripting
+in the  asdf repository)  without need for  cygwin, bash or  any such  thing on
+Windows. Meanwhile, Elias Pipping is  adding asynchronous subprocess support to
+UIOP, so one capability  currently missing from my scripts may  be added. To do
+things really well,  one may want to  use IOlib, etc., though,  but it requires
+linking in  C code which is  somewhat problematic, unless you  use Bazel, which
+allows for single-file  deployment with statically linked  C/C++ libraries, but
+currently only really works well on Linux.
+
+So, the situation for  scripting in Common Lisp is not  perfect (yet), but it's
+pretty good.
+
+*** fare cl-scripting
+
+- [[https://github.com/fare/cl-scripting][GitHub Source]]
+
+~cl-scripting~ is a collection of utilities for scripting in Common Lisp.
+
+Don't write shell scripts, write Common Lisp scripts instead! See my [[cl-scripting][article]].
+
+For examples on how I use these utilities, see [[*fare fare-scripts][fare-scripts]].
+
+#+texinfo:@heading Contents
+
+- ~cl-scripting.asd~:     the    .asd     file,     which    trivially     uses
+  package-inferred-system.
+
+- ~failure.lisp~: recording failure  of subtasks, so you can report  in the end
+  which things went wrong in a script.
+
+- ~commands.lisp~: running  and registering functions  that may be  called from
+  the shell command line.
+
+- ~cl-scripting.lisp~: one package to rule  them all. Importing and reexporting
+  functionality from the above fil
+
+*** fare fare-scripts
+
+- [[https://github.com/fare/fare-scripts][GitHub Source]]
+
+fare-scripts is a collection of small scripts  I use at home. These scripts are
+published as examples of  how to write scripts in Common  Lisp, but without the
+ambition of turning them into widely used programs as such.
+
+#+texinfo:@heading Contents
+
+- fare-scripts.asd: the .asd file, which trivially uses package-inferred-system.
+
+- make-multi.sh: a shell script to create  a multicall binary that contains all
+  the CL scripts I need in a  single image, to combine fast startup with memory
+  savings. See http://fare.livejournal.com/184127.html
+
+- bazel.lisp: trivial functions to work with bazel
+
+- commands.lisp: functions to manage commands in my PATH.
+
+- edgar.lisp: accessing the EDGAR database from the SEC.gov.
+
+- git.lisp: some utility for git.
+
+- gutenberg.lisp: downloading and processing text from Project Gutenberg.
+
+- languages.lisp: scripts to bootstrap various programming languages my way.
+
+- network.lisp: wrappers for network-manager
+
+- obsolete-shell-aliases.lisp: functions I don't use  any more, kept around for
+  archival purposes after conversion from shell to Lisp.
+
+- random.lisp: functions to randomly generate various passphrases, etc.
+
+- repl.lisp: various helpers for the Lisp REPL.
+
+- rescript.lisp: various silly script filters.
+
+- shell-aliases.lisp: various functions  that used to be shell  aliases and are
+  not better written in Lisp.
+
+- toggle-touchpad.lisp:  a utility  to toggle  the touchpad  on a  laptop using
+  X-Window.
+
+- typographie.lisp:  a filter  so my  html  file abides  by French  typographic
+  standards, using cl-ppcre for regexp replacement (NB: assumes UTF-8).
+
+- unmime.lisp:  filter  that's  semi-useful   when  processing  mime  files  as
+  e.g. decrypted from PGP encrypted mail.
+
+- vicode.lisp: deal with various vietnamese encodings
+
+- vicode-test.lisp: mini test-suite for vicode
+
+- viet-practice.lisp: memorization exercises for Vietnamese, courtesy of Robert
+  Strandh
+
+- xrandr.lisp:  wrappers  around  xrandr,   notably  for  dealing  with  screen
+  orientation.
+
+*** fare fare-puzzles
+
+- [[https://github.com/fare/fare-puzzles][GitHub Source]]
+
+This  is a  collection of  my solutions  to various  puzzles and  exercises, in
+Common Lisp.  Over the years, I've  come across these puzzles  and exercises or
+been  asked to  solve  them by  various friends,  family  members or  potential
+employers.  I made  a repository  for them,  to share  with friends  and family
+members, and to make it easier to reuse code infrastructure between exercises.
+
+#+texinfo:@heading Contents
+
+- algo/ has algorithmic problems.
+- data/ contains a corpus of data imported from other sites for use with some algorithms.
+- util/ is a library of general purpose utilities and algorithms.
+- euler/ has a couple of exercises from Project Euler.
+- codeeval/ has an exercise from CodeEval.
+- ita/ has recruiting problems from ITA Software.
+- misc/ has miscellaneous exercises from the Internet.
+- words/ has a few word-manipulation problems.
+- foobar/ solves a few exercises from Google Foobar.
+
+*** fare command-line-arguments
+
+``Trivial command-line argument parsing library for Common Lisp''
+
+- [[https://github.com/fare/command-line-arguments][GitHub Source]]
+
+Use it in conjunction with [[https://common-lisp.net/project/asdf/][asdf:program-op]] or [[http://cliki.net/cl-launch][cl-launch]] for portable processing
+of command-line arguments.
+
+*** Clon---the Command-Line Options Nuker
+
+``The Command-Line Options Nuker''
+
+- [[https://www.lrde.epita.fr/~didier/software/lisp/clon.php#.YavMHi-cbUI][Home]]
+- [[https://github.com/didierverna/clon][GitHub Source]]
+
+Clon is a  library for managing command-line options in  standalone Common Lisp
+applications. It  provides a  unified option  syntax with  both short  and long
+names, automatic completion of partial names and automatic retrieval/conversion
+of option  arguments from  the command-line, associated  environment variables,
+fallback or  default values. Clon comes  with a set of  extensible option types
+(switches, paths,  strings etc.). Clon  also provides automatic  generation and
+formatting  of help  strings, with  support for  highlighting on  tty's through
+ISO/IEC   6429  SGR.   This  formatting   is  customizable   through  "themes".
+Compatibility
+
+#+texinfo:@heading README
+
+Clon is a  library for command-line options management. It  is intended to ease
+the creation of standalone Common Lisp applications by providing a powerful and
+uniform command-line options interface. The most important features of Clon are
+the following.
+
+- From  the application  programmer's point  of view:  centralized command-line
+  options specification and management,  including automatic generation of help
+  strings, conversion  from command-line /  defaults / fallbacks  / environment
+  variables  to application-level  option  values, global  or on-demand  option
+  retrieval,  and  extensibility (the  programmer  can  define his  own  option
+  types).
+
+- From the application user's point of view: uniform command-line option syntax
+  across all Clon applications, customization of the help strings layout (with
+  optional ISO6429 coloring on terminals that support it), automatic completion
+  of abbreviated option names and short/long/pack syntax.
+
+*** guarded-commands
+
+``Better Scripts Through Copying Perl Libraries''
+
+- [[https://github.com/pinterface/guarded-commands][GitHub Source]]
+
+~guarded-commands~  is  a  Common  Lisp  port  of  my  favourite  Perl  module,
+[[http://search.cpan.org/~trey/Commands-Guarded/lib/Commands/Guarded.pm][Commands::Guarded]].  As  its inspiration  says, “Better scripts  through guarded
+commands.”.
+
+*** 500 Data Structures and Algorithms interview questions and their solutions
+
+- [[https://techiedelight.quora.com/500-Data-Structures-and-Algorithms-interview-questions-and-their-solutions][Home]]
+- [[https://techiedelight.quora.com/about][Techie Delight Home]] Leading platform for technical interview preparation.
+
+Nothing here  in Common Lisp.  Your  mission, if you  dare to accept it,  is to
+create some.
+
+*** Advent of Code
+
+- [[https://adventofcode.com][Home]]
+
+Advent of Code is an Advent calendar of small programming puzzles for a variety
+of skill sets and  skill levels that can be solved  in any programming language
+you like. People use them as a speed contest, interview prep, company training,
+university coursework, practice problems, or to challenge each other.
+** QITAB---a collection of free Lisp code
+
+- [[https://common-lisp.net/project/qitab/][Home]]
+
+QITAB is an  umbrella project collecting Lisp code originally  released as Free
+Software by ITA Software, Inc., or later by Google after it acquired ITA.
+
+Note  however that  ITA (and  now Google)  has been  regularly contributing  or
+funding  significant code  improvements to  free software  Lisp implementations
+(CMUCL,   SBCL  and   CCL),   as   well  as   to   software   such  as   SLIME,
+ASDF-DEPENDENCY-GROVEL, ASDF, etc.
 
 * Common Lisp the Language 2nd
 :PROPERTIES:
@@ -13400,6 +14120,7 @@ the object is of that type.
 * Emacs Lisp
 
 ** Emacs Lisp vs Common Lisp
+
 Learning Emacs Lisp is useful and similar (but different from CL
 - Dynamic scope is everywhere
 - There are no reader (or reader-related) functions
@@ -13410,11 +14131,13 @@ Learning Emacs Lisp is useful and similar (but different from CL
 
 
 Some good Emacs Lisp learning resources
+
 - [[https://www.gnu.org/software/emacs/manual/eintr.html][An Introduction to Programming in Emacs Lisp]]
 - [[http://www.oreilly.com/catalog/gnuext/][Writing Gnu Emacs Extensions]]
 - [[http://wikemacs.org/wiki/Category:Emacs_Lisp][Wikemacs]]
 
 ** Emacs Lisp Reference
+
 - An Introduction to Programming in Emacs Lisp ::
 
     https://www.gnu.org/software/emacs/manual/html_node/eintr/index.html
@@ -13439,10 +14162,76 @@ Some good Emacs Lisp learning resources
 
     https://www.emacswiki.org/emacs/CategoryCode
 
+*** Series---Emacs For Productivity
+
+- [[https://github.com/CachesToCaches][GitHub]]
+- [[http://cachestocaches.com/series/emacs-productivity/][Home]]
+
+I use Emacs a lot. Not only do I  do I use it as my development tool for nearly
+all my  programming work,  but I  also use it  as my  task management  tool, my
+calendar and my email  client. As I've added more and more  tips and guides for
+using Emacs, I thought I'd collect them in one place.
+
+- [[http://cachestocaches.com/2015/8/getting-started-use-package/][Getting Started with Use-Package]]
+- [[http://cachestocaches.com/2016/9/my-workflow-org-agenda/][My Workflow with Org-Agenda]]
+- [[http://cachestocaches.com/2016/12/vim-within-emacs-anecdotal-guide/][Vim Within Emacs: An Anecdotal Guide]]
+- [[http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/][A Complete Guide to Email in Emacs using Mu and Mu4e]]
+- [[http://cachestocaches.com/2018/6/org-literate-programming/][Literate Programming with Org-mode]]
+- [[http://cachestocaches.com/2020/3/org-mode-annotated-bibliography/][Managing my Annotated Bibliography with Emacs' Org Mode]]
+
+*** Emacs mini manual series
+
+- [[http://tuhdo.github.io/index.html][Home]]
+
+Many people asked how this manual can be  "mini", since it is pretty big for an
+online single page  article. Yes, if this  page is exported to PDF,  it is more
+than 40  pages. However,  this manual  is "mini"  relative to  the size  of the
+official Emacs manual, which is more than 600 pages. That's why.
+
+*** Pragmatic Emacs
+
+- [[http://pragmaticemacs.com][Home]]
+
+This   blog   started    out   as   a   weekly   emacs   tip    sent   to   the
+phys-emacs@sympa.bristol.ac.uk mailing list.  The tips are aimed  at people who
+have learned the basics of emacs  (i.e. moving around, opening, editing, saving
+files) and are starting to explore how to do more than basic editing.
+
+I am  an *astrophysicist*  at the University  of Bristol, and  *use emacs  on a
+daily basis* for writing papers, lectures,  and notes; for organising my tasks;
+for filing documents; creating  web pages and coding. I am  a pragmatic user of
+emacs and not an expert, but have been  using emacs for about 15 years, so have
+picked up a few tips and tricks along the way.
+
+*** Emacs Wiki
+
+- https://www.emacswiki.org/emacs/
+
+** Packages
+
+*** Use-Package
+
+``A use-package declaration for simplifying your .emacs''
+
+- [[https://github.com/jwiegley/use-package][GitHub Source]]
+
+The ~use-package~  macro allows  you to isolate  package configuration  in your
+.emacs  file in  a way  that is  both performance-oriented  and, well,  tidy. I
+created it because I have over 80 packages that I use in Emacs, and things were
+getting difficult to manage. Yet with this utility my total load time is around
+2 seconds, with no loss of functionality!
+
+*NOTE:* ~use-package~  is not  a package  manager! Although  ~use-package~ does
+have the useful capability to interface  with package managers (see below), its
+primary purpose is for the configuration and loading of packages.
+
 ** Lisp-Mode
+
 Emacs Lisp Mode is enabled for any files ending in =.el= or when
 editing the Emacs InitFile.
+
 *** Evaluating Expressions in Lisp-Mode
+
 - sexp :: any readable Lisp expression --- code enclosed in
   parentheses, a string enclosed in double quotes, a variable name, a
   quoted expression, a numeral, and so on.
@@ -13489,7 +14278,9 @@ editing the Emacs InitFile.
 - set-variable :: =M-x set-variable=
 
   Set user options.
+
 *** Inferior Emacs Lisp Mode
+
 - ielm :: =M-x ielm=
 
   Interactively evaluate Emacs Lisp expressions. This creates a buffer
@@ -13497,15 +14288,12 @@ editing the Emacs InitFile.
   evaluated and the result is printed into the buffer.
 
 *** Lisp Interaction Mode
+
 It is useful for evaluating EmacsLisp expressions. Typing ‘C-j’ after
 an expression will print the result on the next line.
 
-** Emacs Wiki
+** ILISP Mode
 
-- https://www.emacswiki.org/emacs/
-
-** Lisp Mode
-*** ILISP Mode
 A GNU Emacs Interface for Interacting with Lisp
 
 [[http://www.inf.ufsc.br/~aldo.vw/func/ilisp/ilisp.html][ILISP]] is an interface from GNU Emacs to an inferior LISP.
@@ -13519,7 +14307,9 @@ ILISP was a package designed  to integrate various Lisp implementations (mostly
 Common Lisp systems and various Scheme dialects) within Emacs (or XEmacs).
 
 ILISP development stopped in 2004. You should use SlimeMode instead.
+
 ** SLIME Mode
+
 http://www.common-lisp.net/project/slime/images2/slime-small.png
 
  - https://common-lisp.net/project/slime/
@@ -13800,6 +14590,7 @@ others:
    integration is available using the ~inferior-slime-mode~.
  - Many people  load the  better integrated =SLIME  REPL= ~contrib~  module (see
    REPL) and ignore the =*inferior-lisp*= buffer.
+
 *** SLIME Colors for Testing using Prove
 
 SLIME doesn't support to color with ANSI colors in the REPL buffer officially.
@@ -13822,7 +14613,140 @@ defmethod asdf:perform :after ((op asdf:load-op) (c (eql (asdf:find-system :prov
   (setf (symbol-value (intern (string :*enable-colors*) :prove)) t))
 #+end_src
 
+** Org-Mode
+
+*** Org-Mode Tutorials
+
+- [[http://pragmaticemacs.com/org-mode-tutorials/][Home]]
+
+*** Org-Ref
+
+``org-mode modules for citations,  cross-references, bibliographies in org-mode
+and useful bibtex tools to go with it.''
+
+- [[https://github.com/jkitchin/org-ref][GitHub]]
+- [[https://github.com/jkitchin/org-ref/blob/master/org-ref.org][Manual]]
+
+~org-ref~  makes it  easy to  insert citations,  cross-references, indexes  and
+glossaries as hyper-functional links into org files. The links are fontified so
+you can tell them apart from other  links, and each link is clickable to access
+functions like opening a pdf, notes or  url associated with the link. Each link
+also can be  exported to LaTeX to  build a PDF. For citations,  export to other
+formats is  supported by citeproc  for high  quality export to  HTML, markdown,
+plain text, or  stand-alone (i.e.  independent of a bibtex  file) LaTeX.  For a
+full explanation of the features in org-ref see ./org-ref.org.
+
+*** -Org-Roam
+
+- [[https://oremacs.com][Home]]
+
+** Magit
+
+``It's Magit! A Git porcelain inside Emacs.''
+
+- [[https://github.com/magit/magit][GitHub]]
+- [[https://magit.vc][Home]]
+- [[https://www.emacswiki.org/emacs/Magit][Magit Wiki]]
+- [[https://github.com/jkitchin/magit-tutorial][jkitchin magit-tutorial]]
+
+Magit is  an interface  to the  version control system  Git, implemented  as an
+Emacs package.  Magit aspires to be  a complete Git porcelain.  While we cannot
+(yet) claim that Magit  wraps and improves upon each and  every Git command, it
+is complete enough to allow even experienced Git users to perform almost all of
+their daily version  control tasks directly from within Emacs.  While many fine
+Git clients exist, only Magit and Git itself deserve to be called porcelains.
+
+** mu
+
+``maildir indexer/searcher + emacs mail client + guile bindings''
+
+- [[https://github.com/djcb/mu][GitHub]]
+- [[https://www.djcbsoftware.nl/code/mu/][Home]]
+
+~mu~ is a  tool for dealing with e-mail messages  stored in the Maildir-format.
+~mu~ ’s purpose in  life is to help you to quickly find  the messages you need;
+in addition,  it allows you to  view messages, extract attachments,  create new
+maildirs, and so on.   See the [[https://github.com/djcb/mu/blob/master/www/cheatsheet.md][mu cheatsheet]] for some  examples.  ~mu~ is fully
+documented.
+
+Built on top of mu are some extensions (included in this package):
+
+- mu4e :: a full-featured e-mail client that runs inside emacs
+- mu-guile :: bindings  for the Guile/Scheme programming  language (version 2.2
+  and later)
+
+*** mu4e
+
+- [[https://github.com/emacsmirror/mu4e][GitHub Source]]
+- [[https://www.djcbsoftware.nl/code/mu/mu4e.html][Home]]
+- [[https://www.emacswiki.org/emacs/mu4e][Wiki]]
+- [[http://pragmaticemacs.com/mu4e-tutorials/][Tutorials]]
+
+Starting with version  0.9.8, ~mu~ provides an emacs-based  e-mail client which
+uses ~mu~ as its back-end: ~mu4e~.
+
+Through ~mu~, ~mu4e~  sits on top of  your Maildir (which you  update with e.g.
+~offlineimap~,  ~mbsync~  or  ~fetchmail~).    ~mu4e~  is  designed  to  enable
+super-efficient  handling  of  e-mail; searching,  reading,  replying,  moving,
+deleting. The overall ‘feel’ is a bit of a mix of dired and Wanderlust.
+
+*** A Complete Guide to Email in Emacs using Mu and Mu4e
+
+- [[http://cachestocaches.com/2017/3/complete-guide-email-emacs-using-mu-and-/][Home]]
+
+** pdf-tools
+
+``Emacs support library for PDF files.''
+
+- [[https://github.com/politza/pdf-tools][GitHub Source]]
+- [[http://pragmaticemacs.com/emacs/view-and-annotate-pdfs-in-emacs-with-pdf-tools/][Article]], [[http://pragmaticemacs.com/emacs/more-pdf-tools-tweaks/][More]], [[http://pragmaticemacs.com/emacs/even-more-pdf-tools-tweaks/][Even More]]
+
+PDF Tools is, among  other things, a replacement of DocView  for PDF files. The
+key  difference is  that pages  are not  pre-rendered by  e.g. ghostscript  and
+stored in the file-system, but rather created on-demand and stored in memory.
+
+This rendering  is performed by a  special library named, for  whatever reason,
+poppler, running inside  a server program. This program is  called epdfinfo and
+its job  is to  successively read  requests from Emacs  and produce  the proper
+results, i.e. the PNG image of a PDF page.
+
+Actually, displaying PDF files is just one part of PDF Tools. Since poppler can
+provide us with all  kinds of information about a document and  is also able to
+modify it, there is a lot more we can do with it.
+
+#+texinfo:@heading Features
+
+- View
+  - View PDF documents in a buffer with DocView-like bindings.
+- Isearch
+  - Interactively  search PDF  documents like  any other  buffer, either  for a
+    string or a PCRE.
+- Occur
+  - List lines matching a string or regexp in one or more PDF documents.
+- Follow
+  - Click on highlighted  links, moving to some part of  a different page, some
+    external file, a  website or any other  URI. Links may also  be followed by
+    keyboard commands.
+- Annotations
+  - Display and list  text and markup annotations (like  underline), edit their
+    contents  and attributes  (e.g. color),  move them  around, delete  them or
+    create new ones and then save the modifications back to the PDF file.
+- Attachments
+  - Save files attached to the PDF-file or list them in a dired buffer.
+- Outline
+  - Use imenu or a special buffer to examine and navigate the PDF’s outline.
+- SyncTeX
+  - Jump from a position on a page directly to the TeX source and vice versa.
+- Virtual
+  - Use a collection of documents as if it were one, big single PDF.
+- Misc
+  - Display PDF’s metadata.
+  - Mark a region and kill the text from the PDF.
+  - Keep track of visited pages via a history.
+  - Apply a color filter for reading in low light conditions.
+
 ** emacs24-starter-kit
+
 ``A cleaner version of the literate starter kit based on Emacs24''
 
 - [[https://github.com/eschulte/emacs24-starter-kit][GitHub Source]]
@@ -13841,7 +14765,15 @@ The main advantages of this Emacs Starter Kit are
 - git provides for version control, backup, and sharing
 - easy installation with no need to compile external packages
 
+** bbatsov prelude
+
+``Prelude  is  an  enhanced  Emacs  25.1+  distribution  that  should  make  your
+experience with Emacs both more pleasant and more powerful.''
+
+- [[https://github.com/bbatsov/prelude][GitHub Source]]
+
 ** org-ehtml
+
 ``Export Org-mode files as editable web pages''
 
 - [[https://github.com/eschulte/org-ehtml][GitHub Source]]
@@ -13852,11 +14784,13 @@ exported with  a special ox-ehtml  backend which extends the  standard Org-mode
 HTML export.
 
 ** Redshank
+
 "Common Lisp Editing Extensions (for Emacs)"
 
 - [[https://github.com/michaelw/redshank/][Redshank on GitHub]]
 
 ** GNU Emacs Common Lisp Emulation
+
 This file documents the GNU Emacs Common Lisp emulation package.
 
 - [[https://www.gnu.org/software/emacs/manual/html_node/cl/index.html#Top][cl-lib Manual]]
@@ -13966,6 +14900,7 @@ construct.
 **** Argument Lists
 
 ** emacs-request
+
 ``Easy HTTP request for Emacs Lisp''
 
 - [[https://github.com/tkf/emacs-request][GitHub Source]]
@@ -14017,6 +14952,7 @@ construct.
 #+end_src
 
 ** eglot
+
 ``A client for Language Server Protocol servers''[fn:19]
 
 - [[https://github.com/joaotavora/eglot][GitHub Source]]
@@ -14024,6 +14960,7 @@ construct.
 Emacs Polyglot: an Emacs LSP client that stays out of your way:
 
 ** yasnippet
+
 ``A template system for Emacs''
 
 - [[https://github.com/joaotavora/yasnippet][GitHub Source]]
@@ -14035,6 +14972,7 @@ more.  The snippet  syntax is  inspired from  TextMate's syntax,  you can  even
 import most TextMate templates to YASnippet. Watch [[http://www.youtube.com/watch?v=ZCGmZK4V7Sg][a demo on YouTube]].
 
 ** pcre2el
+
 ``convert between PCRE, Emacs and rx regexp syntax''
 
 - [[https://github.com/joddie/pcre2el][GitHub Source]]
@@ -14054,6 +14992,7 @@ Emacs equivalent, it can do the following:
   other modes on the TODO list)
 
 ** emacs-edbi
+
 ``Database Interface for Emacs Lisp''
 
 - [[https://github.com/kiwanami/emacs-edbi][GitHub Source]]
@@ -14062,6 +15001,7 @@ This  program connects  the database  server through  Perl's DBI,  and provides
 DB-accessing API and the simple management UI.
 
 ** emacs-deferred
+
 ``Simple asynchronous functions for emacs lisp''
 
 - [[https://github.com/kiwanami/emacs-deferred][GitHub Source]]
@@ -14100,6 +15040,7 @@ DB-accessing API and the simple management UI.
   error is caught by the errorback function defined by ~deferred:error~.
 
 ** concurrent
+
 ``Concurrent utility functions for emacs lisp''
 
 - [[https://raw.githubusercontent.com/kiwanami/emacs-deferred/master/concurrent.el][Source]]
@@ -14113,6 +15054,7 @@ models.  It  has  following  facilities:  pseud-thread,  generator,  semaphore,
 dataflow variables and event management.
 
 ** emacs-calfw
+
 ``A calendar framework for Emacs''
 
 - [[https://github.com/kiwanami/emacs-calfw][GitHub Source]]
@@ -14126,11 +15068,13 @@ This program displays a calendar view in the Emacs buffer.
  - [[https://github.com/rejeep/evm][GitHub Source]]
 
 ** emacs-github
+
 ``github utilities for emacs interface''
 
 - [[https://github.com/kiwanami/emacs-github][GitHub Source]]
 
 ** emacs-anything-books
+
 ``Opening your PDF books by the anything interface''
 
 - [[https://github.com/kiwanami/emacs-anything-books][GitHub Source]]
@@ -14143,6 +15087,7 @@ Anything interface with a preview image. You can select a PDF more efficiently.
 - https://www.emacswiki.org/emacs/download/anything.el
 
 ** ecukes
+
 ``Cucumber for Emacs''
 
 - [[https://github.com/ecukes/ecukes][GitHub Source]]
@@ -14160,6 +15105,7 @@ If you don't know anything about Cucumber I  suggest you read up a bit about it
 before continuing with Ecukes.
 
 ** cask
+
 ``Project management tool for Emacs''
 
 - [[https://github.com/cask][Emacs Cask]]
@@ -14198,6 +15144,7 @@ Cask. Those are the projects that:
 So all in all, projects that are not worth using.
 
 ** strptime
+
 ``An Emacs dynamic module for strptime(3)''
 
 - [[https://github.com/xuchunyang/strptime.el][GitHub Source]]
@@ -14218,6 +15165,7 @@ have a wrapper of it, hence this module.
 #+end_src
 
 ** osx-dictionary.el
+
 ``Mac OS X Dictionary.app interface for Emacs''
 
 - [[https://github.com/xuchunyang/osx-dictionary.el][GitHub Source]]
@@ -14225,11 +15173,13 @@ have a wrapper of it, hence this module.
 ~osx-dictionary~ provides functions which invoke Dictionary.app from Mac OS X.
 
 ** curl-to-elisp
+
 ``Convert cURL command to Emacs Lisp code''
 
 - [[https://github.com/xuchunyang/curl-to-elisp][GitHub Source]]
 
 ** emacs-web-server
+
 ``web server running Emacs Lisp handlers.''
 
 - [[https://github.com/eschulte/emacs-web-server][GitHub Source]]
@@ -14241,6 +15191,26 @@ performant,  faster than  Elnode  [1].   This is  a  new  project without  much
 extended use  so there are likely  bugs and potentially security  issues.  That
 said it  consists of little  more than HTTP  header parsing logic  perched atop
 Emacs' existing network process primitives, so it should be fairly robust.
+
+** Emacs Config Files
+
+- [[https://github.com/bbatsov/emacs.d][bbatsov emacs.d]]
+- [[https://github.com/azzamsa/emacs.d][azzamsa emacs.d]]
+- [[https://github.com/abo-abo/oremacs][abo-abo oremacs]]
+- [[https://github.com/jkitchin/scimax][jkitchin scimax]]
+- [[https://github.com/rememberYou/.emacs.d][rememberYou .emacs.d]]
+- [[https://github.com/sachac/.emacs.d][sachac .emacs.d]]
+  - [[https://sachachua.com/dotemacs/][configuration]]
+- [[https://github.com/gjstein/emacs.d][gjstein emacs.d]]
+- [[https://github.com/jwiegley/dot-emacs][jwiegley dot-emacs]]
+- [[https://github.com/purcell/emacs.d][purcell emacs.d]]
+
+** Emacs Scripts
+
+- [[https://azzamsa.com/n/scripts-el/][Useful Emacs Lisp Scripts]]
+- [[https://github.com/marcinkoziej/org-pomodoro][marcinkoziej org-pomodoro]]
+- [[https://github.com/baudtack/pomodoro.el][baudtack pomodoro.el]]
+- [[https://github.com/org-roam/org-roam][org-roam]]
 
 * Scheme
 
@@ -16740,6 +17710,7 @@ development anymore.
 * Lisp Community
 
 ** Emacs Community
+
 - [[https://github.com/emacs-tw][GitHub Source]]
 - [[https://github.com/emacs-tw/awesome-emacs][Awesome Emacs]]  Welcome to Awesome  Emacs, a  community driven list  of useful
   Emacs packages, utilities and libraries.
@@ -16749,6 +17720,7 @@ development anymore.
 - [[https://github.com/franzinc][GitHub Source]]
 
 ** Edmund Weitz
+
 - [[http://weitz.de][Home Page]]
 - [[https://github.com/nhabedi][GitHub Page]]
 - [[https://edicl.github.io][Common Lisp Libraries by Edi Weitz]]
@@ -16757,38 +17729,115 @@ development anymore.
   - [[https://edicl.github.io/cl-ppcre/][CL-PPCRE - Portable Perl-compatible regular expressions for Common Lisp]]
     - [[https://github.com/edicl/cl-ppcre/][GitHub Source]]
 
+** Eitaro Fukamachi
+
+- [[https://github.com/fukamachi][GitHub]]
+- [[https://fukamachi.hashnode.dev][Home Page]]
+
+** John Wiegley
+
+- [[https://github.com/jwiegley][GitHub]]
+
+** Mariano Montone
+
+- [[https://github.com/mmontone][GitHub]]
+- [[https://mmontone.github.io/favourite][Favorate Programming Languages---Smalltalk and Lisp]]
+- [[https://common-lisp.net][Common-Lisp.net]]
+- [[https://github.com/mmontone/djula][djula]] Common Lisp port of the Django templating language
+  - [[http://mmontone.github.io/djula/djula/][Djula HTML templating system]]
+- [[https://github.com/mmontone/erudite][erudite]] Literate Programming System for Common Lisp
+  - [[http://mmontone.github.io/erudite/][github.io]]
+
+Several other libraries for Common Lisp:
+- a [[https://github.com/mmontone/easy-routes][web router]],
+- a [[https://github.com/mmontone/cl-forms][web forms handler]],
+- a [[https://github.com/mmontone/rest-server][library for implementing REST web APIs]],
+- a [[https://github.com/mmontone/clavier][generic validation library]].
+
+#+texinfo:@heading Open Source projects and libraries
+
+[[https://mmontone.github.io/software][List of projects and libraries]]
+
+** François-René Rideau
+
+- [[https://github.com/fare][GitHub]]
+- [[http://fare.tunes.org][Home]]
+
+** Didier Verna
+
+- [[https://github.com/didierverna][GitHub]]
+- [[https://www.lrde.epita.fr/~didier/#.YavM_i-cbUI][Home]]
+
 ** Stas Boukarev
 
 - [[https://github.com/stassats][GitHub]]
 - [[https://github.com/stassats/emacs-config][Emacs-Config]]
 
 ** Steve Purcell
+
 - [[https://github.com/purcell][GitHub]]
 - https://www.sanityinc.com
 - [[https://github.com/purcell/emacs.d][A reasonable Emacs config]]
 - [[https://github.com/purcell/nix-emacs-ci][Emacs installations for continuous integration]]
 - [[https://github.com/purcell/setup-emacs][A Github Action that installs a specific emacs version]]
 
+** Sacha Chua
+
+- [[https://github.com/sachac][GitHub]]
+- [[https://sachachua.com/blog/][Home]]
+
+** Xah Lee
+
+- [[https://github.com/xahlee][GitHub]]
+- [[http://xahlee.info/index.html][Xah Code]]
+- [[http://xahlee.info/emacs/index.html][Xah Emacs Site]]
+- [[https://github.com/xahlee/xah-fly-keys][xahlee xah-fly-keys]]
+
+** Zach Beane
+
+- [[https://github.com/xach][GitHub]]
+
 ** Eric Schulte
+
 - [[https://github.com/eschulte][GitHub]]
 
 ** Stelian Ionescu
+
 - [[https://github.com/sionescu][GitHub]]
 - [[https://blog.cddr.org][the fe[nl]ix blog]][fn:21]
 
 ** João Távora
+
 - [[https://github.com/joaotavora][GitHub]]
 
 ** Masashi Sakurai
+
 - [[https://github.com/kiwanami][GitHub]]
 
+** Shinichi Tanaka
+
+- [[https://github.com/t-sin][GitHub]]
+
+*** Asha
+
+``Asha - a static site generating system''
+
+- [[https://github.com/t-sin/asha][GitHub Source]]
+
+One purpose of  asha is to show how to  construct domain-specific language with
+Common Lisp,  or to show  how to  write a system  with Common Lisp.  Another is
+simply I use this.
+
 ** Matus Goljer
+
 - [[https://github.com/Fuco1][GitHub]]
 
 ** Yann Hodique
+
 - [[https://github.com/sigma][GitHub]]
 
 ** Xu Chunyang
+
 - [[https://github.com/xuchunyang][GitHub]]
 - [[https://github.com/xuchunyang/epkg][epkg]] A basic website to browse Emacs packages
 - [[https://github.com/xuchunyang/elisp-docstring-server.el][elisp-docstring-server.el]] An HTTP server for Emacs Lisp Docstring
@@ -16796,10 +17845,32 @@ development anymore.
 - [[https://github.com/xuchunyang/emacs.d][emacs.d]]
 
 ** François-René Rideau
+
 - [[https://github.com/fare][GitHub]]
 
 ** SANO Masatoshi
+
 - [[https://github.com/snmsts][GitHub]]
+
+** Bozhidar Batsov
+
+- [[https://github.com/bbatsov][GitHub]]
+- [[https://batsov.com][Home]]
+
+** Oleh Krehel
+
+- [[https://github.com/abo-abo][GitHub]]
+- [[https://oremacs.com][Home]]
+
+** John Kitchin
+
+- [[https://github.com/jkitchin][GitHub]]
+- [[https://kitchingroup.cheme.cmu.edu/about.html][Home]]
+
+** Terencio Agozzino
+
+- [[https://github.com/rememberYou][GitHub]]
+- [[https://github.com/rememberYou/wallpapers][rememberYou wallpapers]]
 
 * Build Tools
 :PROPERTIES:
