@@ -12,20 +12,10 @@
 # The absolute path to this Template file
 TEMPLATE := $(SYNC_ORG_TEMPLATE)
 
-
-### TOOLS & RESOURCES
-# tools is a directory holding tangled scripts, such as cmprpl
-# resources is a directory holding static resources for the project
-# images is a directory holding jpg and png image files
-TOOLS	:= tools
-CMPRPL	:= $(TOOLS)/cmprpl
-RESOURCES := resources
-IMAGES  := $(RESOURCES)/images
-
 # Use emacsclient as $EDITOR; make sure it is set in a shell startup file and
 # the server has been started.
-EMACS	  := $(EMACS)
-EDITOR	  := $(EDITOR)
+EMACS		:= $(EMACS)
+EDITOR	:= $(EDITOR)
 
 # User’s personal GitHub token for authentication to GitHub
 # DO NOT HARD-CODE THIS VALUE
@@ -39,13 +29,22 @@ GITHUB_TOKEN := $(GITHUB_TOKEN)
 # credentials into ~/.aws/credentials.
 AWS := aws
 S3  := $(AWS) s3
-
-# The AWS region of choice; this can also be in .aws/config
-REGION := --region us-west-2
+CFD := $(AWS) cloudfront
 
 ### END OF USER-DEPENDENT VARIABLES
 ###############################################################################
 ### MAKE-GENERATED VARIABLES
+
+### TOOLS & RESOURCES
+# resources is a directory holding static resources for the project;
+# resources is created as a subdirectory of every new project.
+# resource/tools is a directory holding tangled scripts, such as cmprpl
+# resources/images is a directory holding jpg and png image files
+RESOURCES	:= resources
+TOOLS	:= $(RESOURCES)/tools
+IMAGES	:= $(RESOURCES)/images
+SOURCE	:= $(RESOURCES)/source
+CMPRPL	:= $(TOOLS)/cmprpl
 
 ### PROJ AND ORG
 # ORG is the name of this Org file with extension .org
@@ -79,6 +78,23 @@ BUCKET       := $(shell $(EDITOR) --eval \
 		    (re-search-forward "^\#[+]bucket:\\(.*\\)$$" nil t) \
 		    (match-string-no-properties 1)))')
 S3_BUCKET    := s3://$(BUCKET)
+
+# Buckets set up to serve static web sites from S3 can use either http
+# or https protocols; some  http protocols will automatically redirect
+# to https;  however, some only use  http. I would like  to accomodate
+# both, and  so this code  finds the url's  that are in  my Cloudfront
+# account, which presumably will serve https.  If the url is not here,
+# then this must be set up to serve http instead.
+HTTP_S := $(shell $(CFD) list-distributions | perl -MJSON::PP -e \
+	'$$/=""; \
+	 my @urls = (); \
+	 my $$json=JSON::PP->new->decode(<STDIN>); \
+	 for my $$item ( @{$$json->{"DistributionList"}{"Items"}} ) { \
+		push @urls, @{$$item->{"Aliases"}{"Items"}}; \
+	 } \
+	my $$found = grep { /'$(BUCKET)'/ } @urls; \
+	print "http", ($$found ? "s" : "");')
+
 HTTPS_BUCKET := https://$(BUCKET)
 
 ### DIR, SRC
@@ -191,7 +207,7 @@ endif
 # code should work with any version of 'perl' without having to
 # install any modules.
 
-USER := $(shell \
+USER	:= $(shell \
 	  curl -sH "Authorization: token $(GITHUB_TOKEN)" https://api.github.com/user \
 	  | \
 	  perl -MJSON::PP -e \
@@ -199,28 +215,30 @@ USER := $(shell \
 	       my $$json = JSON::PP->new->loose->allow_barekey->decode(<STDIN>); \
 	       print $$json->{login};' \
 	  )
-SAVE	:= resources
+SAVE		:= resources
 
 ### TEXINFO
-TEXI	:= $(PROJ).texi
-INFO	:= $(DIR).info
-INFOTN	:= $(shell $(EDITOR) --eval "(file-truename \"$(INFO)\")")
-PDF	:= $(PROJ).pdf
-INDEX	:= index.html
-HTML	:= $(DIR)/$(INDEX)
-DIR_OLD	:= $(DIR)-old
+TEXI		:= $(PROJ).texi
+INFO		:= $(DIR).info
+INFOTN		:= $(shell $(EDITOR) --eval "(file-truename \"$(INFO)\")")
+PDF		:= $(PROJ).pdf
+INDEX		:= index.html
+HTML		:= $(DIR)/$(INDEX)
+DIR_OLD		:= $(DIR)-old
 
 ### AWS S3
-DST_OLD	:= $(S3_BUCKET)/$(S3PROJ)
-DST_NEW	:= $(S3_BUCKET)/$(DIR)-$(VERS)
-EXCL_INCL   := --exclude "*" --include "*.html"
-INCL_IMAGES := --exclude "*" --include "*.jpg" --include "*.png"
-GRANTS	:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
-S3SYNC	:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(REGION) $(GRANTS)
-S3MOVE	:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(REGION) $(GRANTS)
-S3COPY	:= $(S3) cp $(INDEX) $(S3_BUCKET) $(REGION) $(GRANTS)
-S3REMOVE:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
-S3IMAGESYNC := $(S3) sync $(INCL_IMAGES) $(IMAGES) $(S3_BUCKET)/$(IMAGES) $(REGIONS) $(GRANTS)
+DST_OLD		:= $(S3_BUCKET)/$(S3PROJ)
+DST_NEW		:= $(S3_BUCKET)/$(DIR)-$(VERS)
+EXCL_INCL		:= --exclude "*" --include "*.html"
+INCL_IMAGES	:= --exclude "*" --include "*.jpg" --include "*.png"
+INCL_SOURCE	:= --exclude "*" --include "*.html"
+GRANTS		:= --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers
+S3SYNC		:= $(S3) sync --delete $(EXCL_INCL) $(SRC) $(DST_OLD) $(GRANTS)
+S3MOVE		:= $(S3) mv --recursive $(DST_OLD) $(DST_NEW) $(GRANTS)
+S3COPY		:= $(S3) cp $(INDEX) $(S3_BUCKET) $(GRANTS)
+S3REMOVE		:= $(S3) rm $(S3_BUCKET)/$(S3PROJ) --recursive
+S3IMAGESYNC	:= $(S3) sync $(INCL_IMAGES) $(IMAGES) $(S3_BUCKET)/$(IMAGES) $(GRANTS)
+S3SOURCESYNC      := $(S3) sync $(INCL_SOURCE) $(SOURCE) $(S3_BUCKET)/$(SOURCE) $(GRANTS)
 
 ###############################################################################
 
@@ -247,6 +265,7 @@ values: check
 	  @echo BUCKET:	$(BUCKET)
 	  @echo PROJ:		$(PROJ) $S
 	  @echo S3_BUCKET:	$(S3_BUCKET)
+	  @echo HTTP_S:	$(HTTP_S)
 	  @echo HTTPS_BUCKET:	$(HTTPS_BUCKET)
 	  @echo VERS:		$(VERS)
 	  @echo S3PROJ:	$(S3PROJ)
@@ -278,10 +297,6 @@ check:
 		printf "$${CYAN}Texinfo backend: $${GREEN}INSTALLED.$${CLEAR}\n" || \
 		{ printf "$${YELLOW}Texinfo backend:$${CLEAR} $${RED}NOT INSTALLED; it must be installed.$${CLEAR}\n"; exit 1; }
 
-	  @[[ $(shell $(EDITOR) --eval '(processp (slime-current-connection))') == "nil" ]] && \
-		{ printf "$${YELLOW}SWANK: $${RED}NOT CONNECTED$${CLEAR}\n"; exit 1; } || \
-		printf "$${CYAN}SWANK: $${GREEN}IS CONNECTED using %s\n$${CLEAR}" $(shell $(EDITOR) --eval '(slime-connection-name)');
-
 	  @[[ $(shell $(EDITOR) --eval '(symbol-value org-confirm-babel-evaluate)') == "t" ]] && \
 		{ printf "$${YELLOW}org-confirm-babel-evaluate:$${CLEAR} $${RED}T; set to NIL.$${CLEAR}\n"; exit 1; } || \
 		printf "$${CYAN}org-confirm-babel-evaluate: $${GREEN}OFF.$${CLEAR}\n\n"
@@ -292,26 +307,13 @@ $(ORG):
 	  @echo 'THERE IS NO $(ORG) FILE!!!'
 	  exit 1
 
-# Creating a texi file in this program runs Common Lisp code; therefore, SLIME must be started and
-# be connected to a running Common Lisp process, such as ccl or sbcl.
-# `slime-current-connection' returns a process if SWANK has been started, no nil otherwise.
-# This code starts SLIME if it is not currently running, then polls for the process until it is ready.
-# Starting SLIME opens a window on the buffer `*slime-repl <implementation>*', which should be closed
-# TODO: allow for code to select an implementation to run, or else use the default.
 texi: $(TEXI)
 $(TEXI): $(ORG)
 	 @echo Making TEXI...
 	 @$(EDITOR) -u --eval \
-		"(progn \
-		      (unless (processp (slime-current-connection)) \
-			      (require (quote cl-lib)) \
-			      (cl-loop initially (slime (quote ccl)) \
-				 do (sleep-for 1) \
-				 until (process-status (get-process \"SLIME Lisp\")) \
-				 finally (delete-windows-on \"*slime-repl ccl*\"))) \
-		      (with-current-buffer (find-file-noselect \"$(ORG)\" t) \
-			      (save-excursion \
-			      (org-texinfo-export-to-texinfo))))"
+		"(with-current-buffer (find-file-noselect \"$(ORG)\" t) \
+			(save-excursion \
+			(org-texinfo-export-to-texinfo)))"
 	 @echo Done making TEXI.
 open-texi: texi
 	 @$(EDITOR) -n $(TEXI)
@@ -356,10 +358,15 @@ $(PDF): $(TEXI)
 open-pdf:pdf
 	 @open $(PDF)
 
+tangle: $(ORG)
+	    @$(EDITOR) -u --eval "(org-babel-tangle)"
+	    @echo Done tangling
+
 sync:   $(HTML)
 	@echo Syncing version $(VERS) onto $(S3VERS)...
 	$(S3SYNC)
 	$(S3IMAGESYNC)
+	$(S3SOURCESYNC)
 	@echo Done syncing.
 	[[ $(VERS) != $(S3VERS) ]] && { echo Moving...; $(S3MOVE); echo Done moving.;  make homepage; } || :
 	[[ $(PROJINS3) = "NO" ]] && make homepage || :
@@ -506,6 +513,12 @@ boot:
 			(goto-char (point-min)) \
 			(re-search-forward \"^#[+]name:preprocess.el$$\") \
 			(org-babel-tangle (quote (4))) \
-                        (save-buffer) \
-			(kill-buffer))"
-	./tools/preprocess.el
+			(save-buffer) \
+			(kill-buffer))" \
+	--eval \
+		"(let ((rsrcdir \"resources\") \
+		       (subdirs (list \"tools\" \"images\" \"source\"))) \
+		   (mkdir rsrcdir t) \
+		   (dolist (subdir subdirs) (mkdir (concat rsrcdir \"/\" subdir) t)))"
+	./resources/tools/preprocess.el
+	git add . && git commit -m "After running boot-template Makefile" && git push origin master
