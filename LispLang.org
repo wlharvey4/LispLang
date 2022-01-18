@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2022-01-18 01:09
-#+macro:version Version 0.0.140
+#+date:2022-01-18 07:22
+#+macro:version Version 0.0.141
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -15060,7 +15060,12 @@ dataflow variables and event management.
 
 This program displays a calendar view in the Emacs buffer.
 
+#+texinfo:@ifnothtml
+[[./resources/images/calfw-image.png]]
+#+texinfo:@end ifnothtml
+#+texinfo:@ifhtml
 [[../resources/images/calfw-image.png]]
+#+texinfo:@end ifhtml
 
 ** evm---Emacs Version Manager
 
