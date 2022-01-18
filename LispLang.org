@@ -3,8 +3,8 @@
 #+title:The Universe Known as LISP
 #+subtitle:{{{version}}} {{{date}}}
 #+author:LOLH
-#+date:2022-01-17 09:19
-#+macro:version Version 0.0.139
+#+date:2022-01-18 01:09
+#+macro:version Version 0.0.140
 #+macro:upload-date (eval (current-time-string))
 #+bucket:pinecone-forest.com
 
@@ -18756,12 +18756,13 @@ downloaded with this  file that could be  invoked to do the  same thing without
 starting Emacs and Org-mode and keying in the ~org-babel-tangle~ command.  This
 little Makefile should be stored on  GitHub along with the ~Template.org~ file.
 When  the source  is extracted  to a  directory, then  running this  Makefile's
-default rule  as simply ~make~  will extract the ~preprocess.el~  script, which
-updates  =DEV= and  then  extracts the  full Makefile.   Because  this file  is
-tangled along with the full Makefile, it simply gets tacked onto the end of the
-big Makefile  as an additional rule.   After 'preprocess.el' runs, and  the new
-Makefile  is  extracted,  the  script  runs 'git'  to  update  the  repository,
-including pushing the changes to Github.
+default rule  as simply  ~make~ will create  the resource  directories 'tools',
+'images', and 'source', and then preprocesses =Dev=, and then extracts the full
+Makefile.  Because this file is tangled along with the full Makefile, it simply
+gets tacked  onto the  end of the  big Makefile as  an additional  rule.
+
+The Makefile can also run 'git' to update the repository, including pushing the
+changes to Github.  Running `make all' does both.
 
 Now, running ~make~ runs  the default rule from the main  Makefile, which is to
 extract everything, then export to TEXI, INFO, HTML, and PDF forms.
@@ -18772,56 +18773,29 @@ variable is set to use ~emacsclient~.
 #+name:boot-template
 #+header: :tangle Makefile
 #+begin_src makefile
-    boot:
-	    @emacsclient --socket-name=termserver --suppress-output \
-	      --eval \
-		    "(with-current-buffer (car (find-file-noselect \"./*.org\" nil nil t)) \
-			    (goto-char (point-min)) \
-			    (re-search-forward \"^#[+]name:preprocess.el$$\") \
-			    (org-babel-tangle (quote (4))) \
-			    (save-buffer))" \
-	      --eval \
-		    "(let ((rsrcdir \"resources\") \
-			   (subdirs (list \"tools\" \"images\" \"source\"))) \
-		       (mkdir rsrcdir t) \
-		       (dolist (subdir subdirs) (mkdir (concat rsrcdir \"/\" subdir) t)))"
-	    @./resources/tools/preprocess.el
-    git:
-	    git add . && git commit -m "After running boot-template Makefile" && git push origin master
-    all: boot git
-#+end_src
-
-** Preprocess Env Vars
-The environment variable DEV can be  in different locations and will be spelled
-differently based  on how the  local machine is set  up.  For instance,  on one
-system,  it will  be at  ~$HOME/Dev~  while in  another  system it  will be  at
-~/usr/local/dev~.  However, the =:tangle= keyword  does not expand variables in
-the form ~${DEV}~,  but rather requires absolute  paths, like ~/usr/local/dev~.
-Therefore, this program works like a preprocessor for environment variables set
-up  as part  of  =:tangle= lines,  changing them  to  their system  environment
-variable values prior to tangling.  It lives in the ~resources/tools~
-directory.
-
-- *NOTE:  [2021-09-15 Wed  23:30]* The  assumption  that the  emacs program  is
-  located   at  ~/opt/local/bin/~   is   incorrect.   Perhaps   it  should   be
-  ~#!/usb/bin/env emacs~ instead.
-
-#+name:preprocess.el
-#+header: :mkdirp t
-#+header: :tangle resources/tools/preprocess.el
-#+header: :shebang "#!/usr/bin/env emacs -Q --script"
-#+begin_src emacs-lisp
-  (with-current-buffer (car (find-file-noselect "./*.org" nil nil t))
-    (save-excursion
-    (goto-char (point-min))
-    (let ((re-search-str "\\(?::tangle\\|load-file \\(?:[\\]*\\)?[\"]\\)\s*\\(.*?/[dD]ev\\)/")
-          (dev (getenv "DEV")))
-      (while
-              (re-search-forward re-search-str nil t)
-              (replace-match dev t nil nil 1)))
-    (save-buffer)
-    (require 'org)
-    (org-babel-tangle)))
+  TERMSERVER := $(EMACS_TERMSERVER) --socket-name=termserver --suppress-output
+  boot:
+	  @$(TERMSERVER) \
+	    --eval \
+		  "(let ((rsrcdir \"resources\") \
+			 (subdirs (list \"tools\" \"images\" \"source\"))) \
+		     (mkdir rsrcdir t) \
+		     (dolist (subdir subdirs) (mkdir (concat rsrcdir \"/\" subdir) t)))" \
+	     --eval \
+		  "(with-current-buffer \
+		     (car (find-file-noselect \"./*.org\" nil nil t)) \
+			(save-excursion \
+			   (goto-char (point-min)) \
+			   (let ((re-search-str \"\\(?::tangle\\|load-file \\(?:[\\]*\\)?[\\\"]\\)\s*\\(.*?/\\[dD\\]ev\\)/\") \
+				  (dev (getenv \"DEV\"))) \
+			      (while \
+				 (re-search-forward re-search-str nil t) \
+				 (replace-match dev t nil nil 1))) \
+			    (save-buffer) \
+			    (org-babel-tangle)))"
+  git:
+	  git add . && git commit -m "After running boot-template Makefile" && git push origin master
+  all: boot git
 #+end_src
 
 ** Samples
